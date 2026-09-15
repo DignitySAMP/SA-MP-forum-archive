@@ -1,0 +1,2625 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] How to make a register system ( Dialogs, SQLite and rBits )</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "b350855ac296284ffe0e28ea2109f9ea";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="I'm not sure if this is really important or not, but I assume it is since no information is saved upon a user registering: Where do we create/place &quot;ServerDatabase.db&quot;? Sorry, i'm fairly new to PAWN E" />
+<link rel="canonical" href="../../threads/0278/tid-278188-page-3.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="b350855ac296284ffe0e28ea2109f9ea" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (4):</span>
+<!-- start: multipage_prevpage -->
+<a href="../../threads/0278/tid-278188-page-2.html" class="pagination_previous">&laquo; Previous</a>
+<!-- end: multipage_prevpage --><!-- start: multipage_page -->
+<a href="../../threads/0278/tid-278188.html" class="pagination_page">1</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0278/tid-278188-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page_current -->
+ <span class="pagination_current">3</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0278/tid-278188-page-4.html" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0278/tid-278188-page-4.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0278/tid-278188-page-3.html#pid1722149">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] How to make a register system ( Dialogs, SQLite and rBits )
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid1722149"></a>
+<div class="post classic " style="" id="post_1722149">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0042/uid-42478.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0042/uid-42478.html">nitrochegs</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 24<br />
+	Threads: 3<br />
+	Joined: Jan 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid1722149" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#41</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 41 by nitrochegs" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">10.03.2012, 04:18 <span class="post_edit" id="edited_by_1722149"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by nitrochegs; 10/03/2012 at 05:42 AM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1722149">
+		I'm not sure if this is really important or not, but I assume it is since no information is saved upon a user registering:<br />
+<br />
+Where do we create/place "ServerDatabase.db"?<br />
+<br />
+Sorry, i'm fairly new to PAWN<br />
+<br />
+EDIT:<br />
+Ah, i'm sorry, I just realised it belongs in scriptfiles.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1722149">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-42478.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1725334"></a>
+<div class="post classic " style="" id="post_1725334">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0135/uid-135991.html"><img src="../../assets/uploads/avatars/135991.png" alt="" width="55" height="37" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0135/uid-135991.html">HDFord</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 166<br />
+	Threads: 18<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid1725334" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#42</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 42 by HDFord" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">11.03.2012, 15:49 <span class="post_edit" id="edited_by_1725334"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1725334">
+		nice but it got some bugs. when you create a new dialog in gamemode example DIALOG_STYLE_MSGBOX and press the buttons ingame. if you press the left button it says wrong password if you press right button it closes connection.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1725334">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-135991.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1726355"></a>
+<div class="post classic " style="" id="post_1726355">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78223.html"><img src="../../assets/uploads/avatars/78223.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78223.html">Lorenc_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,793<br />
+	Threads: 196<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid1726355" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#43</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 43 by Lorenc_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">12.03.2012, 02:27 <span class="post_edit" id="edited_by_1726355"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1726355">
+		What are you talking about? That's normal to apply.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1726355">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78223.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1728657"></a>
+<div class="post classic " style="" id="post_1728657">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0009/uid-9297.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0009/uid-9297.html">TTJJ</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 146<br />
+	Threads: 4<br />
+	Joined: May 2007
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid1728657" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#44</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 44 by TTJJ" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2012, 11:32 <span class="post_edit" id="edited_by_1728657"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1728657">
+		If I may make a suggestion, changing the registration line to this:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"INSERT INTO `USERS` (`NAME`, `PASSWORD`, `IP`, `SCORE`, `CASH`, `ADMINLEVEL`) VALUES('%s',SHA1('%s'),'%s', '0', '500', '0')"</span>, DB_Escape<span style="color: #000000;">(</span>name<span style="color: #000000;">)</span>, DB_Escape<span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span>, DB_Escape<span style="color: #000000;">(</span>ip<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+(Encrypting the password with SHA1) would be a lot more secure. Ensuring that passwords cannot be seen by the naked eye.<br />
+<br />
+Obviously during login you will also have to encrypt the password they submit:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"SELECT * FROM `USERS` WHERE `NAME` = '%s' COLLATE NOCASE AND `PASSWORD` = SHA1('%s')"</span>, DB_Escape<span style="color: #000000;">(</span>name<span style="color: #000000;">)</span>, DB_Escape<span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+Cheers,<br />
+<br />
+TJ
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1728657">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-9297.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1741434"></a>
+<div class="post classic " style="" id="post_1741434">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0158/uid-158502.html"><img src="../../assets/uploads/avatars/158502.png" alt="" width="55" height="35" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0158/uid-158502.html">Karl[NDZ]</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 86<br />
+	Threads: 17<br />
+	Joined: Mar 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid1741434" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#45</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 45 by Karl[NDZ]" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">19.03.2012, 17:47 <span class="post_edit" id="edited_by_1741434"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1741434">
+		When try to make a command for a admin i get this error:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">error 017<span style="color: #000000;">:</span> undefined symbol <span style="color: #000066;">"p_AdminLevel"</span></div></div></pre>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1741434">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-158502.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1806809"></a>
+<div class="post classic " style="" id="post_1806809">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0154/uid-154304.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0154/uid-154304.html">Danny1</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 81<br />
+	Threads: 10<br />
+	Joined: Feb 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid1806809" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#46</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 46 by Danny1" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.04.2012, 15:28 <span class="post_edit" id="edited_by_1806809"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1806809">
+		I have one question : I have to work full mode in SQL? Otherwise, just register can be in SQL and this is it?And how to I create a enum pInfo admin,password,etc...?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1806809">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-154304.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1810461"></a>
+<div class="post classic " style="" id="post_1810461">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0154/uid-154304.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0154/uid-154304.html">Danny1</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 81<br />
+	Threads: 10<br />
+	Joined: Feb 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid1810461" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#47</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 47 by Danny1" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.04.2012, 12:49 <span class="post_edit" id="edited_by_1810461"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1810461">
+		BUMP!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1810461">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-154304.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1811493"></a>
+<div class="post classic " style="" id="post_1811493">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0161/uid-161834.html"><img src="../../assets/uploads/avatars/161834.png" alt="" width="51" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0161/uid-161834.html">KaWavan</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 21<br />
+	Threads: 4<br />
+	Joined: Apr 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid1811493" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#48</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 48 by KaWavan" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.04.2012, 21:20 <span class="post_edit" id="edited_by_1811493"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1811493">
+		You helped me alot! I found alot of Registrations scripts that didn't work for me, but yours works perfect <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/><br />
+Reputation added
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1811493">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-161834.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1813696"></a>
+<div class="post classic " style="" id="post_1813696">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0161/uid-161307.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0161/uid-161307.html">Djumza</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 61<br />
+	Threads: 14<br />
+	Joined: Apr 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid1813696" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#49</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 49 by Djumza" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.04.2012, 22:42 <span class="post_edit" id="edited_by_1813696"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1813696">
+		Hello, everything works great, but when i register, server dont save my stats , so when i reconnect i get register window again :&lt; <br />
+<br />
+Please , help me ? <br />
+<br />
+Thanks <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1813696">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-161307.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1822245"></a>
+<div class="post classic " style="" id="post_1822245">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0157/uid-157120.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0157/uid-157120.html">Jonny5</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 929<br />
+	Threads: 17<br />
+	Joined: Mar 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid1822245" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#50</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 50 by Jonny5" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.04.2012, 21:17 <span class="post_edit" id="edited_by_1822245"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1822245">
+		thanks,<br />
+this has got me started with sqlite<br />
+<br />
+This will make converting my small ini based user system simple!<br />
+<br />
+i was able to import all my vehicle files to the db(1827) within a matter of seconds.<br />
+using almost the same function i use to load the vehicles from files and a little help from sscanf.<br />
+<br />
+And just from your simple example code and my previous knowledge ill be able to<br />
+make a fully dynamic vehicle system that I can edit in game!<br />
+<br />
+If you decide to do a more in depth tutorial on sqlite that would be awesome!<br />
+<br />
+thanks!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1822245">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-157120.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2012859"></a>
+<div class="post classic " style="" id="post_2012859">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0168/uid-168815.html"><img src="../../assets/uploads/avatars/168815.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0168/uid-168815.html">yusei</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 268<br />
+	Threads: 4<br />
+	Joined: Jun 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid2012859" title="Re : How to make a register system ( Dialogs, SQLite and rBits )">#51</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 51 by yusei" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.07.2012, 16:35 <span class="post_edit" id="edited_by_2012859"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2012859">
+		somes errors <br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 354px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">23</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 001</span><span style="color: #007700">: </span><span style="color: #0000BB">expected token</span><span style="color: #007700">: </span><span style="color: #DD0000">"-identifier-"</span><span style="color: #007700">, </span><span style="color: #0000BB">but found </span><span style="color: #DD0000">"("
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">26</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 010</span><span style="color: #007700">: </span><span style="color: #0000BB">invalid </span><span style="color: #007700">function or </span><span style="color: #0000BB">declaration
+<br/>D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">32</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"Database"
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">34</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"Database"
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">41</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"Database"
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">54</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"Bit1_Set"
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">59</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"Database"
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">87</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"Bit1_Get"
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">90 </span><span style="color: #007700">-- </span><span style="color: #0000BB">93</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"Bit16_Get"
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">96</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"Database"
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">98</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"Bit1_Set"
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">121</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"Database"
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">141</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"Bit16_Set"
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">143</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"Bit1_Set"
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">179</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"Database"
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">181</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"Bit1_Set"
+<br/></span><span style="color: #0000BB">D</span><span style="color: #007700">:\</span><span style="color: #0000BB">p</span><span style="color: #007700">\</span><span style="color: #0000BB">GtaSa </span><span style="color: #007700">(</span><span style="color: #0000BB">1</span><span style="color: #007700">)\</span><span style="color: #0000BB">lo</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">223</span><span style="color: #007700">) : </span><span style="color: #0000BB">warning 203</span><span style="color: #007700">: </span><span style="color: #0000BB">symbol is never used</span><span style="color: #007700">: </span><span style="color: #DD0000">"g_PlayerLogged"
+<br/></span><span style="color: #0000BB">Pawn compiler 3.2.3664              Copyright </span><span style="color: #007700">(</span><span style="color: #0000BB">c</span><span style="color: #007700">) </span><span style="color: #0000BB">1997</span><span style="color: #007700">-</span><span style="color: #0000BB">2006</span><span style="color: #007700">, </span><span style="color: #0000BB">ITB CompuPhase
+
+
+<br/>16 Errors</span><span style="color: #007700">. 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2012859">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-168815.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2109449"></a>
+<div class="post classic " style="" id="post_2109449">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0179/uid-179328.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0179/uid-179328.html">iSaad</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 46<br />
+	Threads: 1<br />
+	Joined: Sep 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid2109449" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#52</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 52 by iSaad" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">10.09.2012, 07:26 <span class="post_edit" id="edited_by_2109449"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2109449">
+		Lorenc_,<br />
+<br />
+Can you please explain this part :<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:119px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnFilterScriptExit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i; i <span style="color: #000000;">!=</span> MAX_PLAYERS; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> OnPlayerDisconnect<span style="color: #000000;">(</span>i, <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/>    db_close<span style="color: #000000;">(</span>Database<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+I am new to scripting i just want to know why are you looping ? Why don't you just use :<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">db_close<span style="color: #000000;">(</span>Database<span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+And also Do i need the DB_Escape stock :<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:487px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">stock</span> DB_Escape<span style="color: #000000;">(</span>text<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span><br/>        ret<span style="color: #000000;">[</span><span style="color: #000000;">80</span> <span style="color: #000000;">*</span> <span style="color: #000000;">2</span><span style="color: #000000;">]</span>,<br/>        ch,<br/>        i,<br/>        j;<br/>    <span style="color: #2222BB;">while</span> <span style="color: #000000;">(</span><span style="color: #000000;">(</span>ch <span style="color: #000000;">=</span> text<span style="color: #000000;">[</span>i<span style="color: #000000;">++</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">&amp;&amp;</span> j <span style="color: #000000;">&lt;</span> <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>ret<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>ch <span style="color: #000000;">==</span> <span style="color: #000066;">'<span style="color: #000099; font-weight: bold;">\'</span>'</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>j <span style="color: #000000;">&lt;</span> <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>ret<span style="color: #000000;">)</span> <span style="color: #000000;">-</span> <span style="color: #000000;">2</span><span style="color: #000000;">)</span><br/>            <span style="color: #000000;">{</span><br/>                ret<span style="color: #000000;">[</span>j<span style="color: #000000;">++</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">'<span style="color: #000099; font-weight: bold;">\'</span>'</span>;<br/>                ret<span style="color: #000000;">[</span>j<span style="color: #000000;">++</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">'<span style="color: #000099; font-weight: bold;">\'</span>'</span>;<br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>j <span style="color: #000000;">&lt;</span> <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>ret<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            ret<span style="color: #000000;">[</span>j<span style="color: #000000;">++</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> ch;<br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">else</span><br/>        <span style="color: #000000;">{</span><br/>            j<span style="color: #000000;">++</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    ret<span style="color: #000000;">[</span><span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>ret<span style="color: #000000;">)</span> <span style="color: #000000;">-</span> <span style="color: #000000;">1</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">'<span style="color: #000099; font-weight: bold;">\0</span>'</span>;<br/>    <span style="color: #2222BB;">return</span> ret;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Is it necessary ?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2109449">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-179328.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2110029"></a>
+<div class="post classic " style="" id="post_2110029">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0179/uid-179312.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0179/uid-179312.html">jamesmercer1947</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 95<br />
+	Threads: 20<br />
+	Joined: Sep 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid2110029" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#53</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 53 by jamesmercer1947" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">10.09.2012, 14:46 <span class="post_edit" id="edited_by_2110029"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2110029">
+		Nice tutorial
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2110029">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-179312.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2277826"></a>
+<div class="post classic " style="" id="post_2277826">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0134/uid-134556.html"><img src="../../assets/uploads/avatars/134556.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0134/uid-134556.html">u3games</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 25<br />
+	Threads: 8<br />
+	Joined: Jul 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid2277826" title="Respuesta: How to make a register system ( Dialogs, SQLite and rBits )">#54</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 54 by u3games" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">19.12.2012, 11:01 <span class="post_edit" id="edited_by_2277826"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by u3games; 19/12/2012 at 04:06 PM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2277826">
+		Test in ubuntu server and no work :S, no show second dialog.<br />
+<br />
+No save info player when is disconnected and in register. Error appears out of the server:<br />
+<br />
+<img alt="" border="0" src="http://fotos.subefotos.com/5231c39861604d374617a21a4d2f3989o.jpg"/><br />
+<br />
+Gamemode:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #FF8000">#include &lt;a_samp&gt;
+<br/>#include &lt;rBits&gt;
+
+<br/>//----------------------------------------------------------
+<br/>// FORWARD:
+<br/>//----------------------------------------------------------
+
+
+
+<br/>//----------------------------------------------------------
+<br/>// DEFINE:
+<br/>//----------------------------------------------------------
+
+<br/>// Informacion del servidor:
+<br/>#define INFO_NOMBRE_SERVIDOR    "Server"
+<br/>#define INFO_VERSION_SERVIDOR    "1.0"
+
+<br/>//----------------------------------------------------------
+<br/>// NEW:
+<br/>//----------------------------------------------------------
+
+<br/>// Sistema Mysql:
+<br/></span><span style="color: #007700">new </span><span style="color: #0000BB">Bit1</span><span style="color: #007700">: </span><span style="color: #0000BB">g_PlayerLogged </span><span style="color: #007700">&lt;</span><span style="color: #0000BB">MAX_PLAYERS</span><span style="color: #007700">&gt;;
+<br/>new </span><span style="color: #0000BB">Bit16</span><span style="color: #007700">: </span><span style="color: #0000BB">g_AdminLevel </span><span style="color: #007700">&lt;</span><span style="color: #0000BB">MAX_PLAYERS</span><span style="color: #007700">&gt;;
+<br/>new </span><span style="color: #0000BB">DB</span><span style="color: #007700">: </span><span style="color: #0000BB">Database</span><span style="color: #007700">;
+
+<br/></span><span style="color: #FF8000">//----------------------------------------------------------
+<br/>// CODIGO INTERNO DEL SCRIPT:
+<br/>//----------------------------------------------------------
+
+
+<br/></span><span style="color: #007700">public </span><span style="color: #0000BB">OnFilterScriptInit</span><span style="color: #007700">()
+<br/>{
+<br/>    </span><span style="color: #FF8000">//--------------------------------------------------------
+<br/>    // Sistema Mysql:
+<br/>    //--------------------------------------------------------
+<br/>    // Conexion con la base de datos del servidor:
+<br/>    </span><span style="color: #0000BB">Database </span><span style="color: #007700">= </span><span style="color: #0000BB">db_open</span><span style="color: #007700">(</span><span style="color: #DD0000">"ServerDatabase.db"</span><span style="color: #007700">);
+<br/>    </span><span style="color: #FF8000">// Creacion de tablas en la base de datos, si no existiese:
+<br/>    </span><span style="color: #0000BB">db_query</span><span style="color: #007700">(</span><span style="color: #0000BB">Database</span><span style="color: #007700">, </span><span style="color: #DD0000">"CREATE TABLE IF NOT EXISTS `USERS` (`NAME`, `PASSWORD`, `IP`, `SCORE`, `CASH`, `ADMINLEVEL`)"</span><span style="color: #007700">);
+<br/>    
+<br/>    </span><span style="color: #FF8000">// Mensaje de la ejecucion del script:
+<br/>    </span><span style="color: #007700">print(</span><span style="color: #DD0000">"Scripts del Gamemode habilitados correctamente."</span><span style="color: #007700">);
+<br/>    
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnFilterScriptExit</span><span style="color: #007700">()
+<br/>{
+<br/>    </span><span style="color: #FF8000">//--------------------------------------------------------
+<br/>    // Sistema Mysql:
+<br/>    //--------------------------------------------------------
+<br/>    // Desconexion con la base de datos del servidor:
+<br/>    </span><span style="color: #007700">for (new </span><span style="color: #0000BB">i</span><span style="color: #007700">; </span><span style="color: #0000BB">i </span><span style="color: #007700">!= </span><span style="color: #0000BB">MAX_PLAYERS</span><span style="color: #007700">; </span><span style="color: #0000BB">i</span><span style="color: #007700">++) </span><span style="color: #0000BB">OnPlayerDisconnect</span><span style="color: #007700">(</span><span style="color: #0000BB">i</span><span style="color: #007700">, </span><span style="color: #0000BB">1</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">db_close</span><span style="color: #007700">(</span><span style="color: #0000BB">Database</span><span style="color: #007700">);
+
+<br/>    </span><span style="color: #FF8000">//Mensaje de detencion de la ejecucion del script:
+<br/>    </span><span style="color: #007700">print(</span><span style="color: #DD0000">"Scripts del Gamemode deshabilitados correctamente."</span><span style="color: #007700">);
+
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/></span><span style="color: #0000BB">main</span><span style="color: #007700">()
+<br/>{
+<br/>    </span><span style="color: #FF8000">// Mensaje que se mostrara en la consola del servidor:
+<br/>    </span><span style="color: #007700">print(</span><span style="color: #DD0000">"Gamemode cargado correctamente."</span><span style="color: #007700">);
+<br/>}
+
+<br/></span><span style="color: #FF8000">//----------------------------------------------------------
+<br/>// CODIGO EXTERNO DEL SCRIPT:
+<br/>//----------------------------------------------------------
+
+<br/></span><span style="color: #007700">public </span><span style="color: #0000BB">OnGameModeInit</span><span style="color: #007700">()
+<br/>{
+<br/>    </span><span style="color: #FF8000">// Informacion del Servidor:
+<br/>    </span><span style="color: #0000BB">SetGameModeText</span><span style="color: #007700">(</span><span style="color: #DD0000">"Server Test"</span><span style="color: #007700">);
+
+<br/>    </span><span style="color: #FF8000">// Impide que se vean en el mapa los usuarios conectados:
+<br/>    </span><span style="color: #0000BB">ShowPlayerMarkers</span><span style="color: #007700">(</span><span style="color: #0000BB">0</span><span style="color: #007700">);
+
+<br/>    </span><span style="color: #FF8000">// Las ruedas de los vehiculos pueden ser pinchadas:
+<br/>    </span><span style="color: #0000BB">EnableTirePopping</span><span style="color: #007700">(</span><span style="color: #0000BB">0</span><span style="color: #007700">);
+
+<br/>    </span><span style="color: #FF8000">// Todos los coches apagados:
+<br/>    // ManualVehicleEngineAndLights();
+
+<br/>    // Skins disponibles a elegir:
+<br/>    </span><span style="color: #0000BB">AddPlayerClass</span><span style="color: #007700">(</span><span style="color: #0000BB">101</span><span style="color: #007700">,</span><span style="color: #0000BB">1653.5210</span><span style="color: #007700">,-</span><span style="color: #0000BB">2329.4944</span><span style="color: #007700">,</span><span style="color: #0000BB">13.5469</span><span style="color: #007700">,</span><span style="color: #0000BB">1.2957</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">AddPlayerClass</span><span style="color: #007700">(</span><span style="color: #0000BB">10</span><span style="color: #007700">,</span><span style="color: #0000BB">1653.5210</span><span style="color: #007700">,-</span><span style="color: #0000BB">2329.4944</span><span style="color: #007700">,</span><span style="color: #0000BB">13.5469</span><span style="color: #007700">,</span><span style="color: #0000BB">1.2957</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">AddPlayerClass</span><span style="color: #007700">(</span><span style="color: #0000BB">12</span><span style="color: #007700">,</span><span style="color: #0000BB">1653.5210</span><span style="color: #007700">,-</span><span style="color: #0000BB">2329.4944</span><span style="color: #007700">,</span><span style="color: #0000BB">13.5469</span><span style="color: #007700">,</span><span style="color: #0000BB">1.2957</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">,-</span><span style="color: #0000BB">1</span><span style="color: #007700">);
+
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnGameModeExit</span><span style="color: #007700">()
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerRequestClass</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">classid</span><span style="color: #007700">)
+<br/>{
+<br/>    </span><span style="color: #0000BB">SetPlayerColor</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">COLOR_BLANCO</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">SetPlayerPos</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">2370.5166</span><span style="color: #007700">,</span><span style="color: #0000BB">2165.1321</span><span style="color: #007700">,</span><span style="color: #0000BB">26.9844</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">SetPlayerCameraPos</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">2374.5188</span><span style="color: #007700">,</span><span style="color: #0000BB">2169.5798</span><span style="color: #007700">,</span><span style="color: #0000BB">26.9844</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">SetPlayerCameraLookAt</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">2370.5166</span><span style="color: #007700">,</span><span style="color: #0000BB">2165.1321</span><span style="color: #007700">,</span><span style="color: #0000BB">26.9844</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">SetPlayerFacingAngle</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">,</span><span style="color: #0000BB">315.9228</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">ApplyAnimation</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">,</span><span style="color: #DD0000">"DANCING"</span><span style="color: #007700">,</span><span style="color: #DD0000">"dnce_M_b"</span><span style="color: #007700">,</span><span style="color: #0000BB">4.1</span><span style="color: #007700">,</span><span style="color: #0000BB">7</span><span style="color: #007700">,</span><span style="color: #0000BB">5</span><span style="color: #007700">,</span><span style="color: #0000BB">1</span><span style="color: #007700">,</span><span style="color: #0000BB">1</span><span style="color: #007700">,</span><span style="color: #0000BB">1</span><span style="color: #007700">);
+<br/>    
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerConnect</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">)
+<br/>{
+<br/>    </span><span style="color: #FF8000">//--------------------------------------------------------
+<br/>    // Sistema Mysql:
+<br/>    //--------------------------------------------------------
+<br/>    
+<br/>    // Nuevas variables:
+<br/>    </span><span style="color: #007700">new </span><span style="color: #0000BB">Query</span><span style="color: #007700">[ </span><span style="color: #0000BB">150 </span><span style="color: #007700">];
+<br/>    new </span><span style="color: #0000BB">DBResult</span><span style="color: #007700">: </span><span style="color: #0000BB">Result</span><span style="color: #007700">;
+<br/>    new </span><span style="color: #0000BB">name</span><span style="color: #007700">[ </span><span style="color: #0000BB">MAX_PLAYER_NAME </span><span style="color: #007700">];
+
+<br/>    </span><span style="color: #0000BB">GetPlayerName</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">name</span><span style="color: #007700">, </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">name</span><span style="color: #007700">));
+<br/>    </span><span style="color: #0000BB">Bit1_Set</span><span style="color: #007700">(</span><span style="color: #0000BB">g_PlayerLogged</span><span style="color: #007700">, </span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">false</span><span style="color: #007700">);
+
+<br/>    </span><span style="color: #FF8000">// Lectura del usuario en la base de datos:
+<br/>    </span><span style="color: #0000BB">format</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">, </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">), </span><span style="color: #DD0000">"SELECT `NAME` FROM `USERS` WHERE `NAME` = '%s'"</span><span style="color: #007700">, </span><span style="color: #0000BB">DB_Escape</span><span style="color: #007700">(</span><span style="color: #0000BB">name</span><span style="color: #007700">));
+<br/>    </span><span style="color: #0000BB">Result </span><span style="color: #007700">= </span><span style="color: #0000BB">db_query</span><span style="color: #007700">(</span><span style="color: #0000BB">Database</span><span style="color: #007700">, </span><span style="color: #0000BB">Query</span><span style="color: #007700">);
+
+<br/>    </span><span style="color: #FF8000">// Si el nombre introducido esta registrado:
+<br/>    </span><span style="color: #007700">if (</span><span style="color: #0000BB">db_num_rows</span><span style="color: #007700">(</span><span style="color: #0000BB">Result</span><span style="color: #007700">))
+<br/>    {
+<br/>        </span><span style="color: #FF8000">// Mensaje de logueo para el usuario:
+<br/>        </span><span style="color: #0000BB">format</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">, </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">), </span><span style="color: #DD0000">"Bienvenido al servidor Infernus %s(%d)! Por favor, introduzque la contraseсa de vuestra cuenta para poder loguear."</span><span style="color: #007700">, </span><span style="color: #0000BB">name</span><span style="color: #007700">, </span><span style="color: #0000BB">playerid</span><span style="color: #007700">);
+<br/>        </span><span style="color: #0000BB">ShowPlayerDialog</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #0000BB">DIALOG_STYLE_INPUT</span><span style="color: #007700">, </span><span style="color: #DD0000">"SISTEMA DE LOGUEO"</span><span style="color: #007700">, </span><span style="color: #0000BB">Query</span><span style="color: #007700">, </span><span style="color: #DD0000">"Conectar"</span><span style="color: #007700">, </span><span style="color: #DD0000">"Salir"</span><span style="color: #007700">);
+<br/>    }
+<br/>    </span><span style="color: #FF8000">// Si el nombre introducido no esta registrado:
+<br/>    </span><span style="color: #007700">else
+<br/>    {
+<br/>        </span><span style="color: #FF8000">// Mensaje de registro para el nuevo usuario:
+<br/>        </span><span style="color: #0000BB">format</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">, </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">), </span><span style="color: #DD0000">"Bienvenido al servidor Infernus %s(%d)! Para registraros, introduzca la contraseсa para vuestra cuenta."</span><span style="color: #007700">, </span><span style="color: #0000BB">name</span><span style="color: #007700">, </span><span style="color: #0000BB">playerid</span><span style="color: #007700">);
+<br/>        </span><span style="color: #0000BB">ShowPlayerDialog</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">DIALOG_STYLE_INPUT</span><span style="color: #007700">, </span><span style="color: #DD0000">"SISTEMA DE LOGUEO"</span><span style="color: #007700">, </span><span style="color: #0000BB">Query</span><span style="color: #007700">, </span><span style="color: #DD0000">"Registrarse"</span><span style="color: #007700">, </span><span style="color: #DD0000">"Salir"</span><span style="color: #007700">);
+<br/>    }
+<br/>    </span><span style="color: #0000BB">db_free_result</span><span style="color: #007700">(</span><span style="color: #0000BB">Result</span><span style="color: #007700">);
+<br/>    
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerDisconnect</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">reason</span><span style="color: #007700">)
+<br/>{
+<br/>    </span><span style="color: #FF8000">//--------------------------------------------------------
+<br/>    // Sistema Mysql:
+<br/>    //--------------------------------------------------------
+<br/>    
+<br/>    // Nuevas variables:
+<br/>    </span><span style="color: #007700">new </span><span style="color: #0000BB">Query</span><span style="color: #007700">[ </span><span style="color: #0000BB">200 </span><span style="color: #007700">];
+<br/>    new </span><span style="color: #0000BB">name</span><span style="color: #007700">[ </span><span style="color: #0000BB">MAX_PLAYER_NAME </span><span style="color: #007700">];
+<br/>    
+<br/>    </span><span style="color: #0000BB">GetPlayerName</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">name</span><span style="color: #007700">, </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">name</span><span style="color: #007700">));
+<br/>    
+<br/>    </span><span style="color: #FF8000">// Almacenamiento de datos cuando se desconecta el jugador:
+<br/>    </span><span style="color: #007700">if (</span><span style="color: #0000BB">Bit1_Get</span><span style="color: #007700">(</span><span style="color: #0000BB">g_PlayerLogged</span><span style="color: #007700">, </span><span style="color: #0000BB">playerid</span><span style="color: #007700">) == </span><span style="color: #0000BB">1</span><span style="color: #007700">)
+<br/>    {
+<br/>        </span><span style="color: #FF8000">// Tablas en las que se almacenara la informacion del jugador:
+<br/>        </span><span style="color: #0000BB">format</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">,</span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">),</span><span style="color: #DD0000">"UPDATE `USERS` SET SCORE = '%d', CASH = '%d', ADMINLEVEL = '%d' WHERE `NAME` = '%s'"</span><span style="color: #007700">,
+<br/>            </span><span style="color: #0000BB">GetPlayerScore</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">),                             </span><span style="color: #FF8000">// Puntos del jugador.
+<br/>            </span><span style="color: #0000BB">GetPlayerMoney</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">),                            </span><span style="color: #FF8000">// Dinero del jugador.
+<br/>            </span><span style="color: #0000BB">Bit16_Get</span><span style="color: #007700">(</span><span style="color: #0000BB">g_AdminLevel</span><span style="color: #007700">, </span><span style="color: #0000BB">playerid</span><span style="color: #007700">),                    </span><span style="color: #FF8000">// Accesslevel del jugador.
+<br/>            </span><span style="color: #0000BB">DB_Escape</span><span style="color: #007700">(</span><span style="color: #0000BB">name</span><span style="color: #007700">));                                    </span><span style="color: #FF8000">// Desconexion del jugador.
+
+<br/>        // Lectura de la desconexion:
+<br/>        </span><span style="color: #0000BB">db_query</span><span style="color: #007700">(</span><span style="color: #0000BB">Database</span><span style="color: #007700">, </span><span style="color: #0000BB">Query</span><span style="color: #007700">);
+<br/>        </span><span style="color: #0000BB">Bit1_Set</span><span style="color: #007700">(</span><span style="color: #0000BB">g_PlayerLogged</span><span style="color: #007700">, </span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">false</span><span style="color: #007700">);
+<br/>    }
+<br/>    
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerSpawn</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerDeath</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">killerid</span><span style="color: #007700">, </span><span style="color: #0000BB">reason</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnVehicleSpawn</span><span style="color: #007700">(</span><span style="color: #0000BB">vehicleid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnVehicleDeath</span><span style="color: #007700">(</span><span style="color: #0000BB">vehicleid</span><span style="color: #007700">, </span><span style="color: #0000BB">killerid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerText</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">text</span><span style="color: #007700">[])
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerCommandText</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">cmdtext</span><span style="color: #007700">[])
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerEnterVehicle</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">vehicleid</span><span style="color: #007700">, </span><span style="color: #0000BB">ispassenger</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerExitVehicle</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">vehicleid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerStateChange</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">newstate</span><span style="color: #007700">, </span><span style="color: #0000BB">oldstate</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerEnterCheckpoint</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerLeaveCheckpoint</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerEnterRaceCheckpoint</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerLeaveRaceCheckpoint</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnRconCommand</span><span style="color: #007700">(</span><span style="color: #0000BB">cmd</span><span style="color: #007700">[])
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerRequestSpawn</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnObjectMoved</span><span style="color: #007700">(</span><span style="color: #0000BB">objectid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerObjectMoved</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">objectid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerPickUpPickup</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">pickupid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnVehicleMod</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">vehicleid</span><span style="color: #007700">, </span><span style="color: #0000BB">componentid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnVehiclePaintjob</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">vehicleid</span><span style="color: #007700">, </span><span style="color: #0000BB">paintjobid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnVehicleRespray</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">vehicleid</span><span style="color: #007700">, </span><span style="color: #0000BB">color1</span><span style="color: #007700">, </span><span style="color: #0000BB">color2</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerSelectedMenuRow</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">row</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerExitedMenu</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerInteriorChange</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">newinteriorid</span><span style="color: #007700">, </span><span style="color: #0000BB">oldinteriorid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerKeyStateChange</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">newkeys</span><span style="color: #007700">, </span><span style="color: #0000BB">oldkeys</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnRconLoginAttempt</span><span style="color: #007700">(</span><span style="color: #0000BB">ip</span><span style="color: #007700">[], </span><span style="color: #0000BB">password</span><span style="color: #007700">[], </span><span style="color: #0000BB">success</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerUpdate</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerStreamIn</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">forplayerid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerStreamOut</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">forplayerid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnVehicleStreamIn</span><span style="color: #007700">(</span><span style="color: #0000BB">vehicleid</span><span style="color: #007700">, </span><span style="color: #0000BB">forplayerid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnVehicleStreamOut</span><span style="color: #007700">(</span><span style="color: #0000BB">vehicleid</span><span style="color: #007700">, </span><span style="color: #0000BB">forplayerid</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnDialogResponse</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">dialogid</span><span style="color: #007700">, </span><span style="color: #0000BB">response</span><span style="color: #007700">, </span><span style="color: #0000BB">listitem</span><span style="color: #007700">, </span><span style="color: #0000BB">inputtext</span><span style="color: #007700">[])
+<br/>{
+<br/>    </span><span style="color: #FF8000">//--------------------------------------------------------
+<br/>    // Sistema Mysql:
+<br/>    //--------------------------------------------------------
+<br/>    
+<br/>    // Nuevas variables:
+<br/>    </span><span style="color: #007700">new </span><span style="color: #0000BB">Query</span><span style="color: #007700">[ </span><span style="color: #0000BB">256 </span><span style="color: #007700">];
+<br/>    new </span><span style="color: #0000BB">DBResult</span><span style="color: #007700">: </span><span style="color: #0000BB">Result</span><span style="color: #007700">;
+<br/>    new </span><span style="color: #0000BB">name</span><span style="color: #007700">[ </span><span style="color: #0000BB">MAX_PLAYER_NAME </span><span style="color: #007700">];
+<br/>    new </span><span style="color: #0000BB">ip</span><span style="color: #007700">[ </span><span style="color: #0000BB">16 </span><span style="color: #007700">];
+<br/>    
+<br/>    </span><span style="color: #0000BB">GetPlayerName</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">name</span><span style="color: #007700">, </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">name</span><span style="color: #007700">));
+<br/>    </span><span style="color: #0000BB">GetPlayerIp</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">ip</span><span style="color: #007700">, </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">ip</span><span style="color: #007700">));
+<br/>    
+<br/>    </span><span style="color: #FF8000">// Codigo de los dialogos (Usuario Registrado):
+<br/>    </span><span style="color: #007700">if (</span><span style="color: #0000BB">dialogid </span><span style="color: #007700">== </span><span style="color: #0000BB">1</span><span style="color: #007700">)
+<br/>    {
+<br/>         </span><span style="color: #FF8000">// El jugador esta registrado:
+<br/>          </span><span style="color: #007700">if (</span><span style="color: #0000BB">response</span><span style="color: #007700">)
+<br/>           {
+<br/>            </span><span style="color: #FF8000">// Lectura del usuario en la base de datos:
+<br/>            </span><span style="color: #0000BB">format</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">, </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">), </span><span style="color: #DD0000">"SELECT * FROM `USERS` WHERE `NAME` = '%s' AND `PASSWORD` = '%s'"</span><span style="color: #007700">, </span><span style="color: #0000BB">DB_Escape</span><span style="color: #007700">(</span><span style="color: #0000BB">name</span><span style="color: #007700">), </span><span style="color: #0000BB">DB_Escape</span><span style="color: #007700">(</span><span style="color: #0000BB">inputtext</span><span style="color: #007700">));
+<br/>            </span><span style="color: #0000BB">Result </span><span style="color: #007700">= </span><span style="color: #0000BB">db_query</span><span style="color: #007700">(</span><span style="color: #0000BB">Database</span><span style="color: #007700">, </span><span style="color: #0000BB">Query</span><span style="color: #007700">);
+
+<br/>            </span><span style="color: #FF8000">// Conexion realizada correctamente:
+<br/>            </span><span style="color: #007700">if (</span><span style="color: #0000BB">db_num_rows</span><span style="color: #007700">(</span><span style="color: #0000BB">Result</span><span style="color: #007700">))
+<br/>            {
+<br/>                </span><span style="color: #FF8000">// Nueva variable:
+<br/>                </span><span style="color: #007700">new </span><span style="color: #0000BB">Field</span><span style="color: #007700">[ </span><span style="color: #0000BB">20 </span><span style="color: #007700">];
+
+<br/>                </span><span style="color: #FF8000">// Carga el score del jugador:
+<br/>                </span><span style="color: #0000BB">db_get_field_assoc</span><span style="color: #007700">(</span><span style="color: #0000BB">Result</span><span style="color: #007700">, </span><span style="color: #DD0000">"SCORE"</span><span style="color: #007700">, </span><span style="color: #0000BB">Field</span><span style="color: #007700">, </span><span style="color: #0000BB">30</span><span style="color: #007700">);
+<br/>                </span><span style="color: #0000BB">SetPlayerScore</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">strval</span><span style="color: #007700">(</span><span style="color: #0000BB">Field</span><span style="color: #007700">));
+
+<br/>                </span><span style="color: #FF8000">// Carga el dinero del jugador:
+<br/>                </span><span style="color: #0000BB">db_get_field_assoc</span><span style="color: #007700">(</span><span style="color: #0000BB">Result</span><span style="color: #007700">, </span><span style="color: #DD0000">"CASH"</span><span style="color: #007700">, </span><span style="color: #0000BB">Field</span><span style="color: #007700">, </span><span style="color: #0000BB">30</span><span style="color: #007700">);
+<br/>                </span><span style="color: #0000BB">GivePlayerMoney</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">strval</span><span style="color: #007700">(</span><span style="color: #0000BB">Field</span><span style="color: #007700">));
+
+<br/>                </span><span style="color: #FF8000">// Carga el accesslevel del jugador:
+<br/>                </span><span style="color: #0000BB">db_get_field_assoc</span><span style="color: #007700">(</span><span style="color: #0000BB">Result</span><span style="color: #007700">, </span><span style="color: #DD0000">"ADMINLEVEL"</span><span style="color: #007700">, </span><span style="color: #0000BB">Field</span><span style="color: #007700">, </span><span style="color: #0000BB">30</span><span style="color: #007700">);
+<br/>                </span><span style="color: #0000BB">Bit16_Set</span><span style="color: #007700">(</span><span style="color: #0000BB">g_AdminLevel</span><span style="color: #007700">, </span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">strval</span><span style="color: #007700">(</span><span style="color: #0000BB">Field</span><span style="color: #007700">));
+
+<br/>                </span><span style="color: #FF8000">// El jugador loguea al servidor:
+<br/>                </span><span style="color: #0000BB">Bit1_Set</span><span style="color: #007700">(</span><span style="color: #0000BB">g_PlayerLogged</span><span style="color: #007700">, </span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">true</span><span style="color: #007700">);
+<br/>                </span><span style="color: #FF8000">// Mensaje de logueo en la consola del servidor:
+<br/>                </span><span style="color: #0000BB">SendClientMessage</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, -</span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #DD0000">"Conexion realizada correctamente, disfrute! "</span><span style="color: #007700">);
+<br/>            }
+<br/>            </span><span style="color: #FF8000">// La contraseсa indicada es incorrecta:
+<br/>            </span><span style="color: #007700">else
+<br/>            {
+<br/>                </span><span style="color: #FF8000">// Mensaje de aviso de la contraseсa incorrecta:
+<br/>                   </span><span style="color: #0000BB">format</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">, </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">), </span><span style="color: #DD0000">"Actualmente ya os encontrais registrado, por favor indiquenos su contraseсa para loguear."</span><span style="color: #007700">, </span><span style="color: #0000BB">name</span><span style="color: #007700">, </span><span style="color: #0000BB">playerid</span><span style="color: #007700">);
+<br/>                </span><span style="color: #0000BB">ShowPlayerDialog</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #0000BB">DIALOG_STYLE_INPUT</span><span style="color: #007700">, </span><span style="color: #DD0000">"SISTEMA DE LOGUEO"</span><span style="color: #007700">, </span><span style="color: #0000BB">Query</span><span style="color: #007700">, </span><span style="color: #DD0000">"Conectar"</span><span style="color: #007700">, </span><span style="color: #DD0000">"Salir"</span><span style="color: #007700">);
+<br/>                </span><span style="color: #FF8000">// Show the player the wrong password message.
+<br/>                </span><span style="color: #0000BB">SendClientMessage</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, -</span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #DD0000">"Contraseсa incorrecta , intentelo de nuevo."</span><span style="color: #007700">);
+<br/>            }
+<br/>            </span><span style="color: #FF8000">// Actualizando base de datos:
+<br/>            </span><span style="color: #0000BB">db_free_result</span><span style="color: #007700">(</span><span style="color: #0000BB">Result</span><span style="color: #007700">);
+<br/>        }
+<br/>        else
+<br/>        {
+<br/>            return </span><span style="color: #0000BB">Kick</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">);
+<br/>        }
+<br/>        
+<br/>        </span><span style="color: #FF8000">// Codigo de los dialogos (Usuario No Registrado):
+<br/>        </span><span style="color: #007700">if (</span><span style="color: #0000BB">dialogid </span><span style="color: #007700">== </span><span style="color: #0000BB">0</span><span style="color: #007700">)
+<br/>        {
+<br/>            </span><span style="color: #FF8000">// El jugador no esta registrado:
+<br/>            </span><span style="color: #007700">if (</span><span style="color: #0000BB">response</span><span style="color: #007700">)
+<br/>            {
+<br/>                </span><span style="color: #FF8000">// Sistema de seguridad del nombre:
+<br/>                </span><span style="color: #007700">if (</span><span style="color: #0000BB">strlen</span><span style="color: #007700">(</span><span style="color: #0000BB">inputtext</span><span style="color: #007700">) &gt; </span><span style="color: #0000BB">24 </span><span style="color: #007700">|| </span><span style="color: #0000BB">strlen</span><span style="color: #007700">(</span><span style="color: #0000BB">inputtext</span><span style="color: #007700">) &lt; </span><span style="color: #0000BB">3</span><span style="color: #007700">)
+<br/>                {
+<br/>                    </span><span style="color: #FF8000">// Mensaje de aviso por el uso de un nombre no valido:
+<br/>                    </span><span style="color: #0000BB">format</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">, </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">), </span><span style="color: #DD0000">"Actualmente ya os encontrais registrado, por favor indiquenos su contraseсa para loguear."</span><span style="color: #007700">, </span><span style="color: #0000BB">name</span><span style="color: #007700">, </span><span style="color: #0000BB">playerid</span><span style="color: #007700">);
+<br/>                    </span><span style="color: #0000BB">ShowPlayerDialog</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #0000BB">DIALOG_STYLE_INPUT</span><span style="color: #007700">, </span><span style="color: #DD0000">"SISTEMA DE LOGUEO"</span><span style="color: #007700">, </span><span style="color: #0000BB">Query</span><span style="color: #007700">, </span><span style="color: #DD0000">"Conectar"</span><span style="color: #007700">, </span><span style="color: #DD0000">"Salir"</span><span style="color: #007700">);
+<br/>                    </span><span style="color: #FF8000">// Send a message about the length of characters used for their password.
+<br/>                    </span><span style="color: #0000BB">SendClientMessage</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, -</span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #DD0000">"ERROR: Vuestra contraseсa ha de tener entre 3 - 24 caracteres!"</span><span style="color: #007700">);
+<br/>                }
+<br/>                else
+<br/>                {
+<br/>                    </span><span style="color: #FF8000">// Creando en la base de datos al nuevo usuario:
+<br/>                    </span><span style="color: #0000BB">format</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">, </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">Query</span><span style="color: #007700">), </span><span style="color: #DD0000">"INSERT INTO `USERS` (`NAME`, `PASSWORD`, `IP`, `SCORE`, `CASH`, `ADMINLEVEL`) VALUES('%s','%s','%s', '0', '0', '0')"</span><span style="color: #007700">, </span><span style="color: #0000BB">DB_Escape</span><span style="color: #007700">(</span><span style="color: #0000BB">name</span><span style="color: #007700">), </span><span style="color: #0000BB">DB_Escape</span><span style="color: #007700">(</span><span style="color: #0000BB">inputtext</span><span style="color: #007700">), </span><span style="color: #0000BB">DB_Escape</span><span style="color: #007700">(</span><span style="color: #0000BB">ip</span><span style="color: #007700">));
+<br/>                    </span><span style="color: #0000BB">db_query</span><span style="color: #007700">(</span><span style="color: #0000BB">Database</span><span style="color: #007700">, </span><span style="color: #0000BB">Query</span><span style="color: #007700">);
+
+<br/>                    </span><span style="color: #FF8000">// El jugador loguea al servidor:
+<br/>                    </span><span style="color: #0000BB">Bit1_Set</span><span style="color: #007700">(</span><span style="color: #0000BB">g_PlayerLogged</span><span style="color: #007700">, </span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">true</span><span style="color: #007700">);
+<br/>                    
+<br/>                    </span><span style="color: #FF8000">// Valores iniciales del jugador:
+<br/>                    </span><span style="color: #0000BB">GivePlayerMoney</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">);             </span><span style="color: #FF8000">// Dinero inicial.
+<br/>                    </span><span style="color: #0000BB">SetPlayerScore</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">);                </span><span style="color: #FF8000">// Score "0"
+<br/>                    
+<br/>                     // Mensaje de conexion con el servidor:
+<br/>                    </span><span style="color: #0000BB">SendClientMessage</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, -</span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #DD0000">"Felicidades! Habeis creado una cuenta en nuestro servidor, que comienze vuestra aventura!"</span><span style="color: #007700">);
+<br/>                }
+<br/>            }
+<br/>            else
+<br/>            {
+<br/>                return </span><span style="color: #0000BB">Kick</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">);
+<br/>            }
+<br/>        }
+<br/>    }
+<br/>    
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnPlayerClickPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">clickedplayerid</span><span style="color: #007700">, </span><span style="color: #0000BB">source</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/></span><span style="color: #FF8000">//----------------------------------------------------------
+<br/>// CODIGO ADICIONAL DEL SCRIPT:
+<br/>//----------------------------------------------------------
+
+<br/>// Sistema Mysql:
+<br/></span><span style="color: #0000BB">stock DB_Escape</span><span style="color: #007700">(</span><span style="color: #0000BB">text</span><span style="color: #007700">[])
+<br/>{
+<br/>    new
+<br/>        </span><span style="color: #0000BB">ret</span><span style="color: #007700">[</span><span style="color: #0000BB">80 </span><span style="color: #007700">* </span><span style="color: #0000BB">2</span><span style="color: #007700">],
+<br/>        </span><span style="color: #0000BB">ch</span><span style="color: #007700">,
+<br/>        </span><span style="color: #0000BB">i</span><span style="color: #007700">,
+<br/>        </span><span style="color: #0000BB">j</span><span style="color: #007700">;
+<br/>    while ((</span><span style="color: #0000BB">ch </span><span style="color: #007700">= </span><span style="color: #0000BB">text</span><span style="color: #007700">[</span><span style="color: #0000BB">i</span><span style="color: #007700">++]) &amp;&amp; </span><span style="color: #0000BB">j </span><span style="color: #007700">&lt; </span><span style="color: #0000BB">sizeof </span><span style="color: #007700">(</span><span style="color: #0000BB">ret</span><span style="color: #007700">))
+<br/>    {
+<br/>        if (</span><span style="color: #0000BB">ch </span><span style="color: #007700">== </span><span style="color: #DD0000">'\''</span><span style="color: #007700">)
+<br/>        {
+<br/>            if (</span><span style="color: #0000BB">j </span><span style="color: #007700">&lt; </span><span style="color: #0000BB">sizeof </span><span style="color: #007700">(</span><span style="color: #0000BB">ret</span><span style="color: #007700">) - </span><span style="color: #0000BB">2</span><span style="color: #007700">)
+<br/>            {
+<br/>                </span><span style="color: #0000BB">ret</span><span style="color: #007700">[</span><span style="color: #0000BB">j</span><span style="color: #007700">++] = </span><span style="color: #DD0000">'\''</span><span style="color: #007700">;
+<br/>                </span><span style="color: #0000BB">ret</span><span style="color: #007700">[</span><span style="color: #0000BB">j</span><span style="color: #007700">++] = </span><span style="color: #DD0000">'\''</span><span style="color: #007700">;
+<br/>            }
+<br/>        }
+<br/>        else if (</span><span style="color: #0000BB">j </span><span style="color: #007700">&lt; </span><span style="color: #0000BB">sizeof </span><span style="color: #007700">(</span><span style="color: #0000BB">ret</span><span style="color: #007700">))
+<br/>        {
+<br/>            </span><span style="color: #0000BB">ret</span><span style="color: #007700">[</span><span style="color: #0000BB">j</span><span style="color: #007700">++] = </span><span style="color: #0000BB">ch</span><span style="color: #007700">;
+<br/>        }
+<br/>        else
+<br/>        {
+<br/>            </span><span style="color: #0000BB">j</span><span style="color: #007700">++;
+<br/>        }
+<br/>    }
+<br/>    </span><span style="color: #0000BB">ret</span><span style="color: #007700">[</span><span style="color: #0000BB">sizeof </span><span style="color: #007700">(</span><span style="color: #0000BB">ret</span><span style="color: #007700">) - </span><span style="color: #0000BB">1</span><span style="color: #007700">] = </span><span style="color: #DD0000">'\0'</span><span style="color: #007700">;
+<br/>    return </span><span style="color: #0000BB">ret</span><span style="color: #007700">;
+<br/>} 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>The code:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">db_query(Database, "CREATE TABLE IF NOT EXISTS `USERS` (`NAME`, `PASSWORD`, `IP`, `SCORE`, `CASH`, `ADMINLEVEL`)");</pre>
+</div>Work, but no save info player is connected: is connected with the assigned database (checked).
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2277826">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-134556.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2282092"></a>
+<div class="post classic " style="" id="post_2282092">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78223.html"><img src="../../assets/uploads/avatars/78223.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78223.html">Lorenc_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,793<br />
+	Threads: 196<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid2282092" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#55</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 55 by Lorenc_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.12.2012, 21:54 <span class="post_edit" id="edited_by_2282092"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2282092">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>iSaad</strong><br />
+<a href="../../threads/0278/tid-278188-page-3.html#pid2109449" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Lorenc_,<br />
+<br />
+Can you please explain this part :<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:119px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnFilterScriptExit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i; i <span style="color: #000000;">!=</span> MAX_PLAYERS; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> OnPlayerDisconnect<span style="color: #000000;">(</span>i, <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/>    db_close<span style="color: #000000;">(</span>Database<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+I am new to scripting i just want to know why are you looping ? Why don't you just use :<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">db_close<span style="color: #000000;">(</span>Database<span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+And also Do i need the DB_Escape stock :<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:487px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">stock</span> DB_Escape<span style="color: #000000;">(</span>text<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span><br/>        ret<span style="color: #000000;">[</span><span style="color: #000000;">80</span> <span style="color: #000000;">*</span> <span style="color: #000000;">2</span><span style="color: #000000;">]</span>,<br/>        ch,<br/>        i,<br/>        j;<br/>    <span style="color: #2222BB;">while</span> <span style="color: #000000;">(</span><span style="color: #000000;">(</span>ch <span style="color: #000000;">=</span> text<span style="color: #000000;">[</span>i<span style="color: #000000;">++</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">&amp;&amp;</span> j <span style="color: #000000;">&lt;</span> <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>ret<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>ch <span style="color: #000000;">==</span> <span style="color: #000066;">'<span style="color: #000099; font-weight: bold;">\'</span>'</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>j <span style="color: #000000;">&lt;</span> <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>ret<span style="color: #000000;">)</span> <span style="color: #000000;">-</span> <span style="color: #000000;">2</span><span style="color: #000000;">)</span><br/>            <span style="color: #000000;">{</span><br/>                ret<span style="color: #000000;">[</span>j<span style="color: #000000;">++</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">'<span style="color: #000099; font-weight: bold;">\'</span>'</span>;<br/>                ret<span style="color: #000000;">[</span>j<span style="color: #000000;">++</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">'<span style="color: #000099; font-weight: bold;">\'</span>'</span>;<br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>j <span style="color: #000000;">&lt;</span> <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>ret<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            ret<span style="color: #000000;">[</span>j<span style="color: #000000;">++</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> ch;<br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">else</span><br/>        <span style="color: #000000;">{</span><br/>            j<span style="color: #000000;">++</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    ret<span style="color: #000000;">[</span><span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>ret<span style="color: #000000;">)</span> <span style="color: #000000;">-</span> <span style="color: #000000;">1</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">'<span style="color: #000099; font-weight: bold;">\0</span>'</span>;<br/>    <span style="color: #2222BB;">return</span> ret;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Is it necessary ?</div>
+</td>
+</tr>
+</table>
+</div>1) You can remove it, it was meant to ensure all statistics are saved a <u>second time</u>.<br />
+2) Of course, you are not going to risk your DB being hacked, dropped, or truncated.<br />
+<br />
+You might not even read this as it is a response to a three month old comment. But eh..<br />
+<br />
+<b>@u3games</b><br />
+<br />
+Not sure at all, I used SQLite on CentOS (VPS in early 2012). Worked flawlessly.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2282092">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78223.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2282376"></a>
+<div class="post classic " style="" id="post_2282376">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0156/uid-156116.html"><img src="../../assets/uploads/avatars/156116.png" alt="" width="41" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0156/uid-156116.html">denilson_staff</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 13<br />
+	Threads: 0<br />
+	Joined: Feb 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid2282376" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#56</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 56 by denilson_staff" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">22.12.2012, 03:09 <span class="post_edit" id="edited_by_2282376"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2282376">
+		me ajuda ai<br />
+<br />
+C:\Users\ryan\Documents\Meus arquivos recebidos\Nova pasta\Game_Mode SP Vida RPG By Daniel\gamemodes\SPG.pwn(45446) : warning 217: loose indentation<br />
+C:\Users\ryan\Documents\Meus arquivos recebidos\Nova pasta\Game_Mode SP Vida RPG By Daniel\gamemodes\SPG.pwn(4549<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/cool.gif" title="Cool"/> : error 029: invalid expression, assumed zero<br />
+C:\Users\ryan\Documents\Meus arquivos recebidos\Nova pasta\Game_Mode SP Vida RPG By Daniel\gamemodes\SPG.pwn(4549<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/cool.gif" title="Cool"/> : warning 215: expression has no effect<br />
+C:\Users\ryan\Documents\Meus arquivos recebidos\Nova pasta\Game_Mode SP Vida RPG By Daniel\gamemodes\SPG.pwn(4549<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/cool.gif" title="Cool"/> : error 001: expected token: ";", but found "]"<br />
+C:\Users\ryan\Documents\Meus arquivos recebidos\Nova pasta\Game_Mode SP Vida RPG By Daniel\gamemodes\SPG.pwn(4549<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/cool.gif" title="Cool"/> : error 029: invalid expression, assumed zero<br />
+C:\Users\ryan\Documents\Meus arquivos recebidos\Nova pasta\Game_Mode SP Vida RPG By Daniel\gamemodes\SPG.pwn(4549<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/cool.gif" title="Cool"/> : fatal error 107: too many error messages on one line<br />
+<br />
+Compilation aborted.Pawn compiler 3.2.3664	 	 	Copyright &copy; 1997-2006, ITB CompuPhase<br />
+<br />
+<br />
+4 Errors.<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+codigo<br />
+<br />
+<br />
+if(strcmp(cmd, "/algemar", true) == 0)<br />
+	{<br />
+	    if(IsPlayerConnected(playerid))<br />
+	    {<br />
+	    	if(!IsACop(playerid))<br />
+			{<br />
+			    SendClientMessage(playerid, COLOR_GREY, "   Vocк nгo й um policial!");<br />
+			    return 1;<br />
+			}<br />
+			if(OnDuty[playerid] != 1)<br />
+			{<br />
+			    SendClientMessage(playerid, COLOR_GREY, "   Vocк nгo Bateu o cartгo!");<br />
+			    return 1;<br />
+			}<br />
+			tmp = strtok(cmdtext, idx);<br />
+			if(!strlen(tmp))<br />
+			{<br />
+				SendClientMessage(playerid, COLOR_WHITE, "Use: /algemar [id]");<br />
+				return 1;<br />
+			}<br />
+			giveplayerid = ReturnUser(tmp);<br />
+			if(IsPlayerConnected(giveplayerid))<br />
+			{<br />
+			    if(giveplayerid != INVALID_PLAYER_ID)<br />
+			    {<br />
+			        if(gTeam[giveplayerid] == 2 || IsACop(giveplayerid))<br />
+			        {<br />
+			            SendClientMessage(playerid, COLOR_GREY, "   Vocк nгo pode algemar COPs !");<br />
+				        return 1;<br />
+			        }<br />
+				    if(PlayerCuffed[giveplayerid] &gt; 0)<br />
+				    {<br />
+				        SendClientMessage(playerid, COLOR_GREY, "   O Jogador jб esta algemado !");<br />
+				        return 1;<br />
+				    }<br />
+					if (ProxDetectorS(8.0, playerid, giveplayerid))<br />
+					{<br />
+					    //new car = GetPlayerVehicleID(playerid);<br />
+					    if(giveplayerid == playerid) { SendClientMessage(playerid, COLOR_GREY, "Vocк nao pode se algemar!"); return 1; }<br />
+					    //if(IsPlayerInAnyVehicle(playerid) &amp;&amp; GetPlayerState(playerid) == 2 &amp;&amp; IsPlayerInVehicle(giveplayerid, car))<br />
+					    {<br />
+					        GetPlayerName(giveplayerid, giveplayer, sizeof(giveplayer));<br />
+							GetPlayerName(playerid, sendername, sizeof(sendername));<br />
+					        format(string, sizeof(string), "* Vocк foi algemado pelo: %s.", sendername);<br />
+							SendClientMessage(giveplayerid, COLOR_LIGHTBLUE, string);<br />
+							format(string, sizeof(string), "* Vocк algemou %s.", giveplayer);<br />
+							SendClientMessage(playerid, COLOR_LIGHTBLUE, string);<br />
+							format(string, sizeof(string), "* %s Algemou %s, para nao fugir.", sendername ,giveplayer);<br />
+							ProxDetector(30.0, playerid, string, COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPLE,COLOR_PURPL  E,COLOR_PURPLE);<br />
+							GameTextForPlayer(giveplayerid, "~r~Algemado", 2500, 3);<br />
+							TogglePlayerControllable(giveplayerid, 0);<br />
+							PlayerCuffed[giveplayerid] = 2;<br />
+							PlayerInfo[giveplayerid][pMuted] = 1;<br />
+                            SetPlayerAttachedObject(giveplayerid, 4, 19418, 6, -0.031999, 0.024000, -0.024000, -7.900000, -32.000011, -72.299987, 1.115998, 1.322000, 1.406000);<br />
+                            for(new i = 0; i &lt; MAX_PLAYERS; i++)<br />
+                            {<br />
+                           return SetPlayerSpecialAction(giveplayerid, SPECIAL_ACTION_CUFFED);<br />
+                            }<br />
+					   }<br />
+					 }<br />
+					else<br />
+					{<br />
+					    SendClientMessage(playerid, COLOR_GREY, "   O Jogador estб longe de Vocк !");<br />
+					    return 1;<br />
+					}<br />
+				}<br />
+			}<br />
+			else<br />
+			{<br />
+			    SendClientMessage(playerid, COLOR_GREY, "   O Jogador Estб Offline !");<br />
+			    return 1;<br />
+			}<br />
+		}<br />
+		return 1;<br />
+	}
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2282376">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-156116.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2282430"></a>
+<div class="post classic " style="" id="post_2282430">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0187/uid-187999.html"><img src="../../assets/uploads/avatars/187999.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0187/uid-187999.html">DJTunes</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 389<br />
+	Threads: 67<br />
+	Joined: Dec 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid2282430" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#57</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 57 by DJTunes" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">22.12.2012, 04:16 <span class="post_edit" id="edited_by_2282430"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2282430">
+		Good job.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2282430">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-187999.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2284251"></a>
+<div class="post classic " style="" id="post_2284251">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0134/uid-134556.html"><img src="../../assets/uploads/avatars/134556.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0134/uid-134556.html">u3games</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 25<br />
+	Threads: 8<br />
+	Joined: Jul 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid2284251" title="Respuesta: Re: How to make a register system ( Dialogs, SQLite and rBits )">#58</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 58 by u3games" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.12.2012, 00:46 <span class="post_edit" id="edited_by_2284251"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2284251">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Lorenc_</strong><br />
+<a href="../../threads/0278/tid-278188-page-3.html#pid2282092" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic"><b>@u3games</b><br />
+<br />
+Not sure at all, I used SQLite on CentOS (VPS in early 2012). Worked flawlessly.</div>
+</td>
+</tr>
+</table>
+</div>In windows WORK, in ubuntu NO WORK.<br />
+<br />
+I have a ubuntu. With nothing installed, only the samp.<br />
+<br />
+You have to add a library or something for samp server?<br />
+<br />
+The problem is that it loads the dialogues, the second dialog window is not displayed.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2284251">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-134556.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2343174"></a>
+<div class="post classic " style="" id="post_2343174">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0173/uid-173476.html"><img src="../../assets/uploads/avatars/173476.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0173/uid-173476.html">RiChArD_A</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 683<br />
+	Threads: 104<br />
+	Joined: Jul 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid2343174" title="Respuesta: How to make a register system ( Dialogs, SQLite and rBits )">#59</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 59 by RiChArD_A" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.01.2013, 21:47 <span class="post_edit" id="edited_by_2343174"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2343174">
+		How can I make my self Admin and make others.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2343174">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-173476.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2343290"></a>
+<div class="post classic " style="" id="post_2343290">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0173/uid-173930.html"><img src="../../assets/uploads/avatars/173930.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0173/uid-173930.html">Djean</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 592<br />
+	Threads: 10<br />
+	Joined: Jul 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188-page-3.html#pid2343290" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#60</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 60 by Djean" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">24.01.2013, 00:05 <span class="post_edit" id="edited_by_2343290"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2343290">
+		So much tutorials on this. Good job <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2343290">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-173930.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0278/tid-278188.html">Next Oldest</a> | <a href="../../threads/0278/tid-278188.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="278188" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (4):</span>
+<!-- start: multipage_prevpage -->
+<a href="../../threads/0278/tid-278188-page-2.html" class="pagination_previous">&laquo; Previous</a>
+<!-- end: multipage_prevpage --><!-- start: multipage_page -->
+<a href="../../threads/0278/tid-278188.html" class="pagination_page">1</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0278/tid-278188-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page_current -->
+ <span class="pagination_current">3</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0278/tid-278188-page-4.html" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0278/tid-278188-page-4.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

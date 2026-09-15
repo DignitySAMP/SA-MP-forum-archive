@@ -1,0 +1,2045 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Как создать плагин [часть I]</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "373070b05d52938dda2e54c36d820458";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Как создать плагин часть I Введение Многим скриптерам интересно - Как же создаётся плагины для серверов? В это" />
+<link rel="canonical" href="../../threads/0630/tid-630200.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="373070b05d52938dda2e54c36d820458" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/9.html">Non-English</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/33.html">Languages</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/32.html">Русский/Russian</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/66.html">Релизы/Releases</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0630/tid-630200.html#pid3853702">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Как создать плагин [часть I]
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid3853702"></a>
+<div class="post classic " style="" id="post_3853702">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0137/uid-137522.html"><img src="../../assets/uploads/avatars/137522.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0137/uid-137522.html">Diman777</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 439<br />
+	Threads: 13<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3853702" title="Как создать плагин [часть I]">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by Diman777" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">11.03.2017, 02:33 <span class="post_edit" id="edited_by_3853702"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Diman777; 13/10/2017 at 06:20 PM.
+					
+					
+						Reason: Перезалиты скрины туториала, т.к. по старому адресу они уже не работали. Дополнительно прикрепил их во вложения.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3853702">
+		<font size="6"><div align="center"><b>Как создать плагин</b></div></font><br />
+<font size="5"><div align="center"><b><font color="Gray">часть I</font></b></div></font><br />
+<font size="5">Введение</font><br />
+Многим скриптерам интересно - Как же создаётся плагины для серверов? <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/confused.png" title="Confused"/> В этот руководстве я расскажу один из простых способов как это сделать.<br />
+Туториал расчитан на тех, кто знает язык Pawn, C++ (как минимум на начальном этапе) и хотя бы немного слышал что такое <a href="https://ru.wikipedia.org/wiki/Интегрированная_среда_разработки" target="_blank">Среда Разработки</a>.<br />
+Если у Вас есть проблемы свыше перечисленным, то это тема будет бесполезна. Я сам по себе далеко не профессионал, поэтому буду рассказывать как получается. В 1-ой часте туториала мы разберём 'Как с самого начала создать плагин, и запустить его в моде'.<br />
+<br />
+<font size="5">Начало</font><br />
+Плагин (англ. <i>plug-in</i>, от <i>plug in</i> «подключать») - это независимо компилируемый программный модуль, динамически подключаемый к основной программе. Основное предназначение в нашем случае - это расширение возможностей игрового мода. Благодаря этому можно сделать функционал, который <u>невозможно</u> сделать скриптово в моде на языке Pawn. Например можно сделать функцию, которая разрешит заходить на сервер с ником на кириллице. Или сделать так, чтобы сообщения в консоли были разными цветами.<br />
+Перейдём к делу. Для создания плагина буду использовать  среду разработки <b><a href="https://ru.wikipedia.org/wiki/Microsoft_Visual_Studio" target="_blank">Microsoft Visual Studio 2015</a></b>.<br />
+<div align="center"><img alt="" border="0" src="http://savepic.net/10139392.png"/></div>Если у Вас нет этой студии, то найдите на торрентах и скачайте (ссылку оставлю в самом низу туториала). Руководство пишется именно для версии 2015, поэтому лучше юзайте именно эту версию, чтобы не было каких-то мелочных проблем (типа а у меня другая версия студии и там нет такой штуки в Меню и т.д.).<br />
+<br />
+<font size="5">Важно</font><br />
+Нужно понять такую вещь, что свой первый плагин мы будем делать в виде библиотеки с расширением <b><font color="Red">dll</font></b>. Это означает, что этот самый плагин будет работать только на ОС Windows =&gt; он работает только на локальном сервере с вашего компьютера. Для того, чтобы он запустился у Вас на хостинге - его исходный код нужно будет компилировать на ОС Linux в формат <b><font color="Red">so</font></b>. MVS этим не занимается. Но эта совсем другая тема. Как это делается можно глянуть в этой <a href="../../threads/0131/tid-131419.html" target="_blank">теме</a>.<br />
+<br />
+<font size="5">Пошаговая инструкция</font><br />
+<b><font size="3">1.</font></b> В самом начале мы должны создать проект: Файл -&gt; Создать -&gt; Проект<br />
+<br />
+<img alt="" border="0" src="http://savepic.net/10119936.jpg"/><br />
+<br />
+<b><font size="3">2.</font></b> Выбираем шаблон: Установленные -&gt; Шаблоны -&gt; Visual C++ -&gt; Win32 -&gt; Проект Win32. Сразу после этого мы должны придумать имя нашему проекту|решению, в нашем случае пусть будет <b>MyPlugin</b>. Нажимаем OK (если Вас имя не устраивает, то вписывайте любое на усмотрение. Делайте его лучше коротким, запоминающимся, и чтобы оно не совпадало с другими Вашими проектами).<br />
+<br />
+<a href="http://savepic.net/10151680.htm" target="_blank"><img alt="" border="0" src="http://savepic.net/10151680m.jpg"/></a><br />
+<br />
+<b><font size="3">3.</font></b> Сразу после того как вы выполнили 2-ой шаг - автоматически откроется окно Мастера приложений Win32.<br />
+<br />
+cлева в меню мы выбираем 'Параметры приложения'<br />
+<br />
+<a href="http://savepic.net/10111744.htm" target="_blank"><img alt="" border="0" src="http://savepic.net/10111744m.jpg"/></a><br />
+<br />
+далее в 'Тип приложения' ставим галочку 'Библиотека DLL', в 'Дополнительные параметры' галочку 'Пустой проект'. Нажимаем 'Готово'.<br />
+<br />
+<a href="http://savepic.net/10103552.htm" target="_blank"><img alt="" border="0" src="http://savepic.net/10103552m.jpg"/></a><br />
+<br />
+Перед нами создан пустой проект. Слева Вы можете увидеть/ознакомиться с 'Обозревателем решения' нашего проекта. Это такая область, в которой будут храниться все исходники (.h, .c, .cpp и др.) проекта. Если по какой-то причине этого обозревателя не видно, то щёлкните вкладку Вид -&gt; Обозреватель решений.<br />
+<font color="Silver">Не обязательно: В 'Обозревателе решений' можете удалить 2 фильтра 'Заголовочные файлы' и 'Файлы ресурсов'. Они в дальнейшем не понадобятся (щёлкните правой кнопкой по фильтрам и выберите Удалить).</font><br />
+<br />
+<a href="http://savepic.net/10102528.htm" target="_blank"><img alt="" border="0" src="http://savepic.net/10102528m.jpg"/></a><br />
+<br />
+<b><font size="3">4.</font></b> С этого момента мы переходим непосредственно к установке важных свойств для проекта MyPlugin. Создаём файл определения модуля: Щёлкаем по вкладке Отладка -&gt; Свойства проекта -&gt; Компоновщик -&gt; Ввод -&gt; Файл определения модуля. Вписываем имя, в нашем случае <b>MyPlugin.def</b> (.def - не входит в часть имени, это расширение для будущего файла. По Вашему желанию имя можете указать своё, на английском языке). Сохраняемся, нажав кнопки Применить и ОК.<br />
+<br />
+<a href="http://savepic.net/10105600.htm" target="_blank"><img alt="" border="0" src="http://savepic.net/10105600m.jpg"/></a><br />
+<br />
+Теперь необходимо создать сам файл: Обозреватель решений -&gt; Файлы исходного кода -&gt; Добавить -&gt; Создать Элемент -&gt; Файл определения модуля (.def) -&gt; Имя <b>MyPlugin.def</b> -&gt; Добавить.<br />
+<br />
+<a href="http://savepic.net/10093312.htm" target="_blank"><img alt="" border="0" src="http://savepic.net/10093312m.jpg"/></a><br />
+<br />
+Открываем созданный нами <b>MyPlugin.def</b> и прописываем следующие параметры, которые необходимы для компилятора при построении проекта (этап компоновки):<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 194px;
+		text-align: left;
+		overflow: auto">// оператору LIBRARY даём понять, что имя плагина будет называться MyPlugin
+// во избежание warning'ов компилятора - оставим имя как у решения
+LIBRARY "MyPlugin"
+
+// в EXPORTS указываем какие функции будут экспортироваться
+EXPORTS
+	Supports
+	Load
+	Unload
+	AmxLoad
+	AmxUnload</pre>
+</div><img alt="" border="0" src="http://savepic.net/10098432.jpg"/><br />
+<br />
+<b><font size="3">5.</font></b> Следующим шагом будет - добавление комплекта средств разработки <b>SDK (Software Development Kit)</b>. На сколько я понял он специально поставляется от самих разработчиков SAMP, поэтому мы будем использовать именно его.<br />
+В 'Обозревателе решений' щёлкните правой кнопкой по MyPlugin -&gt; Добавить -&gt; Новый фильтр. Переименовываем его в SDK. Далее <a href="https://www.dropbox.com/s/oh7sokccnnritcf/SDK.rar?dl=0" target="_blank">скачайте</a> сам SDK, и распакуйте его в папку с вашим проектом. Например у меня он расположен по адресу: C:\Users\Diman777\Documents\Visual Studio 2015\Projects\MyPlugin\MyPlugin. И последнее - это включение в проект нашего SDK: Обозреватель решений -&gt; SDK -&gt; Добавить -&gt; Существующий элемент -&gt; amxplugin.cpp -&gt; Добавить.<br />
+<br />
+<a href="http://savepic.net/10156803.htm" target="_blank"><img alt="" border="0" src="http://savepic.net/10156803m.jpg"/></a><br />
+<br />
+<b><font size="3">6.</font></b> Теперь можно приступить к добавлению файла, который будет в себе содержать <b>исходный код</b>. Это то самое место, где Вы будете писать свои функции, определять константы и т.д.<br />
+В 'Обозревателе решений' найдите фильтр Файлы исходного кода -&gt; Добавить -&gt; Создать элемент -&gt; Файл C++ (.cpp) -&gt; Называем его <b>main</b> -&gt; Добавить.<br />
+<br />
+<a href="http://savepic.net/10142467.htm" target="_blank"><img alt="" border="0" src="http://savepic.net/10142467m.jpg"/></a><br />
+<br />
+В только что созданный <b>main.cpp</b> добавляем следующий код:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #FF8000">#include "SDK/plugin.h"
+
+<br/></span><span style="color: #0000BB">typedef void</span><span style="color: #007700">(*</span><span style="color: #0000BB">logprintf_t</span><span style="color: #007700">)(</span><span style="color: #0000BB">char</span><span style="color: #007700">* </span><span style="color: #0000BB">format</span><span style="color: #007700">, ...);
+
+<br/></span><span style="color: #0000BB">logprintf_t logprintf</span><span style="color: #007700">;
+
+<br/></span><span style="color: #0000BB">void </span><span style="color: #007700">**</span><span style="color: #0000BB">ppPluginData</span><span style="color: #007700">;
+
+<br/></span><span style="color: #0000BB">extern void </span><span style="color: #007700">*</span><span style="color: #0000BB">pAMXFunctions</span><span style="color: #007700">;
+
+<br/></span><span style="color: #0000BB">PLUGIN_EXPORT bool PLUGIN_CALL Load</span><span style="color: #007700">(</span><span style="color: #0000BB">void </span><span style="color: #007700">**</span><span style="color: #0000BB">ppData</span><span style="color: #007700">)
+<br/>{
+<br/>    </span><span style="color: #0000BB">pAMXFunctions </span><span style="color: #007700">= </span><span style="color: #0000BB">ppData</span><span style="color: #007700">[</span><span style="color: #0000BB">PLUGIN_DATA_AMX_EXPORTS</span><span style="color: #007700">];
+<br/>    </span><span style="color: #0000BB">logprintf </span><span style="color: #007700">= (</span><span style="color: #0000BB">logprintf_t</span><span style="color: #007700">)</span><span style="color: #0000BB">ppData</span><span style="color: #007700">[</span><span style="color: #0000BB">PLUGIN_DATA_LOGPRINTF</span><span style="color: #007700">];
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/></span><span style="color: #0000BB">PLUGIN_EXPORT void PLUGIN_CALL Unload</span><span style="color: #007700">()
+<br/>{
+<br/>    
+<br/>}
+
+<br/></span><span style="color: #0000BB">AMX_NATIVE_INFO NATIVES_LIST</span><span style="color: #007700">[] =
+<br/>{
+<br/>    { </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">0 </span><span style="color: #007700">}
+<br/>};
+
+<br/></span><span style="color: #0000BB">PLUGIN_EXPORT unsigned int PLUGIN_CALL Supports</span><span style="color: #007700">()
+<br/>{
+<br/>    return </span><span style="color: #0000BB">SUPPORTS_VERSION </span><span style="color: #007700">| </span><span style="color: #0000BB">SUPPORTS_AMX_NATIVES</span><span style="color: #007700">;
+<br/>}
+
+<br/></span><span style="color: #0000BB">PLUGIN_EXPORT int PLUGIN_CALL AmxLoad</span><span style="color: #007700">(</span><span style="color: #0000BB">AMX </span><span style="color: #007700">*</span><span style="color: #0000BB">amx</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">amx_Register</span><span style="color: #007700">(</span><span style="color: #0000BB">amx</span><span style="color: #007700">, </span><span style="color: #0000BB">NATIVES_LIST</span><span style="color: #007700">, -</span><span style="color: #0000BB">1</span><span style="color: #007700">);
+<br/>}
+
+<br/></span><span style="color: #0000BB">PLUGIN_EXPORT int PLUGIN_CALL AmxUnload</span><span style="color: #007700">(</span><span style="color: #0000BB">AMX </span><span style="color: #007700">*</span><span style="color: #0000BB">amx</span><span style="color: #007700">)
+<br/>{
+<br/>    return </span><span style="color: #0000BB">AMX_ERR_NONE</span><span style="color: #007700">;
+<br/>} 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>Вы спросите - 'Почему именно такой код?'. Сразу всё объяснить крайне сложно, просто будем считать, что это <b>основа</b>. Практически любой плагин содержит в себе именно такой код. Но всё же вкратце могу объяснить некоторые моменты:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 402px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #FF8000">// Подключение инклуда от SDK.
+<br/>#include "SDK/plugin.h"
+
+<br/>// Необходимые определения/объявления некоторых функций
+<br/>// для дальнейшей работы с ними.
+<br/></span><span style="color: #0000BB">typedef void</span><span style="color: #007700">(*</span><span style="color: #0000BB">logprintf_t</span><span style="color: #007700">)(</span><span style="color: #0000BB">char</span><span style="color: #007700">* </span><span style="color: #0000BB">format</span><span style="color: #007700">, ...);
+
+<br/></span><span style="color: #0000BB">logprintf_t logprintf</span><span style="color: #007700">;
+
+<br/></span><span style="color: #0000BB">void </span><span style="color: #007700">**</span><span style="color: #0000BB">ppPluginData</span><span style="color: #007700">;
+
+<br/></span><span style="color: #0000BB">extern void </span><span style="color: #007700">*</span><span style="color: #0000BB">pAMXFunctions</span><span style="color: #007700">;
+
+<br/></span><span style="color: #FF8000">// Экспортируемые функции. Это те ф-ии, которые перечислены
+<br/>// в файле my_plugin.def (см. 4-ый шаг)
+<br/></span><span style="color: #0000BB">Load</span><span style="color: #007700">(</span><span style="color: #0000BB">void </span><span style="color: #007700">**</span><span style="color: #0000BB">ppData</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">Unload</span><span style="color: #007700">();
+<br/></span><span style="color: #0000BB">Supports</span><span style="color: #007700">();
+<br/></span><span style="color: #0000BB">AmxLoad</span><span style="color: #007700">(</span><span style="color: #0000BB">AMX </span><span style="color: #007700">*</span><span style="color: #0000BB">amx</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">AmxUnload</span><span style="color: #007700">(</span><span style="color: #0000BB">AMX </span><span style="color: #007700">*</span><span style="color: #0000BB">amx</span><span style="color: #007700">);
+
+<br/></span><span style="color: #FF8000">// Массив, содержащий список созданных Вами функций,
+<br/>// которые будут выполняться плагином.
+<br/></span><span style="color: #0000BB">NATIVES_LIST</span><span style="color: #007700">[] = {...}; 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><b><font size="3">7.</font></b> Теперь осталось сделать отладку:<br />
+<br />
+перед началом отладки на панели инструментов найдите список выбора 'конфигурации решения' и выберите <b>Release</b><br />
+<br />
+<img alt="" border="0" src="http://savepic.net/10136323.jpg"/><br />
+<br />
+теперь проект готов к отладке: Отладка -&gt; Начать отладку<br />
+<br />
+<img alt="" border="0" src="http://savepic.net/10137347.jpg"/><br />
+<br />
+Если Вы все шаги сделали правильно, то в окне студии (обычно внизу) появится некий отчёт.<br />
+При успешной сборке проекта будет явно написано, что ошибок и предупреждений нет:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 178px;
+		text-align: left;
+		overflow: auto">1&gt;------ Сборка начата: проект: MyPlugin, Конфигурация: Release Win32 ------
+1&gt;  main.cpp
+1&gt;  amxplugin.cpp
+1&gt;     Создается библиотека c:\users\diman777\documents\visual studio 2015\Projects\MyPlugin\Release\MyPlugin.lib и объект c:\users\diman777\documents\visual studio 2015\Projects\MyPlugin\Release\MyPlugin.exp
+1&gt;  Создание кода
+1&gt;  All 6 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+1&gt;  Создание кода завершено
+1&gt;  MyPlugin.vcxproj -&gt; c:\users\diman777\documents\visual studio 2015\Projects\MyPlugin\Release\MyPlugin.dll
+1&gt;  MyPlugin.vcxproj -&gt; c:\users\diman777\documents\visual studio 2015\Projects\MyPlugin\Release\MyPlugin.pdb (Full PDB)
+========== Сборка: успешно: 1, с ошибками: 0, без изменений: 0, пропущено: 0 ==========</pre>
+</div>
+<font size="5">Результат</font><br />
+Свой плагин можно будет найти в папке с проектами:<br />
+<br />
+<a href="http://savepic.net/10138371.htm" target="_blank"><img alt="" border="0" src="http://savepic.net/10138371m.jpg"/></a><br />
+<br />
+Чтобы убедиться в работоспособности - подключите его к моду и запустите samp-server.exe:<br />
+<br />
+<img alt="" border="0" src="http://savepic.net/10129155.jpg"/><br />
+<br />
+Т.к. мы не создавали своих функций, то плагин ничего не делает. Он только подгружается к серверу.<br />
+<br />
+<font size="5">Заключение</font><br />
+В этой часте мы разобрали с самого начала 'Как создаются плагины для модов' в MVS. 2-ая часть будет посвящена созданию <u>простеньких функций</u> и вывод их в мод в <font color="Blue">native</font>. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/razz.gif" title="Tongue"/><br />
+<br />
+<font size="5">Полезные ссылки</font><ul><li><a href="http://maintracker.org/forum/viewtopic.php?t=5047529" target="_blank">MVS 2015 Professional</a></li>
+<li><a href="https://www.dropbox.com/s/oh7sokccnnritcf/SDK.rar?dl=0" target="_blank">SDK (Software Development Kit)</a></li>
+</ul>
+<font size="5">Скачать</font><br />
+Внизу во вложениях прикреплены плагин (.dll) и его исходники (.c, .h, .cpp, .def).
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3853702">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-137522.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3853737"></a>
+<div class="post classic " style="" id="post_3853737">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0249/uid-249697.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0249/uid-249697.html">joker2020pro</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 110<br />
+	Threads: 1<br />
+	Joined: Jan 2015
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3853737" title="Re: Как создать плагин [часть I]">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by joker2020pro" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">11.03.2017, 07:11 <span class="post_edit" id="edited_by_3853737"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3853737">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Diman777</strong><br />
+<a href="../../threads/0630/tid-630200.html#pid3853702" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">2-ая часть будет посвящена созданию <u>простеньких функций</u> и вывод их в мод в <font color="Blue">native</font></div>
+</td>
+</tr>
+</table>
+</div>Стоит учесть, что ещё есть экспортная функция ProcessTick (которая так же объявляется в def файле), и вообще лучше описать, при каких обстоятельствах вызывается каждая функция:<ol style="list-style-type: decimal"><li><b>Supports </b>- вызывается при загрузке плагина (перед Load), возвращает права, которые необходимы плагину.</li>
+<li><b>Load </b>- вызывается при загрузке плагина.</li>
+<li><b>Unload </b>- очевидно при отгрузке плагина.</li>
+<li><b>AmxLoad </b>- вызывается при загрузке любой AMX машины (игровой режим или фильтрскрипт).</li>
+<li><b>AmxUnload </b>- при отгрузке AMX машины.</li>
+<li><b>ProcessTick </b>- вызывается при каждом тике (требуется указать права в Supports).</li>
+</ol>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3853737">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-249697.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3853755"></a>
+<div class="post classic " style="" id="post_3853755">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0143/uid-143424.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0143/uid-143424.html">Gettopro</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 184<br />
+	Threads: 23<br />
+	Joined: Oct 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3853755" title="Re: Как создать плагин [часть I]">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Gettopro" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">11.03.2017, 09:35 <span class="post_edit" id="edited_by_3853755"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3853755">
+		Не плохо, стоило бы ещё добавить как создать тот же плагин но под линь <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/> т.е. .so расширение)
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3853755">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-143424.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3854414"></a>
+<div class="post classic " style="" id="post_3854414">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0137/uid-137522.html"><img src="../../assets/uploads/avatars/137522.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0137/uid-137522.html">Diman777</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 439<br />
+	Threads: 13<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3854414" title="Re: Как создать плагин [часть I]">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by Diman777" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">12.03.2017, 18:40 <span class="post_edit" id="edited_by_3854414"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3854414">
+		Во 2-ой части как раз и постараюсь рассказать о функциях. А на счёт туториала 'Как сделать под Linux' - может быть. Вообще по большей части это всё будет полезно новичкам, знающие в принципе не найдут ничего нового.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3854414">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-137522.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3854590"></a>
+<div class="post classic " style="" id="post_3854590">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0028/uid-28037.html"><img src="../../assets/uploads/avatars/28037.png" alt="" width="55" height="53" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0028/uid-28037.html">OKStyle</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,138<br />
+	Threads: 71<br />
+	Joined: May 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3854590" title="Re: Как создать плагин [часть I]">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by OKStyle" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2017, 03:18 <span class="post_edit" id="edited_by_3854590"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3854590">
+		Debug/Release - тут выбирается нужна ли поддержка внешних библиотек? Ненавижу плагины, которым требуются всякие VC++ для работы. Гораздо удобнее воткнуть во внутрь.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3854590">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-28037.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3854606"></a>
+<div class="post classic " style="" id="post_3854606">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0036/uid-36935.html"><img src="../../assets/uploads/avatars/36935.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0036/uid-36935.html"><s>ZiGGi</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,659<br />
+	Threads: 17<br />
+	Joined: Sep 2008
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3854606" title="Re: Как создать плагин [часть I]">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by ZiGGi" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2017, 05:07 <span class="post_edit" id="edited_by_3854606"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3854606">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>OKStyle</strong><br />
+<a href="../../threads/0630/tid-630200.html#pid3854590" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Debug/Release - тут выбирается нужна ли поддержка внешних библиотек? Ненавижу плагины, которым требуются всякие VC++ для работы. Гораздо удобнее воткнуть во внутрь.</div>
+</td>
+</tr>
+</table>
+</div>Нет, при компиляции в Debug режиме в бинарник записывается различная отладочная информация. Аналогично ключу -d3 в Pawn.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3854606">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-36935.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3854789"></a>
+<div class="post classic " style="" id="post_3854789">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0137/uid-137522.html"><img src="../../assets/uploads/avatars/137522.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0137/uid-137522.html">Diman777</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 439<br />
+	Threads: 13<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3854789" title="Re: Как создать плагин [часть I]">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by Diman777" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2017, 15:33 <span class="post_edit" id="edited_by_3854789"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3854789">
+		Меня кстати интересует такой момент - почему в Debug режиме плагин весит больше, чем в Release? Не я один замечал такое.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3854789">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-137522.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3854791"></a>
+<div class="post classic " style="" id="post_3854791">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0031/uid-31537.html"><img src="../../assets/uploads/avatars/31537.png" alt="" width="36" height="36" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0031/uid-31537.html">Stepashka</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Godfather<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 5,763<br />
+	Threads: 19<br />
+	Joined: Jul 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3854791" title="Re: Как создать плагин [часть I]">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by Stepashka" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2017, 15:34 <span class="post_edit" id="edited_by_3854791"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3854791">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Diman777</strong><br />
+<a href="../../threads/0630/tid-630200.html#pid3854789" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">почему в Debug режиме плагин весит больше, чем в Release?</div>
+</td>
+</tr>
+</table>
+</div>эмм:<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>ZiGGi</strong><br />
+<a href="../../threads/0630/tid-630200.html#pid3854606" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">при компиляции в Debug режиме в бинарник записывается различная отладочная информация.</div>
+</td>
+</tr>
+</table>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3854791">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-31537.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3854793"></a>
+<div class="post classic " style="" id="post_3854793">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0137/uid-137522.html"><img src="../../assets/uploads/avatars/137522.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0137/uid-137522.html">Diman777</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 439<br />
+	Threads: 13<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3854793" title="Re: Как создать плагин [часть I]">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Diman777" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2017, 15:39 <span class="post_edit" id="edited_by_3854793"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3854793">
+		Аахха, теперь ясно)
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3854793">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-137522.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3854808"></a>
+<div class="post classic " style="" id="post_3854808">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0104/uid-104339.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0104/uid-104339.html">White_116</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,495<br />
+	Threads: 20<br />
+	Joined: Sep 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3854808" title="Re: Как создать плагин [часть I]">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by White_116" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2017, 16:31 <span class="post_edit" id="edited_by_3854808"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3854808">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>OKStyle</strong><br />
+<a href="../../threads/0630/tid-630200.html#pid3854590" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Debug/Release - тут выбирается нужна ли поддержка внешних библиотек? Ненавижу плагины, которым требуются всякие VC++ для работы. Гораздо удобнее воткнуть во внутрь.</div>
+</td>
+</tr>
+</table>
+</div>Debug/Release - это всего лишь выбор заготовки опций сборки проекта, наплодить всякое можно, VS с этим не ограничивает. Чтобы создать статическую библиотеку, нужно выбрать опцию <i><b>Многопоточная(/MT)</b></i> -  <i>Свойства конфигурации -&gt; С/С++ -&gt; Создание кода -&gt; Библиотека времени выполнения.</i><br />
+Что бы проект был кроссплатформенным, можно использовать CMAKE, тут есть пример как что и куда... <a href="https://github.com/Zeex/sampgdk/wiki/Setting-up-GDK-with-CMake" target="_blank">ССЫЛКА</a><br />
+<br />
+Так же в дебаг режим можно настроить отладку. <br />
+Для этого переходим <i>Свойства конфигурации -&gt; Отладка</i>. <br />
+В строке команда пишем название вашего сервера, допустим <b>sa-mp_server.exe</b>.<br />
+В строке <i>Рабочий каталог</i> указать каталог с вашим сервером где размещён <b>sa-mp_server.exe</b>.<br />
+<b>Примечание:</b> скомпилированная <b>dll</b> уже должна лежать в папке <b>plugins</b> а также отладочная информация <b>pdb</b>. Можно настроить в проекте куда копировать выходные файлы.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3854808">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-104339.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3859695"></a>
+<div class="post classic " style="" id="post_3859695">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0276/uid-276857.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0276/uid-276857.html"><s>BLacksKrillex</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 134<br />
+	Threads: 30<br />
+	Joined: Mar 2016
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3859695" title="Re: Как создать плагин [часть I]">#11</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 11 by BLacksKrillex" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.03.2017, 22:53 <span class="post_edit" id="edited_by_3859695"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3859695">
+		voce fez esse tutorial ai mas eu nao entendi nada (nao sei falar ingles)
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3859695">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-276857.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3859714"></a>
+<div class="post classic " style="" id="post_3859714">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0137/uid-137522.html"><img src="../../assets/uploads/avatars/137522.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0137/uid-137522.html">Diman777</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 439<br />
+	Threads: 13<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3859714" title="Re: Как создать плагин [часть I]">#12</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 12 by Diman777" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.03.2017, 23:21 <span class="post_edit" id="edited_by_3859714"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3859714">
+		BLacksKrillex tire vantagem de ****** tradutor - <a href="https://translate.******.ru/" target="_blank">https://translate.******.ru/</a>. Não é difícil.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3859714">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-137522.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3859715"></a>
+<div class="post classic " style="" id="post_3859715">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0276/uid-276857.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0276/uid-276857.html"><s>BLacksKrillex</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 134<br />
+	Threads: 30<br />
+	Joined: Mar 2016
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3859715" title="Re: Как создать плагин [часть I]">#13</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 13 by BLacksKrillex" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.03.2017, 23:25 <span class="post_edit" id="edited_by_3859715"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Stepashka; 24/03/2017 at 07:44 AM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3859715">
+		Voce poderia posta essse tutorial na board BR?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3859715">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-276857.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3859783"></a>
+<div class="post classic " style="" id="post_3859783">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0137/uid-137522.html"><img src="../../assets/uploads/avatars/137522.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0137/uid-137522.html">Diman777</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 439<br />
+	Threads: 13<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3859783" title="Re: Как создать плагин [часть I]">#14</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 14 by Diman777" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">24.03.2017, 02:33 <span class="post_edit" id="edited_by_3859783"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3859783">
+		Sorry, no.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3859783">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-137522.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3945802"></a>
+<div class="post classic " style="" id="post_3945802">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0306/uid-306544.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0306/uid-306544.html">pawnoholic</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 72<br />
+	Threads: 2<br />
+	Joined: Oct 2017
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3945802" title="Re: Как создать плагин [часть I]">#15</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 15 by pawnoholic" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.10.2017, 17:51 <span class="post_edit" id="edited_by_3945802"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3945802">
+		Скажите пожалуйста, какие компоненты и инструменты необходимо до установить для Community VS 2017?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3945802">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-306544.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3945808"></a>
+<div class="post classic " style="" id="post_3945808">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0137/uid-137522.html"><img src="../../assets/uploads/avatars/137522.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0137/uid-137522.html">Diman777</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 439<br />
+	Threads: 13<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3945808" title="Re: Как создать плагин [часть I]">#16</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 16 by Diman777" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.10.2017, 18:06 <span class="post_edit" id="edited_by_3945808"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3945808">
+		Для 2017 не знаю. Не стоит забывать, что тема о плагинах в 2015 студии. Погугли как говорится)
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3945808">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-137522.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3945816"></a>
+<div class="post classic " style="" id="post_3945816">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0306/uid-306544.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0306/uid-306544.html">pawnoholic</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 72<br />
+	Threads: 2<br />
+	Joined: Oct 2017
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3945816" title="Re: Как создать плагин [часть I]">#17</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 17 by pawnoholic" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.10.2017, 18:37 <span class="post_edit" id="edited_by_3945816"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by pawnoholic; 23/10/2017 at 07:47 PM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3945816">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Diman777</strong><br />
+<a href="../../threads/0630/tid-630200.html#pid3945808" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Для 2017 не знаю. Не стоит забывать, что тема о плагинах в 2015 студии. Погугли как говорится)</div>
+</td>
+</tr>
+</table>
+</div>У меня просто в шаблонах нету Win32<br />
+<br />
+<img alt="" border="0" src="http://pp.userapi.com/c841132/v841132378/2e33c/m-7pme87obM.jpg"/><br />
+<br />
+Выбранные компоненты<br />
+<br />
+<img alt="" border="0" src="http://pp.userapi.com/c841625/v841625378/2cc35/maE3TpYin-I.jpg"/><br />
+<br />
+UPD:<br />
+Почитал на форумах MS<br />
+Пишут что все компоненты C++ ставить нужно.<br />
+Завтра переустановлю, проверю.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3945816">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-306544.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3945963"></a>
+<div class="post classic " style="" id="post_3945963">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0104/uid-104339.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0104/uid-104339.html">White_116</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,495<br />
+	Threads: 20<br />
+	Joined: Sep 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0630/tid-630200.html#pid3945963" title="Re: Как создать плагин [часть I]">#18</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 18 by White_116" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">24.10.2017, 08:57 <span class="post_edit" id="edited_by_3945963"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3945963">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>pawnoholic</strong><br />
+<a href="../../threads/0630/tid-630200.html#pid3945816" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">У меня просто в шаблонах нету Win32<br />
+<br />
+<img alt="" border="0" src="http://pp.userapi.com/c841132/v841132378/2e33c/m-7pme87obM.jpg"/><br />
+<br />
+Выбранные компоненты<br />
+<br />
+<img alt="" border="0" src="http://pp.userapi.com/c841625/v841625378/2cc35/maE3TpYin-I.jpg"/><br />
+<br />
+UPD:<br />
+Почитал на форумах MS<br />
+Пишут что все компоненты C++ ставить нужно.<br />
+Завтра переустановлю, проверю.</div>
+</td>
+</tr>
+</table>
+</div>Выбираешь динамическую библиотеку DLL. Далее в проекте настраиваешь компилятор.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3945963">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-104339.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0630/tid-630200.html">Next Oldest</a> | <a href="../../threads/0630/tid-630200.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="630200" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" selected="selected">------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/9.html">Non-English</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/33.html">Languages</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/32.html">Русский/Russian</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/66.html">Релизы/Releases</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

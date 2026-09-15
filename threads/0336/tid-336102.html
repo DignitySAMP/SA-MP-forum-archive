@@ -1,0 +1,1896 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Making really long dialogs without crashing</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "5d6a3a1bbbfb1c2777e0a81b711ab7a2";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Making really long dialogs without crashing the server I've seen a few tutorials regarding this lately, but they aren't descriptive enough of what they are doing. First of all, this tutorial assumes t" />
+<link rel="canonical" href="../../threads/0336/tid-336102.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="5d6a3a1bbbfb1c2777e0a81b711ab7a2" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0336/tid-336102.html#pid1812083">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Making really long dialogs without crashing
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid1812083"></a>
+<div class="post classic " style="" id="post_1812083">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0116/uid-116619.html"><img src="../../assets/uploads/avatars/116619.png" alt="" width="55" height="51" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0116/uid-116619.html">TheBetaFox</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 245<br />
+	Threads: 21<br />
+	Joined: Jan 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid1812083" title="Making really long dialogs without crashing">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by TheBetaFox" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.04.2012, 06:24 <span class="post_edit" id="edited_by_1812083"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by TheBetaFox; 17.08.2013 at 21:13.
+					
+					
+						Reason: Updated!</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1812083">
+		<font face="Arial Black"><font size="5"><font color="DarkOrange"><div align="center"><b>Making really long dialogs without crashing the server</b></div></font></font></font><br />
+<br />
+I've seen a few tutorials regarding this lately, but they aren't descriptive enough of what they are doing.<br />
+First of all, this tutorial assumes that you have at least basic knowledge of PAWN and of SA-MP functions. You need to know how to create a variable and how to use dialogs in the first place. If you don't know this, please learn how to do so. Besides, if you don't know that, why would you need this tutorial in the first place?<br />
+<blockquote><b>1. </b><font size="4"><font color="DarkOrange"><i>Introduction</i></font></font></blockquote>So, we'd like to show the player a <b>really</b> long dialog, of over 256 characters.<br />
+Keeping it all in one <b>ShowPlayerDialog</b> line will crash pawncc.exe if you go above that limit. Many people do not know this, ending up confused about why their gamemode will refuse to compile. To fix this problem, we need to split up the text of the dialog!<br />
+"But wait," you will say, "how do we do that? How would we split a dialog up?"<br />
+Don't take that literally! I'm not cutting the dialog into separate pieces here,<br />
+Easy! We need to know the usage of the function <b>strcat</b>. You won't actually be SPLITTING the text, but you will be adding each 'piece', each line of it separately.<br />
+<br />
+Unlike <b>OnPlayerText</b>, which I covered in the last section and is a callback, <b>strcat</b> is just a function. Remember that. It concatenates (merges) one string with another. If you'd like to know more about concatenation itself, I advise you to check the Wikipedia page for it: <a href="http://en.wikipedia.org/wiki/Concatenation" target="_blank">http://en.wikipedia.org/wiki/Concatenation</a><br />
+<br />
+<b>Strcat</b> has three parameters. <ul><li><i>dest[] </i>- Because of the [], we notice it is a string. It is actually the destination string - the string in which both strings 'mentioned' in the function are 'merged'.</li>
+<li><i>source[] </i>- Source is a string, as well, and it is the string that we want to merge into the string we have written instead of the first parameter, which is 'dest'.</li>
+<li><i>maxlength</i>- It mentions the size of the destination (i.e dest[] string). It is not necessary to mention it, but I prefer doing it.</li>
+</ul>
+<b>P.S:</b> embedded colours count as eight whole characters! If you happen to have many such colours within one string, the same problem will occur. Do not believe that colours occupy no space - that is not true!<br />
+<blockquote><b>2. </b><font size="4"><font color="DarkOrange"><i>Demonstrating the issue</i></font></font></blockquote>Let's simulate such a situation! We will show a dialog with the rules of the server just when the player spawns - i.e OnPlayerSpawn - but you can do it in any callback of your choice and with any text.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:87px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerSpawn<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span> <br/><span style="color: #000000;">{</span>   <br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Now, let's create the dialog. Perhaps we want to have a rules dialog saying this:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 178px;
+		text-align: left;
+		overflow: auto">'Hi, and welcome to my Awesome Server of Freeroaming!
+Here are some rules that you should respect:
+1. You are not allowed to spam.
+2. You are not allowed to advertise.
+3. You are not allowed to cheat/hack.
+4. You are not allowed to spawnkill.
+5. You are not allowed to insult others.
+6. You are not allowed to beg to be an administrator.
+There are special rules for VIPs! Please check
+/yaddayaddayadda for more information!</pre>
+</div>Great - let's do it! We will add colours as well. You can take their definitions from Zh3r0's <a href="../../threads/0196/tid-196360.html" target="_blank">Easy Colors</a> thread.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:103px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerSpawn<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span> <br/><span style="color: #000000;">{</span><br/>    ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">0</span>, DIALOG_STYLE_MSGBOX, <span style="color: #000066;">""</span>COL_BLUE<span style="color: #000066;">"My Super Rules"</span>, <span style="color: #000066;">""</span>COL_WHITE<span style="color: #000066;">"Hi, and welcome to my "</span>COL_RED<span style="color: #000066;">"super duper awesome "</span>COL_WHITE<span style="color: #000066;">"server!<span style="color: #000099; font-weight: bold;">\n</span>"</span>COL_WHITE<span style="color: #000066;">"Here are some "</span>COL_RED<span style="color: #000066;">"rules "</span>COL_WHITE<span style="color: #000066;">"that you should respect:<span style="color: #000099; font-weight: bold;">\n</span>"</span>COL_GREEN<span style="color: #000066;">"1. "</span>COL_WHITE<span style="color: #000066;">"You are not allowed to spam.<span style="color: #000099; font-weight: bold;">\n</span>"</span>COL_GREEN<span style="color: #000066;">"2. "</span>COL_WHITE<span style="color: #000066;">"You are not allowed to advertise.<span style="color: #000099; font-weight: bold;">\n</span>"</span>COL_GREEN<span style="color: #000066;">"3. "</span>COL_WHITE<span style="color: #000066;">"You are not allowed to cheat/hack.<span style="color: #000099; font-weight: bold;">\n</span>"</span>COL_GREEN<span style="color: #000066;">"4. "</span>COL_WHITE<span style="color: #000066;">"You are not allowed to spawnkill.<span style="color: #000099; font-weight: bold;">\n</span>"</span>COL_GREEN<span style="color: #000066;">"5. "</span>COL_WHITE<span style="color: #000066;">"You are not allowed to insult others.<span style="color: #000099; font-weight: bold;">\n</span>"</span>COL_GREEN<span style="color: #000066;">"6. "</span>COL_WHITE<span style="color: #000066;">"You are not allowed to beg for admin.<span style="color: #000099; font-weight: bold;">\n</span>"</span>COL_WHITE<span style="color: #000066;">"There are special rules for "</span>COL_GREEN<span style="color: #000066;">"VIPs"</span>COL_WHITE<span style="color: #000066;">"! Please check<span style="color: #000099; font-weight: bold;">\n</span>"</span>COL_GREEN<span style="color: #000066;">"/yaddayaddayadda "</span>COL_WHITE<span style="color: #000066;">"for more information!"</span>, <span style="color: #000066;">"OK"</span>, <span style="color: #000066;">"Cancel"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Try compiling this, and you will notice that your gamemode will never get compiled because your compiler will crash!<br />
+<blockquote><b>3. </b><font size="4"><font color="DarkOrange"><i>Demonstrating the solution</i></font></font></blockquote>Now, we will try the method we recommended to solve this issue.<br />
+Declare a variable of size 512 - we do need it that large and sometimes even larger! This is an exception to the "keep the size low" rule.  Call it whatever you like, but for demonstration purposes we will call it pDialog.<br />
+After that, change the message argument in ShowPlayerDialog to our variable - pDialog!<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:119px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerSpawn<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> pDialog<span style="color: #000000;">[</span><span style="color: #000000;">512</span><span style="color: #000000;">]</span>;<br/>    ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">0</span>, DIALOG_STYLE_MSGBOX, <span style="color: #000066;">""</span>COL_BLUE<span style="color: #000066;">"My Super Rules"</span>, pDialog, <span style="color: #000066;">"OK"</span>, <span style="color: #000066;">"Cancel"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+This will work, but there is no text! Why? Because we haven't added it yet. Let's get you used to using strcat.<br />
+Write strcat with the dest[] parameter set to pDialog, and with source[] to the first line of text that you'd like to see in the dialog.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:135px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerSpawn<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> pDialog<span style="color: #000000;">[</span><span style="color: #000000;">512</span><span style="color: #000000;">]</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>pDialog, <span style="color: #000066;">""</span>COL_WHITE<span style="color: #000066;">"Hi, and welcome to my "</span>COL_RED<span style="color: #000066;">"super duper awesome "</span>COL_WHITE<span style="color: #000066;">"server!<span style="color: #000099; font-weight: bold;">\n</span>"</span>, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">0</span>, DIALOG_STYLE_MSGBOX, <span style="color: #000066;">""</span>COL_BLUE<span style="color: #000066;">"My Super Rules"</span>, pDialog, <span style="color: #000066;">"OK"</span>, <span style="color: #000066;">"Cancel"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Make sure to add \n after a line of text, as that creates a new line!<br />
+Now, do so with all lines in your dialog! The text doesn't have to be be same as mine, by the way. Change it to whatever you'd like!<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:279px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerSpawn<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> pDialog<span style="color: #000000;">[</span><span style="color: #000000;">512</span><span style="color: #000000;">]</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>pDialog, <span style="color: #000066;">""</span>COL_WHITE<span style="color: #000066;">"Hi, and welcome to my "</span>COL_RED<span style="color: #000066;">"super duper awesome "</span>COL_WHITE<span style="color: #000066;">"server!<span style="color: #000099; font-weight: bold;">\n</span>"</span>, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>pDialog, <span style="color: #000066;">""</span>COL_WHITE<span style="color: #000066;">"Here are some "</span>COL_RED<span style="color: #000066;">"rules "</span>COL_WHITE<span style="color: #000066;">"that you should respect:<span style="color: #000099; font-weight: bold;">\n</span>"</span>, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>pDialog, <span style="color: #000066;">""</span>COL_GREEN<span style="color: #000066;">"1. "</span>COL_WHITE<span style="color: #000066;">"You are not allowed to spam.<span style="color: #000099; font-weight: bold;">\n</span>"</span>, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>pDialog, <span style="color: #000066;">""</span>COL_GREEN<span style="color: #000066;">"2. "</span>COL_WHITE<span style="color: #000066;">"You are not allowed to advertise.<span style="color: #000099; font-weight: bold;">\n</span>"</span>, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>pDialog, <span style="color: #000066;">""</span>COL_GREEN<span style="color: #000066;">"3. "</span>COL_WHITE<span style="color: #000066;">"You are not allowed to cheat/hack.<span style="color: #000099; font-weight: bold;">\n</span>"</span>, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>pDialog, <span style="color: #000066;">""</span>COL_GREEN<span style="color: #000066;">"4. "</span>COL_WHITE<span style="color: #000066;">"You are not allowed to spawnkill.<span style="color: #000099; font-weight: bold;">\n</span>"</span>, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>pDialog, <span style="color: #000066;">""</span>COL_GREEN<span style="color: #000066;">"5. "</span>COL_WHITE<span style="color: #000066;">"You are not allowed to insult others.<span style="color: #000099; font-weight: bold;">\n</span>"</span>, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>pDialog, <span style="color: #000066;">""</span>COL_GREEN<span style="color: #000066;">"6. "</span>COL_WHITE<span style="color: #000066;">"You are not allowed to beg for admin.<span style="color: #000099; font-weight: bold;">\n</span>"</span>, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>pDialog, <span style="color: #000066;">""</span>COL_WHITE<span style="color: #000066;">"There are special rules for "</span>COL_GREEN<span style="color: #000066;">"VIPs"</span>COL_WHITE<span style="color: #000066;">"! Please check<span style="color: #000099; font-weight: bold;">\n</span>"</span>, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>pDialog, <span style="color: #000066;">""</span>COL_GREEN<span style="color: #000066;">"/yaddayaddayadda "</span>COL_WHITE<span style="color: #000066;">"for more information!"</span>, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">0</span>, DIALOG_STYLE_MSGBOX, <span style="color: #000066;">""</span>COL_BLUE<span style="color: #000066;">"My Super Rules"</span>, pDialog, <span style="color: #000066;">"OK"</span>, <span style="color: #000066;">"Cancel"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Now, the gamemode will compile; the compiler is merciful!<br />
+If you ever need to make dialogs of a reasonable length, this is your salvation.<br />
+<br />
+Have fun scripting!<br />
+<blockquote><b>3. </b><font size="4"><font color="DarkOrange"><i>For those who were using format();</i></font></font></blockquote>Were you formatting your dialog to show the values of specific variables, like a player's name? We'll do things differently, then.<br />
+Let's try a dialog saying this:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 66px;
+		text-align: left;
+		overflow: auto">Welcome back to our server, [playername]!
+Enter your password to log in. You have %d tries left.
+[more text here]</pre>
+</div>If you try to do this with strcat, you will have issues - where to put the player's name?<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:199px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerConnect<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> pDialog<span style="color: #000000;">[</span><span style="color: #000000;">196</span><span style="color: #000000;">]</span>, pName<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>, nTries;<br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, pName, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pName<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>pDialog, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"Welcome back to our server, %s!<span style="color: #000099; font-weight: bold;">\n</span>"</span>, pName<span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>pDialog, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%sEnter your password to log in. You have %d tries left.<span style="color: #000099; font-weight: bold;">\n</span>"</span>, szDialog, nTries<span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>pDialog, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%sMore text here."</span>, szDialog<span style="color: #000000;">)</span>;<br/>    ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">0</span>, DIALOG_STYLE_LIST, <span style="color: #000066;">"My Super Login"</span>, pDialog, <span style="color: #000066;">"OK"</span>, <span style="color: #000066;">"I refuse to log in, for I am jealous of your tidy code."</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+We are assuming you know how to use format, so here is the short explanation: each time you reformat the string, it overwrites itself. To avoid this, we must add the original string in each time we reformat in. Therefore, the first formatted variable in each line beneath the first must be the variable containing the dialog itself.<br />
+Do not forget to add \n at the end of each line.<br />
+<br />
+You may also use both format and strcat in situations where each are needed:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:199px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerConnect<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> pDialog<span style="color: #000000;">[</span><span style="color: #000000;">196</span><span style="color: #000000;">]</span>, pName<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>, nTries;<br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, pName, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pName<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>pDialog, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"Welcome back to our server, %s!<span style="color: #000099; font-weight: bold;">\n</span>"</span>, pName<span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>pDialog, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%sEnter your password to log in. You have %d tries left.<span style="color: #000099; font-weight: bold;">\n</span>"</span>, szDialog, nTries<span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>pDialog, <span style="color: #000066;">"More text here."</span>, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pDialog<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">0</span>, DIALOG_STYLE_LIST, <span style="color: #000066;">"My Super Login"</span>, pDialog, <span style="color: #000066;">"OK"</span>, <span style="color: #000066;">"I refuse to log in, for I am jealous of your tidy code."</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Enjoy. If you have any questions, reply in the thread!<br />
+Happy scripting!<br />
+<br />
+<font size="1"><div align="center">P.S: If you actually read the whole tutorial and you have found mistakes in the text, please tell me. Thank you in advance!</div></font>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1812083">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-116619.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1812115"></a>
+<div class="post classic " style="" id="post_1812115">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0146/uid-146580.html"><img src="../../assets/uploads/avatars/146580.png" alt="" width="55" height="38" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0146/uid-146580.html">Rudy_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,355<br />
+	Threads: 68<br />
+	Joined: Nov 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid1812115" title="Re: Making really long dialogs without crashing">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by Rudy_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.04.2012, 07:14 <span class="post_edit" id="edited_by_1812115"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1812115">
+		Nice work. rep+
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1812115">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-146580.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1812194"></a>
+<div class="post classic " style="" id="post_1812194">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0116/uid-116021.html"><img src="../../assets/uploads/avatars/116021.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0116/uid-116021.html">ilikenuts</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 213<br />
+	Threads: 8<br />
+	Joined: Jan 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid1812194" title="Re: Making really long dialogs without crashing">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by ilikenuts" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.04.2012, 08:57 <span class="post_edit" id="edited_by_1812194"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1812194">
+		Hmm? I've created a tutorial which similar to this.<br />
+Anyway, Good job +rep.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1812194">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-116021.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1812325"></a>
+<div class="post classic " style="" id="post_1812325">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0017/uid-17121.html"><img src="../../assets/uploads/avatars/17121.png" alt="" width="41" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0017/uid-17121.html">shitbird</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 721<br />
+	Threads: 25<br />
+	Joined: Nov 2007
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid1812325" title="Re: Making really long dialogs without crashing">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by shitbird" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.04.2012, 10:42 <span class="post_edit" id="edited_by_1812325"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1812325">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>ilikenuts</strong><br />
+<a href="../../threads/0336/tid-336102.html#pid1812194" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Hmm? I've created a tutorial which similar to this.<br />
+Anyway, Good job +rep.</div>
+</td>
+</tr>
+</table>
+</div>I learned a lot more reading this than I did compared to reading yours.<br />
+You may want to expand your tutorial, as you don't really explain enough, imo.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1812325">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-17121.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1812393"></a>
+<div class="post classic " style="" id="post_1812393">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0116/uid-116619.html"><img src="../../assets/uploads/avatars/116619.png" alt="" width="55" height="51" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0116/uid-116619.html">TheBetaFox</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 245<br />
+	Threads: 21<br />
+	Joined: Jan 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid1812393" title="Re: Making really long dialogs without crashing">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by TheBetaFox" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.04.2012, 11:27 <span class="post_edit" id="edited_by_1812393"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1812393">
+		Just 'fixed' something - I had written this in Word before and somehow I copy-pasted an older version.<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Rudy_</strong><br />
+<a href="../../threads/0336/tid-336102.html#pid1812115" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Nice work. rep+</div>
+</td>
+</tr>
+</table>
+</div>Thanks!<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>ilikenuts</strong><br />
+<a href="../../threads/0336/tid-336102.html#pid1812194" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Hmm? I've created a tutorial which similar to this.<br />
+Anyway, Good job +rep.</div>
+</td>
+</tr>
+</table>
+</div>Thanks, and:<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				I've seen a few tutorials regarding this lately, but they aren't descriptive enough of what they are doing.<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1812393">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-116619.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1812398"></a>
+<div class="post classic " style="" id="post_1812398">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78223.html"><img src="../../assets/uploads/avatars/78223.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78223.html">Lorenc_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,793<br />
+	Threads: 196<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid1812398" title="Re: Making really long dialogs without crashing">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by Lorenc_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.04.2012, 11:29 <span class="post_edit" id="edited_by_1812398"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1812398">
+		You can use "format" as well
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1812398">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78223.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1812411"></a>
+<div class="post classic " style="" id="post_1812411">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0071/uid-71667.html"><img src="../../assets/uploads/avatars/71667.png" alt="" width="55" height="50" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0071/uid-71667.html">vassilis</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,679<br />
+	Threads: 232<br />
+	Joined: Nov 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid1812411" title="Re: Making really long dialogs without crashing">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by vassilis" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.04.2012, 11:33 <span class="post_edit" id="edited_by_1812411"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1812411">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Lorenc_</strong><br />
+<a href="../../threads/0336/tid-336102.html#pid1812398" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">You can use "format" as well</div>
+</td>
+</tr>
+</table>
+</div>Its very nice tutorial but i agree with Lorenc_ why don't you use format for a simpler and faster way?Isn't faster?If i am wrong explain me why.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1812411">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-71667.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1812492"></a>
+<div class="post classic " style="" id="post_1812492">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0116/uid-116619.html"><img src="../../assets/uploads/avatars/116619.png" alt="" width="55" height="51" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0116/uid-116619.html">TheBetaFox</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 245<br />
+	Threads: 21<br />
+	Joined: Jan 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid1812492" title="Re: Making really long dialogs without crashing">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by TheBetaFox" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.04.2012, 12:07 <span class="post_edit" id="edited_by_1812492"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1812492">
+		Format works just as well, yes, but strcat looks cleaner imo, especially because I have each line of the dialog separated. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1812492">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-116619.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1812561"></a>
+<div class="post classic " style="" id="post_1812561">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0157/uid-157120.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0157/uid-157120.html">Jonny5</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 929<br />
+	Threads: 17<br />
+	Joined: Mar 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid1812561" title="Re: Making really long dialogs without crashing">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Jonny5" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.04.2012, 12:41 <span class="post_edit" id="edited_by_1812561"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1812561">
+		you can use format the same way!<br />
+example<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:263px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> strDialog<span style="color: #000000;">[</span><span style="color: #000000;">1024</span><span style="color: #000000;">]</span>;<span style="color: #228822;">//this could... be smaller i know</span><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>strDialog, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>strDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s<span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>(%d)<span style="color: #000099; font-weight: bold;">\n</span>"</span>                ,<span style="color: #000066;">"Land"</span>         ,GetTotalVehCount<span style="color: #000000;">(</span>VEH_FLAG_LAND<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>strDialog, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>strDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%s<span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>(%d)<span style="color: #000099; font-weight: bold;">\n</span>"</span>  ,strDialog  ,<span style="color: #000066;">"Air"</span>          ,GetTotalVehCount<span style="color: #000000;">(</span>VEH_FLAG_AIR<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>strDialog, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>strDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%s<span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>(%d)<span style="color: #000099; font-weight: bold;">\n</span>"</span>  ,strDialog  ,<span style="color: #000066;">"Sea"</span>          ,GetTotalVehCount<span style="color: #000000;">(</span>VEH_FLAG_BOAT<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>strDialog, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>strDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%s<span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>(%d)<span style="color: #000099; font-weight: bold;">\n</span>"</span>  ,strDialog  ,<span style="color: #000066;">"Law"</span>          ,GetTotalVehCount<span style="color: #000000;">(</span>VEH_FLAG_LAW<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>strDialog, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>strDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%s<span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>(%d)<span style="color: #000099; font-weight: bold;">\n</span>"</span>  ,strDialog  ,<span style="color: #000066;">"Bikes"</span>        ,GetTotalVehCount<span style="color: #000000;">(</span>VEH_FLAG_BIKE<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>strDialog, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>strDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%s<span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>(%d)<span style="color: #000099; font-weight: bold;">\n</span>"</span>  ,strDialog  ,<span style="color: #000066;">"Sport"</span>        ,GetTotalVehCount<span style="color: #000000;">(</span><span style="color: #000000;">(</span>VEH_FLAG_CONVERTIBLE | VEH_FLAG_SPORT<span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>strDialog, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>strDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%s<span style="color: #000099; font-weight: bold;">\t</span>(%d)<span style="color: #000099; font-weight: bold;">\n</span>"</span>    ,strDialog  ,<span style="color: #000066;">"Industrial"</span>   ,GetTotalVehCount<span style="color: #000000;">(</span>VEH_FLAG_INDUSTRIAL<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>strDialog, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>strDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%s<span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>(%d)<span style="color: #000099; font-weight: bold;">\n</span>"</span>  ,strDialog  ,<span style="color: #000066;">"Trailers"</span>     ,GetTotalVehCount<span style="color: #000000;">(</span>VEH_FLAG_TRAILER<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>strDialog, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>strDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%s<span style="color: #000099; font-weight: bold;">\t</span>(%d)<span style="color: #000099; font-weight: bold;">\n</span>"</span>    ,strDialog  ,<span style="color: #000066;">"Lowrider"</span>     ,GetTotalVehCount<span style="color: #000000;">(</span>VEH_FLAG_LOWRIDER<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>strDialog, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>strDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%s<span style="color: #000099; font-weight: bold;">\t</span>(%d)<span style="color: #000099; font-weight: bold;">\n</span>"</span>    ,strDialog  ,<span style="color: #000066;">"OffRoad"</span>      ,GetTotalVehCount<span style="color: #000000;">(</span>VEH_FLAG_OFFROAD<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>strDialog, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>strDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%s<span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>(%d)<span style="color: #000099; font-weight: bold;">\n</span>"</span>  ,strDialog  ,<span style="color: #000066;">"Service"</span>      ,GetTotalVehCount<span style="color: #000000;">(</span>VEH_FLAG_PUBLICSERVICE<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>strDialog, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>strDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%s<span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>(%d)<span style="color: #000099; font-weight: bold;">\n</span>"</span>  ,strDialog  ,<span style="color: #000066;">"Saloon"</span>       ,GetTotalVehCount<span style="color: #000000;">(</span>VEH_FLAG_SALOON<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>strDialog, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>strDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%s<span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>(%d)<span style="color: #000099; font-weight: bold;">\n</span>"</span>  ,strDialog  ,<span style="color: #000066;">"Wagon"</span>        ,GetTotalVehCount<span style="color: #000000;">(</span>VEH_FLAG_WAGON<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>strDialog, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>strDialog<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%s<span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>(%d)<span style="color: #000099; font-weight: bold;">\n</span>"</span>  ,strDialog  ,<span style="color: #000066;">"Unique"</span>       ,GetTotalVehCount<span style="color: #000000;">(</span>VEH_FLAG_UNIQUE<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+however i think strcat might be faster from what i read in another thread.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1812561">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-157120.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1812806"></a>
+<div class="post classic " style="" id="post_1812806">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0081/uid-81693.html"><img src="../../assets/uploads/avatars/81693.png" alt="" width="35" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0081/uid-81693.html">playbox12</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,317<br />
+	Threads: 23<br />
+	Joined: Feb 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid1812806" title="Re: Making really long dialogs without crashing">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by playbox12" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.04.2012, 14:14 <span class="post_edit" id="edited_by_1812806"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1812806">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Lorenc_</strong><br />
+<a href="../../threads/0336/tid-336102.html#pid1812398" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">You can use "format" as well</div>
+</td>
+</tr>
+</table>
+</div>There is really no need to use format in this case, AFAIK it'd only make it slower.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1812806">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-81693.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1813111"></a>
+<div class="post classic " style="" id="post_1813111">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0116/uid-116619.html"><img src="../../assets/uploads/avatars/116619.png" alt="" width="55" height="51" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0116/uid-116619.html">TheBetaFox</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 245<br />
+	Threads: 21<br />
+	Joined: Jan 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid1813111" title="Re: Making really long dialogs without crashing">#11</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 11 by TheBetaFox" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.04.2012, 19:22 <span class="post_edit" id="edited_by_1813111"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1813111">
+		Please, guys, don't start a debate on whether I should use format or strcat. If you want, I will edit the tutorial and also present the format 'way' later.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1813111">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-116619.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1813228"></a>
+<div class="post classic " style="" id="post_1813228">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0037/uid-37431.html"><img src="../../assets/uploads/avatars/37431.png" alt="" width="46" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0037/uid-37431.html">Hiddos</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,304<br />
+	Threads: 58<br />
+	Joined: Sep 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid1813228" title="Re: Making really long dialogs without crashing">#12</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 12 by Hiddos" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.04.2012, 20:03 <span class="post_edit" id="edited_by_1813228"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1813228">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>TheBetaFox</strong><br />
+<a href="../../threads/0336/tid-336102.html#pid1813111" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Please, guys, don't start a debate on whether I should use format or strcat. If you want, I will edit the tutorial and also present the format 'way' later.</div>
+</td>
+</tr>
+</table>
+</div>strcat is faster, so I don't think you should add a format section. Plus, strcat doesn't require you to use a format.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1813228">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-37431.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1813984"></a>
+<div class="post classic " style="" id="post_1813984">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0100/uid-100574.html"><img src="../../assets/uploads/avatars/100574.png" alt="" width="55" height="53" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0100/uid-100574.html">Niko_boy</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,336<br />
+	Threads: 30<br />
+	Joined: Aug 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid1813984" title="Re: Making really long dialogs without crashing">#13</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 13 by Niko_boy" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">22.04.2012, 03:32 <span class="post_edit" id="edited_by_1813984"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1813984">
+		oh i see now usage of strcat , never knew much about it <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/razz.gif" title="Tongue"/><br />
+Nice tut
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1813984">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-100574.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2462193"></a>
+<div class="post classic " style="" id="post_2462193">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0160/uid-160642.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0160/uid-160642.html">Youtube12</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 221<br />
+	Threads: 66<br />
+	Joined: Apr 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid2462193" title="AW: Making really long dialogs without crashing">#14</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 14 by Youtube12" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">03.04.2013, 20:01 <span class="post_edit" id="edited_by_2462193"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2462193">
+		Nice
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2462193">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-160642.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2463875"></a>
+<div class="post classic " style="" id="post_2463875">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0107/uid-107760.html"><img src="../../assets/uploads/avatars/107760.png" alt="" width="33" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0107/uid-107760.html">seanny</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,429<br />
+	Threads: 321<br />
+	Joined: Oct 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid2463875" title="Re: Making really long dialogs without crashing">#15</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 15 by seanny" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">04.04.2013, 20:56 <span class="post_edit" id="edited_by_2463875"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2463875">
+		Nice tutorial, very well explained and useful.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2463875">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-107760.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2662867"></a>
+<div class="post classic " style="" id="post_2662867">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0116/uid-116619.html"><img src="../../assets/uploads/avatars/116619.png" alt="" width="55" height="51" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0116/uid-116619.html">TheBetaFox</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 245<br />
+	Threads: 21<br />
+	Joined: Jan 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid2662867" title="Re: Making really long dialogs without crashing">#16</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 16 by TheBetaFox" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.08.2013, 22:15 <span class="post_edit" id="edited_by_2662867"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2662867">
+		I have extended this tutorial and I have corrected several mistakes. Enjoy, and happy scripting!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2662867">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-116619.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3228226"></a>
+<div class="post classic " style="" id="post_3228226">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0226/uid-226807.html"><img src="../../assets/uploads/avatars/226807.png" alt="" width="49" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0226/uid-226807.html">Ryz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 481<br />
+	Threads: 37<br />
+	Joined: Feb 2014
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid3228226" title="Re: Making really long dialogs without crashing">#17</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 17 by Ryz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">16.10.2014, 15:40 <span class="post_edit" id="edited_by_3228226"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3228226">
+		Nice work!thank you very muchh
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3228226">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-226807.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3977470"></a>
+<div class="post classic " style="" id="post_3977470">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0176/uid-176342.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0176/uid-176342.html">kevann</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 79<br />
+	Threads: 18<br />
+	Joined: Aug 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0336/tid-336102.html#pid3977470" title="Re: Making really long dialogs without crashing">#18</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 18 by kevann" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">09.01.2018, 14:32 <span class="post_edit" id="edited_by_3977470"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3977470">
+		Thanks, this helped me alot! REP+
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3977470">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-176342.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0336/tid-336102.html">Next Oldest</a> | <a href="../../threads/0336/tid-336102.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="336102" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

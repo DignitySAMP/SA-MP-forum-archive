@@ -1,0 +1,2137 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] How to make a MySQL Admin System!</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "bd47ce0c9515c35253d90efa95cdc9ed";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="How to make a MySQL Admin SystemIntroduction: Hey guys I've decided to make a tutorial on how to make a MySQL admin system with a few basic admin commands. If you need any help in regards to this tuto" />
+<link rel="canonical" href="../../threads/0422/tid-422295.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="bd47ce0c9515c35253d90efa95cdc9ed" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (2):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0422/tid-422295-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0422/tid-422295-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0422/tid-422295.html#pid2425521">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] How to make a MySQL Admin System!
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid2425521"></a>
+<div class="post classic " style="" id="post_2425521">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0101/uid-101814.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0101/uid-101814.html">kamzaf</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 247<br />
+	Threads: 11<br />
+	Joined: Aug 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2425521" title="How to make a MySQL Admin System!">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by kamzaf" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2013, 02:07 <span class="post_edit" id="edited_by_2425521"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by kamzaf; 13/04/2013 at 05:01 PM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2425521">
+		<div align="center"><font size="7"><font color="Red"><u>How to make a MySQL Admin System</u></font></font></div><b><u><font color="Magenta">Introduction:</font></u></b><br />
+Hey guys I've decided to make a tutorial on how to make a MySQL admin system with a few basic admin commands.  If you need any help in regards to this tutorial, feel free to PM me or post a reply in this topic.<br />
+<br />
+<b><u><font color="Magenta">Before we start:</font></u></b><br />
+Before we start the tutorial you must have the following includes in your pawno folder:<br />
+<a href="http://www.solidfiles.com/d/0ab6808f92/" target="_blank">data</a> - by me :P<br />
+<a href="http://www.solidfiles.com/d/8b16ef7545/" target="_blank">MySQL include</a> | <a href="../../threads/0122/tid-122983.html" target="_blank">MySQL Plugin</a> - StrickenKid<br />
+<a href="http://www.solidfiles.com/d/75c54a900f/" target="_blank">ZCMD</a> - Zeex<br />
+<a href="http://www.solidfiles.com/d/1e83908e37/" target="_blank">Sscanf</a> - Y_Less<br />
+You may also use <a href="http://www.wampserver.com/en/#download-wrapper" target="_blank">WAMPServer</a> for your MySQL/PHPMyAdmin database.<br />
+<br />
+Now once you have installed wampserver and have placed the includes in the appropriate folder we may now begin.<br />
+<br />
+<b><u><font color="Magenta">Lets start:</font></u></b><br />
+Now to begin you have to include the following lines on top of your script:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:103px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include &lt;a_samp&gt;</span><br/><span style="color: #2222AA;">#include &lt;mysql&gt;</span><br/><span style="color: #2222AA;">#include &lt;zcmd&gt;</span><br/><span style="color: #2222AA;">#include &lt;sscanf2&gt;</span><br/><span style="color: #2222AA;">#include &lt;data&gt;</span></div></div></pre>
+</div>
+Underneath that we have to tell the script what server and credentials are we going to connect to. So for that add the following lines underneath:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:87px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#define mysql_host "localhost" //your destination server</span><br/><span style="color: #2222AA;">#define mysql_user "root" //default user name of wampserver</span><br/><span style="color: #2222AA;">#define mysql_password "" //wampserver has no default password unless you have set one.</span><br/><span style="color: #2222AA;">#define mysql_database "sa-mpsql"//the name of your database</span></div></div></pre>
+</div>
+Now that you have defined the mysql database, we must make the tables in your server.  Please follow the next pictures in order to make them.<br />
+Make sure this icon is green.<br />
+<img alt="" border="0" src="http://i.imgur.com/ebYpsC8.png"/><br />
+<br />
+Left click on the icon and click on "PhpMyAdmin"<br />
+<img alt="" border="0" src="http://i.imgur.com/WWieDZY.png"/><br />
+<br />
+Then click on Database, enter the name of the database: "sa-mpsql" and click create.<br />
+<img alt="" border="0" src="http://i.imgur.com/mW4LK9E.png"/><br />
+<br />
+Then click on sql and enter the following lines in the console:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:215px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">CREATE TABLE IF NOT EXISTS `playerdata` <span style="color: #000000;">(</span><br/>  `id` int<span style="color: #000000;">(</span><span style="color: #000000;">11</span><span style="color: #000000;">)</span> NOT NULL AUTO_INCREMENT,<br/>  `nick` varchar<span style="color: #000000;">(</span><span style="color: #000000;">24</span><span style="color: #000000;">)</span> NOT NULL,<br/>  `password` varchar<span style="color: #000000;">(</span><span style="color: #000000;">68</span><span style="color: #000000;">)</span> NOT NULL,<br/>  `admin` int<span style="color: #000000;">(</span><span style="color: #000000;">20</span><span style="color: #000000;">)</span> NOT NULL,<br/>  `score` int<span style="color: #000000;">(</span><span style="color: #000000;">20</span><span style="color: #000000;">)</span> NOT NULL,<br/>  `money` int<span style="color: #000000;">(</span><span style="color: #000000;">20</span><span style="color: #000000;">)</span> NOT NULL,<br/>  `kills` int<span style="color: #000000;">(</span><span style="color: #000000;">20</span><span style="color: #000000;">)</span> NOT NULL,<br/>  `deaths` int<span style="color: #000000;">(</span><span style="color: #000000;">20</span><span style="color: #000000;">)</span> NOT NULL,<br/>  `ip` varchar<span style="color: #000000;">(</span><span style="color: #000000;">16</span><span style="color: #000000;">)</span> NOT NULL,<br/>  PRIMARY KEY <span style="color: #000000;">(</span>`id`<span style="color: #000000;">)</span><br/><span style="color: #000000;">)</span> ENGINE<span style="color: #000000;">=</span>MyISAM  DEFAULT CHARSET<span style="color: #000000;">=</span>latin1 AUTO_INCREMENT<span style="color: #000000;">=</span><span style="color: #000000;">1462</span>;</div></div></pre>
+</div><img alt="" border="0" src="http://i.imgur.com/qzLssdY.png"/><br />
+<br />
+Once you have entered those lines in the console click enter and the following screen should appear after you click on "playerdata".<br />
+<img alt="" border="0" src="http://i.imgur.com/UIgvM5A.png"/><br />
+<br />
+<b><u><font color="Magenta">Next:</font></u></b><br />
+Once we have our tables ready, we can now continue with the script.<br />
+<br />
+Add the following lines underneath the defines:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:151px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> <span style="color: #000000;">MySQL</span><span style="color: #000000;">:</span>mysql;<br/><span style="color: #2222BB;">new</span> field<span style="color: #000000;">[</span><span style="color: #000000;">128</span><span style="color: #000000;">]</span>;<br/><br/><span style="color: #2222AA;">#define mysql_fetch_float(%0,%1) mysql_fetch_field(%0,field); \</span><br/><span style="color: #000000;">%</span>1<span style="color: #000000;">=</span><span style="color: #222222;">floatstr</span><span style="color: #000000;">(</span>field<span style="color: #000000;">)</span><br/><span style="color: #2222AA;">#define mysql_fetch_string(%0,%1) mysql_fetch_field(%0,%1)</span><br/><span style="color: #2222AA;">#define mysql_fetch_int(%0,%1) mysql_fetch_field(%0,field); \</span><br/><span style="color: #000000;">%</span>1<span style="color: #000000;">=</span><span style="color: #222222;">strval</span><span style="color: #000000;">(</span>field<span style="color: #000000;">)</span></div></div></pre>
+</div>
+Next above OnGameModeInit we have to add our <a href="../../threads/0318/tid-318307.html" target="_blank">enums</a> on the script:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:247px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">enum</span> PlayerInfo<br/><span style="color: #000000;">{</span><br/>    ID, <span style="color: #228822;">// id of the player</span><br/>    Nick<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>, <span style="color: #228822;">// name of the player</span><br/>    pAdmin, <span style="color: #228822;">// admin level of the player</span><br/>    pMoney, <span style="color: #228822;">//money of the player</span><br/>    pKills, <span style="color: #228822;">// Kills of the player</span><br/>    pDeaths, <span style="color: #228822;">// deaths of the player</span><br/>    pScore, <span style="color: #228822;">// score of the player</span><br/>    IP<span style="color: #000000;">[</span><span style="color: #000000;">16</span><span style="color: #000000;">]</span>, <span style="color: #228822;">// Storing the ip of the player</span><br/>        Logged, <span style="color: #228822;">// Players logged in or not variable</span><br/>        IsRegistered <span style="color: #228822;">//checks if the player is registered or not.</span><br/><span style="color: #000000;">}</span>;<br/><span style="color: #2222BB;">new</span> pInfo<span style="color: #000000;">[</span>MAX_PLAYERS<span style="color: #000000;">]</span><span style="color: #000000;">[</span>PlayerInfo<span style="color: #000000;">]</span>;</div></div></pre>
+</div>
+Next under OnGameModeInit include the following lines:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:231px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnGameModeInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    mysql <span style="color: #000000;">=</span> mysql_init<span style="color: #000000;">(</span>LOG_ALL<span style="color: #000000;">)</span>; <span style="color: #228822;">// Tells sql to log all mysql features used in the script</span><br/>    <span style="color: #2222BB;">new</span> Connection <span style="color: #000000;">=</span> mysql_connect<span style="color: #000000;">(</span>mysql_host, mysql_user, mysql_password, mysql_database, mysql<span style="color: #000000;">)</span>; <span style="color: #228822;">// connects with the mysql database</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Connection<span style="color: #000000;">)</span> <span style="color: #228822;">//checks if the database is successfully connected</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">new</span> dest<span style="color: #000000;">[</span><span style="color: #000000;">200</span><span style="color: #000000;">]</span>;<br/>        mysql_stat<span style="color: #000000;">(</span>dest<span style="color: #000000;">)</span>; <span style="color: #228822;">// display the mysql database statistics.</span><br/>        <span style="color: #222222;">printf</span><span style="color: #000000;">(</span>dest<span style="color: #000000;">)</span>;<br/>        <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"&gt;&gt; MySQL connection successfully initialized"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// if it is connected it will display this line, if not then it wont display anything.</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Next that we have successfully entered the credentials for our database and have the server connect to it we must log in or register the player under OnPlayerConnect.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:375px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerConnect<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> Query<span style="color: #000000;">[</span><span style="color: #000000;">500</span><span style="color: #000000;">]</span>;<br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span>, <span style="color: #000000;">24</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//gets the player's name and stores it to to your enum pInfo[playerid][Nick]</span><br/>    GetPlayerIp<span style="color: #000000;">(</span>playerid, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>IP<span style="color: #000000;">]</span>, <span style="color: #000000;">16</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Gets the IP of the player and stores it to pInfo[playerid][IP]</span><br/>    mysql_real_escape_string<span style="color: #000000;">(</span>pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// now we have to escape the name inorder to escape any mysql injections. (<a href="http://en.wikipedia.org/wiki/SQL_injection" target="_blank" rel="noopener" class="mycode_url">http://en.wikipedia.org/wiki/SQL_injection</a>)</span><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #000000;">500</span>, <span style="color: #000066;">"SELECT `nick` FROM `playerdata` WHERE `nick` COLLATE latin1_general_cs = '%s' LIMIT 1"</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// here we are selecting the name of the player who logged in from the database.</span><br/>    mysql_query<span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>; <span style="color: #228822;">// we query the statement above</span><br/>    mysql_store_result<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// next we store the result inorder for it to be used further ahead.</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>mysql_num_rows<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">&gt;</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #228822;">// if the  database has more then one table with the given name</span><br/>    <span style="color: #000000;">{</span><span style="color: #228822;">//then</span><br/>        ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">1</span>, DIALOG_STYLE_PASSWORD, <span style="color: #000066;">"Login"</span>, <span style="color: #000066;">"This account is registered! Please log in:"</span>, <span style="color: #000066;">"Login"</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// show the login dialog and tell the player to login.</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #228822;">// else if the database found no tables with the given name</span><br/>    <span style="color: #000000;">{</span> <span style="color: #228822;">// then</span><br/>        ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">2</span>, DIALOG_STYLE_PASSWORD, <span style="color: #000066;">"Register"</span>, <span style="color: #000066;">"This account not registered yet! Please register:"</span>, <span style="color: #000066;">"Register"</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>;<span style="color: #228822;">// show the register dialog and tell the player to register</span><br/>    <span style="color: #000000;">}</span><br/>    mysql_free_result<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// here we free the result we stored in the beginning as we do not need it anymore.</span><br/>    <span style="color: #228822;">//You must always free the mysql result to avoid</span><br/>    <span style="color: #228822;">//there being massive memory usage.</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Now that we have completed our login details, we must move on to the dialogs.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnDialogResponse<span style="color: #000000;">(</span>playerid, dialogid, response, listitem, inputtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>dialogid <span style="color: #000000;">==</span> <span style="color: #000000;">2</span><span style="color: #000000;">)</span> <span style="color: #228822;">//If Dialog is our register dialog</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>response<span style="color: #000000;">)</span> <span style="color: #228822;">//If they click the button register</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span> || <span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span> <span style="color: #000000;">&gt;</span> <span style="color: #000000;">68</span><span style="color: #000000;">)</span>  <span style="color: #228822;">//checks if password is more then 68 characters or nothing.</span><br/>            <span style="color: #000000;">{</span><br/>                SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFF0000, <span style="color: #000066;">"You must insert a password between 1-68 characters!"</span><span style="color: #000000;">)</span>;<br/>                ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">2</span>, DIALOG_STYLE_PASSWORD, <span style="color: #000066;">"Register"</span>, <span style="color: #000066;">"This account not registered yet! Please register:"</span>, <span style="color: #000066;">"Register"</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>;<span style="color: #228822;">// show the register dialog again.</span><br/>            <span style="color: #000000;">}</span><br/>            <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span> <span style="color: #000000;">&gt;</span> <span style="color: #000000;">0</span> <span style="color: #000000;">&amp;&amp;</span> <span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span> <span style="color: #000000;">&lt;</span> <span style="color: #000000;">68</span><span style="color: #000000;">)</span> <span style="color: #228822;">// if the password is in between 1 - 68 characters</span><br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #2222BB;">new</span> escpass<span style="color: #000000;">[</span><span style="color: #000000;">100</span><span style="color: #000000;">]</span>;<br/>                mysql_real_escape_string<span style="color: #000000;">(</span>inputtext, escpass<span style="color: #000000;">)</span>; <span style="color: #228822;">// here we escape the data again to avoid any mysql injection,</span><br/>                <span style="color: #228822;">//remember to always to do this when SELECT'ing or INSERT'ing any data in the database</span><br/>                MySQL_Register<span style="color: #000000;">(</span>playerid, escpass<span style="color: #000000;">)</span>; <span style="color: #228822;">// Here we are going to another function to register the player.</span><br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>response<span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFF0000, <span style="color: #000066;">"You must register before you can login!"</span><span style="color: #000000;">)</span>;<br/>            ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">2</span>, DIALOG_STYLE_PASSWORD, <span style="color: #000066;">"Register"</span>, <span style="color: #000066;">"This account not registered yet! Please register:"</span>, <span style="color: #000066;">"Register"</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>;<span style="color: #228822;">// show the register dialog again.</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>dialogid <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Dialog login</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>response<span style="color: #000000;">)</span> <span style="color: #228822;">//If they click the cancel button</span><br/>        <span style="color: #000000;">{</span><br/>                SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFF0000, <span style="color: #000066;">"You must login before you spawn!"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Sends the client a error message</span><br/>                Kick<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>; <span style="color: #228822;">// and kicks him. ( you can change it to show the player the login dialog again by uncommenting the bottem line and commenting this one.</span><br/>                <span style="color: #228822;">//ShowPlayerDialog(playerid, 1, DIALOG_STYLE_PASSWORD, "Login", "This account is registered! Please log in:", "Login", "");</span><br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>response<span style="color: #000000;">)</span> <span style="color: #228822;">//If the player clicked login</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span> || <span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span> <span style="color: #000000;">&gt;</span> <span style="color: #000000;">68</span><span style="color: #000000;">)</span>  <span style="color: #228822;">//if the password is not 1 to 100 characters</span><br/>            <span style="color: #000000;">{</span><br/>                SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFF0000, <span style="color: #000066;">"You must insert a password between 1-68 characters!"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Sends the client a error message</span><br/>                ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">1</span>, DIALOG_STYLE_PASSWORD, <span style="color: #000066;">"Login"</span>,<span style="color: #000066;">"Your user is registered! Please login with your password below!<span style="color: #000099; font-weight: bold;">\n</span>{FF0000} Please enter a password between 0 and 68 characters"</span>,<span style="color: #000066;">"Login"</span>,<span style="color: #000066;">"Cancel"</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/>            <span style="color: #000000;">}</span><br/>            mysql_real_escape_string<span style="color: #000000;">(</span>inputtext, inputtext<span style="color: #000000;">)</span>; <span style="color: #228822;">//Here we escape the inputtext to avoid SQL injections as stated above.</span><br/>            mysql_real_escape_string<span style="color: #000000;">(</span>pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// escapeing ^^</span><br/>            <span style="color: #2222BB;">new</span> Query<span style="color: #000000;">[</span><span style="color: #000000;">500</span><span style="color: #000000;">]</span>;<br/>            <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #000000;">500</span>, <span style="color: #000066;">"SELECT * FROM `playerdata` WHERE `nick` COLLATE latin1_general_cs = '%s' AND `password` = '%d'"</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span>, udb_hash<span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// now here check the database if the player has given the proper password.HTTP</span><br/>            mysql_query<span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>;<br/>            mysql_store_result<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>mysql_num_rows<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">&gt;</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span> <span style="color: #228822;">// if the password the player provided is correct and matches the database</span><br/>                MySQL_Login<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>; <span style="color: #228822;">// we will call this function and log the player in.</span><br/>            <span style="color: #000000;">}</span> <span style="color: #2222BB;">else</span> <span style="color: #000000;">{</span><br/>                <span style="color: #228822;">//other wise this means that the password that the player</span><br/>                <span style="color: #228822;">//typed was incorrect and we will resend the dialog.</span><br/>                ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">1</span>, DIALOG_STYLE_PASSWORD, <span style="color: #000066;">"Login"</span>,<span style="color: #000066;">"Your user is registered! Please login with your password below!<span style="color: #000099; font-weight: bold;">\n</span> The password you typed was incorrect!"</span>,<span style="color: #000066;">"Login"</span>,<span style="color: #000066;">"Cancel"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Shows our login dialog again.</span><br/>            <span style="color: #000000;">}</span><br/>            mysql_free_result<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Remember to always free a result if you stored one!</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Now compile your script and the following errors should appear on your screen:<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				error 017: undefined symbol "MySQL_Register"<br />
+error 017: undefined symbol "MySQL_Login"<br />
+warning 203: symbol is never used: "field"<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>Don't worry about them we will fix them in the following steps.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">stock</span> MySQL_Register<span style="color: #000000;">(</span>playerid, passwordstring<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> Query<span style="color: #000000;">[</span><span style="color: #000000;">300</span><span style="color: #000000;">]</span>;<br/>    mysql_real_escape_string<span style="color: #000000;">(</span>pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">// escaping the name of the player to avoid sql_injections.</span><br/>    mysql_real_escape_string<span style="color: #000000;">(</span>pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>IP<span style="color: #000000;">]</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>IP<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">// escaping the IP of the player to avoid sql_injections.</span><br/>    <span style="color: #228822;">// as you might've seen we haven't escaped the password here because it was already escaped in our register dialog</span><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"INSERT INTO `playerdata` (`nick`, `password`, `ip`) VALUES('%s', '%d', '%s')"</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span>, udb_hash<span style="color: #000000;">(</span>passwordstring<span style="color: #000000;">)</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>IP<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// Here we use the INSERT option and insert the name, password, and ip of the player in the database.</span><br/>    <span style="color: #228822;">// we don't insert the score, admin, or any other variable because its automatically 0.</span><br/>    mysql_query<span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">// here we do not need to mysql_store_result or mysql_free_result</span><br/>    <span style="color: #228822;">// because we are only inserting data in the database not selecting it</span><br/>    <span style="color: #228822;">//next we set the players logged variable to 1.</span><br/>    <span style="color: #228822;">//and the isregistered variable to 1 aswell.</span><br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"You have now been  successfully registered on this server!"</span><span style="color: #000000;">)</span>;<br/>    pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Logged<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>; <span style="color: #228822;">//Sets the login variable to 1, meaning logged in.</span><br/>    pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>IsRegistered<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>; <span style="color: #228822;">// sets the registered variable to 1. meaning registered.</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">stock</span> MySQL_Login<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> Query<span style="color: #000000;">[</span><span style="color: #000000;">500</span><span style="color: #000000;">]</span>;<br/>    mysql_real_escape_string<span style="color: #000000;">(</span>pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// escaping the name of the player to avoid sql_injections.</span><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"SELECT * FROM `playerdata` WHERE `nick` COLLATE latin1_general_cs = '%s' LIMIT 1"</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>    mysql_query<span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">// here we select all of the user's data in the database and store it</span><br/>    mysql_store_result<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">while</span><span style="color: #000000;">(</span>mysql_fetch_row<span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>    <span style="color: #228822;">// here after the server has selected the user</span><br/>    <span style="color: #228822;">//from the database and stored its data we extract that data onto our enums.</span><br/>    <span style="color: #000000;">{</span><br/>        mysql_fetch_int<span style="color: #000000;">(</span><span style="color: #000066;">"id"</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>ID<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">// the special identifier of a user called "id"</span><br/>        mysql_fetch_int<span style="color: #000000;">(</span><span style="color: #000066;">"admin"</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pAdmin<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">// the admin level of the player</span><br/>        mysql_fetch_int<span style="color: #000000;">(</span><span style="color: #000066;">"score"</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pScore<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; SetPlayerScore<span style="color: #000000;">(</span>playerid, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pScore<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">// here we fetch the score and save it to the enum and also save it to the server by using setplayerscore</span><br/>        mysql_fetch_int<span style="color: #000000;">(</span><span style="color: #000066;">"money"</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pMoney<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; GivePlayerMoney<span style="color: #000000;">(</span>playerid, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pMoney<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">// here we fetch the score and save it to the enum and also save it to the server by using setplayerscore</span><br/>        mysql_fetch_int<span style="color: #000000;">(</span><span style="color: #000066;">"kills"</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pKills<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">// the amount of kills a player has</span><br/>        mysql_fetch_int<span style="color: #000000;">(</span><span style="color: #000066;">"deaths"</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pDeaths<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">// the amount of deaths a player has</span><br/>        <span style="color: #228822;">//</span><br/>        <span style="color: #228822;">// the way to fetch a users stats from the database is:</span><br/>        <span style="color: #228822;">//mysql_fetch_int("table_name", variable_to_store_in);  remember the "table_name" is case sensitive!</span><br/>    <span style="color: #000000;">}</span><br/>    mysql_free_result<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">// here we free our result and end the SELECT process.  Remember this is very important otherwise you may receive high amount of lag in your server!</span><br/>    pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Logged<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>; <span style="color: #228822;">// sets the logged variable to 1 meaning logged in.</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Now that we have created our login and register loading/saving system we can move on to the saving part of the tutorial of when the player disconnects.  For this all you have to include is the following line under OnPlayerDisconnect.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:103px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerDisconnect<span style="color: #000000;">(</span>playerid, reason<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    SavePlayer<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>This will forward the data to another function which we will create.  Put the following function somewhere in your script.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:295px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">SavePlayer<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Logged<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span><br/>    <span style="color: #228822;">// checks if the player is logged</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">new</span> Query<span style="color: #000000;">[</span><span style="color: #000000;">500</span><span style="color: #000000;">]</span>;<br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #000000;">500</span>, <span style="color: #000066;">"UPDATE `playerdata` SET `admin` = '%d', `score` = '%d', `money` = '%d', `kills` = '%d', `deaths` = '%d' WHERE `id` = '%d' LIMIT 1"</span>,<br/>        pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pAdmin<span style="color: #000000;">]</span>,<br/>        pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pScore<span style="color: #000000;">]</span>,<br/>        pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pMoney<span style="color: #000000;">]</span>,<br/>        pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pKills<span style="color: #000000;">]</span>,<br/>        pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pDeaths<span style="color: #000000;">]</span>,<br/>        pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>ID<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        mysql_query<span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>;<br/><span style="color: #228822;">//this basically gets the variables and stores it to the players special identifier called "ID".</span><br/>    <span style="color: #000000;">}</span><br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<font color="Red"><font size="3"><b>Part 1 finished!</b></font></font><br />
+<b><u><font color="Magenta">Next:</font></u></b><br />
+<br />
+Now I'm going to make a few simple admin commands. The first command i'm going to make is...:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:55px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>setlevel<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span></div></div></pre>
+</div>Basically this command will set the admin level of the player specified.<br />
+Before we start include the following lines above OnGameModeInit<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:71px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#define MAX_ADMIN_LEVEL 7</span><br/><span style="color: #2222AA;">#define SETLEVEL_ADMIN 5</span><br/><span style="color: #228822;">//you may change the level of this according to your own choice</span></div></div></pre>
+</div><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>setlevel<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerAdmin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span> || pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pAdmin<span style="color: #000000;">]</span> <span style="color: #000000;">&gt;=</span> SETLEVEL_ADMIN<span style="color: #000000;">)</span><br/>    <span style="color: #228822;">// if the player is an rcon admin or the players admin level is greater or equal</span><br/>    <span style="color: #228822;">// to the defined admin level of that command</span><br/>    <span style="color: #000000;">{</span><span style="color: #228822;">//then</span><br/>        <span style="color: #2222BB;">new</span> level, target;<br/>        <span style="color: #228822;">//here we create 2 variable which we will use</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>sscanf<span style="color: #000000;">(</span>params, <span style="color: #000066;">"ui"</span>, target, level<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, red, <span style="color: #000066;">"[*] Usage: /setadmin [playerid/name] [level]"</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">//if the player hasnt entered a target id or level then it will return that msg</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>target <span style="color: #000000;">==</span> INVALID_PLAYER_ID<span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, red, <span style="color: #000066;">"[*] Enter a valid player ID/name!"</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">// if the target player is not a valid player then it will return that msg</span><br/>        <span style="color: #2222BB;">new</span> string<span style="color: #000000;">[</span><span style="color: #000000;">128</span><span style="color: #000000;">]</span>, Query<span style="color: #000000;">[</span><span style="color: #000000;">500</span><span style="color: #000000;">]</span>, str2<span style="color: #000000;">[</span><span style="color: #000000;">50</span><span style="color: #000000;">]</span>;<br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>level <span style="color: #000000;">&lt;</span> <span style="color: #000000;">0</span> || level <span style="color: #000000;">&gt;</span> MAX_ADMIN_LEVEL<span style="color: #000000;">)</span> <span style="color: #228822;">// here we check if the level the player entered is more then the max admin level defined or 0</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>string<span style="color: #000000;">)</span>, <span style="color: #000066;">"Enter a level between 0 and %d!"</span>, MAX_ADMIN_LEVEL<span style="color: #000000;">)</span>;<br/>            SendClientMessage<span style="color: #000000;">(</span>playerid, red,string<span style="color: #000000;">)</span>; <span style="color: #228822;">// if it is then we send the message and stop the command from processing</span><br/>            <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #000000;">500</span>, <span style="color: #000066;">"UPDATE `playerdata` SET `admin` = '%d' WHERE `id` = '%d' LIMIT 1"</span>, level, pInfo<span style="color: #000000;">[</span>target<span style="color: #000000;">]</span><span style="color: #000000;">[</span>ID<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Format the query</span><br/>        mysql_query<span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">// here we use the UPDATE option again and tell the database to update the player we specified's admin level to what we have set.</span><br/>        pInfo<span style="color: #000000;">[</span>target<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pAdmin<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> level;<br/>        <span style="color: #228822;">// here we set the target's var to what we defined</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #000000;">256</span>, <span style="color: #000066;">"You have set %s[%d]'s admin level to %d."</span>, pInfo<span style="color: #000000;">[</span>target<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span>, target, level<span style="color: #000000;">)</span>;<br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, green, string<span style="color: #000000;">)</span>;<br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #000000;">256</span>, <span style="color: #000066;">"Admin %s has set your admin level to %d."</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span>, level<span style="color: #000000;">)</span>;<br/>        SendClientMessage<span style="color: #000000;">(</span>target, yellow, string<span style="color: #000000;">)</span>;<br/>        <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i<span style="color: #000000;">=</span><span style="color: #000000;">0</span>; i<span style="color: #000000;">&lt;</span>MAX_PLAYERS; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>pInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Logged<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">1</span> <span style="color: #000000;">&amp;&amp;</span> pInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pAdmin<span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #222222;">format</span><span style="color: #000000;">(</span>str2, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>str2<span style="color: #000000;">)</span>, <span style="color: #000066;">"Admin %s[%d] has used the following command: Setlevel"</span>, pInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Nick<span style="color: #000000;">]</span>, playerid<span style="color: #000000;">)</span>;<br/>                SendClientMessage<span style="color: #000000;">(</span>i,COLOR_SPRINGGREEN,string<span style="color: #000000;">)</span>;<br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #228822;">// here we send the message to the admins</span><br/>        PlayerPlaySound<span style="color: #000000;">(</span>target,<span style="color: #000000;">1057</span>,<span style="color: #000000;">0.0</span>,<span style="color: #000000;">0.0</span>,<span style="color: #000000;">0.0</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">// play the sound for the target notifying him of this command.</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">return</span> ErrorMessage<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>; <span style="color: #228822;">// if it wasnt a rcon admin or his admin level wasnt greater then the max level</span><br/>    <span style="color: #228822;">//then we send the error message</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<font color="Red"><font size="3"><b><div align="center">And your finished!</div></b></font></font><br />
+<br />
+<b><font color="Black">Extras:</font></b> If you did not understand any part of my tutorial feel free to PM me or reply to this topic with what you needed help with.<br />
+If for some reason you could not follow through my tutorial then you may download the files <a href="http://www.solidfiles.com/d/3e1f9ba1c3/" target="_blank">here</a>.<br />
+<br />
+<font color="Red"><font size="5"><b>UPCOMING:</b></font></font> <font size="4"><font color="Purple"><b>Making a User CP with MySQL</b></font></font>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2425521">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-101814.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2425615"></a>
+<div class="post classic " style="" id="post_2425615">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0136/uid-136710.html"><img src="../../assets/uploads/avatars/136710.png" alt="" width="51" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0136/uid-136710.html">RajatPawar</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,187<br />
+	Threads: 81<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2425615" title="Re: How to make a MySQL Admin System!">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by RajatPawar" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2013, 05:42 <span class="post_edit" id="edited_by_2425615"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2425615">
+		Nice, better if you had used threaded queries!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2425615">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-136710.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2425627"></a>
+<div class="post classic " style="" id="post_2425627">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0013/uid-13347.html"><img src="../../assets/uploads/avatars/13347.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0013/uid-13347.html">Vince</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Spam Machine<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 10,066<br />
+	Threads: 38<br />
+	Joined: Sep 2007
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2425627" title="Re: How to make a MySQL Admin System!">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Vince" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2013, 06:09 <span class="post_edit" id="edited_by_2425627"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2425627">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Rajat_Pawar</strong><br />
+<a href="../../threads/0422/tid-422295.html#pid2425615" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Nice, better if you had used threaded queries!</div>
+</td>
+</tr>
+</table>
+</div>Exactly what I was about to say when I read this thread.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2425627">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-13347.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2426053"></a>
+<div class="post classic " style="" id="post_2426053">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0101/uid-101814.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0101/uid-101814.html">kamzaf</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 247<br />
+	Threads: 11<br />
+	Joined: Aug 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2426053" title="Re: How to make a MySQL Admin System!">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by kamzaf" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2013, 14:34 <span class="post_edit" id="edited_by_2426053"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2426053">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Rajat_Pawar</strong><br />
+<a href="../../threads/0422/tid-422295.html#pid2425615" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Nice, better if you had used threaded queries!</div>
+</td>
+</tr>
+</table>
+</div>Hm that's true but i find this more easier to work with and plus I haven't received any problems with this so ya...
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2426053">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-101814.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2426102"></a>
+<div class="post classic " style="" id="post_2426102">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0192/uid-192798.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0192/uid-192798.html">MiGu3X</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 223<br />
+	Threads: 50<br />
+	Joined: Jan 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2426102" title="Respuesta: How to make a MySQL Admin System!">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by MiGu3X" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2013, 15:25 <span class="post_edit" id="edited_by_2426102"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2426102">
+		Very good tutorial im gonna use it maybe . How does wampserver works? As a thing to save stuff or wth?.. Regards
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2426102">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-192798.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2426154"></a>
+<div class="post classic " style="" id="post_2426154">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0136/uid-136710.html"><img src="../../assets/uploads/avatars/136710.png" alt="" width="51" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0136/uid-136710.html">RajatPawar</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,187<br />
+	Threads: 81<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2426154" title="Re: How to make a MySQL Admin System!">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by RajatPawar" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2013, 15:54 <span class="post_edit" id="edited_by_2426154"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2426154">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>kamzaf</strong><br />
+<a href="../../threads/0422/tid-422295.html#pid2426053" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Hm that's true but i find this more easier to work with and plus I haven't received any problems with this so ya...</div>
+</td>
+</tr>
+</table>
+</div>I am sure you'll find many posts and threads discussing why unthreaded queries shouldn't be used. Now, since you are making a tutorial, many people will follow in your footsteps and using threaded queries is a good practice, so to avoid getting people having to use bad ways, I suggested this ! Feel free to use unthreaded queries for personal use..
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2426154">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-136710.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2426180"></a>
+<div class="post classic " style="" id="post_2426180">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126521.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126521.html">Bakr</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 977<br />
+	Threads: 10<br />
+	Joined: Apr 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2426180" title="Re: How to make a MySQL Admin System!">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by Bakr" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2013, 16:10 <span class="post_edit" id="edited_by_2426180"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2426180">
+		This is not a tutorial, but a "copy this code" thread.<br />
+<br />
+You never explain how to actually use MySQL, why you need to do what you did, or how you got the results you did.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2426180">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126521.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2426270"></a>
+<div class="post classic " style="" id="post_2426270">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0194/uid-194476.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0194/uid-194476.html">daddyblake</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 17<br />
+	Threads: 5<br />
+	Joined: Feb 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2426270" title="Re: How to make a MySQL Admin System!">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by daddyblake" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.03.2013, 17:22 <span class="post_edit" id="edited_by_2426270"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2426270">
+		--------------------------------------<br />
+<br />
+Edit: Removed, dumb question I figured out very quickly myself.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2426270">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-194476.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2427971"></a>
+<div class="post classic " style="" id="post_2427971">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0101/uid-101814.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0101/uid-101814.html">kamzaf</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 247<br />
+	Threads: 11<br />
+	Joined: Aug 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2427971" title="Re: How to make a MySQL Admin System!">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by kamzaf" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.03.2013, 18:52 <span class="post_edit" id="edited_by_2427971"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2427971">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Bakr</strong><br />
+<a href="../../threads/0422/tid-422295.html#pid2426180" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">This is not a tutorial, but a "copy this code" thread.<br />
+<br />
+You never explain how to actually use MySQL, why you need to do what you did, or how you got the results you did.</div>
+</td>
+</tr>
+</table>
+</div>Well I've explained each and every line in the tutorial thoroughly and if there is still something you don't understand then you can always post here.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2427971">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-101814.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2438333"></a>
+<div class="post classic " style="" id="post_2438333">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0197/uid-197744.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0197/uid-197744.html">M0nSt3r</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1<br />
+	Threads: 0<br />
+	Joined: Mar 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2438333" title="Re: How to make a MySQL Admin System!">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by M0nSt3r" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.03.2013, 22:14 <span class="post_edit" id="edited_by_2438333"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2438333">
+		Thanks alot kamzaf! This helped me very much in my new GM.  I would recommend it to any newbie mysql scripter! THANKSSS <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2438333">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-197744.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2438342"></a>
+<div class="post classic " style="" id="post_2438342">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0080/uid-80385.html"><img src="../../assets/uploads/avatars/80385.png" alt="" width="46" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0080/uid-80385.html">Scenario</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Godfather<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 7,801<br />
+	Threads: 187<br />
+	Joined: Feb 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2438342" title="Re: How to make a MySQL Admin System!">#11</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 11 by Scenario" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.03.2013, 22:21 <span class="post_edit" id="edited_by_2438342"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2438342">
+		You really should be using threaded queries. I don't quite understand why people continue to use this style of MySQL coding, especially since the R7 release of BlueG's plugin.<br />
+<br />
+Nevertheless, people still use dcmd and strcmp for commands, instead of something faster like ZCMD or YCMD.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2438342">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-80385.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2438405"></a>
+<div class="post classic " style="" id="post_2438405">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0101/uid-101814.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0101/uid-101814.html">kamzaf</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 247<br />
+	Threads: 11<br />
+	Joined: Aug 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2438405" title="Re: How to make a MySQL Admin System!">#12</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 12 by kamzaf" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.03.2013, 23:18 <span class="post_edit" id="edited_by_2438405"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2438405">
+		The main reason why most people still use R6 is because most people find R7 something very hard to transfer to.  They don't understand the main concept behind it.  And people are correct that we should switch to R7 to save the lag times + memory usage etc.  So i'll prob make a R7 tutorial soon.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2438405">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-101814.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2438430"></a>
+<div class="post classic " style="" id="post_2438430">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0080/uid-80385.html"><img src="../../assets/uploads/avatars/80385.png" alt="" width="46" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0080/uid-80385.html">Scenario</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Godfather<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 7,801<br />
+	Threads: 187<br />
+	Joined: Feb 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2438430" title="Re: How to make a MySQL Admin System!">#13</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 13 by Scenario" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.03.2013, 23:53 <span class="post_edit" id="edited_by_2438430"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2438430">
+		You're correct- but what if people STARTED by using R7? Then they'd be like "well I don't know how to use R6" which, if you ask me, is better than not knowing how to use R7.<br />
+<br />
+When I first started scripting, I looked at strcmp commands with a dropped jaw. I then looked at sscanf with a dropped jaw, but after reading, it made more sense to me than using strtok. After continuing to read, I found out that is was WAY more efficient and WAY better in general.<br />
+<br />
+To this day I don't know how to write an strcmp with parameters (like /kick [nick/id]). <br />
+<br />
+Same with saving/loading data- I never learned a file-based system simply because MySQL/SQLite (IMHO, again) provides more expansion.<br />
+<br />
+Nonetheless, my point is: if people don't know the outdated ways of programming, they are less likely to make a bad decision in terms of "choosing a system."
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2438430">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-80385.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2438471"></a>
+<div class="post classic " style="" id="post_2438471">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0194/uid-194466.html"><img src="../../assets/uploads/avatars/194466.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0194/uid-194466.html">PabloDiCostanzo</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 308<br />
+	Threads: 36<br />
+	Joined: Feb 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2438471" title="Respuesta: How to make a MySQL Admin System!">#14</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 14 by PabloDiCostanzo" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.03.2013, 01:17 <span class="post_edit" id="edited_by_2438471"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2438471">
+		I have this errors<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 50px;
+		text-align: left;
+		overflow: auto">C:\Documents and Settings\Administrador\Escritorio\Gang Wars\filterscripts\MySQL.pwn(117) : error 017: undefined symbol "Query"
+C:\Documents and Settings\Administrador\Escritorio\Gang Wars\filterscripts\MySQL.pwn(118) : error 017: undefined symbol "Query"</pre>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2438471">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-194466.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2438520"></a>
+<div class="post classic " style="" id="post_2438520">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0101/uid-101814.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0101/uid-101814.html">kamzaf</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 247<br />
+	Threads: 11<br />
+	Joined: Aug 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2438520" title="Re : Respuesta: How to make a MySQL Admin System!">#15</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 15 by kamzaf" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.03.2013, 02:30 <span class="post_edit" id="edited_by_2438520"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2438520">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>PabloDiCostanzo</strong><br />
+<a href="../../threads/0422/tid-422295.html#pid2438471" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">I have this errors<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 50px;
+		text-align: left;
+		overflow: auto">C:\Documents and Settings\Administrador\Escritorio\Gang Wars\filterscripts\MySQL.pwn(117) : error 017: undefined symbol "Query"
+C:\Documents and Settings\Administrador\Escritorio\Gang Wars\filterscripts\MySQL.pwn(118) : error 017: undefined symbol "Query"</pre>
+</div></div>
+</td>
+</tr>
+</table>
+</div>Add new Query[500]; above the line.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2438520">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-101814.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2439491"></a>
+<div class="post classic " style="" id="post_2439491">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0194/uid-194466.html"><img src="../../assets/uploads/avatars/194466.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0194/uid-194466.html">PabloDiCostanzo</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 308<br />
+	Threads: 36<br />
+	Joined: Feb 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2439491" title="Respuesta: How to make a MySQL Admin System!">#16</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 16 by PabloDiCostanzo" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.03.2013, 19:37 <span class="post_edit" id="edited_by_2439491"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2439491">
+		<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">C:\Documents and Settings\Administrador\Escritorio\Gang Wars\filterscripts\MySQL.pwn(118) : error 017: undefined symbol "SOQ"</pre>
+</div>And now I get that
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2439491">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-194466.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2439521"></a>
+<div class="post classic " style="" id="post_2439521">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0141/uid-141761.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0141/uid-141761.html">ReneG</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,905<br />
+	Threads: 63<br />
+	Joined: Oct 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2439521" title="Re: How to make a MySQL Admin System!">#17</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 17 by ReneG" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.03.2013, 20:02 <span class="post_edit" id="edited_by_2439521"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2439521">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>kamzaf</strong><br />
+<a href="../../threads/0422/tid-422295.html#pid2438405" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">most people find R7 something very hard to transfer to.  They don't understand the main concept behind it.</div>
+</td>
+</tr>
+</table>
+</div>Then they're just being ignorant, if you know how ShowPlayerDialog works with OnDialogResponse, then you should know how to use threaded queries. It's literally the <b>same</b> concept. The only difference is that BlueG's plugin allows you to pass arguments.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2439521">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-141761.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2439540"></a>
+<div class="post classic " style="" id="post_2439540">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0007/uid-7895.html"><img src="../../assets/uploads/avatars/7895.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0007/uid-7895.html">LarzI</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,628<br />
+	Threads: 32<br />
+	Joined: Apr 2007
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2439540" title="Re: How to make a MySQL Admin System!">#18</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 18 by LarzI" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.03.2013, 20:14 <span class="post_edit" id="edited_by_2439540"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2439540">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>VincentDunn</strong><br />
+<a href="../../threads/0422/tid-422295.html#pid2439521" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Then they're just being ignorant, if you know how ShowPlayerDialog works with OnDialogResponse, then you should know how to use threaded queries. It's literally the <b>same</b> concept. The only difference is that BlueG's plugin allows you to pass arguments.</div>
+</td>
+</tr>
+</table>
+</div>Would you say there's a difference between using one single callback and give each thread its unique ID, and having a callback for each thread? If so: What difference? What would you recommend? What's most/least efficient? I personally find using separate callbacks for each thread to be more tidy, but if it's very inefficient in comparison, then I'd like to switch ASAP before I get to comfy with it.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2439540">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-7895.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2439616"></a>
+<div class="post classic " style="" id="post_2439616">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0141/uid-141761.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0141/uid-141761.html">ReneG</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,905<br />
+	Threads: 63<br />
+	Joined: Oct 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2439616" title="Re: How to make a MySQL Admin System!">#19</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 19 by ReneG" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.03.2013, 21:12 <span class="post_edit" id="edited_by_2439616"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2439616">
+		I would recommend separate callbacks, but it really is just personal preference.<br />
+<br />
+For example with one callback<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:295px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#define RESULT_LOAD (1)</span><br/><span style="color: #2222AA;">#define RESULT_SAVE (2)</span><br/><br/><span style="color: #2222BB;">public</span> OnQueryExecute<span style="color: #000000;">(</span>resultid, playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> rows, fields;<br/>    cache_get_data<span style="color: #000000;">(</span>rows, fields<span style="color: #000000;">)</span>;<br/><br/>    <span style="color: #2222BB;">switch</span> <span style="color: #000000;">(</span>resultid<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">case</span> RESULT_LOAD<span style="color: #000000;">:</span> <br/>            <span style="color: #228822;">// code here</span><br/>        <span style="color: #2222BB;">case</span> RESULT_SAVE<span style="color: #000000;">:</span> <br/>            <span style="color: #228822;">// code here</span><br/>    <span style="color: #000000;">}</span><br/><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+This can get pretty hard to work with the more queries you script in, but it gets the job done. You can argue that the switch statement will slow it down, but the difference would practically be zero.<br />
+<br />
+with single callbacks<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:407px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">LoadPlayer<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #228822;">// code here</span><br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerLoad<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> rows, fields;<br/>    cache_get_data<span style="color: #000000;">(</span>rows, fields<span style="color: #000000;">)</span>;<br/><br/>    <span style="color: #228822;">// code here</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/> <br/>SavePlayer<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #228822;">// code here</span><br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerSave<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Player %d saved."</span>, playerid<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>It may seem like a lot more lines, but it's a lot easier to handle this way IMO. You don't have to deal with different result ids, there are less mistakes to be made, and you can safely say that your query will only execute what you put into its according callback.<br />
+<br />
+tl;dr - it doesn't really matter, as long as you take efficient advantage of the plugin, then you're fine
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2439616">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-141761.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2439634"></a>
+<div class="post classic " style="" id="post_2439634">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0149/uid-149753.html"><img src="../../assets/uploads/avatars/149753.png" alt="" width="55" height="42" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0149/uid-149753.html">Konstantinos</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Spam Machine<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 11,827<br />
+	Threads: 33<br />
+	Joined: Dec 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422295.html#pid2439634" title="Re: How to make a MySQL Admin System!">#20</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 20 by Konstantinos" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.03.2013, 21:26 <span class="post_edit" id="edited_by_2439634"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2439634">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>RealCop228</strong><br />
+<a href="../../threads/0422/tid-422295.html#pid2438430" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">but what if people STARTED by using R7?</div>
+</td>
+</tr>
+</table>
+</div>That's me! <br />
+<br />
+I tried to learn MySQL when the version was R6 but I found it difficult and I also had few problems with phpMyAdmin so I stopped reading tutorials etc and I started learning SQLite. I do agree that MySQL/SQLite provides more expansion and that's why I used/use them. <br />
+<br />
+I started few days ago reading AndreT's tutorial about MySQL R7 and cache and it was pretty easy. I downloaded the gamemode with simple register/login system AndreT suggested and I read it again and again. I found it very easy and I can say that R7 is a lot of easier than the older versions, atleast for me. It took 2 days to see how it works and what to do and I made a simple register/login system from scratch in less than 1 hour!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2439634">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-149753.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0422/tid-422295.html">Next Oldest</a> | <a href="../../threads/0422/tid-422295.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="422295" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (2):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0422/tid-422295-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0422/tid-422295-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

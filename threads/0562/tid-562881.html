@@ -1,0 +1,804 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Les diffйrentes CallBacks</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "d07c3401cbb8343de12829925c733bd4";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Les diffйrentes CallBacks Salut а tous et а toute, si je fais ce tutoriel aujourd'hui, c'est parce que j'ai remarquй que йnormement de gens (moi y-compris, auparavent) utilise la base des callbac" />
+<link rel="canonical" href="../../threads/0562/tid-562881.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="d07c3401cbb8343de12829925c733bd4" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/9.html">Non-English</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/33.html">Languages</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/30.html">Français/French</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/81.html">Showroom</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0562/tid-562881.html#pid3368239">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Les diffйrentes CallBacks
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid3368239"></a>
+<div class="post classic " style="" id="post_3368239">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0214/uid-214556.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0214/uid-214556.html">asto63</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 27<br />
+	Threads: 6<br />
+	Joined: Sep 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0562/tid-562881.html#pid3368239" title="Les diffйrentes CallBacks">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by asto63" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">12.02.2015, 14:10 <span class="post_edit" id="edited_by_3368239"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by asto63; 13/02/2015 at 11:06 PM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3368239">
+		<div align="center"><font size="7"><font color="DeepSkyBlue"><b><u>Les diffйrentes CallBacks</u></b></font></font><br />
+<br />
+Salut а tous et а toute, si je fais ce tutoriel aujourd'hui, c'est parce que j'ai remarquй que йnormement de gens (moi y-compris, auparavent) utilise la base des callbacks donnйes par Pawno(Le programme de base de SAMP pour script). Alors que il n'y a pas forcement toute les callbacks disponibles! Et que aussi il peut arriver que vous ne sachiez pas vraiment ce qu'est une certaine CallBack, c'est pour cela que je vais vous expliquer ce qu'est une CallBack, et expliquer toutes les CallBacks existantes!</div>
+<font size="3"><b><u>Qu'est-ce qu'une CallBack?</u></b></font><br />
+Les "Callback" sont appelйs dans le script par le serveur lorsque quelque chose d'important se passe (Joueur qui meurt/se dйconnecte/entre dans un vйhicule/rй-apparait etc...). La plupart des Callbacks ont le paramиtre "playerid" qui dйsigne l'ID d'un joueur exйcutant l'action, mais pas forcement toutes!<br />
+<br />
+Maintenant que vous savez ce qu'est une callback, <b>expliquons les !</b><br />
+Actuellement, je comptes <font color="Red">64</font> CallBacks disponibles а cette version de SA-MP (<font color="Red">0.3z</font>)<br />
+Pour voir cette liste de callback je vous invite а aller ici: <a href="https://wiki.sa-mp.com/wiki/Category:Scripting_Callbacks" target="_blank">https://wiki.sa-mp.com/wiki/Category:Scripting_Callbacks</a><br />
+Mais c'est en anglais, vous ne comprendez pas grand chose si vous кtes nul dans ce domaine!<br />
+<br />
+1. <b><u>Public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])</u></b><br />
+Cette callback est appelйe lorsqu'un joueur rйpond а un dialog (Password, Menu....), qui lui est crйй par ShowPlayerDialog, en cliquant sur un des boutons du menu, en cliquant sur un item ou en faisant "entrйe" ou "Echap".<br />
+Voyons les valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur ayant fait une action sur le Dialog.</li>
+<li><b>dialogid:</b> L'ID du dialog йxecutй</li>
+<li><b>response:</b> La rйponse du dialog, elle est en Boolean. Donc sois 1, 0 ou true, false. False si il a quittй le dialog(echap), true si il a cliquй sur un item ou sur le bouton 1.</li>
+<li><b>listitem:</b> Si vous utilisez DIALOG_STYLE_LIST uniquement, c'est l'item dans le menu qui a йtй sйlectionnй.</li>
+<li><b>inputtext[]:</b> Si vous utilisez un DIALOG_STYLE_INPUT ou PASSWORD, cela retourne le texte entrй.</li>
+</ul>
+2. <b><u>Public OnEnterExitModShop(playerid, enterexit, interiorid)</u></b><br />
+Cette CallBack est appelйe lorsqu'un joueur vient de rentrer ou de sortir d'un garage de tuning du jeu (Non d'un script).<br />
+Voyons les valeurs retournйes:<ul><li><b>playerid:</b>  L'ID du joueur qui entre/sort du garage.</li>
+<li><b>enterexit:</b> Valeur boolean, 1 si le joueur rentre dans le garage, 0 s'il y en sort.</li>
+<li><b>interiorid:</b> l'ID de l'intйrieur du garage dans lequel le joueur est rentrй(sorti).</li>
+</ul>
+3. <b><u>Public OnFilterScriptExit()</u></b><br />
+Cette callback est appelйe lorsqu'un filterscript est dйsactivй, lorsque le serveur est rйdemarrй/йteint ou lorsqu'une commande RCON (/rcon unloadfs ***) est executйe.<br />
+Il n'y a pas de valeurs retournйes ici.<br />
+<br />
+4. <b><u>Public OnFilterScriptInit()</u></b><br />
+Cette callback est l'inverse de la prйcйdente, elle est appelйe lors de l'activation du FilterScript, c'est-а-dire а l'ouverture du serveur ou par RCON(/rcon loadfs ****).<br />
+Encore aucunes valeurs n'est retournйes.<br />
+<br />
+5. <b><u>Public OnGameModeInit()</u></b><br />
+Cette Callback est appelйe lorsque le serveur est lancй, et que le Gamemode se lance.<br />
+Aucunes valeurs retournйes.<br />
+<br />
+6. <b><u>Public OnGameModeExit()</u></b><br />
+Cette callback est appelйe lorsque le serveur s'йteint, mais <font color="Red">pas quand le serveur est redйmarrй par un GMX.</font><br />
+<br />
+7. <b><u>Public OnIncomingConnection(playerid, ip_adress[], port)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur tente de se connecter mais ne peut car son IP/pseudo est blockй (Fonction BlockIpAdress)<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur tentant de se connecter.</li>
+<li><b>ip_adress:</b> L'adresse IP du joueur qui tente de se connecter.</li>
+<li><b>port:</b> Le port utilisй pour se connecter.</li>
+</ul>
+8. <b><u>Public OnObjectMoved(objectid)</u></b><br />
+Cette CallBack est appelйe lorsqu'un objet vient d'кtre dйplacй, et que son dйplacement est <font color="Red">terminй.</font><br />
+<br />
+Ses valeurs retournйes:<ul><li><b>objectid:</b> l'ID de l'objet ayant fini son mouvement.</li>
+</ul>
+9. <b><u>Public OnPlayerClickMap(playerid, Float:fX, Float:fY, Float:fZ)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur place un repиre sur la carte du jeu (Echap -&gt; Carte).<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> l'ID du joueur ayant effectuй l'action.</li>
+<li><b>Float:fX:</b> Position X du marqueur.</li>
+<li><b>Float:fY:</b> Position Y du marqueur.</li>
+<li><b>Float:fZ:</b> Position Z du marqueur.</li>
+</ul>
+10. <b><u>Public OnPlayerClickPlayer(playerid, clickedplayerid, source)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur double clic sur un joueur dans le tableau des Scores (TAB).<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> Le joueur ayant effectuй l'action.</li>
+<li><b>clickedplayerid:</b> Le joueur qu'a double clickй playerid.</li>
+<li><b>source:</b> La source est inutile, sa valeur sera toujours 0. C'est la source du clic: CLICK_SOURCE_SCOREBOARD.</li>
+</ul>
+11. <b><u>Public OnPlayerClickPlayerTextDraw(playerid, playertextid)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur clique sur un <font color="Red">PlayerTextDraw</font>. Et non un Textdraw Global.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur cliquant sur le PlayerTextdraw.</li>
+<li><b>playertextid:</b> Le PlayerTextDraw sйlectionnй par le joueur.</li>
+</ul>
+12. <b><u>Public OnPlayerClickTextDraw(playerid, clickedid)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur clique sur un <font color="Magenta">TextDraw</font>, Normal.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> Le joueur cliquant sur un textdraw.</li>
+<li><b>clickedid:</b> Le textdraw sйlectionnй par le joueur.</li>
+</ul>
+13. <b><u> Public OnPlayerCommandText(playerid, cmdtext[] </u></b><br />
+Sыrement la plus connu de toute, cette callback est appelйe lorsqu'un joueur tape un texte commenзant par un slashe(/).<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> Le joueur ayant tapй le texte.</li>
+<li><b>cmdtext[]:</b> Le texte rentrй (Le "/" y comprit).</li>
+</ul>
+14. <b><u> Public OnPlayerConnect(playerid)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur se connecte.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> Le joueur qui se connecte.</li>
+</ul>
+15. <b><u>Public OnPlayerDeath(playerid, killerid, reason)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur meurt.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> Le joueur qui meurt.</li>
+<li><b>killerid:</b> Le joueur qui a tuer Playerid, retourne INVALID_PLAYER_ID si il s'est tuй lui-mкme.</li>
+<li><b>reason:</b> La raison de la mort, liste des raisons: wiki.sa-mp.com/wiki/Weapons .</li>
+</ul>
+16. <b><u>Public OnPlayerDisconnect(playerid,reason)</u></b><br />
+Cette callback est appelйe lors de la dйconnection d'un joueur.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> l'ID du joueur se dйconnectant.</li>
+<li><b>reason:</b> Il existe 3 raisons, 0 si plus de connection/crash, 1 lors d'un /q, 2 si kick ou ban.</li>
+</ul>
+17. <b><u>Public OnPlayerEditAttachedObject(playerid, response, index, modelid, boneid, Float:fOffsetX, Float:fOffsetY, Float:fOffsetZ, Float:fRotX, Float:fRotY, Float:fRotZ, Float:fScaleX, Float:fScaleY, Float:fScaleZ)</u></b><br />
+Cette callback est longue, et rarement appelйe ! <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/> Elle est appelйe lorsqu'un joueur sort du mode d'йdition des objets attachйs а lui.<br />
+Ses valeurs retournйes (Yen a pas mal tavu):<ul><li><b>playerid:</b> L'ID du joueur effectuant l'action.</li>
+<li><b>response:</b> La rйponse en boolean, 0 s'il annule (Echap), 1 s'il clique sur l'icon de sauvegarde.</li>
+<li><b>modelid:</b> L'ID du model йditй.</li>
+<li><b>boneid:</b> La partie du corp sur laquelle l'objet est attachй.</li>
+<li><b>fOffsetX:</b> (Optionnel) L'axe de compensation X йditй.</li>
+<li><b>fOffsetY:</b> (Optionnel) L'axe de compensation Y editй.</li>
+<li><b>fOffsetZ:</b> (Optionnel) L'axe de compensation Z editй.</li>
+<li><b>fRotX:</b> (Optionnel) L'axe de rotation X editй.</li>
+<li><b>fRotY:</b> (Optionnel) L'axe de rotation Y editй.</li>
+<li><b>fRotZ:</b> (Optionnel) L'axe de rotation Z editй.</li>
+<li><b>fScaleX:</b> (Optionnel) L'axe d'йchelonnage X editй.</li>
+<li><b>fScaleY:</b> (Optionnel) L'axe d'йchelonnage Y editй.</li>
+<li><b>fScaleZ:</b> (Optionnel) L'axe d'йchelonnage Z editй.</li>
+</ul>
+18. <b><u>Public OnPlayerEditObject(playerid, playerobject, objectid, response, Float:fX, Float:fY, Float:fZ, Float:fRotX, Float:fRotY, Float:fRotZ)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur a terminй de modifier un objet(PlayerObject/Object, avec EditObject/EditPlayerObject).<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> l'ID du joueur effectuant l'action.</li>
+<li><b>playerobject:</b> Valeur boolean. 0 si l'objet est un Global, 1 si l'objet est un PlayerObject.</li>
+<li><b>objectid:</b> L'ID de l'objet.</li>
+<li><b>response:</b> Valeur numйrique. Voir wiki.sa-mp.com/wiki/ObjectEditionResponesTypes.</li>
+<li><b>Float:fX:</b> Position X editйe.</li>
+<li><b>Float:fY:</b> Position Y editйe.</li>
+<li><b>Float:fZ:</b> Position Z editйe.</li>
+<li><b>Float:fRotX:</b> Rotation X editйe.</li>
+<li><b>Float:fRotY:</b> Rotation Y editйe.</li>
+<li><b>Float:fRotZ:</b> Rotation Z editйe.</li>
+</ul>
+19. <b><u>Public OnPlayerEnterCheckpoint(playerid)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur rentre dans un CheckPoint, et non un Pickup ! <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/><br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur rentrant dans le checkpoint.</li>
+</ul>
+20. <b><u>Public OnPlayerEntrerRaceCheckpoint(playerid)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur rentre dans un CheckPoint de course ! (Pas un normal ou encore un Pickup)<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur rentrant dans le Checkpoint.</li>
+</ul><font color="Red">Dйjа а 20 Callbacks ! Incroyable nan?</font><br />
+<br />
+21. <b><u>Public OnPlayerEnterVehicle(playerid, vehicleid, ispassenger)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur rentre dans un vйhicule, que ce sois en passager ou conducteur.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur rentrant dans le vйhicule.</li>
+<li><b>vehicleid:</b> L'ID du vйhicule.</li>
+<li><b>ispassenger:</b> Valeur boolean. 0 si en conducteur, 1 si en passager.</li>
+</ul>
+22. <b><u>Public OnPlayerExitVehicle(playerid, vehicleid)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur sort d'un vйhicule.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur sortant du vйhicule.</li>
+<li><b>vehicleid:</b> L'ID du vйhicule.</li>
+</ul>
+23. <b><u>Public OnPlayerExitedMenu(playerid)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur sort d'un menu.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur sortant du menu.</li>
+</ul>
+24. <b><u>Public OnPlayerGiveDamage(playerid, damageid, amount, weaponid, bodypart)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur donne des dйgats а un autre joueur (Arme, feu...)<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur affligant les dommages.</li>
+<li><b>damageid:</b> L'ID du joueur qui reзoit ces dommages.</li>
+<li><b>amount:</b> Le nombre de Point de vie, ou de Point d'armure que le joueur perd.</li>
+<li><b>weaponid:</b> L'arme utilisйe pour causer ces dommages.<br />
+<font color="Red">Si le joueur est touchй par du feu, cela retournera l'arme ID 37 (lance flammes)</font></li>
+<li><b>bodypart:</b> Partie du corps qui a йtй touchйe. (Voir ici: <a href="https://wiki.sa-mp.com/wiki/Body_Parts" target="_blank">Parties du corps</a>)</li>
+</ul>
+25. <b><u>Public OnPlayerInteriorChange(playerid, newinteriorid, oldinteriorid)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur change d'intйrieur.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur.</li>
+<li><b>newinteriorid:</b> L'ID du nouveau intйrieur du joueur.</li>
+<li><b>oldinteriorid:</b> L'ancien intйrieur oщ se trouvait le joueur.</li>
+</ul>
+26. <b><u>Public OnPlayerKeyStateChange(playerid, newkeys, oldkeys)</u></b><br />
+Cette callback est appelйe lorsqu'il y a un changement d'йtat au niveau des touches.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur.</li>
+<li><b>newkeys:</b> La touche qui est pressйe actuellement. (Voir ici: wiki.sa-mp.com/wiki/Keys)</li>
+<li><b>oldkeys:</b> La touche qui a йtй pressйe juste avant. (Voir ici: wiki.sa-mp.com/wiki/Keys)</li>
+</ul>
+27. <b><u>Public OnPlayerLeaveCheckpoint(playerid)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur quitte un checkpoint, et non un pickup ! <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/><br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur.</li>
+</ul>
+28. <b><u>Public OnPlayerLeaveRaceCheckpoint(playerid)</u></b><br />
+Cette callback est appelйe lorsque quelqu'un sort d'un checkpoint de course, et non un normal!<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur.</li>
+</ul>
+29. <b><u>Public OnPlayerObjectMoved(playerid, objectid)</u></b><br />
+Cette callback est appelйe lorsqu'un objet attachй а un joueur vient de finir son mouvement.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur</li>
+<li><b>objectid:</b> L'ID de l'objet.</li>
+</ul>
+30. <b><u>Public OnPlayerPickUpPickup(playerid, pickupid)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur passe sur un Pickup, qui a йtй crйй avec "CreatePickup"!<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur.</li>
+<li><b>pickupid:</b> L'ID du pickup sur lequel le joueur est passй.</li>
+</ul>
+31. <b><u>Public OnPlayerRequestClass(playerid, classid)</u></b><br />
+Cette Callback est appelйe lorsqu'un joueur change de classe lors de la sйlection de classe.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur effectuant l'action.</li>
+<li><b>classid:</b> L'ID de la classe que le joueur observe.</li>
+</ul>
+32. <b><u>Public OnPlayerRequestSpawn(playerid)</u></b><br />
+Cette Callback est appelйe lorsqu'un joueur appuie sur le bouton "Spawn" lors de la sйlection de classe.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur.</li>
+</ul>
+33. <b><u>Public OnPlayerSelectObject(playerid, type, objectid, Float:fX, Float:fY, Float:fZ)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur a utilisй "SelectObject".<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur.</li>
+<li><b>type:</b> Le type de la sйlection (Voir ici: wiki.sa-mp.com/wiki/SelectObectTypes )</li>
+<li><b>objectid:</b> L'ID de l'objet sйlectionnй</li>
+<li><b>Float:fX:</b> Position X йditй.</li>
+<li><b>Float:fY:</b> Position Y йditй.</li>
+<li><b>Float:fZ:</b> Position Z йditй.</li>
+</ul>
+34. <b><u>Public OnPlayerSelectedMenuRow(playerid, row)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur sйlectionne un article depuis un menu.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur.</li>
+<li><b>row:</b> L'ID de la ligne sйlectionnйe.</li>
+</ul>
+35. <b><u>Public OnPlayerSpawn(playerid)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur spawn.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur.</li>
+</ul>
+36. <b><u>Public OnPlayerStateChange(playerid, newstate,oldstate)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur change d'йtat: wiki.sa-mp.com/wiki/State.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur.</li>
+<li><b>newstate:</b> Le nouveau йtat du joueur (voir dessus)</li>
+<li><b>oldstate:</b> L'ancien йtat du joueur (voir dessus)</li>
+</ul>
+37. <b><u>Public OnPlayerStreamIn(playerid, forplayerid)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur charge un autre joueur (Pour le voir).<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur qui est chargй.</li>
+<li><b>forplayerid:</b> L'ID du joueur ayant chargй ce joueur.</li>
+</ul>* Correction par Dutheil.<br />
+38. <b><u>Public OnPlayerStreamOut(playerid, forplayerid)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur est dйchargй (On ne le voit plus) <br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur qui n'est plus chargй</li>
+<li><b>forplayerid:</b> L'ID du joueur qui a dйchargй son collиgue.</li>
+</ul>
+39. <b><u>Public OnPlayerTakeDamage(playerid, issuerid, amount, weaponid, bodypart)</u></b><br />
+Cette callback est appelйe lorsqu'un joueur prend des dommages.<br />
+Ses valeurs retournйes:<ul><li><b>playerid:</b> L'ID du joueur qui prend les dommages.</li>
+<li><b>issuerid:</b> L'ID du joueur ayant causй les dommages.</li>
+<li><b>amount:</b> Le nombre de points de vie, et d'armure perdus.</li>
+<li><b>weaponid:</b> L'arme utilisйe pour causer les dommages.<br />
+<font color="Red">Lorsque des dommages de feu sont causйs, l'arme se automatiquement l'ID 37, le lance-flamme.</font></li>
+<li><b>bodypart:</b> La partie du corps touchйe par l'arme.</li>
+</ul>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3368239">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-214556.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0562/tid-562881.html">Next Oldest</a> | <a href="../../threads/0562/tid-562881.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="562881" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" selected="selected">------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/9.html">Non-English</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/33.html">Languages</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/30.html">Français/French</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/81.html">Showroom</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

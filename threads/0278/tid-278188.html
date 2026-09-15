@@ -1,0 +1,2042 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] How to make a register system ( Dialogs, SQLite and rBits )</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "5709a9536c997eaf7f6496a9860a6b2f";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Register System in SQLite using rBits An efficient way to account creating using SQLite, dialogs and rBits. Why? What? Why'd you make this Recently I promised that'd I get a new register system tutori" />
+<link rel="canonical" href="../../threads/0278/tid-278188.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="5709a9536c997eaf7f6496a9860a6b2f" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (4):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0278/tid-278188-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0278/tid-278188-page-3.html" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0278/tid-278188-page-4.html" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0278/tid-278188-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0278/tid-278188.html#pid1359512">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] How to make a register system ( Dialogs, SQLite and rBits )
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid1359512"></a>
+<div class="post classic " style="" id="post_1359512">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78223.html"><img src="../../assets/uploads/avatars/78223.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78223.html">Lorenc_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,793<br />
+	Threads: 196<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1359512" title="How to make a register system ( Dialogs, SQLite and rBits )">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by Lorenc_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.08.2011, 03:54 <span class="post_edit" id="edited_by_1359512"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Lorenc_; 02/01/2012 at 10:18 PM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1359512">
+		<div align="center"><font size="6"><font color="orange"><b>Register System in SQLite using rBits</b></font></font><br />
+<i>An efficient way to account creating using SQLite, dialogs and rBits.</i></div>
+<font size="5"><b><font color="lightblue">Why? What? Why'd you make this</font></b></font><br />
+<br />
+Recently I promised that'd I get a new register system tutorial done really really soon. But it took some time, so yeah. This is one of the second tutorials of registering players that beats the last one by a heap.<br />
+<br />
+All sections are explained in the pawn tags. So notice that! <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/><br />
+<br />
+In this tutorial we'll be saving:<ul><li>Name</li>
+</ul><ul><li>Password</li>
+</ul><ul><li>IP address</li>
+</ul><ul><li>Score</li>
+</ul><ul><li>Cash</li>
+</ul><ul><li>Admin Level</li>
+</ul><font size="5"><b><font color="lightblue"><u>Start</u></font></b></font><br />
+<br />
+<font size="3"><b><font color="lightgreen">Defining and Creating variables and functions</font></b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:247px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include                        &lt;a_samp&gt;</span><br/><span style="color: #2222AA;">#include                        &lt;rBits&gt;</span><br/><br/><span style="color: #228822;">/* ** Colours ** */</span><br/><span style="color: #2222AA;">#define COL_GREEN               "{6EF83C}" // GREEN color in HEX ( USED )</span><br/><span style="color: #2222AA;">#define COL_RED                 "{F81414}" // RED color in HEX ( USED )</span><br/><span style="color: #2222AA;">#define COL_BLUE                "{00C0FF}" // BLUE color in HEX ( USED )</span><br/><br/><span style="color: #228822;">/* ** Player Data ** */</span><br/><span style="color: #2222BB;">new</span><br/>    <span style="color: #000000;">Bit1</span><span style="color: #000000;">:</span>  g_PlayerLogged       <span style="color: #000000;">&lt;</span>MAX_PLAYERS<span style="color: #000000;">&gt;</span>, <span style="color: #228822;">// Creates a 1 bit array</span><br/>    <span style="color: #000000;">Bit16</span><span style="color: #000000;">:</span> g_AdminLevel         <span style="color: #000000;">&lt;</span>MAX_PLAYERS<span style="color: #000000;">&gt;</span>, <span style="color: #228822;">// Creates a 16 bit array again.</span><br/>    <span style="color: #000000;">DB</span><span style="color: #000000;">:</span> Database<br/>;</div></div></pre>
+</div>
+We're going to need all of that above, paste it somewhere in your script, usually at the top.<br />
+<br />
+<b>Functions needed in the procedure!</b><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:487px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">stock</span> DB_Escape<span style="color: #000000;">(</span>text<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span><br/>        ret<span style="color: #000000;">[</span><span style="color: #000000;">80</span> <span style="color: #000000;">*</span> <span style="color: #000000;">2</span><span style="color: #000000;">]</span>,<br/>        ch,<br/>        i,<br/>        j;<br/>    <span style="color: #2222BB;">while</span> <span style="color: #000000;">(</span><span style="color: #000000;">(</span>ch <span style="color: #000000;">=</span> text<span style="color: #000000;">[</span>i<span style="color: #000000;">++</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">&amp;&amp;</span> j <span style="color: #000000;">&lt;</span> <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>ret<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>ch <span style="color: #000000;">==</span> <span style="color: #000066;">'<span style="color: #000099; font-weight: bold;">\'</span>'</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>j <span style="color: #000000;">&lt;</span> <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>ret<span style="color: #000000;">)</span> <span style="color: #000000;">-</span> <span style="color: #000000;">2</span><span style="color: #000000;">)</span><br/>            <span style="color: #000000;">{</span><br/>                ret<span style="color: #000000;">[</span>j<span style="color: #000000;">++</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">'<span style="color: #000099; font-weight: bold;">\'</span>'</span>;<br/>                ret<span style="color: #000000;">[</span>j<span style="color: #000000;">++</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">'<span style="color: #000099; font-weight: bold;">\'</span>'</span>;<br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>j <span style="color: #000000;">&lt;</span> <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>ret<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            ret<span style="color: #000000;">[</span>j<span style="color: #000000;">++</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> ch;<br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">else</span><br/>        <span style="color: #000000;">{</span><br/>            j<span style="color: #000000;">++</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    ret<span style="color: #000000;">[</span><span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span>ret<span style="color: #000000;">)</span> <span style="color: #000000;">-</span> <span style="color: #000000;">1</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">'<span style="color: #000099; font-weight: bold;">\0</span>'</span>;<br/>    <span style="color: #2222BB;">return</span> ret;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+You'll need these functions in order to continue with the tutorial.<br />
+<br />
+<font size="3"><b><font color="lightgreen">Creating/Opening the database</font></b></font><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:135px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnFilterScriptInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    Database <span style="color: #000000;">=</span> db_open<span style="color: #000000;">(</span><span style="color: #000066;">"ServerDatabase.db"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// This will open the database under the name, 'ServerDatabase.db'</span><br/>    <span style="color: #228822;">//If the table does not excists then we're going to write it inside.</span><br/>    db_query<span style="color: #000000;">(</span>Database, <span style="color: #000066;">"CREATE TABLE IF NOT EXISTS `USERS` (`NAME`, `PASSWORD`, `IP`, `SCORE`, `CASH`, `ADMINLEVEL`)"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Here once the server executes it'll create all the databases itself. The procedure of this is:<br />
+Open the database &gt; Write to Database &gt; Free result ( Close the Database )<br />
+<br />
+That's why SQLite is a really interesting implemented feature. It's so damn useful! It'll do most of the stuff for you<br />
+<br />
+So make sure you have this in your script otherwise everything else will bug up or glitch.<br />
+<br />
+<b>Warning</b><br />
+Make sure you close the database, anything could go wrong. to do so have it placed like this.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:119px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnFilterScriptExit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i; i <span style="color: #000000;">!=</span> MAX_PLAYERS; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> OnPlayerDisconnect<span style="color: #000000;">(</span>i, <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/>    db_close<span style="color: #000000;">(</span>Database<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<b>Opening databases manually</b><br />
+In order to do this, you'll need a get a SQLite database opener. <b>SQLite Database Browser</b> is what I currently use. To get this, type into ****** "<b>SQLite Database Browser 2.0 b1 download</b>" and you will see some results appear.<br />
+<br />
+<font size="3"><b><font color="lightgreen">Retrieving if the player is or isn't registered.</font></b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerConnect<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span><br/>        Query<span style="color: #000000;">[</span> <span style="color: #000000;">150</span> <span style="color: #000000;">]</span>, <span style="color: #228822;">// Create a Query</span><br/>        <span style="color: #000000;">DBResult</span><span style="color: #000000;">:</span> Result, <span style="color: #228822;">// Create a database Result</span><br/>        name<span style="color: #000000;">[</span> MAX_PLAYER_NAME <span style="color: #000000;">]</span> <span style="color: #228822;">// create a name string</span><br/>    ;<br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, name, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>name<span style="color: #000000;">)</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// Gather the players name.</span><br/>    <br/>    Bit1_Set<span style="color: #000000;">(</span>g_PlayerLogged, playerid, false<span style="color: #000000;">)</span>; <span style="color: #228822;">// We're going to reset this variable to 0 = false.</span><br/>    <br/>    <span style="color: #228822;">// Okay, we're now going to select from `USERS` where the name equals the players name.</span><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"SELECT `NAME` FROM `USERS` WHERE `NAME` = '%s' COLLATE NOCASE"</span>, DB_Escape<span style="color: #000000;">(</span>name<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">// We're going to insert the query inside the db result. Query is to execute what ever said to the DB</span><br/>    Result <span style="color: #000000;">=</span> db_query<span style="color: #000000;">(</span>Database, Query<span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">// If the num rows are there, then that means his registered.</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>db_num_rows<span style="color: #000000;">(</span>Result<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">// Send a welcome message</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"{FFFFFF}Welcome "</span>COL_BLUE<span style="color: #000066;">"%s(%d){FFFFFF} to the server, you're registered<span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span>Please log in by inputting your password."</span>, name, playerid<span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">// Show a player the dialog. ( dialog login )</span><br/>        ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">1</span>, DIALOG_STYLE_INPUT, <span style="color: #000066;">"{FFFFFF}Register System"</span>, Query, <span style="color: #000066;">"Login"</span>, <span style="color: #000066;">"Leave"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #228822;">// Else if he isn't, he isn't registered.</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">// Send a welcome message</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"{FFFFFF}Welcome "</span>COL_BLUE<span style="color: #000066;">"%s(%d){FFFFFF} to the server, you're "</span>COL_RED<span style="color: #000066;">"not{FFFFFF} registered<span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span>Please log in by inputting your password."</span>, name, playerid<span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">// Show a player the dialog. ( dialog register )</span><br/>        ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">0</span>, DIALOG_STYLE_INPUT, <span style="color: #000066;">"{FFFFFF}Register System"</span>, Query, <span style="color: #000066;">"Register"</span>, <span style="color: #000066;">"Leave"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    db_free_result<span style="color: #000000;">(</span>Result<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+This code above will show you the steps of how the detection works and is what you'll need, so make sure you have this in your script.<br />
+<br />
+<font size="3"><b><font color="lightgreen">Registering and Logging the player</font></b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnDialogResponse<span style="color: #000000;">(</span>playerid, dialogid, response, listitem, inputtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span><br/>        Query<span style="color: #000000;">[</span> <span style="color: #000000;">256</span> <span style="color: #000000;">]</span>, <span style="color: #228822;">// Creating a big array this time. No lies :X</span><br/>        <span style="color: #000000;">DBResult</span><span style="color: #000000;">:</span> Result, <span style="color: #228822;">// Create a database Result</span><br/>        name<span style="color: #000000;">[</span> MAX_PLAYER_NAME <span style="color: #000000;">]</span>, <span style="color: #228822;">// create a name string</span><br/>        ip<span style="color: #000000;">[</span> <span style="color: #000000;">16</span> <span style="color: #000000;">]</span> <span style="color: #228822;">// Create a IP string</span><br/>    ;<br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, name, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>name<span style="color: #000000;">)</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// Gather the name of the player.</span><br/>    GetPlayerIp<span style="color: #000000;">(</span>playerid, ip, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>ip<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>dialogid <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #228822;">// The core of the login dialog</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>response<span style="color: #000000;">)</span> <span style="color: #228822;">// Do what ever if the player selected 'Login"</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">// if  we find inside users the NAME equaled to the players name and the password equals username then</span><br/>            <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"SELECT * FROM `USERS` WHERE `NAME` = '%s' COLLATE NOCASE AND `PASSWORD` = '%s'"</span>, DB_Escape<span style="color: #000000;">(</span>name<span style="color: #000000;">)</span>, DB_Escape<span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #228822;">// storing ^ that inside the databases result</span><br/>            Result <span style="color: #000000;">=</span> db_query<span style="color: #000000;">(</span>Database, Query<span style="color: #000000;">)</span>;<br/>            <span style="color: #228822;">// if the result is found that the user and password are exact, do below</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>db_num_rows<span style="color: #000000;">(</span>Result<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #2222BB;">new</span> Field<span style="color: #000000;">[</span> <span style="color: #000000;">20</span> <span style="color: #000000;">]</span>; <span style="color: #228822;">//Creating a field to retrieve the data</span><br/>                <span style="color: #228822;">// get the field "SCORE"'s value and insert it to Field itself.</span><br/>                db_get_field_assoc<span style="color: #000000;">(</span>Result, <span style="color: #000066;">"SCORE"</span>, Field, <span style="color: #000000;">30</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #228822;">// Set the Player score</span><br/>                SetPlayerScore<span style="color: #000000;">(</span>playerid, <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>Field<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #228822;">// strval is to convert a string into a number</span><br/>                <span style="color: #228822;">// Now we keep doing the same thing with the rest.</span><br/><br/>                <span style="color: #228822;">// get the field "SCORE"'s value and insert it to Field itself.</span><br/>                db_get_field_assoc<span style="color: #000000;">(</span>Result, <span style="color: #000066;">"CASH"</span>, Field, <span style="color: #000000;">30</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #228822;">// Give the player the value of the field the amount of cash needed</span><br/>                GivePlayerMoney<span style="color: #000000;">(</span>playerid, <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>Field<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/>                <span style="color: #228822;">// get the field "SCORE"'s value and insert it to Field itself.</span><br/>                db_get_field_assoc<span style="color: #000000;">(</span>Result, <span style="color: #000066;">"ADMINLEVEL"</span>, Field, <span style="color: #000000;">30</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #228822;">// Set the value of the bit "g_AdminLevel" to the fields value</span><br/>                Bit16_Set<span style="color: #000000;">(</span>g_AdminLevel, playerid, <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>Field<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #228822;">// Log in the player</span><br/>                Bit1_Set<span style="color: #000000;">(</span>g_PlayerLogged, playerid, true<span style="color: #000000;">)</span>; <br/>                <span style="color: #228822;">// Send a client message about how the progress was between logging in</span><br/>                SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"You have "</span>COL_GREEN<span style="color: #000066;">"successfully{FFFFFF} logged in! "</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #000000;">}</span><br/>            <span style="color: #2222BB;">else</span> <span style="color: #228822;">// If the player's password is wrong:</span><br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #228822;">// Send a welcome message</span><br/>                <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"{FFFFFF}Welcome "</span>COL_BLUE<span style="color: #000066;">"%s(%d){FFFFFF} to the server, you're registered<span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span>Please log in by inputting your password."</span>, name, playerid<span style="color: #000000;">)</span>;<br/>                <span style="color: #228822;">// Show a player the dialog. ( dialog login )</span><br/>                ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">1</span>, DIALOG_STYLE_INPUT, <span style="color: #000066;">"{FFFFFF}Register System"</span>, Query, <span style="color: #000066;">"Login"</span>, <span style="color: #000066;">"Leave"</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #228822;">// Show the player the wrong password message.</span><br/>                SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">""</span>COL_RED<span style="color: #000066;">"Wrong{FFFFFF} password, try again!"</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #000000;">}</span><br/>            db_free_result<span style="color: #000000;">(</span>Result<span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">return</span> Kick<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>; <span style="color: #228822;">// Kick the player if he selected 'Leave'</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>dialogid <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #228822;">// The core of the register dialog</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>response<span style="color: #000000;">)</span> <span style="color: #228822;">// Do what ever if the player selected 'Register"</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">//checking if the password is not is less/higher than 3 characters</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span> <span style="color: #000000;">&gt;</span> <span style="color: #000000;">24</span> || <span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span> <span style="color: #000000;">&lt;</span> <span style="color: #000000;">3</span><span style="color: #000000;">)</span><br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #228822;">// Send a welcome message</span><br/>                <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"{FFFFFF}Welcome "</span>COL_BLUE<span style="color: #000066;">"%s(%d){FFFFFF} to the server, you're "</span>COL_RED<span style="color: #000066;">"not{FFFFFF} registered<span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span>Please log in by inputting your password."</span>, name, playerid<span style="color: #000000;">)</span>;<br/>                <span style="color: #228822;">// Reshow this dialog, so we can do this again.</span><br/>                ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">0</span>, DIALOG_STYLE_INPUT, <span style="color: #000066;">"{FFFFFF}Register System"</span>, Query, <span style="color: #000066;">"Register"</span>, <span style="color: #000066;">"Leave"</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #228822;">// Send a message about the length of characters used for their password.</span><br/>                SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Your password length must be from 3 - 24 characters!"</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #000000;">}</span><br/>            <span style="color: #2222BB;">else</span><br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #228822;">// Inserting all these items into the database, confirming it's register was successful.</span><br/>                <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"INSERT INTO `USERS` (`NAME`, `PASSWORD`, `IP`, `SCORE`, `CASH`, `ADMINLEVEL`) VALUES('%s','%s','%s', '0', '500', '0')"</span>, DB_Escape<span style="color: #000000;">(</span>name<span style="color: #000000;">)</span>, DB_Escape<span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span>, DB_Escape<span style="color: #000000;">(</span>ip<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #228822;">// Querying the formatted Query ^</span><br/>                db_query<span style="color: #000000;">(</span>Database, Query<span style="color: #000000;">)</span>;<br/>                <span style="color: #228822;">// Log in the player</span><br/>                Bit1_Set<span style="color: #000000;">(</span>g_PlayerLogged, playerid, true<span style="color: #000000;">)</span>; <br/>                GivePlayerMoney<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">500</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// Give Player the money.</span><br/>                <span style="color: #228822;">// Reset score.</span><br/>                SetPlayerScore<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #228822;">// Show a message :)</span><br/>                SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"You have "</span>COL_GREEN<span style="color: #000066;">"successfully{FFFFFF} registered! You have been automatically logged in!"</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">return</span> Kick<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>; <span style="color: #228822;">// Kick the player if he selected 'Leave'</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+This code is the core to registering and logging in, without it nothing would work. This will register you/login you in the system.<br />
+<br />
+<font size="3"><b><font color="lightgreen">Saving the player data</font></b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:391px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerDisconnect<span style="color: #000000;">(</span>playerid, reason<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span><br/>        Query<span style="color: #000000;">[</span> <span style="color: #000000;">200</span> <span style="color: #000000;">]</span>, <span style="color: #228822;">// We need to create such a query so we can format it.</span><br/>        name<span style="color: #000000;">[</span> MAX_PLAYER_NAME <span style="color: #000000;">]</span> <span style="color: #228822;">// create a name string</span><br/>    ;<br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, name, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>name<span style="color: #000000;">)</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// Gather the name of the player.</span><br/><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Bit1_Get<span style="color: #000000;">(</span>g_PlayerLogged, playerid<span style="color: #000000;">)</span> <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">// Formatting the query containing all the updating stuff, this will update the database with the latest information.</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query,<span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>,<span style="color: #000066;">"UPDATE `USERS` SET SCORE = '%d', CASH = '%d', ADMINLEVEL = '%d' WHERE `NAME` = '%s' COLLATE NOCASE"</span>,<br/>                                                                                        GetPlayerScore<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>, <span style="color: #228822;">// Gather the player's score</span><br/>                                                                                        GetPlayerMoney<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>, <span style="color: #228822;">// Gather the player's money</span><br/>                                                                                        Bit16_Get<span style="color: #000000;">(</span>g_AdminLevel, playerid<span style="color: #000000;">)</span>, <span style="color: #228822;">// Gather the Admin Level</span><br/>                                                                                        DB_Escape<span style="color: #000000;">(</span>name<span style="color: #000000;">)</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// Gather the name of the player then escape it.</span><br/>        <span style="color: #228822;">// querying the formatted Query</span><br/>        db_query<span style="color: #000000;">(</span>Database, Query<span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">// We're going to reset this bit array to 0, = false.</span><br/>        Bit1_Set<span style="color: #000000;">(</span>g_PlayerLogged, playerid, false<span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+All this code will reset the player bit array, g_PlayerLogged; Will even save all the new information the player has.<br />
+<br />
+<font size="3"><b><font color="lightgreen">Credits</font></b></font><br />
+Lorenc - Creating the tutorial<br />
+RyDeR` - rBits<br />
+SA-MP - Implemented SQLite<br />
+<br />
+<font size="3"><b><font color="lightgreen">Download the script</font></b></font><br />
+<a href="http://pastebin.com/PXMpWrCB" target="_blank"><img alt="" border="0" src="https://addons.opera.com/media/extensions/63/4763/1.0-rev1/icons/icon_64x64.png"/></a><br />
+<i>Version 1.7</i><br />
+<br />
+Thanks <a href="http://forum.sa-mp.com/member.php?u=126521" target="_blank">Bakr</a> for the efficiency tips. The script should be much much better now.<br />
+<br />
+Thanks <a href="http://forum.sa-mp.com/member.php?u=133429" target="_blank">AndreT</a> for those player name &amp; ip tips.<br />
+<br />
+Thanks <a href="http://forum.sa-mp.com/member.php?u=7586" target="_blank">JaTochNietDan</a> for pointing some things out.<br />
+<br />
+* Fixed loading issue<br />
+* Uses DB_Escape<br />
+* Not using ReturnPlayerName and ReturnPlayerIP<br />
+* Slightly more efficient<br />
+* Much better in performance.<br />
+* Fixed a DB_Escape issue.<br />
+<br />
+<font size="3"><b><font color="lightgreen">Problems?</font></b></font><br />
+Please do report problems. I'll be repairing them ASAP. The code looks fine and should work well.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1359512">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78223.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1359518"></a>
+<div class="post classic " style="" id="post_1359518">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0055/uid-55724.html"><img src="../../assets/uploads/avatars/55724.png" alt="" width="55" height="42" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0055/uid-55724.html">Jack_Wilson</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 94<br />
+	Threads: 14<br />
+	Joined: Jun 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1359518" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by Jack_Wilson" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.08.2011, 03:55 <span class="post_edit" id="edited_by_1359518"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1359518">
+		That is a nice tutorial, nice to see some SQL being used around on the forum.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1359518">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-55724.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1359546"></a>
+<div class="post classic " style="" id="post_1359546">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78223.html"><img src="../../assets/uploads/avatars/78223.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78223.html">Lorenc_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,793<br />
+	Threads: 196<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1359546" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Lorenc_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.08.2011, 04:19 <span class="post_edit" id="edited_by_1359546"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1359546">
+		Thanks, Here's a screen shot to the GUI and how the styles like.<br />
+<br />
+<img alt="" border="0" src="../../imageshack/img88/4264/previewgl.png"/><br />
+<br />
+Have fun coding <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1359546">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78223.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1359675"></a>
+<div class="post classic " style="" id="post_1359675">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0128/uid-128387.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0128/uid-128387.html">Kush</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 781<br />
+	Threads: 12<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1359675" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by Kush" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.08.2011, 07:21 <span class="post_edit" id="edited_by_1359675"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1359675">
+		Very nice. Well done Lorenc_.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1359675">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-128387.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1359680"></a>
+<div class="post classic " style="" id="post_1359680">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0117/uid-117681.html"><img src="../../assets/uploads/avatars/117681.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0117/uid-117681.html">Davz*|*Criss</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 780<br />
+	Threads: 58<br />
+	Joined: Jan 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1359680" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by Davz*|*Criss" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.08.2011, 07:24 <span class="post_edit" id="edited_by_1359680"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1359680">
+		Awesome Tutorial! Good job Lorenc_ :P!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1359680">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-117681.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1359718"></a>
+<div class="post classic " style="" id="post_1359718">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0124/uid-124642.html"><img src="../../assets/uploads/avatars/124642.png" alt="" width="46" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0124/uid-124642.html">juraska</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 305<br />
+	Threads: 28<br />
+	Joined: Apr 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1359718" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by juraska" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.08.2011, 08:17 <span class="post_edit" id="edited_by_1359718"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1359718">
+		Very nice tutorial !
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1359718">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-124642.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1359816"></a>
+<div class="post classic " style="" id="post_1359816">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126674.html"><img src="../../assets/uploads/avatars/126674.png" alt="" width="55" height="43" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126674.html"><s>Kaperstone</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,004<br />
+	Threads: 12<br />
+	Joined: May 2011
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1359816" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by Kaperstone" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.08.2011, 10:08 <span class="post_edit" id="edited_by_1359816"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1359816">
+		nice tutorial <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/><br />
+very useful..
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1359816">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126674.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1359850"></a>
+<div class="post classic " style="" id="post_1359850">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0097/uid-97706.html"><img src="../../assets/uploads/avatars/97706.png" alt="" width="55" height="40" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0097/uid-97706.html">Darnell</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 824<br />
+	Threads: 53<br />
+	Joined: Jul 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1359850" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by Darnell" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.08.2011, 10:57 <span class="post_edit" id="edited_by_1359850"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1359850">
+		A very usefull tutorial.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1359850">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-97706.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1359878"></a>
+<div class="post classic " style="" id="post_1359878">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78223.html"><img src="../../assets/uploads/avatars/78223.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78223.html">Lorenc_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,793<br />
+	Threads: 196<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1359878" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Lorenc_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.08.2011, 11:27 <span class="post_edit" id="edited_by_1359878"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1359878">
+		Thanks for the comments, well said; if there is bugs or problems, tell me so it can be fixed.<br />
+<br />
+99% sure there's nothing wrong though.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1359878">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78223.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1359924"></a>
+<div class="post classic " style="" id="post_1359924">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0128/uid-128387.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0128/uid-128387.html">Kush</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 781<br />
+	Threads: 12<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1359924" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by Kush" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.08.2011, 12:06 <span class="post_edit" id="edited_by_1359924"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1359924">
+		I like your method of using the native SQL. Y_Less and I both had discussion about this and it's actually really useful.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1359924">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-128387.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1359928"></a>
+<div class="post classic " style="" id="post_1359928">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0080/uid-80385.html"><img src="../../assets/uploads/avatars/80385.png" alt="" width="46" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0080/uid-80385.html">Scenario</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Godfather<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 7,801<br />
+	Threads: 187<br />
+	Joined: Feb 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1359928" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#11</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 11 by Scenario" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.08.2011, 12:09 <span class="post_edit" id="edited_by_1359928"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1359928">
+		Can I ask why you don't save the username and password into a variable?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1359928">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-80385.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1360000"></a>
+<div class="post classic " style="" id="post_1360000">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0060/uid-60300.html"><img src="../../assets/uploads/avatars/60300.png" alt="" width="55" height="51" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0060/uid-60300.html">antonio112</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 970<br />
+	Threads: 16<br />
+	Joined: Aug 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1360000" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#12</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 12 by antonio112" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.08.2011, 13:02 <span class="post_edit" id="edited_by_1360000"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1360000">
+		Holy, nice tutorial. I'll give it a try later on. Thanks alot.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1360000">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-60300.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1360826"></a>
+<div class="post classic " style="" id="post_1360826">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78223.html"><img src="../../assets/uploads/avatars/78223.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78223.html">Lorenc_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,793<br />
+	Threads: 196<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1360826" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#13</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 13 by Lorenc_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.08.2011, 22:01 <span class="post_edit" id="edited_by_1360826"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1360826">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>RealCop228</strong><br />
+<a href="../../threads/0278/tid-278188.html#pid1359928" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Can I ask why you don't save the username and password into a variable?</div>
+</td>
+</tr>
+</table>
+</div>What's the point firstly?<br />
+<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Kush</strong><br />
+<a href="../../threads/0278/tid-278188.html#pid1359924" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">I like your method of using the native SQL. Y_Less and I both had discussion about this and it's actually really useful.</div>
+</td>
+</tr>
+</table>
+</div>Haha, thanks <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1360826">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78223.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1361159"></a>
+<div class="post classic " style="" id="post_1361159">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126521.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126521.html">Bakr</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 977<br />
+	Threads: 10<br />
+	Joined: Apr 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1361159" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#14</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 14 by Bakr" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">22.08.2011, 02:13 <span class="post_edit" id="edited_by_1361159"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1361159">
+		Nicely explained, however, there are a few errors and or unnecessary things done I would like to point out:<ul><li>You free a result when you don't select anything (when creating the table if not exists)</li>
+<li>You don't free the result after selecting information (under OnPlayerConnect)</li>
+<li>You use ` around field names (only necessary around table names)</li>
+<li>You use ' around integer values (only necessary around strings)</li>
+<li>You check if the player is registered under OnDialogResponse in the registration dialog, even though you only show it if they are registered</li>
+<li>When seeing if the player is registered, you select ALL their information, which is unnecessary, and even inefficient with large amounts of fields. Just retrieve one value.</li>
+</ul>
+That was just a quick look at the code, didn't study it much. Not to put you down! I'm just trying to help you improve this tutorial.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1361159">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126521.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1361348"></a>
+<div class="post classic " style="" id="post_1361348">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78223.html"><img src="../../assets/uploads/avatars/78223.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78223.html">Lorenc_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,793<br />
+	Threads: 196<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1361348" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#15</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 15 by Lorenc_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">22.08.2011, 06:41 <span class="post_edit" id="edited_by_1361348"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Lorenc_; 22/08/2011 at 09:19 AM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1361348">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Bakr</strong><br />
+<a href="../../threads/0278/tid-278188.html#pid1361159" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Nicely explained, however, there are a few errors and or unnecessary things done I would like to point out:<ul><li>You free a result when you don't select anything (when creating the table if not exists)</li>
+<li>You don't free the result after selecting information (under OnPlayerConnect)</li>
+<li>You use ` around field names (only necessary around table names)</li>
+<li>You use ' around integer values (only necessary around strings)</li>
+<li>You check if the player is registered under OnDialogResponse in the registration dialog, even though you only show it if they are registered</li>
+<li>When seeing if the player is registered, you select ALL their information, which is unnecessary, and even inefficient with large amounts of fields. Just retrieve one value.</li>
+</ul>
+That was just a quick look at the code, didn't study it much. Not to put you down! I'm just trying to help you improve this tutorial.</div>
+</td>
+</tr>
+</table>
+</div>-- Never mind this post, understand what you mean. I'm adding it now and updating the thread. Thanks a lot.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1361348">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78223.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1361465"></a>
+<div class="post classic " style="" id="post_1361465">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0105/uid-105000.html"><img src="../../assets/uploads/avatars/105000.png" alt="" width="47" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0105/uid-105000.html">Tee</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 836<br />
+	Threads: 107<br />
+	Joined: Sep 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1361465" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#16</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 16 by Tee" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">22.08.2011, 08:43 <span class="post_edit" id="edited_by_1361465"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1361465">
+		Well I read somewhere, were freeing something that hasn't been stored would increase the memory usage, anyway nice tutorial.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1361465">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-105000.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1361499"></a>
+<div class="post classic " style="" id="post_1361499">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78223.html"><img src="../../assets/uploads/avatars/78223.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78223.html">Lorenc_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,793<br />
+	Threads: 196<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1361499" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#17</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 17 by Lorenc_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">22.08.2011, 09:08 <span class="post_edit" id="edited_by_1361499"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1361499">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Tee</strong><br />
+<a href="../../threads/0278/tid-278188.html#pid1361465" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Well I read somewhere, were freeing something that hasn't been stored would increase the memory usage, anyway nice tutorial.</div>
+</td>
+</tr>
+</table>
+</div>If that is so, I'll go in to this tommorow, I really need to work on the CTF mode right now :X<br />
+<br />
+Thanks for telling me
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1361499">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78223.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1361680"></a>
+<div class="post classic " style="" id="post_1361680">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0130/uid-130715.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0130/uid-130715.html">Cowboy</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 107<br />
+	Threads: 21<br />
+	Joined: Jun 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1361680" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#18</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 18 by Cowboy" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">22.08.2011, 11:48 <span class="post_edit" id="edited_by_1361680"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1361680">
+		How will I be able to check the admin level with enums? <br />
+<br />
+How do I open the database, find the players admin level and then use it to check if a player can use a command? <br />
+<br />
+Also, what does "30" mean from this code?<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">db_get_field_assoc<span style="color: #000000;">(</span>Result, <span style="color: #000066;">"ADMINLEVEL"</span>, Field, <span style="color: #000000;">30</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+Thanks<br />
+<br />
+EDIT:<br />
+<br />
+Need some help on this code<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:55px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">db_get_field_assoc<span style="color: #000000;">(</span>Result, <span style="color: #000066;">"ADMINLEVEL"</span>, Field, <span style="color: #000000;">30</span><span style="color: #000000;">)</span>;<br/>PlayerInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pAdminLevel<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>Field<span style="color: #000000;">)</span>; <span style="color: #228822;">// how can I retrieve the data and then put it in that line? The last line occurs an error</span></div></div></pre>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1361680">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-130715.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1361859"></a>
+<div class="post classic " style="" id="post_1361859">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0059/uid-59625.html"><img src="../../assets/uploads/avatars/59625.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0059/uid-59625.html">HyperZ</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,341<br />
+	Threads: 17<br />
+	Joined: Aug 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1361859" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#19</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 19 by HyperZ" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">22.08.2011, 13:44 <span class="post_edit" id="edited_by_1361859"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1361859">
+		Great TUT <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1361859">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-59625.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1361903"></a>
+<div class="post classic " style="" id="post_1361903">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0105/uid-105308.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0105/uid-105308.html">Gh0sT_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 704<br />
+	Threads: 118<br />
+	Joined: Sep 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0278/tid-278188.html#pid1361903" title="Re: How to make a register system ( Dialogs, SQLite and rBits )">#20</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 20 by Gh0sT_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">22.08.2011, 14:32 <span class="post_edit" id="edited_by_1361903"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1361903">
+		1. 16 bit for admin level? O_O<br />
+2. Why you're checking is player connected? There's no point I think
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1361903">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-105308.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0278/tid-278188.html">Next Oldest</a> | <a href="../../threads/0278/tid-278188.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="278188" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (4):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0278/tid-278188-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0278/tid-278188-page-3.html" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0278/tid-278188-page-4.html" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0278/tid-278188-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

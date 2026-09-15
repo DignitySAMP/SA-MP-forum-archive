@@ -1,0 +1,1194 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[FilterScript] Simple stream for music rcon and user commands</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "4f7b5b154f609a4bee4cce246c361e88";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="This is just a simple music stream for your server quite afew songs i'll come around to updating it later on to match enums and so on at the moment there's only one play list for rcon admins and 9 for" />
+<link rel="canonical" href="../../threads/0496/tid-496848.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="4f7b5b154f609a4bee4cce246c361e88" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0496/tid-496848.html#pid2927329">Threaded Mode</a></span>
+				</div>
+				
+					[FilterScript] Simple stream for music rcon and user commands
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid2927329"></a>
+<div class="post classic " style="" id="post_2927329">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0226/uid-226167.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0226/uid-226167.html">boxbonik</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 11<br />
+	Threads: 7<br />
+	Joined: Feb 2014
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0496/tid-496848.html#pid2927329" title="Simple stream for music rcon and user commands">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by boxbonik" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">24.02.2014, 04:01 <span class="post_edit" id="edited_by_2927329"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2927329">
+		This is just a simple music stream for your server quite afew songs i'll come around to updating it later on to match enums and so on at the moment there's only one play list for rcon admins and 9 for players and admins I guess lol you can edit it so it will fit your script and so on first we gotta define the playlists and color<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 210px;
+		text-align: left;
+		overflow: auto">#define COLOR_YELLOW 0xFFFF00AA
+#define DIALOG_MUSIC 984
+#define DIALOG_MUSIC_PLAYLISTS 983
+#define DIALOG_MUSIC_HITS 982
+#define DIALOG_MUSIC_HITSS 981
+#define DIALOG_MUSIC_HITSSS 980
+#define DIALOG_MUSIC_DRAKE 952
+#define DIALOG_MUSIC_MACKLEMORE 953
+#define DIALOG_MUSIC_JAYZ 954
+#define DIALOG_MUSIC_KESHA 955
+#define DIALOG_MUSIC_CHILDISH 956
+#define DIALOG_MUSIC_ADMINMUSIC 957</pre>
+</div><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">public OnDialogResponse(playerid, dialogid, response, listitem, inputtext[])
+{
+	if(dialogid == DIALOG_MUSIC)
+		{
+		if(response)
+		    {
+		    switch(listitem)
+		        {
+		            case 0:
+		            {
+						ShowPlayerDialog(playerid, DIALOG_MUSIC_PLAYLISTS, DIALOG_STYLE_LIST, "Radio Stations", "Mixed Rock", "Play","Cancel");
+		            }
+		            case 1:
+					{
+					    ShowPlayerDialog(playerid, DIALOG_MUSIC_HITS, DIALOG_STYLE_LIST, "2013 Hit Songs", "Lady Gaga - Applause\nLana Del Rey - Summertime Sadness\nLorde - Royals\nMiley Cyrus - Wrecking Ball\nWake Me Up -- Avicii ft. Aloe Blacc\nBlurred Lines - Robin Thicke\nCapital Cities - Safe &amp; Sound\nDrake - Hold On We're Going Home\nJay Z FT Justin Timberlake - Holy Grail\nKaty Perry - Roar", "Play", "Back");
+					}
+					case 2:
+					{
+					    ShowPlayerDialog(playerid, DIALOG_MUSIC_HITSS, DIALOG_STYLE_LIST, "2012 Hit Songs", "LMFAO - Sexy and i know it\nRack City - Tyga\nTrain - Drive By\nCarly Rae Jepsen - Call Me Maybe\nWhistle - Flo Rida\nDrake ft. Rihanna - Take Care\nYoung, Wild And Free - Wiz Khalifa feat. Snoop Dogg\nFlo Rida - Good Feeling\nJay-Z ft Kanye West - Niggas In Paris\nKaty Perry - The One That Got Away","Play","Back");
+					}
+					case 3:
+					{
+					    ShowPlayerDialog(playerid, DIALOG_MUSIC_HITSSS, DIALOG_STYLE_LIST, "2011 Hit Songs", "Kesha - Blow\nBorn This Way- Lady Gaga\nLupe Fiasco - The Show Goes on\nGrenade-Bruno Mars\nGym Class Heroes - Stereo Hearts\nParty Rock Anthem\nI Need A Doctor - Eminem ft. Dr. Dre And Skylar Grey\nWiz Khalifa - No Sleep\nKaty Perry - ET\nWiz Khalifa- Black and Yellow","Play","Back");
+					}
+					case 4:
+					{
+					    ShowPlayerDialog(playerid, DIALOG_MUSIC_DRAKE, DIALOG_STYLE_LIST, "Top 5 Drake Songs", "Drake Best I Ever Had\nDrake Headlines\nDrake Marvins Room\nDrake Ft Kanye West Forever\nDrake Over", "Play", "Back");
+					}
+					case 5:
+					{
+					    ShowPlayerDialog(playerid, DIALOG_MUSIC_MACKLEMORE, DIALOG_STYLE_LIST, "Top 5 Macklemore Songs", "Macklemore - And We Danced\nMacklemore - Can't Hold Us\nMacklemore - Irish Celebration\nMacklemore - Same Love\nMacklemore - Thrift Shop","Play","Back");
+					}
+					case 6:
+					{
+					    ShowPlayerDialog(playerid, DIALOG_MUSIC_JAYZ, DIALOG_STYLE_LIST, "Top 5 Jay Z Songs", "Jay Z 99 Problems\nJay Z Dirt Off Your Shoulder\nJay Z Dead President 2\nJay Z Empire State Of Mind\nJay Z Feat Eminem Renegade","Play","Back");
+					}
+					case 7:
+					{
+					    ShowPlayerDialog(playerid, DIALOG_MUSIC_KESHA, DIALOG_STYLE_LIST, "Top 5 Ke&#36;ha Songs", "We R Who We R - Ke&#36;ha\nKe&#36;ha - Take It Off\nKe&#36;ha - Your Love Is My Drug\nPittbull Feat Ke&#36;ha - Timber\nKe&#36;ha - Tik Tok","Play","Back");
+					}
+					case 8:
+					{
+					    ShowPlayerDialog(playerid, DIALOG_MUSIC_CHILDISH, DIALOG_STYLE_LIST, "Top 5 Childish Gambino Songs", "Childish Gambino - Freaks And Geeks\nChildish Gambino - Bonfire\nChildish Gambino - You See Me\nChildish Gambino - That Power\nChildish Gambino - Do You Like","Play","Back");
+					}
+					case 9:
+					{
+					    ShowPlayerDialog(playerid, DIALOG_MUSIC_ADMINMUSIC, DIALOG_STYLE_LIST, "RCON Admin Playlist", "You Think\nHello World\nHome Town\nMiss Me\nNew Town\nSunny\n3foottall\nBaddest\nBombBay\nBoy\nSRH","Play","Back");
+					}
+				}
+			}
+		}
+	if(dialogid == DIALOG_MUSIC_ADMINMUSIC)
+	    {
+	    if(response)
+	        {
+	        switch(listitem)
+				{
+		            case 0:
+		            {
+						if(IsPlayerAdmin(playerid))
+		                {
+		                for(new i = 0; i &lt; MAX_PLAYERS; i++)
+		                PlayAudioStreamForPlayer(i, "http://k007.kiwi6.com/hotlink/zkxala9tc6/youthink.mp3");
+		                new szPlayerName[MAX_PLAYER_NAME], szMessage[74];
+						GetPlayerName(playerid, szPlayerName, MAX_PLAYER_NAME);
+						format(szMessage, sizeof(szMessage), "%s has start a Audio Stream", szPlayerName);
+						SendClientMessageToAll(COLOR_YELLOW, szMessage);  // Replace 0 with the colour
+						}
+						else return SendClientMessage(playerid, COLOR_YELLOW, "You are not allowed to stream music for others!");
+					}
+					case 1:
+					{
+						if(IsPlayerAdmin(playerid))
+		                {
+		                for(new i = 0; i &lt; MAX_PLAYERS; i++)
+		                PlayAudioStreamForPlayer(i, "http://k007.kiwi6.com/hotlink/7dvtl1fpd0/helloworld.mp3");
+		                new szPlayerName[MAX_PLAYER_NAME], szMessage[74];
+						GetPlayerName(playerid, szPlayerName, MAX_PLAYER_NAME);
+						format(szMessage, sizeof(szMessage), "%s has start a Audio Stream", szPlayerName);
+						SendClientMessageToAll(COLOR_YELLOW, szMessage);  // Replace 0 with the colour
+						}
+						else return SendClientMessage(playerid, COLOR_YELLOW, "You are not allowed to stream music for others!");
+					}
+					case 2:
+					{
+						if(IsPlayerAdmin(playerid))
+		                {
+		                for(new i = 0; i &lt; MAX_PLAYERS; i++)
+		                PlayAudioStreamForPlayer(i, "http://k007.kiwi6.com/hotlink/5qadcg7r3s/HomeTown.mp3");
+		                new szPlayerName[MAX_PLAYER_NAME], szMessage[74];
+						GetPlayerName(playerid, szPlayerName, MAX_PLAYER_NAME);
+						format(szMessage, sizeof(szMessage), "%s has start a Audio Stream", szPlayerName);
+						SendClientMessageToAll(COLOR_YELLOW, szMessage);  // Replace 0 with the colour
+						}
+						else return SendClientMessage(playerid, COLOR_YELLOW, "You are not allowed to stream music for others!");
+					}
+					case 3:
+					{
+						if(IsPlayerAdmin(playerid))
+		                {
+		                for(new i = 0; i &lt; MAX_PLAYERS; i++)
+		                PlayAudioStreamForPlayer(i, "http://k007.kiwi6.com/hotlink/m9hgzwz86u/missme.mp3");
+		                new szPlayerName[MAX_PLAYER_NAME], szMessage[74];
+						GetPlayerName(playerid, szPlayerName, MAX_PLAYER_NAME);
+						format(szMessage, sizeof(szMessage), "%s has start a Audio Stream", szPlayerName);
+						SendClientMessageToAll(COLOR_YELLOW, szMessage);  // Replace 0 with the colour
+						}
+						else return SendClientMessage(playerid, COLOR_YELLOW, "You are not allowed to stream music for others!");
+					}
+					case 4:
+					{
+						if(IsPlayerAdmin(playerid))
+		                {
+		                for(new i = 0; i &lt; MAX_PLAYERS; i++)
+		                PlayAudioStreamForPlayer(i, "http://k007.kiwi6.com/hotlink/gm73f6lo8q/newtown.mp3");
+		                new szPlayerName[MAX_PLAYER_NAME], szMessage[74];
+						GetPlayerName(playerid, szPlayerName, MAX_PLAYER_NAME);
+						format(szMessage, sizeof(szMessage), "%s has start a Audio Stream", szPlayerName);
+						SendClientMessageToAll(COLOR_YELLOW, szMessage);  // Replace 0 with the colour
+						}
+						else return SendClientMessage(playerid, COLOR_YELLOW, "You are not allowed to stream music for others!");
+					}
+					case 5:
+					{
+						if(IsPlayerAdmin(playerid))
+		                {
+		                for(new i = 0; i &lt; MAX_PLAYERS; i++)
+		                PlayAudioStreamForPlayer(i, "http://k007.kiwi6.com/hotlink/jdkri4ug2p/Sunny.mp3");
+		                new szPlayerName[MAX_PLAYER_NAME], szMessage[74];
+						GetPlayerName(playerid, szPlayerName, MAX_PLAYER_NAME);
+						format(szMessage, sizeof(szMessage), "%s has start a Audio Stream", szPlayerName);
+						SendClientMessageToAll(COLOR_YELLOW, szMessage);  // Replace 0 with the colour
+						}
+						else return SendClientMessage(playerid, COLOR_YELLOW, "You are not allowed to stream music for others!");
+					}
+					case 6:
+					{
+						if(IsPlayerAdmin(playerid))
+		                {
+		                for(new i = 0; i &lt; MAX_PLAYERS; i++)
+		                PlayAudioStreamForPlayer(i, "http://k007.kiwi6.com/hotlink/4f73y2xsz4/3foottall.mp3");
+		                new szPlayerName[MAX_PLAYER_NAME], szMessage[74];
+						GetPlayerName(playerid, szPlayerName, MAX_PLAYER_NAME);
+						format(szMessage, sizeof(szMessage), "%s has start a Audio Stream", szPlayerName);
+						SendClientMessageToAll(COLOR_YELLOW, szMessage);  // Replace 0 with the colour
+						}
+						else return SendClientMessage(playerid, COLOR_YELLOW, "You are not allowed to stream music for others!");
+					}
+					case 7:
+					{
+						if(IsPlayerAdmin(playerid))
+		                {
+		                for(new i = 0; i &lt; MAX_PLAYERS; i++)
+		                PlayAudioStreamForPlayer(i, "http://k007.kiwi6.com/hotlink/iyi9j0qybo/baddest.mp3");
+		                new szPlayerName[MAX_PLAYER_NAME], szMessage[74];
+						GetPlayerName(playerid, szPlayerName, MAX_PLAYER_NAME);
+						format(szMessage, sizeof(szMessage), "%s has start a Audio Stream", szPlayerName);
+						SendClientMessageToAll(COLOR_YELLOW, szMessage);  // Replace 0 with the colour
+						}
+						else return SendClientMessage(playerid, COLOR_YELLOW, "You are not allowed to stream music for others!");
+					}
+					case 8:
+					{
+						if(IsPlayerAdmin(playerid))
+		                {
+		                for(new i = 0; i &lt; MAX_PLAYERS; i++)
+		                PlayAudioStreamForPlayer(i, "http://k007.kiwi6.com/hotlink/93gwrn7fuy/bombay.mp3");
+		                new szPlayerName[MAX_PLAYER_NAME], szMessage[74];
+						GetPlayerName(playerid, szPlayerName, MAX_PLAYER_NAME);
+						format(szMessage, sizeof(szMessage), "%s has start a Audio Stream", szPlayerName);
+						SendClientMessageToAll(COLOR_YELLOW, szMessage);  // Replace 0 with the colour
+						}
+						else return SendClientMessage(playerid, COLOR_YELLOW, "You are not allowed to stream music for others!");
+					}
+					case 9:
+					{
+						if(IsPlayerAdmin(playerid))
+		                {
+		                for(new i = 0; i &lt; MAX_PLAYERS; i++)
+		                PlayAudioStreamForPlayer(i, "http://k007.kiwi6.com/hotlink/x9kqvstijd/boy.mp3");
+		                new szPlayerName[MAX_PLAYER_NAME], szMessage[74];
+						GetPlayerName(playerid, szPlayerName, MAX_PLAYER_NAME);
+						format(szMessage, sizeof(szMessage), "%s has start a Audio Stream", szPlayerName);
+						SendClientMessageToAll(COLOR_YELLOW, szMessage);  // Replace 0 with the colour
+						}
+						else return SendClientMessage(playerid, COLOR_YELLOW, "You are not allowed to stream music for others!");
+					}
+					case 10:
+					{
+  						if(IsPlayerAdmin(playerid))
+		                {
+		                for(new i = 0; i &lt; MAX_PLAYERS; i++)
+		                PlayAudioStreamForPlayer(i, "http://k007.kiwi6.com/hotlink/n8lmfe8o58/SRH.mp3");
+		                new szPlayerName[MAX_PLAYER_NAME], szMessage[74];
+						GetPlayerName(playerid, szPlayerName, MAX_PLAYER_NAME);
+						format(szMessage, sizeof(szMessage), "%s has start a Audio Stream", szPlayerName);
+						SendClientMessageToAll(COLOR_YELLOW, szMessage);  // Replace 0 with the colour
+						}
+						else return SendClientMessage(playerid, COLOR_YELLOW, "You are not allowed to stream music for others!");
+					}
+				}
+			}
+  		else return ShowPlayerDialog(playerid, DIALOG_MUSIC, DIALOG_STYLE_LIST, "Music", "1.Radio Playlists\n2.2013 Hit Songs\n3.2012 Hit Songs\n4.2011 Hit Songs\n5.Top 5 Drake Songs\n6.Top 5 Macklemore Songs\n7.Top 5 Jay Z Songs\n8.Top 5 Ke&#36;ha Songs\n9.Top 5 Childish Gambino Songs\n10.RCON Admin Music", "Open", "Cancel");
+	}
+	if(dialogid == DIALOG_MUSIC_CHILDISH)
+	    {
+		if(response)
+		    {
+		    switch(listitem)
+		        {
+					case 0:
+					{
+    					PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/sg4z9si0d7/Childish_Gambino_-_Freaks_and_Geeks_HD_Music_Video_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 1:
+					{
+    					PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/53bgtn5ih5/Childish_Gambino_-_That_Power.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 2:
+					{
+   	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/85qzdfj07z/Childish_Gambino_-_You_See_Me_with_Lyrics_HD.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 3:
+					{
+   	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/wkfi900q5g/Childish_Gambino-_Bonfire_w_lyrics_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 4:
+					{
+   	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/hnm02h92xj/Childish_Gambino-Do_Ya_Like_w-lyrics_2_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+				}
+			}
+  		else return ShowPlayerDialog(playerid, DIALOG_MUSIC, DIALOG_STYLE_LIST, "Music", "1.Radio Playlists\n2.2013 Hit Songs\n3.2012 Hit Songs\n4.2011 Hit Songs\n5.Top 5 Drake Songs\n6.Top 5 Macklemore Songs\n7.Top 5 Jay Z Songs\n8.Top 5 Ke&#36;ha Songs\n9.Top 5 Childish Gambino Songs\n10.RCON Admin Music", "Open", "Cancel");
+	}
+	if(dialogid == DIALOG_MUSIC_KESHA)
+		{
+		if(response)
+		    {
+		    switch(listitem)
+		        {
+					case 0:
+					{
+   	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/pje46erkne/Ke_ha_Kesha_-_We_R_Who_We_R_Lyrics_NEW_SONG_HQHD_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 1:
+					{
+   	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/2ck5vbrqk9/Kesha_-_Take_It_Off_with_Lyrics.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 2:
+					{
+   	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/zzsuyyk0bs/Kesha_-_Your_Love_Is_My_Drug_Lyrics_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 3:
+					{
+   	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/u8wgwkenkp/Pitbull_feat_Kesha_-_Timber_-_Lyrics.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 4:
+					{
+   	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/89o5nj3t7w/TiK_ToK_Kesha_With_Lyrics_On_Screen_HQ.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+				}
+			}
+  		else return ShowPlayerDialog(playerid, DIALOG_MUSIC, DIALOG_STYLE_LIST, "Music", "1.Radio Playlists\n2.2013 Hit Songs\n3.2012 Hit Songs\n4.2011 Hit Songs\n5.Top 5 Drake Songs\n6.Top 5 Macklemore Songs\n7.Top 5 Jay Z Songs\n8.Top 5 Ke&#36;ha Songs\n9.Top 5 Childish Gambino Songs\n10.RCON Admin Music", "Open", "Cancel");
+	}
+	if(dialogid == DIALOG_MUSIC_JAYZ)
+	    {
+	    if(response)
+			{
+			switch(listitem)
+			    {
+			        case 0:
+			        {
+          				PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/fe5ihwxuo6/99_Problems_Jay-Z_-_Lyrics.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+			        }
+			        case 1:
+			        {
+  	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/creqp35dhw/Jay_Z_Dirt_off_your_shoulder_lyrics.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+			        }
+			        case 2:
+			        {
+  	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/08l1o4ah50/Jay-Z_-_Dead_Presidents_II_with_lyrics_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+			        }
+			        case 3:
+			        {
+  	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/m8ul4grqmd/Jay-Z_-_Empire_State_of_Mind_with_Lyrics.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+			        }
+			        case 4:
+			        {
+  	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/nn6yxzh7vs/Jay-Z_Feat._Eminem_-_Renegade_lyrics.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+			        }
+				}
+			}
+  		else return ShowPlayerDialog(playerid, DIALOG_MUSIC, DIALOG_STYLE_LIST, "Music", "1.Radio Playlists\n2.2013 Hit Songs\n3.2012 Hit Songs\n4.2011 Hit Songs\n5.Top 5 Drake Songs\n6.Top 5 Macklemore Songs\n7.Top 5 Jay Z Songs\n8.Top 5 Ke&#36;ha Songs\n9.Top 5 Childish Gambino Songs\n10.RCON Admin Music", "Open", "Cancel");
+	}
+	if(dialogid == DIALOG_MUSIC_MACKLEMORE)
+	    {
+	    if(response)
+	        {
+	        switch(listitem)
+	            {
+					case 0:
+					{
+ 	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/rstcigxxbh/Macklemore_-_And_we_danced_lyrics.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 1:
+					{
+ 	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/7oaalyia23/Macklemore_-_Can_t_hold_us_Lyrics.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 2:
+					{
+ 	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/bx1tfskzkw/MACKLEMORE_and_RYAN_LEWIS_-_Irish_Celebration_Official_Music_Video_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 3:
+					{
+ 	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/z25q88asey/Macklemore_and_amp_Ryan_Lewis-_Same_Love_feat._Mary_Lambert_Lyric_Video_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 4:
+					{
+ 	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/4cyba0ue9p/Macklemore-_Thrift_Shop-_ACCURATE_LYRICS_ON_SCREEN_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+				}
+			}
+  		else return ShowPlayerDialog(playerid, DIALOG_MUSIC, DIALOG_STYLE_LIST, "Music", "1.Radio Playlists\n2.2013 Hit Songs\n3.2012 Hit Songs\n4.2011 Hit Songs\n5.Top 5 Drake Songs\n6.Top 5 Macklemore Songs\n7.Top 5 Jay Z Songs\n8.Top 5 Ke&#36;ha Songs\n9.Top 5 Childish Gambino Songs\n10.RCON Admin Music", "Open", "Cancel");
+	}
+	if(dialogid == DIALOG_MUSIC_DRAKE)
+	    {
+	    if(response)
+	        {
+	        switch(listitem)
+	            {
+	                case 0:
+	                {
+ 	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/32nfg0538n/Drake_-_Best_I_Ever_Had_w_Lyrics.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+	                }
+	                case 1:
+	                {
+ 	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/d6udowq7sf/Drake_-_Headlines_Lyrics_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+	                }
+	                case 2:
+	                {
+ 	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/cl7k70rpwu/Drake_-_Marvins_Room_Lyrics_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+	                }
+	                case 3:
+	                {
+ 	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/ln4nxvsxt4/Drake_Ft._Kanye_West_Lil_Wayne_and_amp_Eminem_-_Forever_Original_Lyrics_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+	                }
+	                case 4:
+	                {
+ 	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/bpl7jz23a3/Over-Drake_Lyrics_On_Screen_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+	                }
+				}
+			}
+  		else return ShowPlayerDialog(playerid, DIALOG_MUSIC, DIALOG_STYLE_LIST, "Music", "1.Radio Playlists\n2.2013 Hit Songs\n3.2012 Hit Songs\n4.2011 Hit Songs\n5.Top 5 Drake Songs\n6.Top 5 Macklemore Songs\n7.Top 5 Jay Z Songs\n8.Top 5 Ke&#36;ha Songs\n9.Top 5 Childish Gambino Songs\n10.RCON Admin Music", "Open", "Cancel");
+	}
+	if(dialogid == DIALOG_MUSIC_PLAYLISTS)
+	    {
+	    if(response)
+	        {
+	        switch(listitem)
+	            {
+	                case 0:
+	                {
+	                	PlayAudioStreamForPlayer(playerid, "http://www.radioparadise.com/musiclinks/rp_128.m3u");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+	                }
+				}
+			}
+  		else return ShowPlayerDialog(playerid, DIALOG_MUSIC, DIALOG_STYLE_LIST, "Music", "1.Radio Playlists\n2.2013 Hit Songs\n3.2012 Hit Songs\n4.2011 Hit Songs\n5.Top 5 Drake Songs\n6.Top 5 Macklemore Songs\n7.Top 5 Jay Z Songs\n8.Top 5 Ke&#36;ha Songs\n9.Top 5 Childish Gambino Songs\n10.RCON Admin Music", "Open", "Cancel");
+	}
+	if(dialogid == DIALOG_MUSIC_HITSSS)
+		{
+		if(response)
+		    {
+		    switch(listitem)
+		        {
+					case 0:
+					{
+    					PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/8ih22w6d45/Kesha_-_Blow_Lyrics.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 1:
+					{
+  	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/ds3c3zkbsz/Born_This_Way-_Lady_Gaga_LYRICS.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 2:
+					{
+  	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/b4nig4ey4g/Lupe_Fiasco_-_The_Show_Goes_on_lyrics_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 3:
+					{
+  	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/6dd9b7ni9z/Grenade-Bruno_Mars_Lyrics.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 4:
+					{
+  	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/n7mreil6or/Gym_Class_Heroes_-_Stereo_Hearts_Lyrics.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 5:
+					{
+  	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/gvmfdqbhvd/Party_Rock_Anthem_Audio_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 6:
+					{
+  	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/qylbo15cqc/I_Need_A_Doctor_-_Eminem_ft._Dr._Dre_and_amp_Skylar_Grey_Lyrics.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 7:
+					{
+  	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/ctdfm61y07/Wiz_Khalifa_-_No_Sleep_HD_LYRICS_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 8:
+					{
+  	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/qgdx9ku18q/Katy_Perry_-_ET_Lyrics..mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+					case 9:
+					{
+  	                	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/dz6reiw0yy/Wiz_Khalifa-_Black_and_Yellow_LYRICS_.mp3");
+		                SendClientMessage(playerid, COLOR_YELLOW, "You have started a AudioSteam");
+					}
+				}
+			}
+  		else return ShowPlayerDialog(playerid, DIALOG_MUSIC, DIALOG_STYLE_LIST, "Music", "1.Radio Playlists\n2.2013 Hit Songs\n3.2012 Hit Songs\n4.2011 Hit Songs\n5.Top 5 Drake Songs\n6.Top 5 Macklemore Songs\n7.Top 5 Jay Z Songs\n8.Top 5 Ke&#36;ha Songs\n9.Top 5 Childish Gambino Songs\n10.RCON Admin Music", "Open", "Cancel");
+	}
+	if(dialogid == DIALOG_MUSIC_HITSS)
+		{
+		if(response)
+		    {
+		    switch(listitem)
+		        {
+					case 0:
+					{
+					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/fs33xwhxur/LMFAO_-_Sexy_and_i_know_it_lyrics_NEW.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 1:
+					{
+ 					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/u75m71cknm/Rack_City_-_Tyga_-_Lyrics.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 2:
+					{
+ 					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/504v3dai7q/Train_-_Drive_By_Lyrics.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 3:
+					{
+ 					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/ln8r93xtd8/Carly_Rae_Jepsen_-_Call_Me_Maybe_LYRICS_-_New_Single_.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 4:
+					{
+  					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/ouhqlyxqxe/Whistle_-_Flo_Rida_-_Lyrics.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 5:
+					{
+  					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/lobvxvlgdd/Drake_ft._Rihanna_-_Take_Care_LYRICS_.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 6:
+					{
+					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/1zbx0r6fo3/Young_Wild_and_amp_Free_Lyrics_-_Wiz_Khalifa_feat._Snoop_Dogg.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 7:
+					{
+ 					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/9rydl3npcc/Flo_Rida_-_Good_Feeling_Lyrics_on_screen_.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 8:
+					{
+ 					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/v83nunvfef/Jay-Z_ft_Kanye_West_-_Niggas_In_Paris_LYRICS_ON_SCREEN_HD_.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 9:
+					{
+ 					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/yczouprm99/Katy_Perry_-_The_One_That_Got_Away_Lyrics.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+				}
+			}
+  		else return ShowPlayerDialog(playerid, DIALOG_MUSIC, DIALOG_STYLE_LIST, "Music", "1.Radio Playlists\n2.2013 Hit Songs\n3.2012 Hit Songs\n4.2011 Hit Songs\n5.Top 5 Drake Songs\n6.Top 5 Macklemore Songs\n7.Top 5 Jay Z Songs\n8.Top 5 Ke&#36;ha Songs\n9.Top 5 Childish Gambino Songs\n10.RCON Admin Music", "Open", "Cancel");
+	}
+	if(dialogid == DIALOG_MUSIC_HITS)
+		{
+		if(response)
+		    {
+		    switch(listitem)
+				{
+				    case 0:
+				    {
+				    	PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/2c77kaegt5/Lady_Gaga_-_Applause_Official_.mp3");
+						SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+				    }
+   					case 1:
+					{
+					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/1v4l82x4nu/Lana_Del_Rey_-_Summertime_Sadness.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 2:
+					{
+					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/11os4ugqn1/Lorde_-_Royals.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 3:
+					{
+					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/i803retrlq/Miley_Cyrus_-_Wrecking_Ball.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 4:
+					{
+					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/hgfd63p8n8/Wake_Me_Up_--_Avicii_ft._Aloe_Blacc_Lyrics.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 5:
+					{
+					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/a7fl3k6hr3/Blurred_Lines_-_Robin_Thicke_Lyrics.mp3");
+						SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 6:
+					{
+					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/ub1g2zvsj8/Capital_Cities_-_Safe_and_Sound.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 7:
+					{
+					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/66h4m2mg7p/Drake_-_Hold_On_We_re_Going_Home_Lyrics_.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 8:
+					{
+					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/wldmg72u3z/JAY_Z_and_quot_Holy_Grail_and_quot_featuring_Justin_Timberlake.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+					case 9:
+					{
+					    PlayAudioStreamForPlayer(playerid, "http://k007.kiwi6.com/hotlink/olwfhi7yxh/Katy_Perry_-_Roar_Official_.mp3");
+					    SendClientMessage(playerid, COLOR_YELLOW, "You have started a Audio Stream");
+					}
+				}
+			}
+  		else return ShowPlayerDialog(playerid, DIALOG_MUSIC, DIALOG_STYLE_LIST, "Music", "1.Radio Playlists\n2.2013 Hit Songs\n3.2012 Hit Songs\n4.2011 Hit Songs\n5.Top 5 Drake Songs\n6.Top 5 Macklemore Songs\n7.Top 5 Jay Z Songs\n8.Top 5 Ke&#36;ha Songs\n9.Top 5 Childish Gambino Songs\n10.RCON Admin Music", "Open", "Cancel");
+	}
+	return 1;
+}</pre>
+</div>
+I use ZCMD and the commands go like this  <div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 98px;
+		text-align: left;
+		overflow: auto">CMD:music(playerid, params[])
+{
+	ShowPlayerDialog(playerid, DIALOG_MUSIC, DIALOG_STYLE_LIST, "Music", "1.Radio Stations\n2.2013 Hit Songs\n3.2012 Hit Songs\n4.2011 Hit Songs\n5.Top 5 Drake Songs\n6.Top 5 Macklemore Songs\n7.Top 5 Jay Z Songs\n8.Top 5 Ke&#36;ha Songs\n9.Top 5 Childish Gambino Songs\n10.RCON Admin Songs", "Open", "Cancel");
+	return 1;
+}</pre>
+</div> and to stop the music<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 114px;
+		text-align: left;
+		overflow: auto">CMD:stopmusic(playerid, params[])
+{
+	StopAudioStreamForPlayer(playerid);
+	SendClientMessage(playerid, COLOR_YELLOW, "You have stopped the audio stream!");
+	return 1;
+}</pre>
+</div>Thank's enjoy <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2927329">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-226167.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0496/tid-496848.html">Next Oldest</a> | <a href="../../threads/0496/tid-496848.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="496848" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" selected="selected">-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

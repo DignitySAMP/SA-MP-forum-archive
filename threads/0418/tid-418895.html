@@ -1,0 +1,758 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Optimising saving systems</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "08bb2204a7bc3890dddc96f55b9fd90e";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Hello. I wanted to create an include, but every scripter has to decide how to solve few things himself, so I wrote this tut instead. Also - this was supposed to be little snippet, and turned out to be" />
+<link rel="canonical" href="../../threads/0418/tid-418895.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="08bb2204a7bc3890dddc96f55b9fd90e" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0418/tid-418895.html#pid2402896">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Optimising saving systems
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid2402896"></a>
+<div class="post classic " style="" id="post_2402896">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0055/uid-55934.html"><img src="../../assets/uploads/avatars/55934.png" alt="" width="55" height="42" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0055/uid-55934.html">Misiur</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,528<br />
+	Threads: 124<br />
+	Joined: Jul 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0418/tid-418895.html#pid2402896" title="Optimising saving systems">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by Misiur" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.02.2013, 15:48 <span class="post_edit" id="edited_by_2402896"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2402896">
+		Hello. <br />
+<br />
+I wanted to create an include, but every scripter has to decide how to solve few things himself, so I wrote this tut instead. Also - this was supposed to be little snippet, and turned out to be a monster (in size, and in logic). Prepare for brainmelt, and enjoy!<br />
+<br />
+Look at this simple code:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:295px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">enum</span> PData <span style="color: #000000;">{</span><br/>    dbID,<br/>    wafflez,<br/>    pancakes<span style="color: #000000;">[</span><span style="color: #000000;">32</span><span style="color: #000000;">]</span><br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">new</span> PInfo<span style="color: #000000;">[</span>MAX_PLAYERS<span style="color: #000000;">]</span><span style="color: #000000;">[</span>PData<span style="color: #000000;">]</span>;<br/><br/><span style="color: #2222BB;">public</span> OnGameModeExit<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    foreach<span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> <span style="color: #000000;">pid</span> <span style="color: #000000;">:</span> Player<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        SavePlayer<span style="color: #000000;">(</span>pid<span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">stock</span> SavePlayer<span style="color: #000000;">(</span>uid<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    mysql_format<span style="color: #000000;">(</span>dbhandle, q, <span style="color: #000066;">"UPDATE `users` SET wafflez = %d, pancakes = '%e' WHERE id = %d"</span>, PInfo<span style="color: #000000;">[</span>pid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>wafflez<span style="color: #000000;">]</span> <span style="color: #000000;">+</span> <span style="color: #000000;">1</span>, PInfo<span style="color: #000000;">[</span>pid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pancakes<span style="color: #000000;">]</span>, PInfo<span style="color: #000000;">[</span>pid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>dbID<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>    mysql_function_query<span style="color: #000000;">(</span>dbhandle, q, false, <span style="color: #000066;">""</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+This is how most of servers currently are saving user data. Works fine, so where's the problem? Well, if there are 500 players connected, you are executing <b>500 sql queries</b> to database. A lot, ain't it? Queries are really heavy, and executing a lot of them is not a good idea. How to reduce this? Let's take a look at mysql reference <a href="http://dev.mysql.com/doc/refman/5.0/en/case.html" target="_blank">http://dev.mysql.com/doc/refman/5.0/en/case.html</a> . What can I do with this?<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:215px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">UPDATE `users`<br/>    SET wafflez <span style="color: #000000;">=</span> CASE id<br/>        WHEN PInfo<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>dbID<span style="color: #000000;">]</span> THEN PInfo<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>wafflez<span style="color: #000000;">]</span><br/>        WHEN PInfo<span style="color: #000000;">[</span><span style="color: #000000;">2</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>dbID<span style="color: #000000;">]</span> THEN PInfo<span style="color: #000000;">[</span><span style="color: #000000;">2</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>wafflez<span style="color: #000000;">]</span><br/>        WHEN PInfo<span style="color: #000000;">[</span><span style="color: #000000;">3</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>dbID<span style="color: #000000;">]</span> THEN PInfo<span style="color: #000000;">[</span><span style="color: #000000;">3</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>wafflez<span style="color: #000000;">]</span><br/>    END,<br/>    title <span style="color: #000000;">=</span> CASE id<br/>        WHEN PInfo<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>dbID<span style="color: #000000;">]</span> THEN <span style="color: #000066;">"PInfo[1][pancakes]"</span><br/>        WHEN PInfo<span style="color: #000000;">[</span><span style="color: #000000;">2</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>dbID<span style="color: #000000;">]</span> THEN <span style="color: #000066;">"PInfo[2][pancakes]"</span><br/>        WHEN PInfo<span style="color: #000000;">[</span><span style="color: #000000;">3</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>dbID<span style="color: #000000;">]</span> THEN <span style="color: #000066;">"PInfo[3][pancakes]"</span><br/>    END<br/>WHERE id IN <span style="color: #000000;">(</span><span style="color: #000000;">1</span>,<span style="color: #000000;">2</span>,<span style="color: #000000;">3</span><span style="color: #000000;">)</span></div></div></pre>
+</div>(not an actual query)<br />
+<br />
+Single query can handle a lot of updates at once. Cool, eh? Now, there are some limits like string length, etc. <br />
+<br />
+Firstly, add new define, two indexes, and an array of bools to enum:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:183px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">static</span> currentUser<span style="color: #000000;">@</span> <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>, currentField<span style="color: #000000;">@</span> <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>;<br/><br/><span style="color: #2222AA;">#define FIELDS_NUMBER 2</span><br/><br/><span style="color: #2222BB;">enum</span> PData <span style="color: #000000;">{</span><br/>    dbID,<br/>    wafflez,<br/>    pancakes<span style="color: #000000;">[</span><span style="color: #000000;">32</span><span style="color: #000000;">]</span>,<br/>    <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>alreadySaved<span style="color: #000000;">[</span>FIELDS_NUMBER<span style="color: #000000;">]</span><br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Indexes will be needed for recuring function, the constant defines how much fields do you want to update (we will update field by field, user by user)<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:263px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">enum</span> <span style="color: #000000;">{</span><br/>    DB_INT,<br/>    DB_STR<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">enum</span> dBInfo <span style="color: #000000;">{</span><br/>    fname<span style="color: #000000;">[</span><span style="color: #000000;">32</span><span style="color: #000000;">]</span>,<br/>    <span style="color: #000000;">PData</span><span style="color: #000000;">:</span>pointer,<br/>    <span style="color: #000000;">_</span><span style="color: #000000;">:</span>type<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">static</span> <span style="color: #2222BB;">const</span> dbprops<span style="color: #000000;">[</span>FIELDS_NUMBER<span style="color: #000000;">]</span><span style="color: #000000;">[</span>dBInfo<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">{</span><br/>    <span style="color: #000000;">{</span> <span style="color: #000066;">"wafflez"</span>,  <span style="color: #000000;">PData</span><span style="color: #000000;">:</span>wafflez,  DB_INT <span style="color: #000000;">}</span>,<br/>    <span style="color: #000000;">{</span> <span style="color: #000066;">"pancakes"</span>, <span style="color: #000000;">PData</span><span style="color: #000000;">:</span>pancakes, DB_STR <span style="color: #000000;">}</span><br/><span style="color: #000000;">}</span>;</div></div></pre>
+</div>
+We need to define types of data for query builder (tagof is black magic for me (inside enum everything supposedly returns the enum tag, as it should I guess)). For now INT and STR will be sufficient. You might want to add date functions later on.<br />
+<br />
+For testing purposes I have database with fields id, wafflez (int), and pancakes (varchar).<br />
+<br />
+The dBInfo contains informations about your fields: name, pointer to PData enum, and type of data.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:199px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">stock</span> ResetPlayersStates<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    currentUser<span style="color: #000000;">@</span> <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>;<br/>    currentField<span style="color: #000000;">@</span> <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>;<br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> pid <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; pid <span style="color: #000000;">&lt;</span> MAX_PLAYERS; <span style="color: #000000;">++</span>pid<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerConnected<span style="color: #000000;">(</span>pid<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> j <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; j <span style="color: #000000;">&lt;</span> FIELDS_NUMBER; <span style="color: #000000;">++</span>j<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>                PInfo<span style="color: #000000;">[</span>pid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>alreadySaved<span style="color: #000000;">]</span><span style="color: #000000;">[</span>j<span style="color: #000000;">]</span> <span style="color: #000000;">^=</span> PInfo<span style="color: #000000;">[</span>pid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>alreadySaved<span style="color: #000000;">]</span><span style="color: #000000;">[</span>j<span style="color: #000000;">]</span>;<br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+This function as you can see resets indexes and states for all users. It is used before each clean start of updating.<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				Sidenote: variable ^= variable is exactly the same as variable = false, howerver this is my old asm habit<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>Now, the grand chunk of shitstorm<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#define MAX_SINGLE 64</span><br/><span style="color: #2222BB;">stock</span> SaveAllPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222AA;">#define MAX_QUERY 128</span><br/>    <span style="color: #228822;">//Alots are awesome</span><br/>    <span style="color: #2222AA;">#define ALOT    32</span><br/>    <br/>    <span style="color: #2222AA;">#if MAX_QUERY &lt; ALOT || MAX_QUERY &lt; 64</span><br/>    <span style="color: #2222AA;">#error Dont do this, k?</span><br/>    <span style="color: #2222AA;">#endif</span><br/>    <span style="color: #2222BB;">static</span> <span style="color: #2222BB;">const</span> where<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">" END WHERE id IN "</span>;<br/>    <span style="color: #2222BB;">new</span> query<span style="color: #000000;">[</span>MAX_QUERY<span style="color: #000000;">+</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, first <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>, ids<span style="color: #000000;">[</span>ALOT<span style="color: #000000;">+</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, idlen <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>, pdbID <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>emptyRun <span style="color: #000000;">=</span> true, tmp<span style="color: #000000;">[</span>MAX_SINGLE <span style="color: #000000;">+</span> <span style="color: #000000;">1</span><span style="color: #000000;">]</span>, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>errorFlag <span style="color: #000000;">=</span> false;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>query, <span style="color: #2222BB;">sizeof</span> query, <span style="color: #000066;">"UPDATE `users` SET `%s` = CASE `id` "</span>, dbprops<span style="color: #000000;">[</span>currentField<span style="color: #000000;">@</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>fname<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>    ids<span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">'('</span>;<br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>; currentUser<span style="color: #000000;">@</span> <span style="color: #000000;">&lt;</span> MAX_PLAYERS; <span style="color: #000000;">++</span>currentUser<span style="color: #000000;">@</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>PInfo<span style="color: #000000;">[</span>currentUser<span style="color: #000000;">@</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>dbID<span style="color: #000000;">]</span><span style="color: #228822;">/*IsPlayerConnected(currentUser@)*/</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>PInfo<span style="color: #000000;">[</span>currentUser<span style="color: #000000;">@</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>alreadySaved<span style="color: #000000;">]</span><span style="color: #000000;">[</span>currentField<span style="color: #000000;">@</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">continue</span>;<br/>            <span style="color: #228822;">//Database id string length</span><br/>            pdbID <span style="color: #000000;">=</span> PInfo<span style="color: #000000;">[</span>currentUser<span style="color: #000000;">@</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>dbID<span style="color: #000000;">]</span>;<br/>            idlen <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>;<br/>            <span style="color: #2222BB;">while</span> <span style="color: #000000;">(</span>pdbID <span style="color: #000000;">&gt;</span> <span style="color: #000000;">9</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>                idlen<span style="color: #000000;">++</span>;<br/>                pdbID <span style="color: #000000;">/=</span> <span style="color: #000000;">10</span>;<br/>            <span style="color: #000000;">}</span><br/>            <span style="color: #228822;">//Check if we are still under ALOT magic barrier</span><br/>            <span style="color: #228822;">//Current ids + current id length + comma separator + )</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>ids<span style="color: #000000;">)</span> <span style="color: #000000;">+</span> idlen <span style="color: #000000;">+</span> <span style="color: #000000;">(</span>first <span style="color: #000000;">?</span> <span style="color: #000000;">0</span> <span style="color: #000000;">:</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #000000;">+</span> <span style="color: #000000;">1</span> <span style="color: #000000;">&gt;</span> ALOT<span style="color: #000000;">)</span> <span style="color: #2222BB;">break</span>;<br/>            <br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>first<span style="color: #000000;">)</span> <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>ids, <span style="color: #000066;">","</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #222222;">format</span><span style="color: #000000;">(</span>ids, <span style="color: #2222BB;">sizeof</span> ids, <span style="color: #000066;">"%s%d"</span>, ids, pdbID<span style="color: #000000;">)</span>;<br/>            <br/>            tmp<span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> EOS;<br/>            <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>tmp, BuildSet<span style="color: #000000;">(</span>currentUser<span style="color: #000000;">@</span>, dbprops<span style="color: #000000;">[</span>currentField<span style="color: #000000;">@</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>            <br/>            <span style="color: #228822;">//Check if we are still under MAX_QUERY barrier</span><br/>            <span style="color: #228822;">//Current query + where + all ids</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span> <span style="color: #000000;">+</span> <span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>where<span style="color: #000000;">)</span> <span style="color: #000000;">+</span> <span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>ids<span style="color: #000000;">)</span> <span style="color: #000000;">+</span> <span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>tmp<span style="color: #000000;">)</span> <span style="color: #000000;">+</span> <span style="color: #000000;">(</span>first <span style="color: #000000;">?</span> <span style="color: #000000;">0</span> <span style="color: #000000;">:</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #000000;">&gt;</span> MAX_QUERY<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>                <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>first<span style="color: #000000;">)</span> errorFlag <span style="color: #000000;">=</span> true;<br/>                <span style="color: #2222BB;">break</span>;<br/>            <span style="color: #000000;">}</span><br/>            <br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>first<span style="color: #000000;">)</span> <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>query, <span style="color: #000066;">","</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>query, tmp<span style="color: #000000;">)</span>;<br/>            <br/>            PInfo<span style="color: #000000;">[</span>currentUser<span style="color: #000000;">@</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>alreadySaved<span style="color: #000000;">]</span><span style="color: #000000;">[</span>currentField<span style="color: #000000;">@</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> true;<br/>            <br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>first<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>                first <span style="color: #000000;">^=</span> first;<br/>                emptyRun <span style="color: #000000;">^=</span> emptyRun;<br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>errorFlag<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">//This shouldn't happen, but when the query isn't long enough even to fit one record, do eet</span><br/>        <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"GODDAMNIT"</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>emptyRun<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>ids, <span style="color: #000066;">")"</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>query, where<span style="color: #000000;">)</span>;<br/>        <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>query, ids<span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span> <span style="color: #2222BB;">else</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>currentField<span style="color: #000000;">@</span> <span style="color: #000000;">&lt;</span> FIELDS_NUMBER<span style="color: #000000;">)</span> <span style="color: #000000;">++</span>currentField<span style="color: #000000;">@</span>;<br/>        currentUser<span style="color: #000000;">@</span> <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>;<br/>        query<span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> EOS;<br/>    <span style="color: #000000;">}</span><br/>    mysql_function_query<span style="color: #000000;">(</span>dbhandle, query, false, <span style="color: #000066;">""</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Query: '%s'"</span>, query<span style="color: #000000;">)</span>;<br/>    <br/>    <span style="color: #2222AA;">#undef MAX_QUERY</span><br/>    <span style="color: #2222AA;">#undef ALOT</span><br/>    <br/>    <span style="color: #2222BB;">return</span> emptyRun <span style="color: #000000;">&amp;&amp;</span> currentField<span style="color: #000000;">@</span> <span style="color: #000000;">==</span> FIELDS_NUMBER <span style="color: #000000;">?</span> <span style="color: #000000;">1</span> <span style="color: #000000;">:</span> SaveAllPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">stock</span> BuildSet<span style="color: #000000;">(</span>pid, variable<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> q<span style="color: #000000;">[</span>MAX_SINGLE <span style="color: #000000;">+</span> <span style="color: #000000;">1</span><span style="color: #000000;">]</span>;<br/>    <span style="color: #2222BB;">switch</span><span style="color: #000000;">(</span>variable<span style="color: #000000;">[</span>type<span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">case</span> <span style="color: #000000;">DB_INT</span><span style="color: #000000;">:</span><br/>            mysql_format<span style="color: #000000;">(</span>dbhandle, q, <span style="color: #000066;">"WHEN %d THEN %d"</span>, PInfo<span style="color: #000000;">[</span>pid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>dbID<span style="color: #000000;">]</span>, PInfo<span style="color: #000000;">[</span>pid<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">PData</span><span style="color: #000000;">:</span>variable<span style="color: #000000;">[</span>pointer<span style="color: #000000;">]</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #2222BB;">default</span><span style="color: #000000;">:</span><br/>            <span style="color: #228822;">//includes str</span><br/>            mysql_format<span style="color: #000000;">(</span>dbhandle, q, <span style="color: #000066;">"WHEN %d THEN '%e'"</span>, PInfo<span style="color: #000000;">[</span>pid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>dbID<span style="color: #000000;">]</span>, PInfo<span style="color: #000000;">[</span>pid<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">PData</span><span style="color: #000000;">:</span>variable<span style="color: #000000;">[</span>pointer<span style="color: #000000;">]</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #228822;">//Add more cases for special tags, or handle it in some other way</span><br/>    <span style="color: #2222BB;">return</span> q;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Let's get through this piece by piece:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:215px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#define MAX_SINGLE 64</span><br/><span style="color: #2222BB;">stock</span> SaveAllPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222AA;">#define MAX_QUERY 512</span><br/>    <span style="color: #228822;">//Alots are awesome</span><br/>    <span style="color: #2222AA;">#define ALOT    128</span><br/>    <br/>    <span style="color: #2222AA;">#if MAX_QUERY &lt; ALOT || MAX_QUERY &lt; 64</span><br/>    <span style="color: #2222AA;">#error Dont do this, k?</span><br/>    <span style="color: #2222AA;">#endif</span><br/>    <span style="color: #2222BB;">static</span> <span style="color: #2222BB;">const</span> where<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">" END WHERE id IN "</span>;<br/>    <span style="color: #2222BB;">new</span> query<span style="color: #000000;">[</span>MAX_QUERY<span style="color: #000000;">+</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, first <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>, ids<span style="color: #000000;">[</span>ALOT<span style="color: #000000;">+</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, idlen <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>, pdbID <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>emptyRun <span style="color: #000000;">=</span> true, tmp<span style="color: #000000;">[</span>MAX_SINGLE <span style="color: #000000;">+</span> <span style="color: #000000;">1</span><span style="color: #000000;">]</span>, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>errorFlag <span style="color: #000000;">=</span> false;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>query, <span style="color: #2222BB;">sizeof</span> query, <span style="color: #000066;">"UPDATE `users` SET `%s` = CASE `id` "</span>, dbprops<span style="color: #000000;">[</span>currentField<span style="color: #000000;">@</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>fname<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+We are defining limits for strings, max_single is maximum length of single "WHEN THEN", alot is max length of ids list, max_query is max query. If max_query is shorter than alot, or max_query is shorter than 64 I'll rise compiler error because I like it.<br />
+<br />
+where variable holds chunk between values and ids, we need it here because it's length will determine if there is any more empty buffer space.<br />
+first - bool used as int flagging if this is first real iteration<br />
+ids - string containing all ids used<br />
+idlen - tmp variable used to store length of current id<br />
+pdbID - copy of PInfo[currentUser@][pdbID] for determining id string length without actual converting to string<br />
+emptyRun - important variable flagging end of single field run, or whole function run. If there is no more things to update, finishes recursion<br />
+errorFlag - raised only when the buffer isn't long enough to hold even single update statement<br />
+<br />
+Then we set the field name to be updated, and off we go<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:343px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">ids<span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">'('</span>;<br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>; currentUser<span style="color: #000000;">@</span> <span style="color: #000000;">&lt;</span> MAX_PLAYERS; <span style="color: #000000;">++</span>currentUser<span style="color: #000000;">@</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerConnected<span style="color: #000000;">(</span>currentUser<span style="color: #000000;">@</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>PInfo<span style="color: #000000;">[</span>currentUser<span style="color: #000000;">@</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>alreadySaved<span style="color: #000000;">]</span><span style="color: #000000;">[</span>currentField<span style="color: #000000;">@</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">continue</span>;<br/>            <span style="color: #228822;">//Database id string length</span><br/>            pdbID <span style="color: #000000;">=</span> PInfo<span style="color: #000000;">[</span>currentUser<span style="color: #000000;">@</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>dbID<span style="color: #000000;">]</span>;<br/>            idlen <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>;<br/>            <span style="color: #2222BB;">while</span> <span style="color: #000000;">(</span>pdbID <span style="color: #000000;">&gt;</span> <span style="color: #000000;">9</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>                idlen<span style="color: #000000;">++</span>;<br/>                pdbID <span style="color: #000000;">/=</span> <span style="color: #000000;">10</span>;<br/>            <span style="color: #000000;">}</span><br/>            <span style="color: #228822;">//Check if we are still under ALOT magic barrier</span><br/>            <span style="color: #228822;">//Current ids + current id length + comma separator + )</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>ids<span style="color: #000000;">)</span> <span style="color: #000000;">+</span> idlen <span style="color: #000000;">+</span> <span style="color: #000000;">(</span>first <span style="color: #000000;">?</span> <span style="color: #000000;">0</span> <span style="color: #000000;">:</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #000000;">+</span> <span style="color: #000000;">1</span> <span style="color: #000000;">&gt;</span> ALOT<span style="color: #000000;">)</span> <span style="color: #2222BB;">break</span>;<br/>            <br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>first<span style="color: #000000;">)</span> <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>ids, <span style="color: #000066;">","</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #222222;">format</span><span style="color: #000000;">(</span>ids, <span style="color: #2222BB;">sizeof</span> ids, <span style="color: #000066;">"%s%d"</span>, ids, pdbID<span style="color: #000000;">)</span>;<br/>            <br/>            tmp<span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> EOS;<br/>            <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>tmp, BuildSet<span style="color: #000000;">(</span>currentUser<span style="color: #000000;">@</span>, dbprops<span style="color: #000000;">[</span>currentField<span style="color: #000000;">@</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+ids string will have final form something like "(1,2,3,4,5)", so we need the brace now.<br />
+<br />
+The function is recursive, so we hold in alreadySaved for each field if the user was already saved. If he was, skip iteration.<br />
+Now we get the length of id to pdbID.<br />
+<br />
+First check if we are still inside buffer length, then we add "," if this isn't first id (otherwise it'd be something like "(,1,2,3)").<br />
+tmp[0] = EOS resets the tmp variable (actually that's cheating but whateaver) - I need strcpy here, not strcat<br />
+BuildSet function will be explained in a while - basically it just builds the when-then part of query and loads data.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:311px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">//Check if we are still under MAX_QUERY barrier</span><br/>            <span style="color: #228822;">//Current query + where + all ids</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span> <span style="color: #000000;">+</span> <span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>where<span style="color: #000000;">)</span> <span style="color: #000000;">+</span> <span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>ids<span style="color: #000000;">)</span> <span style="color: #000000;">+</span> <span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>tmp<span style="color: #000000;">)</span> <span style="color: #000000;">+</span> <span style="color: #000000;">(</span>first <span style="color: #000000;">?</span> <span style="color: #000000;">0</span> <span style="color: #000000;">:</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #000000;">&gt;</span> MAX_QUERY<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>                <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>first<span style="color: #000000;">)</span> errorFlag <span style="color: #000000;">=</span> true;<br/>                <span style="color: #2222BB;">break</span>;<br/>            <span style="color: #000000;">}</span><br/>            <br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>first<span style="color: #000000;">)</span> <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>query, <span style="color: #000066;">","</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>query, tmp<span style="color: #000000;">)</span>;<br/>            <br/>            PInfo<span style="color: #000000;">[</span>currentUser<span style="color: #000000;">@</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>alreadySaved<span style="color: #000000;">]</span><span style="color: #000000;">[</span>currentField<span style="color: #000000;">@</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> true;<br/>            <br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>first<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>                first <span style="color: #000000;">^=</span> first;<br/>                emptyRun <span style="color: #000000;">^=</span> emptyRun;<br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span></div></div></pre>
+</div>
+Second buffer check, comma between when-thens, and setting alreadySaved for this field to true. If this is first iteration, then we mark that it isn't first any longer, and that the run isn't empty.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:375px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>errorFlag<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">//This shouldn't happen, but when the query isn't long enough even to fit one record, do eet</span><br/>        <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"GODDAMNIT"</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>emptyRun<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>ids, <span style="color: #000066;">")"</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>query, where<span style="color: #000000;">)</span>;<br/>        <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>query, ids<span style="color: #000000;">)</span>;<br/>        mysql_function_query<span style="color: #000000;">(</span>dbhandle, query, false, <span style="color: #000066;">""</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Query: '%s'"</span>, query<span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span> <span style="color: #2222BB;">else</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>currentField<span style="color: #000000;">@</span> <span style="color: #000000;">&lt;</span> FIELDS_NUMBER<span style="color: #000000;">)</span> <span style="color: #000000;">++</span>currentField<span style="color: #000000;">@</span>;<br/>        currentUser<span style="color: #000000;">@</span> <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>;<br/>        <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Empty run, next field XOR end"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span>   <br/>    <br/>    <span style="color: #2222AA;">#undef MAX_QUERY</span><br/>    <span style="color: #2222AA;">#undef ALOT</span><br/>    <br/>    <span style="color: #2222BB;">return</span> emptyRun <span style="color: #000000;">&amp;&amp;</span> currentField<span style="color: #000000;">@</span> <span style="color: #000000;">==</span> FIELDS_NUMBER <span style="color: #000000;">?</span> <span style="color: #000000;">1</span> <span style="color: #000000;">:</span> SaveAllPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+If error flag was raised, we panic. If the run wasn't empty we add final brace to ids, and we build final query and execute it. Otherwise we raise the current field counter, and reset the user loop. Then we get rid of definitions, aaand there is where magic happens.<br />
+<br />
+If the run is empty and we already iterated all of the fields, we can finish the function. Otherwise we run it again (probably with incremented field index, or same field again, but for rest of the users).<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:215px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">stock</span> BuildSet<span style="color: #000000;">(</span>pid, variable<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> q<span style="color: #000000;">[</span>MAX_SINGLE <span style="color: #000000;">+</span> <span style="color: #000000;">1</span><span style="color: #000000;">]</span>;<br/>    <span style="color: #2222BB;">switch</span><span style="color: #000000;">(</span>variable<span style="color: #000000;">[</span>type<span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">case</span> <span style="color: #000000;">DB_INT</span><span style="color: #000000;">:</span><br/>            mysql_format<span style="color: #000000;">(</span>dbhandle, q, <span style="color: #000066;">"WHEN %d THEN %d"</span>, PInfo<span style="color: #000000;">[</span>pid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>dbID<span style="color: #000000;">]</span>, PInfo<span style="color: #000000;">[</span>pid<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">PData</span><span style="color: #000000;">:</span>variable<span style="color: #000000;">[</span>pointer<span style="color: #000000;">]</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #2222BB;">default</span><span style="color: #000000;">:</span><br/>            <span style="color: #228822;">//includes str</span><br/>            mysql_format<span style="color: #000000;">(</span>dbhandle, q, <span style="color: #000066;">"WHEN %d THEN '%e'"</span>, PInfo<span style="color: #000000;">[</span>pid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>dbID<span style="color: #000000;">]</span>, PInfo<span style="color: #000000;">[</span>pid<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">PData</span><span style="color: #000000;">:</span>variable<span style="color: #000000;">[</span>pointer<span style="color: #000000;">]</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #228822;">//Add more cases for special tags, or handle it in some other way</span><br/>    <span style="color: #2222BB;">return</span> q;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+We create WHEN THEN for corresponding data type (DB_STR or DB_INT for now only), and return it.<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				Sidenote: there are two ways you can create the query - field by field, or row by row. I don't know about internal database implementations, but I guess that row by row will be faster becuase it won't have to search for all the ids each time. Currently this function handles only one field at a time. However coding for row by row would be twice as long (at least for me), so I'll just leave this here.<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>Now: how to use this?<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:103px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnGameModeExit<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    ResetPlayersStates<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/>    SaveAllPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Fin<br />
+<br />
+Cool, we went from ~5 lines of code to... ALOT<br />
+<br />
+<img alt="" border="0" src="http://4.bp.blogspot.com/_D_Z-D2tzi14/S8TRIo4br3I/AAAAAAAACv4/Zh7_GcMlRKo/s400/ALOT.png"/><br />
+<br />
+You can YSI iterators to make stuff nicer, but you should get the idea behind reducing queries number. Oh, there might be some typos because I'm just writing it live in diffrent syntax for myself. Also remember that for few users this won't make a diffrence (or what's worse - this code execution will be slower than actual queries). In high level languages all of this would've been ~10 lines of code, but whatever. I bet ****** will facepalm when he sees this tutorial, but you can only learn by experimenting <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/> This was fun<br />
+<br />
+GLHF
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2402896">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-55934.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2402964"></a>
+<div class="post classic " style="" id="post_2402964">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0046/uid-46589.html"><img src="../../assets/uploads/avatars/46589.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0046/uid-46589.html">iggy1</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,421<br />
+	Threads: 52<br />
+	Joined: Mar 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0418/tid-418895.html#pid2402964" title="Re: Optimising saving systems">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by iggy1" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.02.2013, 16:21 <span class="post_edit" id="edited_by_2402964"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2402964">
+		Also a good idea to wrap many update queries in a <a href="http://dev.mysql.com/doc/refman/5.0/en/commit.html" target="_blank">transaction</a>. This vastly reduces execution time.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2402964">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-46589.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0418/tid-418895.html">Next Oldest</a> | <a href="../../threads/0418/tid-418895.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="418895" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

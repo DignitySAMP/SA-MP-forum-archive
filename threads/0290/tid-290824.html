@@ -1,0 +1,2357 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Creating a basic user control panel</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "10475ad899b008c5645ee812e7f9d7bb";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Introduction Hi all, After one-two week if finshed my UCP, most of it learn from phpAcademy (On *******, visit the!) and I decide to make tutorial on this forum because I see a lot of people need it!" />
+<link rel="canonical" href="../../threads/0290/tid-290824.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="10475ad899b008c5645ee812e7f9d7bb" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (3):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0290/tid-290824-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0290/tid-290824-page-3.html" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0290/tid-290824-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0290/tid-290824.html#pid1465674">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Creating a basic user control panel
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid1465674"></a>
+<div class="post classic " style="" id="post_1465674">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126726.html"><img src="../../assets/uploads/avatars/126726.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126726.html">System64</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 933<br />
+	Threads: 62<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1465674" title="Creating a basic user control panel">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by System64" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 09:00 <span class="post_edit" id="edited_by_1465674"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by System64; 17.10.2011 at 20:28.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1465674">
+		<div align="center"><img alt="" border="0" src="http://www.zaslike.com/files/8n4q7iro0eive4uudom.png"/></div>
+<font color="Green"><font size="5"><u>Introduction</u></font></font><br />
+<br />
+<font color="DarkOrange">Hi all, <br />
+After one-two week if finshed my UCP, most of it learn from phpAcademy (On *******, visit the!)<br />
+and I decide to make tutorial on this forum because I see a lot of people need it! It's pretty easy, just a few steps...<br />
+ Let's start!</font><br />
+<br />
+<font color="Green"><font size="5"><u>Features</u></font></font><ul><li>Login form</li>
+<li>Showing user stats</li>
+<li>Logout form</li>
+</ul>
+<font color="Green"><font size="5"><u>Starting our user control panel</u></font></font><br />
+<br />
+<font color="DarkOrange">First of all, be sure that you have XAMPP (Or WAMP, I use XAMPP) and create in htdocs folder called eq. ucp<br />
+In that folder we will creat our files!</font><br />
+<br />
+<br />
+<b>Page Name:</b> config.php<br />
+<b>Use:</b> Connecting to MySQL server and selecting the database<br />
+<b>Language:</b> PHP<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 226px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php
+
+<br/>    &#36;connect </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_connect</span><span style="color: #007700">(</span><span style="color: #DD0000">"localhost"</span><span style="color: #007700">, </span><span style="color: #DD0000">"root"</span><span style="color: #007700">, </span><span style="color: #DD0000">""</span><span style="color: #007700">) or die(</span><span style="color: #DD0000">"I can't connect to the server!"</span><span style="color: #007700">); </span><span style="color: #FF8000">//connecting to mysql, change setting if you have to
+<br/>    </span><span style="color: #0000BB">mysql_select_db</span><span style="color: #007700">(</span><span style="color: #DD0000">"sa:mp"</span><span style="color: #007700">) or die (</span><span style="color: #DD0000">"I can't find the database!"</span><span style="color: #007700">); </span><span style="color: #FF8000">//selecting database, change name to your database name!
+<br/>    
+<br/>    </span><span style="color: #007700">function </span><span style="color: #0000BB">sanitize</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;string</span><span style="color: #007700">) </span><span style="color: #FF8000">//function for sanitize from xss and mysql and csrf... Thanks to XFlawless
+<br/>    </span><span style="color: #007700">{ 
+<br/>        </span><span style="color: #0000BB">&#36;string </span><span style="color: #007700">= </span><span style="color: #0000BB">strip_tags</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;string</span><span style="color: #007700">); 
+<br/>        </span><span style="color: #0000BB">&#36;string </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_real_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;string</span><span style="color: #007700">); 
+<br/>        return </span><span style="color: #0000BB">&#36;string</span><span style="color: #007700">; 
+<br/>    }
+
+<br/></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><b>Page Name:</b> login.php you can also call it index.php if you want just login and showing stats in your ucp...<br />
+<b>Use:</b> Creating form for loging user<br />
+<b>Language:</b> PHP<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php
+
+<br/></span><span style="color: #007700">include(</span><span style="color: #DD0000">"config.php"</span><span style="color: #007700">); </span><span style="color: #FF8000">//including our config.php where is connecting to mysql...
+<br/></span><span style="color: #0000BB">session_start</span><span style="color: #007700">(); </span><span style="color: #FF8000">//starting session for profile.php (Dunno how to explain better) look little down
+<br/></span><span style="color: #0000BB">error_reporting</span><span style="color: #007700">(</span><span style="color: #0000BB">0</span><span style="color: #007700">); </span><span style="color: #FF8000">//without this we will always get some stupid notice that variable isn't defined....
+
+<br/></span><span style="color: #0000BB">&#36;submit </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">'submit'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//variable for submit button, in this variable we save button that player press in &lt;input type='submit' name="submit" value='Login' /&gt;....
+<br/></span><span style="color: #0000BB">&#36;username </span><span style="color: #007700">= </span><span style="color: #0000BB">sanitize</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">'username'</span><span style="color: #007700">]); </span><span style="color: #FF8000">//variable for username, in this variable we save text that user type in &lt;input type="text" name="username"....
+<br/></span><span style="color: #0000BB">&#36;password </span><span style="color: #007700">= </span><span style="color: #0000BB">sanitize</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">'password'</span><span style="color: #007700">]); </span><span style="color: #FF8000">//variable for password, in this variable we save text that user type in &lt;input type="password" name="password"....
+
+<br/></span><span style="color: #007700">if(</span><span style="color: #0000BB">&#36;submit</span><span style="color: #007700">) </span><span style="color: #FF8000">//if he press submit button
+<br/></span><span style="color: #007700">{    
+<br/>    if(</span><span style="color: #0000BB">&#36;username </span><span style="color: #007700">&amp;&amp; </span><span style="color: #0000BB">&#36;password</span><span style="color: #007700">) </span><span style="color: #FF8000">//if he type both of username and password not just one of them
+<br/>    </span><span style="color: #007700">{
+<br/>        </span><span style="color: #0000BB">&#36;query </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_query</span><span style="color: #007700">(</span><span style="color: #DD0000">"SELECT username, password FROM users WHERE username = '</span><span style="color: #0000BB">&#36;username</span><span style="color: #DD0000">'"</span><span style="color: #007700">); </span><span style="color: #FF8000">//selecting user name and password, change it to your field names,  chage users to your table name, &#36;username means username that he type...
+<br/>        </span><span style="color: #007700">if(</span><span style="color: #0000BB">mysql_num_rows</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;query</span><span style="color: #007700">) == </span><span style="color: #0000BB">1</span><span style="color: #007700">) </span><span style="color: #FF8000">//if user exists
+<br/>        </span><span style="color: #007700">{
+<br/>            while(</span><span style="color: #0000BB">&#36;row </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_fetch_assoc</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;query</span><span style="color: #007700">)) </span><span style="color: #FF8000">//loop thought table that we select in mysql_query
+<br/>            </span><span style="color: #007700">{
+<br/>                </span><span style="color: #0000BB">&#36;dbusername </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;row</span><span style="color: #007700">[</span><span style="color: #DD0000">'username'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//setting dbusername as variable from table, change 'username' to your field!
+<br/>                </span><span style="color: #0000BB">&#36;dbpassword </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;row</span><span style="color: #007700">[</span><span style="color: #DD0000">'password'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//setting dbpassword as variable from table, change 'password' to your field!
+<br/>            </span><span style="color: #007700">}
+<br/>            if(</span><span style="color: #0000BB">&#36;username </span><span style="color: #007700">== </span><span style="color: #0000BB">&#36;dbusername </span><span style="color: #007700">&amp;&amp; </span><span style="color: #0000BB">&#36;password </span><span style="color: #007700">== </span><span style="color: #0000BB">&#36;dbpassword</span><span style="color: #007700">) </span><span style="color: #FF8000">//if username is same as one from table and if password is the same as one from table...
+<br/>            </span><span style="color: #007700">{
+<br/>                </span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">'username'</span><span style="color: #007700">] = </span><span style="color: #0000BB">&#36;dbusername</span><span style="color: #007700">; </span><span style="color: #FF8000">//setting session username to one from table, this is useful if you login, that restart your browser and than you go in url where is your profile.php... Anyway this is useful :D
+<br/>                </span><span style="color: #007700">echo </span><span style="color: #0000BB">header</span><span style="color: #007700">(</span><span style="color: #DD0000">'location: profile.php'</span><span style="color: #007700">); </span><span style="color: #FF8000">//redirecting user to his profile page (profile.php)
+<br/>            </span><span style="color: #007700">}
+<br/>            else echo </span><span style="color: #DD0000">"Wrong password!"</span><span style="color: #007700">; </span><span style="color: #FF8000">//else if user type wrong password he will get this...
+<br/>        </span><span style="color: #007700">}
+<br/>        else echo </span><span style="color: #DD0000">"Username doesn't exist!"</span><span style="color: #007700">; </span><span style="color: #FF8000">//if username doesn't exist in table user will get this
+<br/>    </span><span style="color: #007700">}
+<br/>    else echo </span><span style="color: #DD0000">"Type name and password!"</span><span style="color: #007700">; </span><span style="color: #FF8000">//else if user doesn't type all fields he will get this...
+<br/></span><span style="color: #007700">}
+
+<br/></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><font color="DarkOrange">Put this in bottom of login.php!</font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">HTML Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 226px;
+		text-align: left;
+		overflow: auto"><span style="color:#000080">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</span>
+<span style="color:#000080">&lt;html xmlns=<span style="color:#0000FF">"http://www.w3.org/1999/xhtml"</span>&gt;</span>
+<span style="color:#000080">&lt;head&gt;</span>
+<span style="color:#000080">&lt;meta http-equiv="Content-Type" content=<span style="color:#0000FF">"text/html; charset=utf-8"</span> /&gt;</span>
+<span style="color:#000080">&lt;title&gt;</span>Basic UCP<span style="color:#000080">&lt;/title&gt;</span>
+//here you can add your design (Remove this line)
+<span style="color:#FF8000">&lt;form action='../../unavailable.html' method='POST'&gt;</span> 
+<span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"text"</span> name=<span style="color:#0000FF">"username"</span> value='&lt;?php echo &#36;username?&gt;'/&gt;</span> 
+<span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"password"</span> name=<span style="color:#0000FF">"password"</span>/&gt;</span> 
+<span style="color:#FF8000">&lt;input type='submit' name=<span style="color:#0000FF">"submit"</span> value='Login' /&gt;</span> 
+<span style="color:#FF8000">&lt;/form&gt;</span>
+<span style="color:#000080">&lt;/head&gt;</span>
+<span style="color:#000080">&lt;/html&gt;</span></pre>
+</div><b>Page Name:</b> logout.php <br />
+<b>Use:</b> Logout user<br />
+<b>Language:</b> PHP<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 146px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php
+
+<br/></span><span style="color: #007700">include(</span><span style="color: #DD0000">"config.php"</span><span style="color: #007700">); </span><span style="color: #FF8000">//including our config.php
+<br/></span><span style="color: #0000BB">session_start</span><span style="color: #007700">(); </span><span style="color: #FF8000">//starting session
+<br/></span><span style="color: #0000BB">session_destroy</span><span style="color: #007700">(); </span><span style="color: #FF8000">//destroying it
+<br/></span><span style="color: #0000BB">header</span><span style="color: #007700">(</span><span style="color: #DD0000">'location: login.php'</span><span style="color: #007700">); </span><span style="color: #FF8000">//redirecting user to login.php
+
+<br/></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><b>Page Name:</b> profile.php <br />
+<b>Use:</b> Showing users stats...<br />
+<b>Language:</b> PHP<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 402px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php
+
+<br/></span><span style="color: #007700">include(</span><span style="color: #DD0000">"config.php"</span><span style="color: #007700">); </span><span style="color: #FF8000">//including our config.php
+<br/></span><span style="color: #0000BB">session_start</span><span style="color: #007700">(); </span><span style="color: #FF8000">//starting session
+<br/></span><span style="color: #0000BB">error_reporting</span><span style="color: #007700">(</span><span style="color: #0000BB">0</span><span style="color: #007700">);
+
+<br/>if(isset(</span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">'username'</span><span style="color: #007700">])) </span><span style="color: #FF8000">//if session is set, so if user is logged in...
+<br/></span><span style="color: #007700">{
+<br/>    </span><span style="color: #0000BB">&#36;username </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">'username'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//setting variable username as one from session
+<br/>    </span><span style="color: #0000BB">&#36;query </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_query</span><span style="color: #007700">(</span><span style="color: #DD0000">"SELECT * FROM users WHERE username = '</span><span style="color: #0000BB">&#36;username</span><span style="color: #DD0000">'"</span><span style="color: #007700">);  </span><span style="color: #FF8000">//selecting all from table users where username is name that your is loged in
+<br/>    </span><span style="color: #007700">echo </span><span style="color: #DD0000">"Welcome "</span><span style="color: #007700">.</span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">'username'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//saying welcome to user!
+<br/>    </span><span style="color: #007700">while(</span><span style="color: #0000BB">&#36;row </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_fetch_assoc</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;query</span><span style="color: #007700">)) </span><span style="color: #FF8000">//looping thousgt table to get informations
+<br/>    </span><span style="color: #007700">{
+<br/>        </span><span style="color: #0000BB">&#36;name </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;row</span><span style="color: #007700">[</span><span style="color: #DD0000">'username'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//selecting user name, change 'username' to your field name
+<br/>        </span><span style="color: #0000BB">&#36;money </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;row</span><span style="color: #007700">[</span><span style="color: #DD0000">'money'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//selecting user money, change 'money' to your field name
+<br/>        </span><span style="color: #0000BB">&#36;score </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;row</span><span style="color: #007700">[</span><span style="color: #DD0000">'score'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//selecting user score, change 'score' to your field name
+<br/>        </span><span style="color: #0000BB">&#36;kills </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;row</span><span style="color: #007700">[</span><span style="color: #DD0000">'kills'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//selecting user kills, change 'kills' to your field name
+<br/>        </span><span style="color: #0000BB">&#36;deaths </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;row</span><span style="color: #007700">[</span><span style="color: #DD0000">'deaths'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//selecting user deaths, change 'deaths' to your field name
+<br/>    </span><span style="color: #007700">}
+<br/>    echo </span><span style="color: #DD0000">"&lt;br&gt;&lt;br&gt;Name: "</span><span style="color: #007700">.</span><span style="color: #0000BB">&#36;name</span><span style="color: #007700">.</span><span style="color: #DD0000">"&lt;br&gt; Money: "</span><span style="color: #007700">.</span><span style="color: #0000BB">&#36;money</span><span style="color: #007700">.</span><span style="color: #DD0000">"&lt;br&gt; Score: "</span><span style="color: #007700">.</span><span style="color: #0000BB">&#36;score</span><span style="color: #007700">.</span><span style="color: #DD0000">"&lt;br&gt; Kills: "</span><span style="color: #007700">.</span><span style="color: #0000BB">&#36;kills</span><span style="color: #007700">.</span><span style="color: #DD0000">"&lt;br&gt; Deaths: "</span><span style="color: #007700">.</span><span style="color: #0000BB">&#36;deaths</span><span style="color: #007700">;
+<br/>}
+<br/>else </span><span style="color: #0000BB">header</span><span style="color: #007700">(</span><span style="color: #DD0000">'location: login.php'</span><span style="color: #007700">); </span><span style="color: #FF8000">//if user isn't loged in it will redirect him on login.php
+
+<br/></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><font color="DarkOrange">Put this in bottom of profile.php!</font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">HTML Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 130px;
+		text-align: left;
+		overflow: auto"><span style="color:#000080">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;</span>
+<span style="color:#000080">&lt;html xmlns=<span style="color:#0000FF">"http://www.w3.org/1999/xhtml"</span>&gt;</span>
+<span style="color:#000080">&lt;head&gt;</span>
+<span style="color:#000080">&lt;meta http-equiv="Content-Type" content=<span style="color:#0000FF">"text/html; charset=utf-8"</span> /&gt;</span>
+<span style="color:#000080">&lt;title&gt;</span>Basic UCP<span style="color:#000080">&lt;/title&gt;</span>
+<span style="color:#000080">&lt;/head&gt;</span>
+<span style="color:#000080">&lt;/html&gt;</span></pre>
+</div><font color="Green"><font size="5"><u>Pictures</u></font></font><br />
+<br />
+<font color="DarkOrange">Ok, here are some pictures of my user control panel...</font><br />
+<br />
+<a href="http://zaslike.com/files/zvly6ilumws991satva.png" target="_blank">Login</a><br />
+<a href="http://zaslike.com/files/ov1ph9ipasjbrf28d48.png" target="_blank">Profile</a>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1465674">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126726.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1465701"></a>
+<div class="post classic " style="" id="post_1465701">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78223.html"><img src="../../assets/uploads/avatars/78223.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78223.html">Lorenc_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,793<br />
+	Threads: 196<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1465701" title="Re: Creating a basic user control panel">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by Lorenc_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 09:25 <span class="post_edit" id="edited_by_1465701"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1465701">
+		mind if someone tries a sql injection on this?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1465701">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78223.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1465709"></a>
+<div class="post classic " style="" id="post_1465709">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0103/uid-103048.html"><img src="../../assets/uploads/avatars/103048.png" alt="" width="55" height="52" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0103/uid-103048.html">Sinner</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 772<br />
+	Threads: 52<br />
+	Joined: Aug 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1465709" title="Re: Creating a basic user control panel">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Sinner" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 09:28 <span class="post_edit" id="edited_by_1465709"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1465709">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Lorenc_</strong><br />
+<a href="../../threads/0290/tid-290824.html#pid1465701" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">mind if someone tries a sql injection on this?</div>
+</td>
+</tr>
+</table>
+</div>Exactly, use mysql_real_escape_string(); for data you use to run queries with at the very least.<br />
+Good tutorial though!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1465709">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-103048.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1465710"></a>
+<div class="post classic " style="" id="post_1465710">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126726.html"><img src="../../assets/uploads/avatars/126726.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126726.html">System64</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 933<br />
+	Threads: 62<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1465710" title="Re: Creating a basic user control panel">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by System64" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 09:29 <span class="post_edit" id="edited_by_1465710"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1465710">
+		To be honest, I don't know what it is, so I don't care about that xD
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1465710">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126726.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1465713"></a>
+<div class="post classic " style="" id="post_1465713">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0103/uid-103048.html"><img src="../../assets/uploads/avatars/103048.png" alt="" width="55" height="52" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0103/uid-103048.html">Sinner</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 772<br />
+	Threads: 52<br />
+	Joined: Aug 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1465713" title="Re: Creating a basic user control panel">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by Sinner" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 09:31 <span class="post_edit" id="edited_by_1465713"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1465713">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>System64</strong><br />
+<a href="../../threads/0290/tid-290824.html#pid1465710" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">To be honest, I don't know what it is, so I don't care about that xD</div>
+</td>
+</tr>
+</table>
+</div>You'll care about it if someone erases your entire database, or makes himself admin. I agree it doesn't have to be included in a tutorial but it wouldn't hurt to mention it.<br />
+<br />
+<a href="http://en.wikipedia.org/wiki/SQL_injection" target="_blank">http://en.wikipedia.org/wiki/SQL_injection</a>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1465713">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-103048.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1465725"></a>
+<div class="post classic " style="" id="post_1465725">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126726.html"><img src="../../assets/uploads/avatars/126726.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126726.html">System64</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 933<br />
+	Threads: 62<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1465725" title="Re: Creating a basic user control panel">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by System64" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 09:39 <span class="post_edit" id="edited_by_1465725"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1465725">
+		@Sinner:<br />
+You mean soemthing liek this<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">mysql_real_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;username</span><span style="color: #007700">) = </span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">'username'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//variable for username, in this variable we save text that user type in &lt;input type="text" name="username".... 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1465725">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126726.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1465730"></a>
+<div class="post classic " style="" id="post_1465730">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0023/uid-23565.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0023/uid-23565.html">[HiC]TheKiller</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,629<br />
+	Threads: 40<br />
+	Joined: Mar 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1465730" title="Re: Creating a basic user control panel">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by [HiC]TheKiller" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 09:42 <span class="post_edit" id="edited_by_1465730"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1465730">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>System64</strong><br />
+<a href="../../threads/0290/tid-290824.html#pid1465725" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">@Sinner:<br />
+You mean soemthing liek this<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">mysql_real_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;username</span><span style="color: #007700">) = </span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">'username'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//variable for username, in this variable we save text that user type in &lt;input type="text" name="username".... 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div></div>
+</td>
+</tr>
+</table>
+</div>Also add <a href="http://php.net/manual/en/function.htmlentities.php" target="_blank">htmlentities</a> to avoid <a href="http://en.wikipedia.org/wiki/Cross-site_scripting" target="_blank">XSS injections</a>.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1465730">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-23565.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1465753"></a>
+<div class="post classic " style="" id="post_1465753">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126726.html"><img src="../../assets/uploads/avatars/126726.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126726.html">System64</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 933<br />
+	Threads: 62<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1465753" title="Re: Creating a basic user control panel">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by System64" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 10:02 <span class="post_edit" id="edited_by_1465753"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1465753">
+		@TK:<br />
+Than it should be:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">htmlentities</span><span style="color: #007700">(</span><span style="color: #0000BB">mysql_real_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;username</span><span style="color: #007700">)) = </span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">'username'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//variable for username, in this variable we save text that user type in &lt;input type="text" name="username"... 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1465753">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126726.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1465762"></a>
+<div class="post classic " style="" id="post_1465762">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78223.html"><img src="../../assets/uploads/avatars/78223.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78223.html">Lorenc_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,793<br />
+	Threads: 196<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1465762" title="Re: Creating a basic user control panel">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Lorenc_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 10:17 <span class="post_edit" id="edited_by_1465762"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1465762">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>System64</strong><br />
+<a href="../../threads/0290/tid-290824.html#pid1465710" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">To be honest, I don't know what it is, so I don't care about that xD</div>
+</td>
+</tr>
+</table>
+</div>
+Then you don't care about the community's security and therefore a tutorial like this isn't recommended. Go and look at TheKillers php part in his mysql thread.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1465762">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78223.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1465763"></a>
+<div class="post classic " style="" id="post_1465763">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126726.html"><img src="../../assets/uploads/avatars/126726.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126726.html">System64</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 933<br />
+	Threads: 62<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1465763" title="Re: Creating a basic user control panel">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by System64" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 10:19 <span class="post_edit" id="edited_by_1465763"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1465763">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Lorenc_</strong><br />
+<a href="../../threads/0290/tid-290824.html#pid1465762" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Then you don't care about the community's security and therefore a tutorial like this isn't recommended. Go and look at TheKillers php part in his mysql thread.</div>
+</td>
+</tr>
+</table>
+</div>I will ask my friend about SQL Injection so I will fix it, thanks for reporting guys <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1465763">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126726.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1465765"></a>
+<div class="post classic " style="" id="post_1465765">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0064/uid-64975.html"><img src="../../assets/uploads/avatars/64975.png" alt="" width="53" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0064/uid-64975.html">GloomY</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 153<br />
+	Threads: 20<br />
+	Joined: Sep 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1465765" title="Re: Creating a basic user control panel">#11</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 11 by GloomY" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 10:20 <span class="post_edit" id="edited_by_1465765"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1465765">
+		Very usefull, thank you very much!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1465765">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-64975.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1465778"></a>
+<div class="post classic " style="" id="post_1465778">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126726.html"><img src="../../assets/uploads/avatars/126726.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126726.html">System64</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 933<br />
+	Threads: 62<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1465778" title="Re: Creating a basic user control panel">#12</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 12 by System64" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 10:33 <span class="post_edit" id="edited_by_1465778"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1465778">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Haxby</strong><br />
+<a href="../../threads/0290/tid-290824.html#pid1465765" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Very usefull, thank you very much!</div>
+</td>
+</tr>
+</table>
+</div>Thank you <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/><br />
+Tomorrow I'll fix SQL Injection however...
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1465778">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126726.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1466530"></a>
+<div class="post classic " style="" id="post_1466530">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126726.html"><img src="../../assets/uploads/avatars/126726.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126726.html">System64</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 933<br />
+	Threads: 62<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1466530" title="Re: Creating a basic user control panel">#13</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 13 by System64" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 18:21 <span class="post_edit" id="edited_by_1466530"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by System64; 17/10/2011 at 08:15 PM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1466530">
+		<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&#36;username </span><span style="color: #007700">= </span><span style="color: #0000BB">Sanitize</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">'username'</span><span style="color: #007700">]); 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>I have to do that just for username or for password too?<br />
+<br />
+Edit: I've add it, look at the script now, did i do something wrong?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1466530">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126726.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1466751"></a>
+<div class="post classic " style="" id="post_1466751">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0110/uid-110255.html"><img src="../../assets/uploads/avatars/110255.png" alt="" width="55" height="54" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0110/uid-110255.html"><s>Baboon</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 918<br />
+	Threads: 125<br />
+	Joined: Nov 2010
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1466751" title="Re: Creating a basic user control panel">#14</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 14 by Baboon" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 20:25 <span class="post_edit" id="edited_by_1466751"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1466751">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"&gt;<br />
+&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;<br />
+&lt;head&gt;<br />
+&lt;meta http-equiv="Content-Type" content="text/html; charset=utf-8" /&gt;<br />
+&lt;title&gt;Basic UCP&lt;/title&gt;<br />
+//here you can add your design (Remove this line)<br />
+&lt;form action='../../unavailable.html' method='POST'&gt; <br />
+&lt;input type="text" name="username" value='&lt;?php echo &#36;username?&gt;'/&gt; <br />
+&lt;input type="password" name="password"/&gt; <br />
+&lt;input type='submit' name="submit" value='Login' /&gt; <br />
+&lt;/form&gt;<br />
+&lt;/body&gt;<br />
+&lt;/html&gt;<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>check the body....<br />
+Oh and what about the head?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1466751">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-110255.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1466753"></a>
+<div class="post classic " style="" id="post_1466753">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126726.html"><img src="../../assets/uploads/avatars/126726.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126726.html">System64</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 933<br />
+	Threads: 62<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1466753" title="Re: Creating a basic user control panel">#15</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 15 by System64" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.10.2011, 20:27 <span class="post_edit" id="edited_by_1466753"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1466753">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>timothyinthehouse</strong><br />
+<a href="../../threads/0290/tid-290824.html#pid1466751" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">check the body....<br />
+Oh and what about the head?</div>
+</td>
+</tr>
+</table>
+</div>my bad I forgot to close tags... fixed
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1466753">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126726.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1467509"></a>
+<div class="post classic " style="" id="post_1467509">
+<div class="post_author scaleimages">
+	
+	<div class="author_information">
+			<strong><span class="largetext">XFlawless</span></strong> <br />
+			<span class="smalltext">
+				Unregistered<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_guest -->
+&nbsp;
+<!-- end: postbit_author_guest -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1467509" title="Re: Creating a basic user control panel">#16</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 16 by XFlawless" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.10.2011, 10:46 <span class="post_edit" id="edited_by_1467509"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1467509">
+		<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 50px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #007700">&lt;</span><span style="color: #0000BB">input type</span><span style="color: #007700">=</span><span style="color: #DD0000">'submit' </span><span style="color: #0000BB">name</span><span style="color: #007700">=</span><span style="color: #DD0000">"submit" </span><span style="color: #0000BB">value</span><span style="color: #007700">=</span><span style="color: #DD0000">'Login' </span><span style="color: #007700">/&gt; 
+<br/></span><span style="color: #0000BB">&#36;submit </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">'submit'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//variable for submit button, in this variable we save button that player press in &lt;input type='submit' name="submit" value='Login' /&gt;.... 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>Why in the world do you need a submit variable it doesn't store any result<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 386px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #007700">if(</span><span style="color: #0000BB">&#36;submit</span><span style="color: #007700">) </span><span style="color: #FF8000">//if he press submit button 
+<br/></span><span style="color: #007700">{     
+<br/>    if(</span><span style="color: #0000BB">&#36;username </span><span style="color: #007700">&amp;&amp; </span><span style="color: #0000BB">&#36;password</span><span style="color: #007700">) </span><span style="color: #FF8000">//if he type both of username and password not just one of them 
+<br/>    </span><span style="color: #007700">{ 
+<br/>        </span><span style="color: #0000BB">&#36;query </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_query</span><span style="color: #007700">(</span><span style="color: #DD0000">"SELECT username, password FROM users WHERE username = '</span><span style="color: #0000BB">&#36;username</span><span style="color: #DD0000">'"</span><span style="color: #007700">); </span><span style="color: #FF8000">//selecting user name and password, change it to your field names,  chage users to your table name, &#36;username means username that he type... 
+<br/>        </span><span style="color: #007700">if(</span><span style="color: #0000BB">mysql_num_rows</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;query</span><span style="color: #007700">) == </span><span style="color: #0000BB">1</span><span style="color: #007700">) </span><span style="color: #FF8000">//if user exists 
+<br/>        </span><span style="color: #007700">{ 
+<br/>            while(</span><span style="color: #0000BB">&#36;row </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_fetch_assoc</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;query</span><span style="color: #007700">)) </span><span style="color: #FF8000">//loop thought table that we select in mysql_query 
+<br/>            </span><span style="color: #007700">{ 
+<br/>                </span><span style="color: #0000BB">&#36;dbusername </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;row</span><span style="color: #007700">[</span><span style="color: #DD0000">'username'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//setting dbusername as variable from table, change 'username' to your field! 
+<br/>                </span><span style="color: #0000BB">&#36;dbpassword </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;row</span><span style="color: #007700">[</span><span style="color: #DD0000">'password'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//setting dbpassword as variable from table, change 'password' to your field! 
+<br/>            </span><span style="color: #007700">} 
+<br/>            if(</span><span style="color: #0000BB">&#36;username </span><span style="color: #007700">== </span><span style="color: #0000BB">&#36;dbusername </span><span style="color: #007700">&amp;&amp; </span><span style="color: #0000BB">&#36;password </span><span style="color: #007700">== </span><span style="color: #0000BB">&#36;dbpassword</span><span style="color: #007700">) </span><span style="color: #FF8000">//if username is same as one from table and if password is the same as one from table... 
+<br/>            </span><span style="color: #007700">{ 
+<br/>                </span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">'username'</span><span style="color: #007700">] = </span><span style="color: #0000BB">&#36;dbusername</span><span style="color: #007700">; </span><span style="color: #FF8000">//setting session username to one from table, this is useful if you login, that restart your browser and than you go in url where is your profile.php... Anyway this is useful :D 
+<br/>                </span><span style="color: #007700">echo </span><span style="color: #0000BB">header</span><span style="color: #007700">(</span><span style="color: #DD0000">'location: profile.php'</span><span style="color: #007700">); </span><span style="color: #FF8000">//redirecting user to his profile page (profile.php) 
+<br/>            </span><span style="color: #007700">} 
+<br/>            else echo </span><span style="color: #DD0000">"Wrong password!"</span><span style="color: #007700">; </span><span style="color: #FF8000">//else if user type wrong password he will get this... 
+<br/>        </span><span style="color: #007700">} 
+<br/>        else echo </span><span style="color: #DD0000">"Username doesn't exist!"</span><span style="color: #007700">; </span><span style="color: #FF8000">//if username doesn't exist in table user will get this 
+<br/>    </span><span style="color: #007700">} 
+<br/>    else echo </span><span style="color: #DD0000">"Type name and password!"</span><span style="color: #007700">; </span><span style="color: #FF8000">//else if user doesn't type all fields he will get this... 
+<br/></span><span style="color: #007700">} 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>You are doing it the messed way, "SELECT username, password from users WHERE username = {&#36;username} AND password = {&#36;password}" would do it. <br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 114px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #007700">if(</span><span style="color: #0000BB">&#36;username </span><span style="color: #007700">== </span><span style="color: #0000BB">&#36;dbusername </span><span style="color: #007700">&amp;&amp; </span><span style="color: #0000BB">&#36;password </span><span style="color: #007700">== </span><span style="color: #0000BB">&#36;dbpassword</span><span style="color: #007700">) 
+<br/>{ 
+<br/>       </span><span style="color: #0000BB">session_regenerate_id</span><span style="color: #007700">();</span><span style="color: #FF8000">// create another session id to prevent from session fixation.
+<br/>       </span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">'username'</span><span style="color: #007700">] = </span><span style="color: #0000BB">&#36;dbusername</span><span style="color: #007700">; </span><span style="color: #FF8000">// From here it's vulnerable to session fixation.
+<br/>       </span><span style="color: #0000BB">header</span><span style="color: #007700">(</span><span style="color: #DD0000">'location: profile.php'</span><span style="color: #007700">); 
+<br/>} 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>Use Jquery plugins like <a href="http://flowplayer.org/tools/" target="_blank">Flowtools</a> form validator, they are easy to explain and validate form.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1467509">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1467529"></a>
+<div class="post classic " style="" id="post_1467529">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126726.html"><img src="../../assets/uploads/avatars/126726.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126726.html">System64</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 933<br />
+	Threads: 62<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1467529" title="Re: Creating a basic user control panel">#17</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 17 by System64" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.10.2011, 11:05 <span class="post_edit" id="edited_by_1467529"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1467529">
+		@XFawless - submit because it will always show tyoe name and password<br />
+<br />
+2. Why complicating?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1467529">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126726.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1467696"></a>
+<div class="post classic " style="" id="post_1467696">
+<div class="post_author scaleimages">
+	
+	<div class="author_information">
+			<strong><span class="largetext">XFlawless</span></strong> <br />
+			<span class="smalltext">
+				Unregistered<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_guest -->
+&nbsp;
+<!-- end: postbit_author_guest -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1467696" title="Re: Creating a basic user control panel">#18</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 18 by XFlawless" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.10.2011, 12:59 <span class="post_edit" id="edited_by_1467696"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1467696">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>System64</strong><br />
+<a href="../../threads/0290/tid-290824.html#pid1467529" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">@XFawless - submit because it will always show type name and password</div>
+</td>
+</tr>
+</table>
+</div>Submit attribute in html will forward the input content to form action. There's no need for it. If you are not aware of it better go take some tutorials about it.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1467696">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1468353"></a>
+<div class="post classic " style="" id="post_1468353">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126726.html"><img src="../../assets/uploads/avatars/126726.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126726.html">System64</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 933<br />
+	Threads: 62<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1468353" title="Re: Creating a basic user control panel">#19</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 19 by System64" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.10.2011, 17:49 <span class="post_edit" id="edited_by_1468353"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1468353">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>XFlawless</strong><br />
+<a href="../../threads/0290/tid-290824.html#pid1467696" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Submit attribute in html will forward the input content to form action. There's no need for it. If you are not aware of it better go take some tutorials about it.</div>
+</td>
+</tr>
+</table>
+</div>When I move if submit... It always show type username and password.... when I put it, it doesn't <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/wink.png" title="Wink"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1468353">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126726.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1777172"></a>
+<div class="post classic " style="" id="post_1777172">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0139/uid-139087.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0139/uid-139087.html">DiNorscio</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 21<br />
+	Threads: 5<br />
+	Joined: Sep 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290824.html#pid1777172" title="Re: Creating a basic user control panel">#20</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 20 by DiNorscio" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">05.04.2012, 09:23 <span class="post_edit" id="edited_by_1777172"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1777172">
+		This is create on computer or ? <br />
+<br />
+I create on computer and how to upload on web page, where?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1777172">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-139087.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0290/tid-290824.html">Next Oldest</a> | <a href="../../threads/0290/tid-290824.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="290824" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (3):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0290/tid-290824-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0290/tid-290824-page-3.html" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0290/tid-290824-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

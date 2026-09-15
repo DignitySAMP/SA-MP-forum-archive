@@ -1,0 +1,919 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Bug map filterscript</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "decc8c94d47ce8b679c1a087d73f2ed8";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="My filterscript mapping.pwn code: Code: #include &lt;a_samp&gt; #include &lt;streamer&gt; public OnPlayerConnect(playerid) { RemoveBuildings(playerid); return 1; } forward RemoveBuildings(playerid); public Remo" />
+<link rel="canonical" href="../../threads/0609/tid-609738.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="decc8c94d47ce8b679c1a087d73f2ed8" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0609/tid-609738.html#pid3717736">Threaded Mode</a></span>
+				</div>
+				
+					Bug map filterscript
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid3717736"></a>
+<div class="post classic " style="" id="post_3717736">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0280/uid-280801.html"><img src="../../assets/uploads/avatars/280801.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0280/uid-280801.html">SamBum</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 25<br />
+	Threads: 11<br />
+	Joined: Jun 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0609/tid-609738.html#pid3717736" title="Bug map filterscript">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by SamBum" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">16.06.2016, 04:25 <span class="post_edit" id="edited_by_3717736"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3717736">
+		My filterscript mapping.pwn code:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">#include &lt;a_samp&gt;
+#include &lt;streamer&gt;
+
+public OnPlayerConnect(playerid)
+{
+	RemoveBuildings(playerid);
+	return 1;
+}
+
+forward RemoveBuildings(playerid);
+public RemoveBuildings(playerid)
+{
+	/* Begin Mapping */
+
+	//Market Mall Exterior - [21/12/2015]
+        RemoveBuildingForPlayer(playerid, 6130, 1117.5859, -1490.0078, 32.7188, 0.25);
+	RemoveBuildingForPlayer(playerid, 6255, 1117.5859, -1490.0078, 32.7188, 0.25);
+	RemoveBuildingForPlayer(playerid, 792, 1128.7344, -1518.4922, 15.2109, 0.25);
+	RemoveBuildingForPlayer(playerid, 792, 1111.2578, -1512.3594, 15.2109, 0.25);
+	RemoveBuildingForPlayer(playerid, 792, 1106.4375, -1501.3750, 15.2109, 0.25);
+	RemoveBuildingForPlayer(playerid, 792, 1144.3984, -1512.7891, 15.2109, 0.25);
+	RemoveBuildingForPlayer(playerid, 792, 1152.3828, -1502.5391, 15.2109, 0.25);
+	RemoveBuildingForPlayer(playerid, 792, 1118.0156, -1467.4688, 15.2109, 0.25);
+	RemoveBuildingForPlayer(playerid, 792, 1139.9219, -1467.4688, 15.2109, 0.25);
+	RemoveBuildingForPlayer(playerid, 792, 1139.9219, -1456.4375, 15.2109, 0.25);
+	RemoveBuildingForPlayer(playerid, 792, 1118.0156, -1456.4375, 15.2109, 0.25);
+	RemoveBuildingForPlayer(playerid, 792, 1139.9219, -1445.1016, 15.2109, 0.25);
+	RemoveBuildingForPlayer(playerid, 792, 1118.0156, -1445.1016, 15.2109, 0.25);
+	RemoveBuildingForPlayer(playerid, 792, 1139.9219, -1434.0703, 15.2109, 0.25);
+	RemoveBuildingForPlayer(playerid, 792, 1118.0156, -1434.0703, 15.2109, 0.25);
+        return 1;
+}
+
+public OnGameModeInit()
+{
+    for(new i; i &lt; MAX_PLAYERS; i++)
+	{
+	    if(GetPlayerVirtualWorld(i) != 0 || GetPlayerInterior(i) != 0)
+		{
+			TogglePlayerControllable(i, false);
+		}
+	}
+    //6 - Mall Exterior - [21/12/2015]
+    CreateDynamicObject(19322, 1117.60315, -1489.99756, 32.71880,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(19323, 1117.58594, -1490.00781, 32.71880,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(19325, 1155.38513, -1445.44116, 16.75750,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(19325, 1155.40259, -1435.13196, 16.45850,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(19325, 1155.36401, -1452.55566, 16.12291,   0.00000, 0.00000, -0.60000);
+	CreateDynamicObject(19325, 1157.25537, -1467.95654, 16.32620,   0.00000, 0.00000, 19.02000);
+	CreateDynamicObject(19325, 1160.74438, -1478.41711, 16.01850,   0.00000, 0.00000, 18.54000);
+	CreateDynamicObject(19325, 1159.79614, -1502.22546, 16.00987,   0.00000, 0.00000, -20.16000);
+	CreateDynamicObject(19325, 1139.23145, -1523.71106, 16.17210,   0.00000, 0.00000, -68.87999);
+	CreateDynamicObject(19325, 1116.96082, -1523.42920, 16.11658,   0.00000, 0.00000, -110.46003);
+	CreateDynamicObject(19325, 1097.11841, -1502.29968, 16.30608,   0.00000, 0.00000, 21.06001);
+	CreateDynamicObject(19325, 1096.47937, -1478.23889, 16.41375,   0.00000, 0.00000, -17.94000);
+	CreateDynamicObject(19325, 1099.58154, -1468.44226, 16.06855,   0.00000, 0.00000, -18.18001);
+	CreateDynamicObject(19325, 1101.77881, -1452.57019, 16.56231,   0.00000, 0.00000, -1.32000);
+	CreateDynamicObject(19325, 1101.77051, -1445.21570, 16.17698,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(3055, 1163.07959, -1441.64856, 23.52267,   0.00000, 0.00000, -90.00002);
+	CreateDynamicObject(3055, 1163.17273, -1435.43481, 22.65940,   0.00000, 0.00000, -90.17999);
+	CreateDynamicObject(3055, 1163.15149, -1428.97827, 22.85076,   0.00000, 0.00000, -89.45997);
+	CreateDynamicObject(1984, 1158.16724, -1431.86145, 14.80645,   0.00000, 0.00000, -89.76003);
+	CreateDynamicObject(1984, 1158.11890, -1446.28442, 14.74255,   0.00000, 0.00000, -89.76000);
+	CreateDynamicObject(1887, 1163.90967, -1448.44519, 14.58986,   0.00000, 0.00000, -180.00012);
+	CreateDynamicObject(1887, 1166.87012, -1448.43433, 14.59059,   0.00000, 0.00000, -180.00011);
+	CreateDynamicObject(1887, 1169.81201, -1448.42334, 14.58807,   0.00000, 0.00000, -180.00011);
+	CreateDynamicObject(1888, 1163.89832, -1444.11816, 14.61537,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1888, 1166.88513, -1444.12195, 14.61748,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1888, 1169.87439, -1444.11951, 14.61808,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1848, 1168.88342, -1443.07349, 14.62389,   0.00000, 0.00000, -180.00011);
+	CreateDynamicObject(1848, 1164.89526, -1443.07385, 14.61830,   0.00000, 0.00000, -180.00011);
+	CreateDynamicObject(1843, 1163.82898, -1438.75586, 14.58225,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1843, 1166.79968, -1438.75330, 14.56507,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1843, 1169.80261, -1438.76135, 14.56507,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1843, 1169.81567, -1437.71277, 14.55628,   0.00000, 0.00000, -180.00011);
+	CreateDynamicObject(1843, 1166.81580, -1437.70618, 14.56110,   0.00000, 0.00000, -180.00011);
+	CreateDynamicObject(1843, 1163.84387, -1437.71765, 14.56110,   0.00000, 0.00000, -180.00011);
+	CreateDynamicObject(1849, 1164.90198, -1431.92151, 14.59464,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1849, 1169.90356, -1431.91858, 14.59464,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1883, 1176.13147, -1434.11243, 14.72698,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1883, 1176.11829, -1438.24756, 14.72976,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1883, 1176.13904, -1442.75867, 14.72976,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1883, 1176.13000, -1447.12708, 14.72976,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1846, 1176.14453, -1442.74719, 14.67984,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1846, 1176.12781, -1438.26306, 14.67984,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1846, 1176.13293, -1434.09558, 14.67984,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1846, 1176.13928, -1447.15198, 14.67984,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1847, 1182.87671, -1435.10059, 14.72689,   0.00000, 0.00000, -89.87997);
+	CreateDynamicObject(1847, 1182.90308, -1440.11707, 14.72689,   0.00000, 0.00000, -89.87997);
+	CreateDynamicObject(1847, 1182.91772, -1445.11743, 14.72689,   0.00000, 0.00000, -89.87997);
+	CreateDynamicObject(2577, 1160.74048, -1458.52002, 15.02247,   0.00000, 0.00000, -90.18000);
+	CreateDynamicObject(2586, 1159.28027, -1459.27466, 15.21699,   0.00000, 0.00000, -90.65999);
+	CreateDynamicObject(2578, 1155.53040, -1454.84937, 15.76908,   0.00000, 0.00000, -90.41998);
+	CreateDynamicObject(2579, 1155.54822, -1453.79028, 15.76520,   0.00000, 0.00000, -90.42000);
+	CreateDynamicObject(2586, 1155.82007, -1451.90222, 15.23626,   0.00000, 0.00000, -90.36002);
+	CreateDynamicObject(19086, 1155.90735, -1452.23584, 15.98557,   0.00000, 0.00000, -110.22005);
+	CreateDynamicObject(321, 1155.75574, -1451.82227, 15.77803,   -62.16004, -75.90007, -57.90000);
+	CreateDynamicObject(322, 1155.59851, -1451.25964, 15.81402,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(2579, 1155.76855, -1454.85681, 15.76874,   0.00000, 0.00000, 89.51997);
+	CreateDynamicObject(2578, 1155.77429, -1453.79297, 15.77431,   0.00000, 0.00000, 89.52000);
+	CreateDynamicObject(2581, 1160.96741, -1455.03455, 15.45612,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(2581, 1160.99341, -1454.59009, 15.45563,   0.00000, 0.00000, -178.97992);
+	CreateDynamicObject(2583, 1158.45264, -1449.30457, 15.65211,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(2583, 1159.94312, -1449.29260, 15.65211,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(2582, 1161.48242, -1449.28528, 15.62044,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(2582, 1162.99658, -1449.27856, 15.62044,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1810, 1160.53345, -1460.02625, 14.72889,   0.00000, 0.00000, -177.89990);
+	CreateDynamicObject(2596, 1160.04785, -1458.44226, 15.55197,   0.00000, 0.00000, 3.96000);
+	CreateDynamicObject(19449, 1164.75916, -1453.80945, 16.43995,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(19449, 1164.77563, -1455.76086, 16.43953,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(19449, 1164.80933, -1455.75745, 17.45799,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(19449, 1164.75940, -1453.80945, 17.39851,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(2588, 1164.60815, -1452.25989, 16.48453,   0.00000, 0.00000, -90.36003);
+	CreateDynamicObject(2588, 1164.61670, -1459.01624, 16.48453,   0.00000, 0.00000, -90.36003);
+	CreateDynamicObject(2587, 1164.59729, -1455.39624, 16.60169,   0.00000, 0.00000, -90.36000);
+	CreateDynamicObject(19086, 1159.28967, -1459.02686, 15.95581,   0.00000, 0.00000, -87.36000);
+	CreateDynamicObject(2586, 1160.89014, -1452.00793, 15.15022,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(322, 1159.82141, -1451.78870, 15.73285,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(322, 1159.96143, -1451.78345, 15.73285,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(322, 1159.92505, -1451.88501, 15.73285,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(322, 1159.86353, -1451.84717, 15.73285,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(322, 1159.80640, -1451.92944, 15.73285,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(322, 1159.90735, -1451.94568, 15.73285,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(322, 1159.80945, -1452.00940, 15.73285,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(322, 1159.96948, -1452.00342, 15.73285,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(322, 1160.02332, -1451.88733, 15.73285,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(322, 1160.07605, -1452.01843, 15.73285,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(322, 1159.91089, -1452.10010, 15.73285,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(321, 1160.60156, -1451.83569, 15.62336,   91.02003, 28.61997, -71.39999);
+	CreateDynamicObject(321, 1160.71326, -1451.78760, 15.62336,   91.02003, 28.61997, -22.49999);
+	CreateDynamicObject(321, 1161.11255, -1452.13367, 15.62336,   91.02003, 28.61997, -159.65987);
+	CreateDynamicObject(321, 1161.27991, -1452.07202, 15.62336,   91.02003, 28.61997, 134.22000);
+	CreateDynamicObject(19086, 1161.39648, -1452.13794, 15.90364,   0.00000, 0.00000, 35.70001);
+	CreateDynamicObject(2623, 1161.62732, -1464.82166, 16.29082,   0.00000, 0.00000, 17.64001);
+	CreateDynamicObject(2701, 1162.71008, -1467.83252, 18.67809,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(2701, 1164.55908, -1474.00354, 18.67809,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(2622, 1158.03760, -1465.50293, 15.54912,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(2622, 1164.59753, -1463.36536, 15.54912,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(2371, 1166.78821, -1469.04651, 14.76071,   0.00000, 0.00000, 15.48001);
+	CreateDynamicObject(2371, 1167.42639, -1471.34912, 14.76071,   0.00000, 0.00000, 15.48001);
+	CreateDynamicObject(2390, 1164.94421, -1480.35571, 15.61411,   0.00000, 0.00000, -164.58020);
+	CreateDynamicObject(2390, 1164.27087, -1480.52466, 15.61411,   0.00000, 0.00000, -164.58020);
+	CreateDynamicObject(2390, 1163.63550, -1480.75073, 15.61411,   0.00000, 0.00000, -164.58020);
+	CreateDynamicObject(2390, 1162.95276, -1480.93787, 15.61411,   0.00000, 0.00000, -164.58020);
+	CreateDynamicObject(2394, 1166.99597, -1470.84912, 15.47293,   0.00000, 0.00000, -75.84000);
+	CreateDynamicObject(2394, 1167.61523, -1470.67493, 15.47293,   0.00000, 0.00000, -75.84000);
+	CreateDynamicObject(2394, 1166.97119, -1468.37354, 15.47293,   0.00000, 0.00000, -75.84000);
+	CreateDynamicObject(2394, 1166.31885, -1468.57324, 15.47293,   0.00000, 0.00000, -75.84000);
+	CreateDynamicObject(2618, 1158.99353, -1471.47668, 14.77693,   0.00000, 0.00000, 106.37997);
+	CreateDynamicObject(2729, 1158.01074, -1464.51636, 16.75646,   0.00000, 0.00000, 15.54000);
+	CreateDynamicObject(2731, 1164.04321, -1462.61975, 16.73337,   0.00000, 0.00000, 17.16001);
+	CreateDynamicObject(2730, 1166.29968, -1465.35425, 16.57912,   0.00000, 0.00000, -72.78001);
+	CreateDynamicObject(2624, 1167.68164, -1476.93750, 16.45641,   0.00000, 0.00000, -71.39997);
+	CreateDynamicObject(2694, 1169.39087, -1476.37903, 15.67564,   0.00000, 0.00000, 27.47999);
+	CreateDynamicObject(2694, 1168.93677, -1478.88513, 15.68169,   0.00000, 0.00000, -60.65999);
+	CreateDynamicObject(2654, 1168.88623, -1474.97327, 15.12076,   0.00000, 0.00000, -163.25998);
+	CreateDynamicObject(18001, 1166.76660, -1501.03735, 16.38711,   0.00000, 0.00000, -21.30001);
+	CreateDynamicObject(18003, 1165.92078, -1503.45166, 15.37360,   0.00000, 0.00000, -20.75999);
+	CreateDynamicObject(1811, 1159.20471, -1509.84216, 15.43297,   0.00000, 0.00000, -115.85999);
+	CreateDynamicObject(1811, 1159.98645, -1510.12659, 15.43297,   0.00000, 0.00000, -113.75999);
+	CreateDynamicObject(1811, 1160.93787, -1510.47388, 15.43297,   0.00000, 0.00000, -101.69998);
+	CreateDynamicObject(1811, 1161.75195, -1510.80542, 15.43297,   0.00000, 0.00000, -103.62000);
+	CreateDynamicObject(1811, 1162.54004, -1511.03979, 15.43297,   0.00000, 0.00000, -113.21997);
+	CreateDynamicObject(1811, 1163.34131, -1511.42114, 15.43297,   0.00000, 0.00000, -108.29997);
+	CreateDynamicObject(2368, 1159.35913, -1504.53064, 14.73423,   0.00000, 0.00000, 69.65999);
+	CreateDynamicObject(2368, 1160.37927, -1501.79980, 14.73423,   0.00000, 0.00000, 69.65999);
+	CreateDynamicObject(2368, 1165.22681, -1500.36707, 14.64703,   0.00000, 0.00000, 158.93988);
+	CreateDynamicObject(2368, 1167.86646, -1501.38525, 14.64703,   0.00000, 0.00000, 158.93988);
+	CreateDynamicObject(2368, 1170.16064, -1502.27405, 14.64703,   0.00000, 0.00000, 158.93988);
+	CreateDynamicObject(19462, 1169.73779, -1504.54175, 16.40441,   0.00000, 0.00000, -24.00000);
+	CreateDynamicObject(19462, 1167.92834, -1508.64148, 16.40441,   0.00000, 0.00000, -24.00000);
+	CreateDynamicObject(19462, 1167.94678, -1508.64917, 17.11012,   0.00000, 0.00000, -24.00000);
+	CreateDynamicObject(19462, 1169.75574, -1504.55054, 17.12247,   0.00000, 0.00000, -24.00000);
+	CreateDynamicObject(18092, 1140.05591, -1524.17468, 15.24720,   0.00000, 0.00000, 21.60001);
+	CreateDynamicObject(2502, 1144.62268, -1534.46887, 14.78611,   0.00000, 0.00000, -160.37993);
+	CreateDynamicObject(2502, 1143.33105, -1534.92163, 14.78611,   0.00000, 0.00000, -160.37993);
+	CreateDynamicObject(2502, 1142.04236, -1535.37280, 14.78611,   0.00000, 0.00000, -160.37993);
+	CreateDynamicObject(2502, 1140.77209, -1535.81653, 14.78611,   0.00000, 0.00000, -160.37993);
+	CreateDynamicObject(2475, 1146.88062, -1521.41614, 14.66797,   0.00000, 0.00000, -68.99995);
+	CreateDynamicObject(2413, 1137.34070, -1527.18787, 14.79288,   0.00000, 0.00000, -249.65987);
+	CreateDynamicObject(2413, 1137.88904, -1528.69189, 14.79288,   0.00000, 0.00000, -249.65987);
+	CreateDynamicObject(2413, 1138.43835, -1530.16809, 14.79288,   0.00000, 0.00000, -249.65987);
+	CreateDynamicObject(2413, 1139.00415, -1531.68665, 14.79288,   0.00000, 0.00000, -249.65987);
+	CreateDynamicObject(2413, 1139.56946, -1533.20520, 14.79288,   0.00000, 0.00000, -249.65987);
+	CreateDynamicObject(341, 1137.96899, -1524.77502, 15.95546,   4.56003, 26.57999, 31.14000);
+	CreateDynamicObject(341, 1139.41479, -1523.95276, 15.95546,   4.56003, 26.57999, -161.69998);
+	CreateDynamicObject(336, 1139.64612, -1523.92908, 15.80926,   27.84001, 87.42004, 0.00000);
+	CreateDynamicObject(336, 1140.50476, -1523.31128, 15.80926,   27.84001, 87.42004, -135.47997);
+	CreateDynamicObject(339, 1140.85486, -1523.57971, 15.80159,   51.00005, 77.27987, 0.00000);
+	CreateDynamicObject(3055, 1138.65918, -1523.86279, 18.28514,   0.00000, 0.00000, 21.48000);
+	CreateDynamicObject(18092, 1114.02783, -1525.05811, 15.22506,   0.00000, 0.00000, 68.16001);
+	CreateDynamicObject(18092, 1112.26282, -1529.47400, 15.22506,   0.00000, 0.00000, 68.16001);
+	CreateDynamicObject(18092, 1119.32532, -1527.16565, 15.07706,   0.00000, 0.00000, 70.43999);
+	CreateDynamicObject(18092, 1117.70422, -1531.64185, 15.07706,   0.00000, 0.00000, 69.96000);
+	CreateDynamicObject(18092, 1116.07263, -1536.10974, 15.07706,   0.00000, 0.00000, 69.96000);
+	CreateDynamicObject(2806, 1119.58948, -1525.53394, 15.60914,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(2806, 1119.26270, -1526.64258, 15.60914,   0.00000, 0.00000, -17.82000);
+	CreateDynamicObject(2806, 1118.77319, -1528.01294, 15.60914,   0.00000, 0.00000, 158.70007);
+	CreateDynamicObject(2806, 1118.27637, -1529.42615, 15.60914,   0.00000, 0.00000, 213.18002);
+	CreateDynamicObject(2806, 1117.91724, -1530.42700, 15.60914,   0.00000, 0.00000, 150.05989);
+	CreateDynamicObject(2805, 1117.39368, -1531.73730, 15.70328,   -46.91997, -87.00006, 65.81998);
+	CreateDynamicObject(2805, 1116.90283, -1532.83398, 15.70328,   -46.91997, -87.00006, -100.56005);
+	CreateDynamicObject(2804, 1116.50745, -1533.91333, 15.59459,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(2803, 1115.22852, -1535.03943, 15.15245,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(2785, 1087.96851, -1512.17761, 15.55066,   0.00000, 0.00000, 110.58001);
+	CreateDynamicObject(2785, 1086.47900, -1508.22754, 15.55066,   0.00000, 0.00000, 110.58001);
+	CreateDynamicObject(1515, 1085.59387, -1505.83374, 14.69659,   0.00000, 0.00000, 111.48004);
+	CreateDynamicObject(1515, 1085.29834, -1505.04736, 14.69659,   0.00000, 0.00000, 111.48004);
+	CreateDynamicObject(1515, 1085.00281, -1504.26062, 14.69659,   0.00000, 0.00000, 111.48004);
+	CreateDynamicObject(2785, 1089.23340, -1507.22375, 15.59610,   0.00000, 0.00000, -69.60002);
+	CreateDynamicObject(2785, 1090.05945, -1506.91687, 15.59610,   0.00000, 0.00000, 110.58000);
+	CreateDynamicObject(2785, 1094.01770, -1505.54053, 15.59610,   0.00000, 0.00000, 110.58000);
+	CreateDynamicObject(2785, 1093.15698, -1505.86401, 15.59588,   0.00000, 0.00000, -69.60000);
+	CreateDynamicObject(3055, 1097.08130, -1501.79260, 18.53044,   0.00000, 0.00000, -69.17999);
+	CreateDynamicObject(2414, 1094.96277, -1481.10059, 14.73376,   0.00000, 0.00000, -197.21999);
+	CreateDynamicObject(2414, 1093.06592, -1480.51575, 14.73376,   0.00000, 0.00000, -197.21999);
+	CreateDynamicObject(2414, 1091.14001, -1479.92310, 14.73376,   0.00000, 0.00000, -197.45998);
+	CreateDynamicObject(2414, 1089.30457, -1479.34729, 14.73376,   0.00000, 0.00000, -197.51997);
+	CreateDynamicObject(2368, 1090.74377, -1476.07312, 14.63483,   0.00000, 0.00000, 163.25981);
+	CreateDynamicObject(2368, 1093.43872, -1476.87109, 14.63483,   0.00000, 0.00000, 163.43980);
+	CreateDynamicObject(2368, 1096.14282, -1477.68616, 14.63483,   0.00000, 0.00000, 163.19981);
+	CreateDynamicObject(2147, 1087.24292, -1478.46033, 14.76075,   0.00000, 0.00000, 158.51978);
+	CreateDynamicObject(2500, 1091.70569, -1480.20374, 15.77815,   0.00000, 0.00000, 159.05991);
+	CreateDynamicObject(2149, 1089.34412, -1479.32312, 15.91517,   0.00000, 0.00000, 157.86002);
+	CreateDynamicObject(1825, 1098.24744, -1466.37805, 14.74888,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1825, 1093.14063, -1464.30811, 14.74888,   0.00000, 0.00000, -28.56000);
+	CreateDynamicObject(1825, 1094.81885, -1467.42065, 14.74888,   0.00000, 0.00000, -28.56000);
+	CreateDynamicObject(1825, 1090.83105, -1468.61560, 14.74888,   0.00000, 0.00000, -28.56000);
+	CreateDynamicObject(1825, 1097.14478, -1470.72424, 14.74888,   0.00000, 0.00000, -54.36000);
+	CreateDynamicObject(1825, 1101.50415, -1466.95203, 14.74888,   0.00000, 0.00000, -28.56000);
+	CreateDynamicObject(1825, 1097.20557, -1480.61475, 14.74888,   0.00000, 0.00000, -28.56000);
+	CreateDynamicObject(1825, 1098.37146, -1477.41345, 14.74888,   0.00000, 0.00000, -28.56000);
+	CreateDynamicObject(1825, 1100.51184, -1470.03308, 14.74888,   0.00000, 0.00000, -28.56000);
+	CreateDynamicObject(970, 1102.18579, -1465.36255, 15.26719,   0.00000, 0.00000, -21.96000);
+	CreateDynamicObject(970, 1103.42126, -1468.09790, 15.26240,   0.00000, 0.00000, 71.28001);
+	CreateDynamicObject(970, 1102.76404, -1470.04980, 15.26240,   0.00000, 0.00000, 71.28001);
+	CreateDynamicObject(970, 1096.48352, -1482.57214, 15.26719,   0.00000, 0.00000, -12.90000);
+	CreateDynamicObject(970, 1099.13782, -1481.07458, 15.26240,   0.00000, 0.00000, 71.28001);
+	CreateDynamicObject(970, 1099.83667, -1479.12488, 15.26240,   0.00000, 0.00000, 71.28001);
+	CreateDynamicObject(2626, 1096.94983, -1446.12061, 15.28854,   0.00000, 0.00000, -180.53995);
+	CreateDynamicObject(3055, 1097.74976, -1437.84729, 16.68097,   0.00000, 0.00000, -181.07985);
+	CreateDynamicObject(3055, 1096.18872, -1437.81909, 16.68097,   0.00000, 0.00000, -181.07985);
+	CreateDynamicObject(1744, 1092.20557, -1440.86316, 17.00189,   0.00000, 0.00000, 90.24003);
+	CreateDynamicObject(1744, 1092.24854, -1446.44287, 17.00189,   0.00000, 0.00000, 90.24003);
+	CreateDynamicObject(1075, 1092.56042, -1443.14307, 15.25635,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1075, 1092.55798, -1442.17236, 15.25635,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1075, 1092.82507, -1442.16553, 15.25635,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1075, 1093.09155, -1442.15601, 15.25635,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1075, 1092.80725, -1443.14111, 15.25635,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1081, 1092.54614, -1441.02930, 15.28781,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1081, 1092.79382, -1441.02734, 15.28781,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1081, 1092.56335, -1440.05383, 15.28781,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1082, 1092.51672, -1439.08887, 15.30201,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1082, 1092.78467, -1439.06909, 15.30201,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1082, 1093.03552, -1439.05957, 15.30201,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(1082, 1092.84277, -1437.93604, 15.30201,   0.00000, 0.00000, -86.52002);
+	CreateDynamicObject(1082, 1092.88000, -1438.17395, 15.30201,   0.00000, 0.00000, -86.52002);
+	CreateDynamicObject(18761, 1092.29370, -1448.35107, 13.99967,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(18104, 1086.50122, -1453.81250, 15.92664,   0.00000, 0.00000, -90.90005);
+	CreateDynamicObject(18092, 1084.10315, -1451.82324, 15.26106,   0.00000, 0.00000, -180.05997);
+	CreateDynamicObject(18885, 1095.31616, -1460.27209, 15.87744,   0.00000, 0.00000, -179.57982);
+	CreateDynamicObject(2619, 1084.30469, -1449.15344, 16.56784,   0.00000, 0.00000, 90.42002);
+	CreateDynamicObject(2064, 1079.08215, -1458.84460, 15.44479,   0.00000, 0.00000, 105.66003);
+	CreateDynamicObject(18553, 1077.04980, -1451.59827, 16.02147,   0.00000, 0.00000, 0.00000);
+	CreateDynamicObject(3055, 1154.70764, -1526.83704, 23.74219,   0.00000, 0.00000, 48.30000);
+	CreateDynamicObject(3055, 1158.51892, -1522.65247, 23.74219,   0.00000, 0.00000, 48.30000);
+	CreateDynamicObject(3055, 1163.42273, -1516.79553, 23.74219,   0.00000, 0.00000, 49.26001);
+	CreateDynamicObject(3055, 1101.44312, -1527.05884, 23.90123,   0.00000, 0.00000, -47.70000);
+	CreateDynamicObject(3055, 1096.94006, -1522.20715, 23.90123,   0.00000, 0.00000, -49.02000);
+	CreateDynamicObject(3055, 1092.56287, -1516.90894, 23.90123,   0.00000, 0.00000, -49.02000);
+	CreateDynamicObject(3055, 1094.45288, -1458.07581, 22.94776,   0.00000, 0.00000, -89.93998);
+	CreateDynamicObject(3055, 1094.31030, -1444.78931, 22.94776,   0.00000, 0.00000, -89.93998);
+	CreateDynamicObject(3055, 1094.26379, -1450.81787, 22.94776,   0.00000, 0.00000, -89.15998);
+        for(new i, Float: fPlayerPos[3]; i &lt; MAX_PLAYERS; i++)
+        {
+	    if(GetPlayerVirtualWorld(i) != 0 || GetPlayerInterior(i) != 0)
+            {
+			Streamer_UpdateEx(i, fPlayerPos[0], fPlayerPos[1], fPlayerPos[2]);
+			GetPlayerPos(i, fPlayerPos[0], fPlayerPos[1], fPlayerPos[2]);
+			SetPlayerPos(i, fPlayerPos[0], fPlayerPos[1], fPlayerPos[2] + 2.5);
+			TogglePlayerControllable(i, true);
+	     }
+	}
+	// Headroom for static objects - streamed limits are completely independent (cause of old crashing)
+	Streamer_VisibleItems(STREAMER_TYPE_OBJECT, 965);
+}</pre>
+</div>******* video bug error: <a href="https://*********/5HfoDiuVxPA" target="_blank">https://*********/5HfoDiuVxPA</a><br />
+I don't know where is the error begin.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3717736">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-280801.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3723742"></a>
+<div class="post classic " style="" id="post_3723742">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0280/uid-280801.html"><img src="../../assets/uploads/avatars/280801.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0280/uid-280801.html">SamBum</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 25<br />
+	Threads: 11<br />
+	Joined: Jun 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0609/tid-609738.html#pid3723742" title="Re: Bug map filterscript">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by SamBum" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.06.2016, 15:21 <span class="post_edit" id="edited_by_3723742"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3723742">
+		It's ok when I delete server.amx from server.cfg . But NGG custom interior amx will not work without server.amx.<br />
+I saw some server opened gamemode NGG but they're run normally
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3723742">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-280801.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0609/tid-609738.html">Next Oldest</a> | <a href="../../threads/0609/tid-609738.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="609738" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" selected="selected">-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: </span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

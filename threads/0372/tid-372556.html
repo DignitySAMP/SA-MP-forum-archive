@@ -1,0 +1,1191 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Using strcmp without strtok, but more effective</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "0f4d693cda7891e09e4de66836c611eb";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Introduction Hello dear readers! In this tutorial I will try to show you my way of making commands. I saw a lot of people complaining about strcmp and strtok speed. But in this scripting language it�" />
+<link rel="canonical" href="../../threads/0372/tid-372556.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="0f4d693cda7891e09e4de66836c611eb" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0372/tid-372556.html#pid2082326">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Using strcmp without strtok, but more effective
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid2082326"></a>
+<div class="post classic " style="" id="post_2082326">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0056/uid-56199.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0056/uid-56199.html">Roko_foko</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 541<br />
+	Threads: 60<br />
+	Joined: Jul 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0372/tid-372556.html#pid2082326" title="Commands using strcmp without strtok, but more effective">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by Roko_foko" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">27.08.2012, 12:25 <span class="post_edit" id="edited_by_2082326"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Roko_foko; 27.08.2012 at 13:28.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2082326">
+		<b><div align="center"><font size="6"><font color="Green">Introduction</font></font></div></b><br />
+<br />
+Hello dear readers! In this tutorial I will try to show you my way of making commands.<br />
+I saw a lot of people complaining about strcmp and strtok speed. But in this scripting language it’s not hard to avoid strtok(what I think used the most time). In my opinion speed of this will be very fast. As I already said, I think, it’s fast and I hope experts in this field will comment the speed of it and and tell us if it is better or worse than other command systems as ZCMD,YCMD, or any else.<br />
+<br />
+For me, the best way of understanding things about programming is trough examples.<br />
+That’s the reason I will try to teach you by making three commands. One “easy” one a “medium” and one “hard”,<br />
+<br />
+<br />
+<div align="center"><font size="4"><font color="Green"><b>Easy command</b></font><font color="Red"> (/suicide)</font></font></div><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:183px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerCommandText<span style="color: #000000;">(</span>playerid, cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/suicide"</span>,true,<span style="color: #000000;">8</span><span style="color: #000000;">)</span> <span style="color: #000000;">&amp;&amp;</span> <span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">8</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid,COLOR_ORANGE,<span style="color: #000066;">"Server:{FFFFFF} It's ilegal to use this function to avoid being arrested, killed, etc."</span><span style="color: #000000;">)</span>;<br/>        SetPlayerHealth<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>now explanation :<br />
+1)<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/suicide"</span>,true,<span style="color: #000000;">8</span><span style="color: #000000;">)</span></div></div></pre>
+</div>strcmp checks if the two strings are equal( in this case ). If they are equal strcmp returns 0(lie, non-truth). With '!' we are telling program to make result opposite( if strings are equal strcmp will return<br />
+truth ( anything expect 0)) .<br />
+2)<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">&amp;&amp;</span> <span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">8</span><span style="color: #000000;">]</span></div></div></pre>
+</div> !cmdtext[8] is checking if on the 9th place in string is "End of string( aka EOS)", which value is 0(lie)- again in need to make the result opposite. I used &amp;&amp; so both conditions need to be truth.<br />
+3)<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:71px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">SendClientMessage<span style="color: #000000;">(</span>playerid,COLOR_ORANGE,<span style="color: #000066;">"Server:{FFFFFF} It's ilegal to use this function to avoid being arrested, killed, etc."</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//sending message to command user.</span><br/>SetPlayerHealth<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//Killing player</span><br/><span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<span style="color: #228822;">// command is done well.</span></div></div></pre>
+</div><div align="center"><font size="4"><font color="Green"><b>Medium command</b></font><font color="Red"> (/report)</font></font></div><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:439px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerCommandText<span style="color: #000000;">(</span>playerid, cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span><span style="color: #000066;">"/report"</span>, cmdtext, true, <span style="color: #000000;">7</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #228822;">//first 7 char are /,r,e,p,o,r,t. Note that here we don't expect that on 8th place is EOS.</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">7</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFFFFFF,<span style="color: #000066;">"Ussage: /report [Text]"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if on the 8th place is EOS send usage message.</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">7</span><span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">' '</span><span style="color: #000000;">)</span><span style="color: #228822;">// in case 8th char is space execute the command</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">new</span> i;<span style="color: #228822;">//defining a variable</span><br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>i<span style="color: #000000;">=</span><span style="color: #000000;">8</span>;cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">' '</span>;i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><span style="color: #000000;">}</span><span style="color: #228822;">//checking if there are more spaces after 8th char. If so, we will cut that from message that is sent to admins.</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFFFFFF,<span style="color: #000066;">"Ussage: /report [Text]"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if first char after space(s) is EOS stop the execution and send the usage message.</span><br/>            <span style="color: #2222BB;">new</span> String<span style="color: #000000;">[</span><span style="color: #000000;">128</span><span style="color: #000000;">+</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>;<span style="color: #228822;">//declaring new variable</span><br/>            GetPlayerName<span style="color: #000000;">(</span>playerid,String,MAX_PLAYER_NAME<span style="color: #000000;">)</span>;<span style="color: #228822;">//getting name of the reporter and storing it in String.</span><br/>            <span style="color: #222222;">format</span><span style="color: #000000;">(</span>String,<span style="color: #000000;">128</span><span style="color: #000000;">+</span>MAX_PLAYER_NAME,<span style="color: #000066;">"%s[%d] reporting: %s"</span>,String,playerid,cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//Constructing the report message. cmdtext[i] is usually one char. But his time it is string( part of cmdtext with start from i-pos and end with EOS) </span><br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>i<span style="color: #000000;">=</span><span style="color: #000000;">0</span>;i<span style="color: #000000;">&lt;</span>MAX_PLAYERS;i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerConnected<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span><span style="color: #000000;">&amp;&amp;</span> <span style="color: #000000;">!</span>IsPlayerNPC<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #228822;">//looping all players that could be admins</span><br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerAdmin<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span> <span style="color: #228822;">/* AdminLevel[i]&gt;0*/</span><span style="color: #000000;">)</span><span style="color: #228822;">//checking if they are admins</span><br/>                <span style="color: #000000;">{</span><br/>                    SendClientMessage<span style="color: #000000;">(</span>i,0xFF0000,String<span style="color: #000000;">)</span>;<span style="color: #228822;">//sending the message to admins</span><br/>                <span style="color: #000000;">}</span><br/>            <span style="color: #000000;">}</span><br/>            SendClientMessage<span style="color: #000000;">(</span>playerid,0x00FFFF,<span style="color: #000066;">"Report sent."</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div><div align="center"><font size="4"><font color="Green"><b>Hard command</b></font><font color="Red"> (/pay)</font></font></div><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerCommandText<span style="color: #000000;">(</span>playerid, cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/pay"</span>,true,<span style="color: #000000;">4</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #228822;">//first 4 chars: /, p, a, y</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">4</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"{FF0000}Usage: {FFFFFF}/pay {009BFF}[amount]{FFFFFF}."</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if there is nothing after /pay</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">4</span><span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">' '</span><span style="color: #000000;">)</span><span style="color: #228822;">//if there is space after /pay</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">new</span> i,j;<span style="color: #228822;">//defining variables</span><br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>i<span style="color: #000000;">=</span><span style="color: #000000;">5</span>;cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">' '</span>;i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><span style="color: #000000;">}</span><span style="color: #228822;">//cutting not-needed spaces also finding first char after spaces( first char of the word that comes after spaces )</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"{FF0000}Usage: {FFFFFF}/pay {009BFF}[amount]{FFFFFF}."</span><span style="color: #000000;">)</span>;<span style="color: #228822;">// if after spaces comes EOS - stop the command</span><br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>j<span style="color: #000000;">=</span>i<span style="color: #000000;">+</span><span style="color: #000000;">1</span>;cmdtext<span style="color: #000000;">[</span>j<span style="color: #000000;">]</span><span style="color: #000000;">!=</span><span style="color: #000066;">' '</span>;j<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span>j<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"{FF0000}Usage: {FFFFFF}/pay {009BFF}[amount]{FFFFFF}."</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//finding the last char in the word. If loop finds EOS before space that means third parameter of the command isn't inputted - stop command. </span><br/>            <span style="color: #2222BB;">new</span> Str<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>;<span style="color: #228822;">//defining a string</span><br/>            <span style="color: #222222;">strmid</span><span style="color: #000000;">(</span>Str,cmdtext,i,j<span style="color: #000000;">)</span>;<span style="color: #228822;">//inserting word into Str</span><br/>            <span style="color: #2222BB;">new</span> id<span style="color: #000000;">=</span>GetIdOfPartOfNameOrId<span style="color: #000000;">(</span>Str<span style="color: #000000;">)</span>;<span style="color: #228822;">//as Function says. The function is below</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>id<span style="color: #000000;">==-</span><span style="color: #000000;">1</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,COLOR_RED,<span style="color: #000066;">"Server: There are more players with that name."</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>id<span style="color: #000000;">==-</span><span style="color: #000000;">2</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,COLOR_RED,<span style="color: #000066;">"Server: That player doesn't exist."</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>id<span style="color: #000000;">==</span>playerid<span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,COLOR_RED,<span style="color: #000066;">"Server: You cannot pay yourself!"</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>i<span style="color: #000000;">=</span>j<span style="color: #000000;">+</span><span style="color: #000000;">1</span>;cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">' '</span>;i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><span style="color: #000000;">}</span><span style="color: #228822;">//after finding id of player we want to cut space(s) after the Id or PlayerName</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"{FF0000}Usage: {FFFFFF}/pay {009BFF}[amount]{FFFFFF}."</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if after spaces comes EOS - stop the command</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsNumber<span style="color: #000000;">(</span>cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #228822;">// checking if string (part of cmdtext with beggining at i-pos) is number, positive one</span><br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #2222BB;">new</span> amount<span style="color: #000000;">=</span><span style="color: #222222;">strval</span><span style="color: #000000;">(</span>cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//converting string into integer</span><br/>                <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>amount<span style="color: #000000;">&gt;</span>gPlayerCash<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">)</span>SendClientMessage<span style="color: #000000;">(</span>playerid,COLOR_RED,<span style="color: #000066;">"Server: You don't have that much money!"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">// does player have that amount of money?</span><br/>                <span style="color: #2222BB;">else</span><br/>                <span style="color: #000000;">{</span><br/>                    gPlayerCash<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">-=</span>amount;<span style="color: #228822;">// decreasing player's cash by the amount</span><br/>                    gPlayerCash<span style="color: #000000;">[</span>id<span style="color: #000000;">]</span><span style="color: #000000;">+=</span>amount;<span style="color: #228822;">//increasing player's cash by the amount</span><br/>                    ShowPlayerMoney<span style="color: #000000;">(</span>id<span style="color: #000000;">)</span>;<span style="color: #228822;">//showing player his money</span><br/>                    <span style="color: #2222BB;">new</span> String<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">+</span><span style="color: #000000;">60</span><span style="color: #000000;">]</span>;<span style="color: #228822;">//defining a string</span><br/>                    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>String,<span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>String<span style="color: #000000;">)</span>,<span style="color: #000066;">"takes out %s wallet and gives some ammount of cash to %s."</span>,<span style="color: #000000;">(</span>gPlayerSex<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">'M'</span><span style="color: #000000;">)</span><span style="color: #000000;">?</span><span style="color: #000000;">(</span><span style="color: #000066;">"his"</span><span style="color: #000000;">)</span><span style="color: #000000;">:</span><span style="color: #000000;">(</span><span style="color: #000066;">"her"</span><span style="color: #000000;">)</span>,RealisticName<span style="color: #000000;">(</span>gPlayerCharName<span style="color: #000000;">[</span>id<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>                    <span style="color: #228822;">//^^making message that will be sent to players around. Same as /me</span><br/>                    SendTextToNearlyPlayers<span style="color: #000000;">(</span>playerid, String, ME<span style="color: #000000;">)</span>;<span style="color: #228822;">//sending message</span><br/>                    PlayAnimEx<span style="color: #000000;">(</span>playerid, <span style="color: #000066;">"DEALER"</span>, <span style="color: #000066;">"shop_pay"</span>, <span style="color: #000000;">4.0</span>, <span style="color: #000000;">1</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//animation</span><br/>                <span style="color: #000000;">}</span><br/>                ShowPlayerMoney<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/>            <span style="color: #000000;">}</span><br/>            <span style="color: #2222BB;">else</span> SendClientMessage<span style="color: #000000;">(</span>playerid,COLOR_RED,<span style="color: #000066;">"Server: The paying amount must be numeric!"</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div><div align="center"><font size="6"><font color="Green"><b>One more thing</b></font></font></div>
+<br />
+And, one thing more. To make it faster I and one friend of mine( Alex ) came up with this idea. On the beginning of the OnPlayerCommandText make a &gt;&gt;CommandTeleport&lt;&lt;.<br />
+To make it, you first need to sort all commands in alphabet order.<br />
+After that, add this on the beginning of the OnPlayerCommandText.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerCommandText<span style="color: #000000;">(</span>playerid, cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">switch</span><span style="color: #000000;">(</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'a'</span>,<span style="color: #000066;">'A'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdA;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'b'</span>,<span style="color: #000066;">'B'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdB;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'c'</span>,<span style="color: #000066;">'C'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdC;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'d'</span>,<span style="color: #000066;">'D'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdD;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'e'</span>,<span style="color: #000066;">'E'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdE;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'f'</span>,<span style="color: #000066;">'F'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdF;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'g'</span>,<span style="color: #000066;">'G'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdG;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'h'</span>,<span style="color: #000066;">'H'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdH;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'i'</span>,<span style="color: #000066;">'I'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdI;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'j'</span>,<span style="color: #000066;">'J'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdJ;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'k'</span>,<span style="color: #000066;">'K'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdK;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'l'</span>,<span style="color: #000066;">'L'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdL;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'m'</span>,<span style="color: #000066;">'M'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdM;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'n'</span>,<span style="color: #000066;">'N'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdN;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'o'</span>,<span style="color: #000066;">'O'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdO;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'p'</span>,<span style="color: #000066;">'P'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdP;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'q'</span>,<span style="color: #000066;">'Q'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdQ;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'r'</span>,<span style="color: #000066;">'R'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdR;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'s'</span>,<span style="color: #000066;">'S'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdS;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'t'</span>,<span style="color: #000066;">'T'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdT;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'u'</span>,<span style="color: #000066;">'U'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdU;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'v'</span>,<span style="color: #000066;">'V'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdV;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'w'</span>,<span style="color: #000066;">'W'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdW;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'x'</span>,<span style="color: #000066;">'X'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdX;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'y'</span>,<span style="color: #000066;">'Y'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdY;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'z'</span>,<span style="color: #000066;">'Z'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdZ;<br/>        <span style="color: #2222BB;">default</span><span style="color: #000000;">:</span> <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/>    <span style="color: #000000;">}</span><br/>    CmdA<span style="color: #000000;">:</span><br/>    <span style="color: #228822;">//cmds that start with 'a' .( example /Auction)</span><br/>    CmdB<br/>    <span style="color: #228822;">// cmds that start with 'b'.(example /breakdoor)</span><br/>    <span style="color: #228822;">//etc</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>All I did in this tutorial should end up like this:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerCommandText<span style="color: #000000;">(</span>playerid, cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">switch</span><span style="color: #000000;">(</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'a'</span>,<span style="color: #000066;">'A'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdA;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'b'</span>,<span style="color: #000066;">'B'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdB;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'c'</span>,<span style="color: #000066;">'C'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdC;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'d'</span>,<span style="color: #000066;">'D'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdD;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'e'</span>,<span style="color: #000066;">'E'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdE;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'f'</span>,<span style="color: #000066;">'F'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdF;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'g'</span>,<span style="color: #000066;">'G'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdG;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'h'</span>,<span style="color: #000066;">'H'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdH;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'i'</span>,<span style="color: #000066;">'I'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdI;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'j'</span>,<span style="color: #000066;">'J'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdJ;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'k'</span>,<span style="color: #000066;">'K'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdK;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'l'</span>,<span style="color: #000066;">'L'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdL;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'m'</span>,<span style="color: #000066;">'M'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdM;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'n'</span>,<span style="color: #000066;">'N'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdN;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'o'</span>,<span style="color: #000066;">'O'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdO;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'p'</span>,<span style="color: #000066;">'P'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdP;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'q'</span>,<span style="color: #000066;">'Q'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdQ;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'r'</span>,<span style="color: #000066;">'R'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdR;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'s'</span>,<span style="color: #000066;">'S'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdS;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'t'</span>,<span style="color: #000066;">'T'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdT;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'u'</span>,<span style="color: #000066;">'U'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdU;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'v'</span>,<span style="color: #000066;">'V'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdV;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'w'</span>,<span style="color: #000066;">'W'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdW;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'x'</span>,<span style="color: #000066;">'X'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdX;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'y'</span>,<span style="color: #000066;">'Y'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdY;<br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'z'</span>,<span style="color: #000066;">'Z'</span><span style="color: #000000;">:</span><span style="color: #2222BB;">goto</span> CmdZ;<br/>        <span style="color: #2222BB;">default</span><span style="color: #000000;">:</span> <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">CmdP</span><span style="color: #000000;">:</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/pay"</span>,true,<span style="color: #000000;">4</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #228822;">//first 4 chars: /, p, a, y</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">4</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"{FF0000}Usage: {FFFFFF}/pay {009BFF}[amount]{FFFFFF}."</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if there is nothing after /pay</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">4</span><span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">' '</span><span style="color: #000000;">)</span><span style="color: #228822;">//if there is space after /pay</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">new</span> i,j;<span style="color: #228822;">//defining variables</span><br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>i<span style="color: #000000;">=</span><span style="color: #000000;">5</span>;cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">' '</span>;i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><span style="color: #000000;">}</span><span style="color: #228822;">//cutting not-needed spaces also finding first char after spaces( first char of the word that comes after spaces )</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"{FF0000}Usage: {FFFFFF}/pay {009BFF}[amount]{FFFFFF}."</span><span style="color: #000000;">)</span>;<span style="color: #228822;">// if after spaces comes EOS - stop the command</span><br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>j<span style="color: #000000;">=</span>i<span style="color: #000000;">+</span><span style="color: #000000;">1</span>;cmdtext<span style="color: #000000;">[</span>j<span style="color: #000000;">]</span><span style="color: #000000;">!=</span><span style="color: #000066;">' '</span>;j<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span>j<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"{FF0000}Usage: {FFFFFF}/pay {009BFF}[amount]{FFFFFF}."</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//finding the last char in the word</span><br/>            <span style="color: #2222BB;">new</span> Str<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>;<span style="color: #228822;">//defining a string</span><br/>            <span style="color: #222222;">strmid</span><span style="color: #000000;">(</span>Str,cmdtext,i,j<span style="color: #000000;">)</span>;<span style="color: #228822;">//inserting word into Str</span><br/>            <span style="color: #2222BB;">new</span> id<span style="color: #000000;">=</span>GetIdOfPartOfNameOrId<span style="color: #000000;">(</span>Str<span style="color: #000000;">)</span>;<span style="color: #228822;">//as Function says. The function is below</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>id<span style="color: #000000;">==-</span><span style="color: #000000;">1</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFF0000FF,<span style="color: #000066;">"Server: There are more players with that name."</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>id<span style="color: #000000;">==-</span><span style="color: #000000;">2</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFF0000FF,<span style="color: #000066;">"Server: That player doesn't exist."</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>id<span style="color: #000000;">==</span>playerid<span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFF0000FF,<span style="color: #000066;">"Server: You cannot pay yourself!"</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>i<span style="color: #000000;">=</span>j<span style="color: #000000;">+</span><span style="color: #000000;">1</span>;cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">' '</span>;i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><span style="color: #000000;">}</span><span style="color: #228822;">//after finding id of player we want to pay cutting spaces</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"{FF0000}Usage: {FFFFFF}/pay {009BFF}[amount]{FFFFFF}."</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if after spaces comes EOS - stop the command</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsNumber<span style="color: #000000;">(</span>cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #228822;">// checking if string is number, positive one</span><br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #2222BB;">new</span> amount<span style="color: #000000;">=</span><span style="color: #222222;">strval</span><span style="color: #000000;">(</span>cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//converting string into integer</span><br/>                <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>amount<span style="color: #000000;">&gt;</span>gPlayerCash<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">)</span>SendClientMessage<span style="color: #000000;">(</span>playerid,0xFF0000FF,<span style="color: #000066;">"Server: You don't have that much money!"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">// does player have that amount of money?</span><br/>                <span style="color: #2222BB;">else</span><br/>                <span style="color: #000000;">{</span><br/>                    gPlayerCash<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">-=</span>amount;<span style="color: #228822;">// decreasing player's cash by the amount</span><br/>                    gPlayerCash<span style="color: #000000;">[</span>id<span style="color: #000000;">]</span><span style="color: #000000;">+=</span>amount;<span style="color: #228822;">//increasing player's cash by the amount</span><br/>                    ShowPlayerMoney<span style="color: #000000;">(</span>id<span style="color: #000000;">)</span>;<span style="color: #228822;">//showing player his money</span><br/>                    <span style="color: #2222BB;">new</span> String<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">+</span><span style="color: #000000;">60</span><span style="color: #000000;">]</span>;<span style="color: #228822;">//defining a string</span><br/>                    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>String,<span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>String<span style="color: #000000;">)</span>,<span style="color: #000066;">"takes out %s wallet and gives some ammount of cash to %s."</span>,<span style="color: #000000;">(</span>gPlayerSex<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">'M'</span><span style="color: #000000;">)</span><span style="color: #000000;">?</span><span style="color: #000000;">(</span><span style="color: #000066;">"his"</span><span style="color: #000000;">)</span><span style="color: #000000;">:</span><span style="color: #000000;">(</span><span style="color: #000066;">"her"</span><span style="color: #000000;">)</span>,RealisticName<span style="color: #000000;">(</span>gPlayerCharName<span style="color: #000000;">[</span>id<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>                    <span style="color: #228822;">//^^making message that will be sent to players around. Same as /me</span><br/>                    SendTextToNearlyPlayers<span style="color: #000000;">(</span>playerid, String, ME<span style="color: #000000;">)</span>;<span style="color: #228822;">//sending message</span><br/>                    PlayAnimEx<span style="color: #000000;">(</span>playerid, <span style="color: #000066;">"DEALER"</span>, <span style="color: #000066;">"shop_pay"</span>, <span style="color: #000000;">4.0</span>, <span style="color: #000000;">1</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//animation</span><br/>                <span style="color: #000000;">}</span><br/>                ShowPlayerMoney<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/>            <span style="color: #000000;">}</span><br/>            <span style="color: #2222BB;">else</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFF0000FF,<span style="color: #000066;">"Server: The paying amount must be numeric!"</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">CmdR</span><span style="color: #000000;">:</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span><span style="color: #000066;">"/report"</span>, cmdtext, true, <span style="color: #000000;">7</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #228822;">//first 7 char are /,r,e,p,o,r,t. Note that here we don't expect that on 8th place is EOS.</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">7</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFFFFFFFF,<span style="color: #000066;">"Ussage: /report [Text]"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if on the 8th place is EOS send usage message.</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">7</span><span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">' '</span><span style="color: #000000;">)</span><span style="color: #228822;">// in case 8th char is space execute the command</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">new</span> i;<span style="color: #228822;">//defining a variable</span><br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>i<span style="color: #000000;">=</span><span style="color: #000000;">8</span>;cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">' '</span>;i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><span style="color: #000000;">}</span><span style="color: #228822;">//checking if there are more spaces after 8th char. If so we will cut that from message that is sent to admins</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFFFFFFFF,<span style="color: #000066;">"Ussage: /report [Text]"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if first char after space(s) is EOS stop the execution and send the usage message.</span><br/>            <span style="color: #2222BB;">new</span> String<span style="color: #000000;">[</span><span style="color: #000000;">128</span><span style="color: #000000;">+</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>;<span style="color: #228822;">//declaring new variable</span><br/>            GetPlayerName<span style="color: #000000;">(</span>playerid,String,MAX_PLAYER_NAME<span style="color: #000000;">)</span>;<span style="color: #228822;">//getting name of the reporter and storing it in String.</span><br/>            <span style="color: #222222;">format</span><span style="color: #000000;">(</span>String,<span style="color: #000000;">128</span><span style="color: #000000;">+</span>MAX_PLAYER_NAME,<span style="color: #000066;">"%s[%d] reporting: %s"</span>,String,playerid,cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//Constructing the report message</span><br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>i<span style="color: #000000;">=</span><span style="color: #000000;">0</span>;i<span style="color: #000000;">&lt;</span>MAX_PLAYERS;i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerConnected<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span><span style="color: #000000;">&amp;&amp;</span> <span style="color: #000000;">!</span>IsPlayerNPC<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #228822;">//looping all players that could be admins</span><br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerAdmin<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span> <span style="color: #228822;">/* AdminLevel[i]&gt;0*/</span><span style="color: #000000;">)</span><span style="color: #228822;">//checking if they are admins</span><br/>                <span style="color: #000000;">{</span><br/>                    SendClientMessage<span style="color: #000000;">(</span>i,0xFF0000FF,String<span style="color: #000000;">)</span>;<span style="color: #228822;">//sending the message to admins</span><br/>                <span style="color: #000000;">}</span><br/>            <span style="color: #000000;">}</span><br/>            SendClientMessage<span style="color: #000000;">(</span>playerid,0x00FFFFFF,<span style="color: #000066;">"Report sent."</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">CmdS</span><span style="color: #000000;">:</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/suicide"</span>,true,<span style="color: #000000;">8</span><span style="color: #000000;">)</span> <span style="color: #000000;">&amp;&amp;</span> <span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">8</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid,0xFF0000FF,<span style="color: #000066;">"Server:{FFFFFF} It's ilegal to use this function to avoid being arrested, killed, etc."</span><span style="color: #000000;">)</span>;<br/>        SetPlayerHealth<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #228822;">//strcmp checks if the two strings are equal( in this case ). If they are equal strcmp returns 0(lie, non-truth). With '!' we are telling program to make result opposite( if strings are equal strcmp will return true) .</span><br/>    <span style="color: #228822;">//!cmdtext[8] is checking if on the 9th place in string is "End of string( aka EOS)" what's value is 0(lie).</span><br/>    <span style="color: #228822;">//sending message to command user.</span><br/>    <span style="color: #228822;">//Killing player</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/pay"</span>,true,<span style="color: #000000;">4</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #228822;">//first 4 chars: /, p, a, y</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">4</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"{FF0000}Usage: {FFFFFF}/pay {009BFF}[amount]{FFFFFF}."</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if there is nothing after /pay</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">4</span><span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">' '</span><span style="color: #000000;">)</span><span style="color: #228822;">//if there is space after /pay</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">new</span> i,j;<span style="color: #228822;">//defining variables</span><br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>i<span style="color: #000000;">=</span><span style="color: #000000;">5</span>;cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">' '</span>;i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><span style="color: #000000;">}</span><span style="color: #228822;">//cutting not-needed spaces also finding first char after spaces( first char of the word that comes after spaces )</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"{FF0000}Usage: {FFFFFF}/pay {009BFF}[amount]{FFFFFF}."</span><span style="color: #000000;">)</span>;<span style="color: #228822;">// if after spaces comes EOS - stop the command</span><br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>j<span style="color: #000000;">=</span>i<span style="color: #000000;">+</span><span style="color: #000000;">1</span>;cmdtext<span style="color: #000000;">[</span>j<span style="color: #000000;">]</span><span style="color: #000000;">!=</span><span style="color: #000066;">' '</span>;j<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span>j<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"{FF0000}Usage: {FFFFFF}/pay {009BFF}[amount]{FFFFFF}."</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//finding the last char in the word</span><br/>            <span style="color: #2222BB;">new</span> Str<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>;<span style="color: #228822;">//defining a string</span><br/>            <span style="color: #222222;">strmid</span><span style="color: #000000;">(</span>Str,cmdtext,i,j<span style="color: #000000;">)</span>;<span style="color: #228822;">//inserting word into Str</span><br/>            <span style="color: #2222BB;">new</span> id<span style="color: #000000;">=</span>GetIdOfPartOfNameOrId<span style="color: #000000;">(</span>Str<span style="color: #000000;">)</span>;<span style="color: #228822;">//as Function says. The function is below</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>id<span style="color: #000000;">==-</span><span style="color: #000000;">1</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFF0000FF,<span style="color: #000066;">"Server: There are more players with that name."</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>id<span style="color: #000000;">==-</span><span style="color: #000000;">2</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFF0000FF,<span style="color: #000066;">"Server: That player doesn't exist."</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>id<span style="color: #000000;">==</span>playerid<span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFF0000FF,<span style="color: #000066;">"Server: You cannot pay yourself!"</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>i<span style="color: #000000;">=</span>j<span style="color: #000000;">+</span><span style="color: #000000;">1</span>;cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">' '</span>;i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><span style="color: #000000;">}</span><span style="color: #228822;">//after finding id of player we want to pay cutting spaces</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"{FF0000}Usage: {FFFFFF}/pay {009BFF}[amount]{FFFFFF}."</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if after spaces comes EOS - stop the command</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsNumber<span style="color: #000000;">(</span>cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #228822;">// checking if string is number, positive one</span><br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #2222BB;">new</span> amount<span style="color: #000000;">=</span><span style="color: #222222;">strval</span><span style="color: #000000;">(</span>cmdtext<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//converting string into integer</span><br/>                <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>amount<span style="color: #000000;">&gt;</span>gPlayerCash<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">)</span>SendClientMessage<span style="color: #000000;">(</span>playerid,0xFF0000FF,<span style="color: #000066;">"Server: You don't have that much money!"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">// does player have that amount of money?</span><br/>                <span style="color: #2222BB;">else</span><br/>                <span style="color: #000000;">{</span><br/>                    gPlayerCash<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">-=</span>amount;<span style="color: #228822;">// decreasing player's cash by the amount</span><br/>                    gPlayerCash<span style="color: #000000;">[</span>id<span style="color: #000000;">]</span><span style="color: #000000;">+=</span>amount;<span style="color: #228822;">//increasing player's cash by the amount</span><br/>                    ShowPlayerMoney<span style="color: #000000;">(</span>id<span style="color: #000000;">)</span>;<span style="color: #228822;">//showing player his money</span><br/>                    <span style="color: #2222BB;">new</span> String<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">+</span><span style="color: #000000;">60</span><span style="color: #000000;">]</span>;<span style="color: #228822;">//defining a string</span><br/>                    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>String,<span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>String<span style="color: #000000;">)</span>,<span style="color: #000066;">"takes out %s wallet and gives some ammount of cash to %s."</span>,<span style="color: #000000;">(</span>gPlayerSex<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span><span style="color: #000000;">==</span><span style="color: #000066;">'M'</span><span style="color: #000000;">)</span><span style="color: #000000;">?</span><span style="color: #000000;">(</span><span style="color: #000066;">"his"</span><span style="color: #000000;">)</span><span style="color: #000000;">:</span><span style="color: #000000;">(</span><span style="color: #000066;">"her"</span><span style="color: #000000;">)</span>,RealisticName<span style="color: #000000;">(</span>gPlayerCharName<span style="color: #000000;">[</span>id<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>                    <span style="color: #228822;">//^^making message that will be sent to players around. Same as /me</span><br/>                    SendTextToNearlyPlayers<span style="color: #000000;">(</span>playerid, String, ME<span style="color: #000000;">)</span>;<span style="color: #228822;">//sending message</span><br/>                    PlayAnimEx<span style="color: #000000;">(</span>playerid, <span style="color: #000066;">"DEALER"</span>, <span style="color: #000066;">"shop_pay"</span>, <span style="color: #000000;">4.0</span>, <span style="color: #000000;">1</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//animation</span><br/>                <span style="color: #000000;">}</span><br/>                ShowPlayerMoney<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/>            <span style="color: #000000;">}</span><br/>            <span style="color: #2222BB;">else</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFF0000FF,<span style="color: #000066;">"Server: The paying amount must be numeric!"</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;</div></div></pre>
+</div>GetIdOfPartOfNameOrId - fuction I used in tutorial<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:423px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">GetIdOfPartOfNameOrId<span style="color: #000000;">(</span>str<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> id<span style="color: #000000;">=</span><span style="color: #000000;">0</span>,i,<span style="color: #000000;">bool</span><span style="color: #000000;">:</span>flag<span style="color: #000000;">=</span>true;<br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>i<span style="color: #000000;">=</span><span style="color: #000000;">0</span>;str<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span>;i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000066;">'9'</span><span style="color: #000000;">&lt;</span>str<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span> || str<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">&lt;</span><span style="color: #000066;">'0'</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span>flag<span style="color: #000000;">=</span>false;break;<span style="color: #000000;">}</span><br/>        id<span style="color: #000000;">=</span>id<span style="color: #000000;">*</span><span style="color: #000000;">10</span><span style="color: #000000;">+</span>str<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">-</span><span style="color: #000066;">'0'</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>flag<span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> <span style="color: #000000;">(</span>IsPlayerConnected<span style="color: #000000;">(</span>id<span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">?</span><span style="color: #000000;">id</span><span style="color: #000000;">:-</span><span style="color: #000000;">2</span>;<br/>    <span style="color: #2222BB;">new</span> Name<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>,br<span style="color: #000000;">=</span><span style="color: #000000;">0</span>,lenght;<br/>    lenght<span style="color: #000000;">=</span><span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>str<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>i<span style="color: #000000;">=</span><span style="color: #000000;">0</span>;i<span style="color: #000000;">&lt;</span>MAX_PLAYERS;i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>IsPlayerConnected<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #2222BB;">continue</span>;<br/>        GetPlayerName<span style="color: #000000;">(</span>i,Name,MAX_PLAYER_NAME<span style="color: #000000;">)</span>;<br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span>Name,str,true,lenght<span style="color: #000000;">)</span><span style="color: #000000;">==</span><span style="color: #000000;">0</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            br<span style="color: #000000;">++</span>;<br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>br<span style="color: #000000;">==</span><span style="color: #000000;">2</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> <span style="color: #000000;">-</span><span style="color: #000000;">1</span>;<br/>            id<span style="color: #000000;">=</span>i;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>br<span style="color: #000000;">==</span><span style="color: #000000;">1</span><span style="color: #000000;">)</span><span style="color: #2222BB;">return</span> <span style="color: #000000;">(</span>IsPlayerConnected<span style="color: #000000;">(</span>id<span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">?</span><span style="color: #000000;">id</span><span style="color: #000000;">:-</span><span style="color: #000000;">2</span>;<br/>    <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">return</span> <span style="color: #000000;">-</span><span style="color: #000000;">2</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div><b><div align="center"><font size="6"><font color="Green">Last words</font></font></div></b><br />
+Thank you for reading it. I hope you found it usefull.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2082326">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-56199.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2082358"></a>
+<div class="post classic " style="" id="post_2082358">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0157/uid-157025.html"><img src="../../assets/uploads/avatars/157025.png" alt="" width="33" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0157/uid-157025.html">im</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 213<br />
+	Threads: 16<br />
+	Joined: Mar 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0372/tid-372556.html#pid2082358" title="Re: Using strcmp without strtok, but more effective">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by im" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">27.08.2012, 12:43 <span class="post_edit" id="edited_by_2082358"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2082358">
+		ZCMD is faster and easier to use. There's a reason why everyone recommends using ZCMD on YCMD.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2082358">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-157025.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2082367"></a>
+<div class="post classic " style="" id="post_2082367">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0056/uid-56199.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0056/uid-56199.html">Roko_foko</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 541<br />
+	Threads: 60<br />
+	Joined: Jul 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0372/tid-372556.html#pid2082367" title="Re: Using strcmp without strtok, but more effective">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Roko_foko" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">27.08.2012, 12:48 <span class="post_edit" id="edited_by_2082367"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Roko_foko; 27.08.2012 at 13:21.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2082367">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>im</strong><br />
+<a href="../../threads/0372/tid-372556.html#pid2082358" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">ZCMD is faster and easier to use. There's a reason why everyone recommends using ZCMD on YCMD.</div>
+</td>
+</tr>
+</table>
+</div>Yes ZCMD was faster than regular strcmp/strtok. And in my opinion strtok is too slow, which isn't needed. ZCMD uses CallRemoteFunction what is faster than if-else ( only if there are a lot of if-elses). In this case there won't be a lot of if-elses because of switch on beggining we jump/skip a 80 percent of them. So, this could be faster then ZCMD. About YCMD, I dunno how it works so I can't tell anything about it. And I want to underline that I am not expert in processing speed.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2082367">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-56199.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2085858"></a>
+<div class="post classic " style="" id="post_2085858">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0096/uid-96960.html"><img src="../../assets/uploads/avatars/96960.png" alt="" width="55" height="39" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0096/uid-96960.html">fightaxe</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 6<br />
+	Threads: 0<br />
+	Joined: Jun 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0372/tid-372556.html#pid2085858" title="Re: Using strcmp without strtok, but more effective">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by fightaxe" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">28.08.2012, 21:32 <span class="post_edit" id="edited_by_2085858"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2085858">
+		Good work I wonder if that command teleport is as good as ZCMD,would help if someone does some tests.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2085858">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-96960.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2086204"></a>
+<div class="post classic " style="" id="post_2086204">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0141/uid-141761.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0141/uid-141761.html">ReneG</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,905<br />
+	Threads: 63<br />
+	Joined: Oct 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0372/tid-372556.html#pid2086204" title="Re: Using strcmp without strtok, but more effective">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by ReneG" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.08.2012, 02:41 <span class="post_edit" id="edited_by_2086204"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2086204">
+		You should never use "goto". It's a lazy way of correcting bad program flow.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:311px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerCommandText<span style="color: #000000;">(</span>playerid, cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">switch</span><span style="color: #000000;">(</span>cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">case</span> <span style="color: #000066;">'a'</span>,<span style="color: #000066;">'A'</span><span style="color: #000000;">:</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span>cmdtext, <span style="color: #000066;">"/apple"</span>, true<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <br/>            <span style="color: #000000;">{</span><br/>                <br/>            <span style="color: #000000;">}</span><br/>            <span style="color: #228822;">// commands with A</span><br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #228822;">// so on and so forth</span><br/>        <span style="color: #2222BB;">default</span><span style="color: #000000;">:</span> <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/>    <span style="color: #000000;">}</span><br/><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>Will using characters in switch statements even compile? I was under the impression you could only use integers.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2086204">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-141761.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2086901"></a>
+<div class="post classic " style="" id="post_2086901">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0056/uid-56199.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0056/uid-56199.html">Roko_foko</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 541<br />
+	Threads: 60<br />
+	Joined: Jul 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0372/tid-372556.html#pid2086901" title="Re: Using strcmp without strtok, but more effective">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by Roko_foko" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.08.2012, 12:51 <span class="post_edit" id="edited_by_2086901"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2086901">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>******</strong><br />
+<a href="../../unavailable.html" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Characters ARE integers.  Anyway, I've not seen the switch trick in a long time (but I'm afraid I HAVE seen it before), so that's one good way of improving speeds.  But I still have to ask why you are still using this method rather than any other?  You mentioned that ZCMD is only faster than strcmp for multiple commands, and that's true, but have you actually done any timings that include the switch?  The reason I ask is that the number of "multiple" commands is very low - you only need 5-10 commands for ZCMD to become faster, so yes that's more like 125-250 using your method, but that's ignoring the other overheads and the development simplicity.</div>
+</td>
+</tr>
+</table>
+</div>I am using this method because I feel safely while doing it( I know how they work and what are they supposed to do ). Also, when I know how operators work it's easy to find the problem when it occurs. I tried to understand how ZCMD works but didn't succeed. Now, when I use word "work", I don't mean 'how to use it', but how is it scripted/programmed (what actually stands behind 'CMD:').  In additoin, with logical thinking (doesn't mean it's correct) switch is more, more faster then CallRemoteFunction. As well as that, in every command group ( we sorted them in groups: the ones that start with 'a' or 'A', etc.)  we can put another switch if there are too many commands  to make it faster. I know once it will be slower then ZCMD, but when? when it reaches 20'000 commands? Got my point?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2086901">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-56199.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2092717"></a>
+<div class="post classic " style="" id="post_2092717">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0158/uid-158907.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0158/uid-158907.html">JoBullet</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 58<br />
+	Threads: 0<br />
+	Joined: Mar 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0372/tid-372556.html#pid2092717" title="Re: Using strcmp without strtok, but more effective">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by JoBullet" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">01.09.2012, 01:56 <span class="post_edit" id="edited_by_2092717"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2092717">
+		switch is implemented just as a if-elseif-else in current Pawn VM so you are doing pretty much the same slow stuff.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2092717">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-158907.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2093051"></a>
+<div class="post classic " style="" id="post_2093051">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0165/uid-165080.html"><img src="../../assets/uploads/avatars/165080.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0165/uid-165080.html">TaLhA XIV</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 507<br />
+	Threads: 94<br />
+	Joined: May 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0372/tid-372556.html#pid2093051" title="Re: Using strcmp without strtok, but more effective">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by TaLhA XIV" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">01.09.2012, 06:46 <span class="post_edit" id="edited_by_2093051"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2093051">
+		Nice tutorial for newbies but would have been better with sscanf.Anyways keep it up.Good work.<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/razz.gif" title="Tongue"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2093051">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-165080.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2095763"></a>
+<div class="post classic " style="" id="post_2095763">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0009/uid-9570.html"><img src="../../assets/uploads/avatars/9570.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0009/uid-9570.html">MadeMan</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,488<br />
+	Threads: 16<br />
+	Joined: Jun 2007
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0372/tid-372556.html#pid2095763" title="Re: Using strcmp without strtok, but more effective">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by MadeMan" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">02.09.2012, 13:07 <span class="post_edit" id="edited_by_2095763"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2095763">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Roko_foko</strong><br />
+<a href="../../threads/0372/tid-372556.html#pid2086901" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">I am using this method because I feel safely while doing it( I know how they work and what are they supposed to do ). Also, when I know how operators work it's easy to find the problem when it occurs. I tried to understand how ZCMD works but didn't succeed. Now, when I use word "work", I don't mean 'how to use it', but how is it scripted/programmed (what actually stands behind 'CMD:'). [...]</div>
+</td>
+</tr>
+</table>
+</div>Why not read the source code of ZCMD?<br />
+<br />
+You are doing pretty much the same thing that strtok does: skip whitespace and extract a word from a long string. Except strtok is a lot cleaner, as you don't have to worry about string cutting and invent a new processing system for every command. I'm not promoting strtok here, but I'm promoting the usage of functions for similar tasks. If you put the string processing code into a function, you would get strtok.<br />
+<br />
+I support doing things differently, showing that there are other ways, but I would rather use strtok than this. Just my opinion.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2095763">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-9570.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0372/tid-372556.html">Next Oldest</a> | <a href="../../threads/0372/tid-372556.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="372556" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

@@ -1,0 +1,2344 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Map] LSPD, completely from scratch</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "1126ec12b64f5f94a374f352daa9a2d8";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="JackBauer's LSPD Interior Rooms: *Lobby *Dispatch Room *Evidence Room *Gym *Rest Room with Pool table *Interogation Room (Small black room which can be viewed) *Lockers Room *Interviews Room *Sergeant" />
+<link rel="canonical" href="../../threads/0241/tid-241697.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="1126ec12b64f5f94a374f352daa9a2d8" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/64.html">Maps</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (3):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0241/tid-241697-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0241/tid-241697-page-3.html" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0241/tid-241697-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0241/tid-241697.html#pid1125888">Threaded Mode</a></span>
+				</div>
+				
+					[Map] LSPD, completely from scratch
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid1125888"></a>
+<div class="post classic " style="" id="post_1125888">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120143.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120143.html">JackBauer.</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 21<br />
+	Threads: 2<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1125888" title="LSPD, completely from scratch">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by JackBauer." style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.03.2011, 15:50 <span class="post_edit" id="edited_by_1125888"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by JackBauer.; 13/05/2011 at 09:47 AM.
+					
+					
+						Reason: Fixed some text.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1125888">
+		<i><div align="center"><b><font color="Red"><font size="6">JackBauer's LSPD Interior</font></font></b></div></i><div align="center">
+<font face="Arial"><b><br />
+<font color="Blue"><u>Rooms:</u></font><br />
+<font size="2">*Lobby<br />
+*Dispatch Room<br />
+*Evidence Room<br />
+*Gym<br />
+*Rest Room with Pool table<br />
+*Interogation Room (Small black room which can be viewed)<br />
+*Lockers Room<br />
+*Interviews Room<br />
+*Sergeants Offices<br />
+*Briefing Room<br />
+*Control Room<br />
+*Empty Training Room (for random use)<br />
+*Detectives Offices<br />
+*Head of Detectives Office<br />
+*Command Offices (2 small offices)<br />
+*Commander Office<br />
+*Chief Office<br />
+*Servers-Database room<br />
+*High Command/Command Meeting Room<br />
+*Cells</font></b><br />
+<br />
+<font color="Blue"><u><b>Screens:</b></u></font><br />
+Lockers Room<br />
+<img alt="" border="0" src="../../imageshack/img121/4571/samp288y.png"/><br />
+<br />
+Dispatch Room<br />
+<img alt="" border="0" src="../../imageshack/img857/6228/samp287.png"/><br />
+<br />
+Lobby<br />
+<img alt="" border="0" src="../../imageshack/img832/5862/samp286w.png"/><br />
+<br />
+Cells<br />
+<img alt="" border="0" src="../../imageshack/img577/3853/samp285h.png"/><br />
+<br />
+Servers-Database Room<br />
+<img alt="" border="0" src="../../imageshack/img88/2397/samp302gf.png"/><br />
+<br />
+Evidence Room<br />
+<img alt="" border="0" src="../../imageshack/img842/5042/samp295i.png"/><br />
+<br />
+Interogation Room<br />
+<img alt="" border="0" src="../../imageshack/img859/3609/samp293.png"/><br />
+<br />
+View of Interogation Room<br />
+<img alt="" border="0" src="../../imageshack/img823/835/samp294j.png"/><br />
+<br />
+Gym<br />
+<img alt="" border="0" src="../../imageshack/img263/1672/samp292f.png"/><br />
+<br />
+Sergeants Offices<br />
+<img alt="" border="0" src="../../imageshack/img12/8033/samp291vr.png"/><br />
+<br />
+Interview Room<br />
+<img alt="" border="0" src="../../imageshack/img3/2272/samp289v.png"/><br />
+<br />
+High Command/Command Meeting Room<br />
+<img alt="" border="0" src="../../imageshack/img402/2393/samp300r.png"/><br />
+<br />
+Commander Room<br />
+<img alt="" border="0" src="../../imageshack/img684/2078/samp299fd.png"/><br />
+<br />
+Command Offices<br />
+<img alt="" border="0" src="../../imageshack/img716/4559/samp298c.png"/><br />
+<br />
+Detectives Offices<br />
+<img alt="" border="0" src="../../imageshack/img717/2614/samp297se.png"/><br />
+<br />
+Head of Detectives Office<br />
+<img alt="" border="0" src="../../imageshack/img52/5489/samp296k.png"/><br />
+<br />
+Chief Office<br />
+<img alt="" border="0" src="../../imageshack/img138/3056/samp301k.png"/><br />
+<br />
+<font color="Blue"><u><b>FilterScript Link:</b></u></font><br />
+<b><a href="http://pastebin.com/7abbtJSz" target="_blank">http://pastebin.com/7abbtJSz</a></b><br />
+<br />
+<font color="Blue"><u><b>Objects:</b></u></font><br />
+<b>Lobby Doors</b><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 194px;
+		text-align: left;
+		overflow: auto">Close:
+CreateObject(1495,1553.54492188,-1691.42968750,1722.10498047,0.00000000,0.00000000,180.00000000);Right
+CreateObject(1495,1550.53906250,-1691.45898438,1722.10498047,0.00000000,0.00000000,0.00000000);Right 
+CreateObject(1495,1558.88598633,-1677.85021973,1722.10498047,0.00000000,0.00000000,0.00000000);Left
+CreateObject(1495,1561.89611816,-1677.81909180,1722.10498047,0.00000000,0.00000000,180.00000000);Left
+
+Open:
+CreateObject(1495,1554.59216309,-1691.42968750,1722.10498047,0.00000000,0.00000000,180.00000000); Right
+CreateObject(1495,1549.44067383,-1691.4589843,1722.10498047,0.00000000,0.00000000,0.00000000);Right
+CreateObject(1495,1557.95495605,-1677.84960938,1722.10498047,0.00000000,0.00000000,0.00000000);Left
+CreateObject(1495,1562.96398926,-1677.8183593,1722.10498047,0.00000000,0.00000000,180.00000000);Left</pre>
+</div><b>Room Doors</b><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 290px;
+		text-align: left;
+		overflow: auto">Close:
+CreateObject(3089,1560.74609375,-1714.04785156,1724.83239746,0.00000000,0.00000000,180.00000000);Door1 
+CreateObject(3089,1555.40820312,-1709.21386719,1724.83239746,0.00000000,0.00000000,90.00000000);Door2 
+CreateObject(3089,1557.70996094,-1706.66113281,1728.91784668,0.00000000,0.00000000,180.00000000);Door3 
+CreateObject(3089,1562.37890625,-1668.96679688,1730.43395996,0.00000000,0.00000000,270.00000000);Door4 
+CreateObject(3089,1562.38183594,-1660.47460938,1730.43395996,0.00000000,0.00000000,270.00000000);Door5 
+CreateObject(3089,1551.52050781,-1667.73339844,1730.43395996,0.00000000,0.00000000,0.00000000);Door6 
+CreateObject(3089,1552.38964844,-1671.16992188,1730.43395996,0.00000000,0.00000000,180.00000000);Door7 
+
+Open:
+CreateObject(3089,1562.78088379,-1714.04785156,1724.83239746,0.00000000,0.00000000,180.00000000);Door1
+CreateObject(3089,1555.40820312,-1711.23852539,1724.83239746,0.00000000,0.00000000,90.00000000);Door2 
+CreateObject(3089,1559.78076172,-1706.66113281,1728.91784668,0.00000000,0.00000000,180.00000000);Door3 
+CreateObject(3089,1562.37890625,-1666.89562988,1730.43395996,0.00000000,0.00000000,270.00000000);Door4 
+CreateObject(3089,1562.38183594,-1658.96093750,1730.43395996,0.00000000,0.00000000,270.00000000);Door5 
+CreateObject(3089,1549.43908691,-1667.73339844,1730.43395996,0.00000000,0.00000000,0.00000000);Door6 
+CreateObject(3089,1554.45117188,-1671.16992188,1730.43395996,0.00000000,0.00000000,180.00000000);Door7</pre>
+</div><b><br />
+Normal Objects</b><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">CreateObject(14847,1560.67871094,-1684.51171875,1725.49560547,0.00000000,0.00000000,90.00000000); //object(sfpd) (1)
+CreateObject(14848,1563.08154297,-1682.91552734,1723.49731445,0.00000000,0.00000000,90.00000000); //object(sfpd) (2)
+CreateObject(14852,1549.56201172,-1684.63476562,1727.57714844,0.00000000,0.00000000,90.00000000); //object(sfpd) (3)
+CreateObject(14892,1571.11718750,-1688.10839844,1728.37902832,0.00000000,0.00000000,90.00000000); //object(sfpd) (4)
+CreateObject(14851,1561.02246094,-1684.53417969,1726.22973633,0.00000000,0.00000000,90.00000000); //object(sfpd) (5)
+CreateObject(1892,1559.80236816,-1655.60021973,1717.90185547,0.00000000,0.00000000,270.00000000); //object(security_gatsh) (1)
+CreateObject(2924,1554.80688477,-1713.90820312,1724.69702148,0.00000000,0.00000000,90.00000000); //object(kmb_crash3door) (1)
+CreateObject(2924,1555.51464844,-1713.90820312,1724.69702148,0.00000000,0.00000000,90.00000000); //object(kmb_crash3door) (2)
+CreateObject(2173,1553.15002441,-1714.74145508,1723.50341797,0.00000000,0.00000000,180.00000000); //object(med_office_desk_3) (1)
+CreateObject(2196,1552.28955078,-1714.36547852,1724.30505371,0.00000000,0.00000000,0.00000000); //object(work_lamp1) (1)
+CreateObject(2894,1552.48925781,-1714.76562500,1724.30505371,0.00000000,0.00000000,0.00000000); //object(kmb_rhymesbook) (1)
+CreateObject(1671,1552.49035645,-1713.79919434,1723.96362305,0.00000000,0.00000000,0.00000000); //object(swivelchair_a) (1)
+CreateObject(2885,1562.73828125,-1683.44140625,1727.90612793,0.00000000,0.00000000,90.00000000); //object(xref_garagedoor) (1)
+CreateObject(2885,1562.80480957,-1683.32482910,1727.90612793,0.00000000,0.00000000,270.00000000); //object(xref_garagedoor) (2)
+CreateObject(2885,1562.80468750,-1685.83300781,1727.90612793,0.00000000,0.00000000,270.00000000); //object(xref_garagedoor) (3)
+CreateObject(2885,1562.73852539,-1685.95922852,1727.90612793,0.00000000,0.00000000,90.00000000); //object(xref_garagedoor) (4)
+CreateObject(16500,1552.78637695,-1712.39318848,1722.56091309,0.00000000,0.00000000,90.00000000); //object(cn2_savgardr1_) (6)
+CreateObject(16500,1547.79394531,-1712.39257812,1722.56091309,0.00000000,0.00000000,90.00000000); //object(cn2_savgardr1_) (7)
+CreateObject(3051,1550.47070312,-1712.48535156,1725.67419434,0.00000000,0.00000000,315.99975586); //object(lift_dr) (12)
+CreateObject(3051,1550.47070312,-1712.29602051,1725.67419434,0.00000000,0.00000000,315.99426270); //object(lift_dr) (13)
+CreateObject(3051,1554.68652344,-1712.48535156,1725.67419434,0.00000000,0.00000000,315.99426270); //object(lift_dr) (15)
+CreateObject(3051,1554.68652344,-1712.29602051,1725.67419434,0.00000000,0.00000000,316.00000000); //object(lift_dr) (16)
+CreateObject(14901,1548.45605469,-1685.41992188,1723.69995117,0.00000000,0.00000000,270.00000000); //object(police3-exit02) (1)
+CreateObject(1535,1549.74938965,-1683.14990234,1722.10498047,0.00000000,0.00000000,270.00000000); //object(gen_doorext14) (1)
+CreateObject(1535,1549.79003906,-1686.17773438,1722.10498047,0.00000000,0.00000000,90.00000000); //object(gen_doorext14) (2)
+CreateObject(2886,1558.98632812,-1678.10546875,1723.92883301,0.00000000,0.00000000,0.00000000); //object(sec_keypad) (1)
+CreateObject(2886,1553.51757812,-1691.21289062,1723.92883301,0.00000000,0.00000000,180.00000000); //object(sec_keypad) (2)
+CreateObject(8167,1563.69824219,-1691.55566406,1724.78186035,0.00000000,0.00000000,90.00000000); //object(apgate1_vegs01) (2)
+CreateObject(8167,1552.33715820,-1677.83020020,1724.77709961,0.00000000,0.00000000,270.00000000); //object(apgate1_vegs01) (3)
+CreateObject(11631,1554.01733398,-1671.23608398,1723.35778809,0.00000000,0.00000000,0.00000000); //object(ranch_desk) (1)
+CreateObject(1806,1554.51452637,-1672.38842773,1722.11193848,0.00000000,0.00000000,0.00000000); //object(med_office_chair) (1)
+CreateObject(1827,1563.28576660,-1696.20178223,1722.10498047,0.00000000,0.00000000,0.00000000); //object(man_sdr_tables) (4)
+CreateObject(1827,1563.28515625,-1696.20117188,1722.30712891,0.00000000,0.00000000,0.00000000); //object(man_sdr_tables) (5)
+CreateObject(18001,1550.60839844,-1712.28515625,1725.11694336,0.00000000,0.00000000,180.00000000); //object(int_barbera07) (1)
+CreateObject(18001,1550.60839844,-1712.28515625,1726.53198242,0.00000000,0.00000000,180.00000000); //object(int_barbera07) (3)
+CreateObject(3089,1555.40820312,-1710.71386719,1724.83239746,0.00000000,0.00000000,90.00000000); //object(ab_casdorlok) (3)
+CreateObject(962,1557.77856445,-1678.10644531,1723.11572266,90.00000000,0.00000000,0.00000000); //object(cj_t_ticket_ped) (1)
+CreateObject(1719,1553.14062500,-1714.83398438,1724.35949707,0.00000000,0.00000000,270.00000000); //object(low_console) (1)
+CreateObject(2310,1552.54101562,-1716.03710938,1724.00268555,0.00000000,0.00000000,270.00000000); //object(mike_din_chair) (1)
+CreateObject(1714,1552.46667480,-1657.15039062,1729.09802246,0.00000000,0.00000000,0.00000000); //object(kb_swivelchair1) (1)
+CreateObject(2357,1552.44140625,-1661.65625000,1729.49316406,0.00000000,0.00000000,90.00000000); //object(dunc_dinning) (1)
+CreateObject(2112,1552.44140625,-1658.82519531,1729.49023438,0.00000000,0.00000000,0.00000000); //object(med_dinning_4) (1)
+CreateObject(1715,1554.10449219,-1660.26550293,1729.09802246,0.00000000,0.00000000,270.00000000); //object(kb_swivelchair2) (1)
+CreateObject(1714,1554.05102539,-1658.82861328,1729.09802246,0.00000000,0.00000000,270.00000000); //object(kb_swivelchair1) (2)
+CreateObject(1714,1550.73632812,-1658.89758301,1729.09802246,0.00000000,0.00000000,90.00000000); //object(kb_swivelchair1) (3)
+CreateObject(1715,1554.10449219,-1661.27514648,1729.09802246,0.00000000,0.00000000,270.00000000); //object(kb_swivelchair2) (2)
+CreateObject(1715,1554.10449219,-1662.38574219,1729.09802246,0.00000000,0.00000000,270.00000000); //object(kb_swivelchair2) (3)
+CreateObject(1715,1554.10449219,-1663.39648438,1729.09802246,0.00000000,0.00000000,270.00000000); //object(kb_swivelchair2) (4)
+CreateObject(1715,1550.66894531,-1660.20129395,1729.09802246,0.00000000,0.00000000,90.00000000); //object(kb_swivelchair2) (5)
+CreateObject(1715,1550.64208984,-1661.21069336,1729.09802246,0.00000000,0.00000000,90.00000000); //object(kb_swivelchair2) (6)
+CreateObject(1715,1550.61132812,-1662.32031250,1729.09802246,0.00000000,0.00000000,90.00000000); //object(kb_swivelchair2) (7)
+CreateObject(1715,1550.58398438,-1663.32910156,1729.09802246,0.00000000,0.00000000,90.00000000); //object(kb_swivelchair2) (8)
+CreateObject(1808,1553.73730469,-1667.38574219,1729.10498047,0.00000000,0.00000000,180.00000000); //object(cj_watercooler2) (1)
+CreateObject(3089,1550.02539062,-1667.73339844,1730.43395996,0.00000000,0.00000000,0.00000000); //object(ab_casdorlok) (6)
+CreateObject(2886,1551.25598145,-1667.78076172,1730.70080566,0.00000000,0.00000000,0.00000000); //object(sec_keypad) (1)
+CreateObject(2886,1551.21276855,-1667.70092773,1730.70080566,0.00000000,0.00000000,180.00000000); //object(sec_keypad) (1)
+CreateObject(3089,1553.88964844,-1671.16992188,1730.43395996,0.00000000,0.00000000,179.99450684); //object(ab_casdorlok) (7)
+CreateObject(2886,1552.67163086,-1671.14135742,1730.70080566,0.00000000,0.00000000,180.00000000); //object(sec_keypad) (1)
+CreateObject(2886,1552.62487793,-1671.22131348,1730.70080566,0.00000000,0.00000000,0.00000000); //object(sec_keypad) (1)
+CreateObject(3089,1562.37890625,-1667.47070312,1730.43395996,0.00000000,0.00000000,270.00000000); //object(ab_casdorlok) (7)
+CreateObject(2886,1562.32910156,-1668.71777344,1730.70080566,0.00000000,0.00000000,270.00000000); //object(sec_keypad) (1)
+CreateObject(2886,1562.41857910,-1668.67895508,1730.70080566,0.00000000,0.00000000,90.00000000); //object(sec_keypad) (1)
+CreateObject(3384,1570.54931641,-1660.98706055,1730.54760742,0.00000000,0.00000000,0.00000000); //object(a51_halbox_) (1)
+CreateObject(3386,1568.42443848,-1659.57543945,1729.10498047,0.00000000,0.00000000,90.00000000); //object(a51_srack2_) (1)
+CreateObject(3386,1565.91552734,-1659.50573730,1729.10498047,0.00000000,0.00000000,90.00000000); //object(a51_srack2_) (2)
+CreateObject(3389,1568.41113281,-1662.43457031,1729.10498047,0.00000000,0.00000000,270.00000000); //object(a51_srack1_) (1)
+CreateObject(3389,1565.91699219,-1662.49755859,1729.10498047,0.00000000,0.00000000,270.00000000); //object(a51_srack1_) (2)
+CreateObject(2886,1562.24145508,-1660.00793457,1730.70080566,0.00000000,0.00000000,270.00000000); //object(sec_keypad) (1)
+CreateObject(2886,1562.54003906,-1659.91796875,1730.70080566,0.00000000,0.00000000,90.00000000); //object(sec_keypad) (1)
+CreateObject(2167,1549.90002441,-1675.51330566,1729.10498047,0.00000000,0.00000000,90.00000000); //object(med_office_unit_7) (1)
+CreateObject(2184,1553.90136719,-1674.74536133,1729.10498047,0.00000000,0.00000000,180.00000000); //object(med_office6_desk_2) (1)
+CreateObject(1715,1552.78625488,-1676.96118164,1729.10498047,0.00000000,0.00000000,180.00000000); //object(kb_swivelchair2) (10)
+CreateObject(1663,1553.47058105,-1673.55725098,1729.56518555,0.00000000,0.00000000,340.00000000); //object(swivelchair_b) (1)
+CreateObject(1663,1552.19787598,-1673.54150391,1729.56518555,0.00000000,0.00000000,20.00000000); //object(swivelchair_b) (2)
+CreateObject(2190,1552.39355469,-1675.08691406,1729.88073730,0.00000000,0.00000000,0.00000000); //object(pc_1) (1)
+CreateObject(2297,1562.82421875,-1666.79382324,1729.10498047,0.00000000,0.00000000,46.00000000); //object(tv_unit_2) (1)
+CreateObject(2603,1552.25500488,-1655.02832031,1718.35510254,0.00000000,0.00000000,270.00000000); //object(police_cell_bed) (1)
+CreateObject(2603,1552.25500488,-1658.98681641,1718.35510254,0.00000000,0.00000000,270.00000000); //object(police_cell_bed) (2)
+CreateObject(2603,1552.25500488,-1662.92346191,1718.35510254,0.00000000,0.00000000,270.00000000); //object(police_cell_bed) (3)
+CreateObject(2603,1552.25500488,-1667.06469727,1718.35510254,0.00000000,0.00000000,270.00000000); //object(police_cell_bed) (4)
+CreateObject(2700,1553.65832520,-1671.61474609,1732.13171387,0.00000000,0.00000000,272.00000000); //object(cj_sex_tv2) (1)
+CreateObject(2817,1564.47656250,-1690.32873535,1729.10498047,0.00000000,0.00000000,0.00000000); //object(gb_bedrug01) (1)
+CreateObject(2818,1564.67028809,-1682.17150879,1729.10498047,0.00000000,0.00000000,0.00000000); //object(gb_bedrug02) (1)
+CreateObject(2835,1564.00378418,-1686.10168457,1729.10498047,0.00000000,0.00000000,0.00000000); //object(gb_livingrug04) (1)
+CreateObject(2841,1564.22680664,-1678.01013184,1729.10498047,0.00000000,0.00000000,0.00000000); //object(gb_bedrug03) (1)
+CreateObject(1721,1556.53173828,-1671.75317383,1729.10498047,0.00000000,0.00000000,270.00000000); //object(est_chair1) (1)
+CreateObject(1721,1556.53173828,-1672.43078613,1729.10498047,0.00000000,0.00000000,270.00000000); //object(est_chair1) (2)
+CreateObject(1721,1556.53173828,-1673.10839844,1729.10498047,0.00000000,0.00000000,270.00000000); //object(est_chair1) (3)
+CreateObject(1721,1556.53173828,-1673.78601074,1729.10498047,0.00000000,0.00000000,270.00000000); //object(est_chair1) (4)
+CreateObject(1808,1555.76293945,-1674.85546875,1729.10498047,0.00000000,0.00000000,270.00000000); //object(cj_watercooler2) (2)
+CreateObject(1721,1562.08105469,-1666.96472168,1729.10498047,0.00000000,0.00000000,90.00000000); //object(est_chair1) (5)
+CreateObject(1721,1562.08105469,-1666.30578613,1729.10498047,0.00000000,0.00000000,90.00000000); //object(est_chair1) (6)
+CreateObject(1721,1562.08105469,-1665.64685059,1729.10498047,0.00000000,0.00000000,90.00000000); //object(est_chair1) (7)
+CreateObject(1721,1562.08105469,-1664.98791504,1729.10498047,0.00000000,0.00000000,90.00000000); //object(est_chair1) (8)
+CreateObject(2257,1571.29980469,-1664.78222656,1730.90466309,0.00000000,0.00000000,270.00000000); //object(frame_clip_4) (1)
+CreateObject(2256,1571.31762695,-1669.54663086,1731.16650391,0.00000000,0.00000000,270.00000000); //object(frame_clip_3) (1)
+CreateObject(2000,1555.49035645,-1676.11413574,1729.10498047,0.00000000,0.00000000,270.00000000); //object(filing_cab_nu) (1)
+CreateObject(949,1549.52465820,-1673.64074707,1730.34765625,0.00000000,0.00000000,0.00000000); //object(plant_pot_4) (1)
+CreateObject(2251,1571.62353516,-1667.30151367,1730.55432129,0.00000000,0.00000000,0.00000000); //object(plant_pot_20) (1)
+CreateObject(1808,1564.11694336,-1663.53491211,1729.10498047,0.00000000,0.00000000,0.00000000); //object(cj_watercooler2) (3)
+CreateObject(2184,1567.99133301,-1666.17102051,1729.10498047,0.00000000,0.00000000,270.00000000); //object(med_office6_desk_2) (2)
+CreateObject(1714,1570.14758301,-1667.25878906,1729.10498047,0.00000000,0.00000000,270.00000000); //object(kb_swivelchair1) (4)
+CreateObject(2190,1568.19165039,-1667.77246094,1729.88073730,0.00000000,0.00000000,90.00000000); //object(pc_1) (2)
+CreateObject(2824,1568.33007812,-1667.22973633,1729.88073730,0.00000000,0.00000000,90.00000000); //object(gb_novels02) (1)
+CreateObject(1715,1566.40124512,-1666.55822754,1729.10498047,0.00000000,0.00000000,75.00000000); //object(kb_swivelchair2) (11)
+CreateObject(1715,1566.41040039,-1667.98327637,1729.10498047,0.00000000,0.00000000,110.00000000); //object(kb_swivelchair2) (12)
+CreateObject(2200,1565.59106445,-1663.47351074,1729.10498047,0.00000000,0.00000000,0.00000000); //object(med_office5_unit_1) (1)
+CreateObject(2885,1556.00781250,-1658.21887207,1736.19421387,0.00000000,0.00000000,270.00000000); //object(xref_garagedoor) (2)
+CreateObject(2885,1555.90234375,-1658.39062500,1736.19421387,0.00000000,0.00000000,90.00000000); //object(xref_garagedoor) (2)
+CreateObject(2885,1567.83386230,-1671.07019043,1735.48669434,0.00000000,0.00000000,180.00000000); //object(xref_garagedoor) (2)
+CreateObject(2885,1567.81823730,-1670.98706055,1735.48669434,0.00000000,0.00000000,0.00000000); //object(xref_garagedoor) (2)
+CreateObject(2886,1555.43066406,-1709.46289062,1725.24279785,0.00000000,0.00000000,90.00000000); //object(sec_keypad) (1)
+CreateObject(2886,1555.37561035,-1709.46911621,1725.24279785,0.00000000,0.00000000,270.00000000); //object(sec_keypad) (1)
+CreateObject(2632,1553.70031738,-1700.73779297,1723.54980469,0.00000000,0.00000000,270.00000000); //object(gym_mat02) (1)
+CreateObject(2630,1550.83874512,-1704.52331543,1723.50341797,0.00000000,0.00000000,90.00000000); //object(gym_bike) (1)
+CreateObject(2627,1551.92639160,-1699.95617676,1723.50341797,0.00000000,0.00000000,0.00000000); //object(gym_treadmill) (1)
+CreateObject(2627,1550.60864258,-1699.95617676,1723.50341797,0.00000000,0.00000000,0.00000000); //object(gym_treadmill) (2)
+CreateObject(2628,1554.08422852,-1705.55932617,1723.50341797,0.00000000,0.00000000,180.00000000); //object(gym_bench2) (1)
+CreateObject(2630,1550.83874512,-1702.98815918,1723.50341797,0.00000000,0.00000000,88.00000000); //object(gym_bike) (2)
+CreateObject(2629,1552.46496582,-1705.62561035,1723.50341797,0.00000000,0.00000000,178.00000000); //object(gym_bench1) (1)
+CreateObject(2964,1560.83593750,-1705.22851562,1723.50341797,0.00000000,0.00000000,270.00000000); //object(k_pooltablesm) (2)
+CreateObject(1724,1563.44226074,-1708.23388672,1723.50341797,0.00000000,0.00000000,180.00000000); //object(mrk_seating1b) (1)
+CreateObject(1723,1561.58520508,-1708.21264648,1723.50341797,0.00000000,0.00000000,180.00000000); //object(mrk_seating1) (1)
+CreateObject(1724,1559.09094238,-1702.58728027,1723.50341797,0.00000000,0.00000000,0.00000000); //object(mrk_seating1b) (2)
+CreateObject(1723,1560.88977051,-1702.58276367,1723.50341797,0.00000000,0.00000000,0.00000000); //object(mrk_seating1) (2)
+CreateObject(3003,1560.84667969,-1704.82128906,1724.43383789,0.00000000,0.00000000,0.00000000); //object(k_poolballcue) (1)
+CreateObject(3004,1560.46118164,-1705.93640137,1724.39538574,0.00000000,0.00000000,0.00000000); //object(k_poolq2) (1)
+CreateObject(3004,1561.16760254,-1705.94580078,1724.39538574,0.00000000,0.00000000,0.00000000); //object(k_poolq2) (2)
+CreateObject(1721,1554.21789551,-1690.89025879,1722.10498047,0.00000000,0.00000000,0.00000000); //object(est_chair1) (9)
+CreateObject(1721,1554.92248535,-1690.89025879,1722.10498047,0.00000000,0.00000000,0.00000000); //object(est_chair1) (10)
+CreateObject(1721,1555.62707520,-1690.89025879,1722.10498047,0.00000000,0.00000000,0.00000000); //object(est_chair1) (11)
+CreateObject(1721,1556.33166504,-1690.89025879,1722.10498047,0.00000000,0.00000000,0.00000000); //object(est_chair1) (12)
+CreateObject(1721,1557.03625488,-1690.89025879,1722.10498047,0.00000000,0.00000000,0.00000000); //object(est_chair1) (13)
+CreateObject(1721,1557.74084473,-1690.89025879,1722.10498047,0.00000000,0.00000000,0.00000000); //object(est_chair1) (14)
+CreateObject(1721,1553.94409180,-1678.32104492,1722.10498047,0.00000000,0.00000000,180.00000000); //object(est_chair1) (15)
+CreateObject(1721,1553.23950195,-1678.32104492,1722.10498047,0.00000000,0.00000000,180.00000000); //object(est_chair1) (16)
+CreateObject(1721,1552.53491211,-1678.32104492,1722.10498047,0.00000000,0.00000000,180.00000000); //object(est_chair1) (17)
+CreateObject(1721,1551.83032227,-1678.32104492,1722.10498047,0.00000000,0.00000000,180.00000000); //object(est_chair1) (18)
+CreateObject(2222,1563.28967285,-1696.23547363,1722.78918457,0.00000000,0.00000000,119.99813843); //object(rustyhigh) (3)
+CreateObject(1720,1561.67736816,-1697.38964844,1722.10498047,0.00000000,0.00000000,128.00000000); //object(rest_chair) (1)
+CreateObject(1720,1561.54614258,-1696.07861328,1722.10498047,0.00000000,0.00000000,77.99621582); //object(rest_chair) (2)
+CreateObject(1720,1564.96582031,-1697.37622070,1722.10498047,0.00000000,0.00000000,223.99195862); //object(rest_chair) (3)
+CreateObject(1720,1564.94604492,-1695.55664062,1722.10498047,0.00000000,0.00000000,293.98925781); //object(rest_chair) (4)
+CreateObject(3089,1559.20605469,-1706.66113281,1728.91784668,0.00000000,0.00000000,180.00000000); //object(ab_casdorlok) (7)
+CreateObject(2886,1558.00878906,-1706.68457031,1729.18823242,0.00000000,0.00000000,0.00000000); //object(sec_keypad) (3)
+CreateObject(2886,1557.95312500,-1706.63378906,1729.18823242,0.00000000,0.00000000,180.00000000); //object(sec_keypad) (4)
+CreateObject(1502,1555.56237793,-1703.38684082,1727.70654297,0.00000000,0.00000000,180.00000000); //object(gen_doorint04) (1)
+CreateObject(1721,1551.09704590,-1697.89147949,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (19)
+CreateObject(1721,1552.02819824,-1697.89147949,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (20)
+CreateObject(1721,1552.95935059,-1697.89147949,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (21)
+CreateObject(1721,1553.89050293,-1697.89147949,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (22)
+CreateObject(1721,1554.82165527,-1697.89147949,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (23)
+CreateObject(1721,1551.09704590,-1699.12011719,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (25)
+CreateObject(1721,1551.09704590,-1700.34875488,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (26)
+CreateObject(1721,1552.02819824,-1699.12011719,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (27)
+CreateObject(1721,1552.95935059,-1699.12011719,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (28)
+CreateObject(1721,1553.89050293,-1699.12011719,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (29)
+CreateObject(1721,1554.82165527,-1699.12011719,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (30)
+CreateObject(1721,1552.01184082,-1700.34875488,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (31)
+CreateObject(1721,1552.91369629,-1700.34875488,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (32)
+CreateObject(1721,1553.85461426,-1700.34875488,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (33)
+CreateObject(1721,1554.80700684,-1700.34875488,1727.70654297,0.00000000,0.00000000,180.00000000); //object(est_chair1) (34)
+CreateObject(1999,1558.81494141,-1710.68615723,1727.72570801,0.00000000,0.00000000,0.00000000); //object(officedesk2) (1)
+CreateObject(1999,1559.82641602,-1709.67822266,1727.72570801,0.00000000,0.00000000,180.00000000); //object(officedesk2) (2)
+CreateObject(1957,1558.89172363,-1710.63037109,1728.62817383,0.00000000,0.00000000,0.00000000); //object(turn_tablel) (1)
+CreateObject(1957,1559.70385742,-1709.80883789,1728.62817383,0.00000000,0.00000000,0.00000000); //object(turn_tablel) (2)
+CreateObject(2008,1558.86535645,-1714.37780762,1727.69921875,0.00000000,0.00000000,0.00000000); //object(officedesk1) (1)
+CreateObject(2008,1559.88085938,-1713.35485840,1727.69921875,0.00000000,0.00000000,180.00000000); //object(officedesk1) (2)
+CreateObject(1719,1559.74975586,-1713.63220215,1728.55371094,0.00000000,0.00000000,0.00000000); //object(low_console) (2)
+CreateObject(1719,1559.13940430,-1714.31591797,1728.55371094,0.00000000,0.00000000,182.00000000); //object(low_console) (3)
+CreateObject(1663,1559.01013184,-1708.35021973,1728.16674805,0.00000000,0.00000000,0.00000000); //object(swivelchair_b) (3)
+CreateObject(1663,1559.00976562,-1712.20214844,1728.16674805,0.00000000,0.00000000,0.00000000); //object(swivelchair_b) (5)
+CreateObject(1663,1559.89294434,-1711.88171387,1728.16674805,0.00000000,0.00000000,180.00000000); //object(swivelchair_b) (6)
+CreateObject(1663,1559.89294434,-1715.51074219,1728.16674805,0.00000000,0.00000000,180.00000000); //object(swivelchair_b) (7)
+CreateObject(14532,1550.55200195,-1702.15393066,1728.90014648,0.00000000,0.00000000,0.00000000); //object(tv_stand_driv) (1)
+CreateObject(2198,1557.56054688,-1696.47412109,1727.70654297,0.00000000,0.00000000,180.00000000); //object(med_office2_desk_3) (5)
+CreateObject(1806,1557.24121094,-1694.88769531,1727.70654297,0.00000000,0.00000000,180.00000000); //object(med_office_chair) (3)
+CreateObject(1806,1556.37817383,-1694.88806152,1727.70654297,0.00000000,0.00000000,180.00000000); //object(med_office_chair) (4)
+CreateObject(2191,1559.04687500,-1698.02734375,1727.70654297,0.00000000,0.00000000,180.00000000); //object(med_office2_cab) (1)
+CreateObject(2191,1557.22558594,-1698.02819824,1727.70654297,0.00000000,0.00000000,180.00000000); //object(med_office2_cab) (2)
+CreateObject(2172,1556.52722168,-1692.30725098,1727.70654297,0.00000000,0.00000000,0.00000000); //object(med_office2_desk_1) (2)
+CreateObject(2198,1558.88488770,-1693.92224121,1727.69921875,0.00000000,0.00000000,0.00000000); //object(med_office2_desk_3) (6)
+CreateObject(1806,1559.80175781,-1695.70605469,1727.70654297,0.00000000,0.00000000,0.00000000); //object(med_office_chair) (6)
+CreateObject(1806,1558.99414062,-1695.70690918,1727.70654297,0.00000000,0.00000000,0.00000000); //object(med_office_chair) (7)
+CreateObject(2356,1557.01452637,-1693.47875977,1727.70654297,0.00000000,0.00000000,0.00000000); //object(police_off_chair) (1)
+CreateObject(1502,1560.51989746,-1696.82812500,1727.70654297,0.00000000,0.00000000,270.00000000); //object(gen_doorint04) (2)
+CreateObject(1502,1560.51965332,-1699.01000977,1727.70654297,0.00000000,0.00000000,270.00000000); //object(gen_doorint04) (3)
+CreateObject(2205,1556.44238281,-1701.60498047,1727.70654297,0.00000000,0.00000000,0.00000000); //object(med_office8_desk_1) (1)
+CreateObject(2205,1557.80004883,-1700.58251953,1727.70654297,0.00000000,0.00000000,180.00000000); //object(med_office8_desk_1) (2)
+CreateObject(1671,1557.09423828,-1702.85571289,1728.15942383,0.00000000,0.00000000,180.00000000); //object(swivelchair_a) (2)
+CreateObject(2190,1556.81738281,-1701.32226562,1728.62207031,0.00000000,0.00000000,0.00000000); //object(pc_1) (3)
+CreateObject(2201,1558.17187500,-1701.39941406,1728.64306641,0.00000000,0.00000000,0.00000000); //object(printer_1) (1)
+CreateObject(14532,1559.96728516,-1701.01232910,1728.68188477,0.00000000,0.00000000,90.00000000); //object(tv_stand_driv) (2)
+CreateObject(2854,1557.40283203,-1700.78625488,1728.82421875,0.00000000,0.00000000,0.00000000); //object(gb_bedmags04) (1)
+CreateObject(2164,1560.37548828,-1702.00122070,1727.70654297,0.00000000,0.00000000,270.00000000); //object(med_office_unit_5) (1)
+CreateObject(14782,1566.07714844,-1670.93994141,1723.12097168,0.00000000,0.00000000,0.00000000); //object(int3int_boxing30) (1)
+CreateObject(14782,1566.23303223,-1673.43151855,1723.12097168,0.00000000,0.00000000,180.00000000); //object(int3int_boxing30) (2)
+CreateObject(1502,1562.14941406,-1672.91113281,1722.10498047,0.00000000,0.00000000,90.00000000); //object(gen_doorint04) (4)
+CreateObject(1502,1562.17163086,-1676.61279297,1722.10498047,0.00000000,0.00000000,90.00000000); //object(gen_doorint04) (5)
+CreateObject(1806,1556.59399414,-1699.10717773,1727.70654297,0.00000000,0.00000000,180.00000000); //object(med_office_chair) (3)
+CreateObject(1806,1557.70556641,-1699.10717773,1727.70654297,0.00000000,0.00000000,180.00000000); //object(med_office_chair) (3)
+CreateObject(1337,1553.31347656,-1788.25488281,1691.96240234,0.00000000,0.00000000,0.00000000); //object(binnt07_la) (4)
+CreateObject(2921,1561.95996094,-1690.80346680,1726.33288574,0.00000000,0.00000000,0.00000000); //object(kmb_cam) (1)
+CreateObject(2921,1563.37878418,-1691.18786621,1726.35595703,0.00000000,0.00000000,270.00000000); //object(kmb_cam) (2)
+CreateObject(2921,1558.77795410,-1651.90881348,1720.93408203,0.00000000,0.00000000,90.00000000); //object(kmb_cam) (3)
+CreateObject(2921,1559.52758789,-1652.37634277,1721.13623047,0.00000000,0.00000000,180.00000000); //object(kmb_cam) (4)
+CreateObject(2921,1570.85229492,-1671.30017090,1732.16455078,0.00000000,0.00000000,88.00000000); //object(kmb_cam) (5)
+CreateObject(2921,1556.69494629,-1677.58532715,1732.26562500,0.00000000,0.00000000,270.00000000); //object(kmb_cam) (6)
+CreateObject(2921,1563.11999512,-1709.06311035,1726.13134766,0.00000000,0.00000000,94.00000000); //object(kmb_cam) (7)
+CreateObject(1502,1558.85852051,-1663.34301758,1722.10498047,0.00000000,0.00000000,270.00000000); //object(gen_doorint04) (4)
+CreateObject(2174,1566.30053711,-1691.22094727,1729.10498047,0.00000000,0.00000000,180.00000000); //object(med_office4_desk_2) (1)
+CreateObject(2171,1563.73400879,-1691.14648438,1729.10498047,0.00000000,0.00000000,180.00000000); //object(med_office4_desk_1) (1)
+CreateObject(2161,1565.44726562,-1687.77062988,1729.11706543,0.00000000,0.00000000,0.00000000); //object(med_office_unit_4) (1)
+CreateObject(2162,1563.05249023,-1687.76892090,1729.10498047,0.00000000,0.00000000,0.00000000); //object(med_office_unit_1) (1)
+CreateObject(2165,1565.22155762,-1689.37512207,1729.10498047,0.00000000,0.00000000,270.00000000); //object(med_office_desk_1) (1)
+CreateObject(1671,1563.93786621,-1689.79919434,1729.61035156,0.00000000,0.00000000,90.00000000); //object(swivelchair_a) (3)
+CreateObject(1663,1566.73889160,-1689.08374023,1729.61035156,0.00000000,0.00000000,300.00000000); //object(swivelchair_b) (4)
+CreateObject(1663,1566.76611328,-1690.18054199,1729.61035156,0.00000000,0.00000000,240.00000000); //object(swivelchair_b) (8)
+CreateObject(2161,1565.46435547,-1687.51940918,1729.11706543,0.00000000,0.00000000,180.00000000); //object(med_office_unit_4) (3)
+CreateObject(2166,1563.80944824,-1687.02160645,1729.10498047,0.00000000,0.00000000,90.00000000); //object(med_office_desk_2) (1)
+CreateObject(2174,1564.89343262,-1684.32934570,1729.15502930,0.00000000,0.00000000,0.00000000); //object(med_office4_desk_2) (2)
+CreateObject(14532,1563.17456055,-1684.57739258,1730.11572266,0.00000000,0.00000000,215.00000000); //object(tv_stand_driv) (3)
+CreateObject(2165,1565.34667969,-1685.17590332,1729.15478516,0.00000000,0.00000000,270.00000000); //object(med_office_desk_1) (2)
+CreateObject(1671,1564.20605469,-1685.72753906,1729.61035156,0.00000000,0.00000000,90.00000000); //object(swivelchair_a) (4)
+CreateObject(1663,1566.61486816,-1685.55395508,1729.61035156,0.00000000,0.00000000,270.00000000); //object(swivelchair_b) (9)
+CreateObject(2186,1565.69592285,-1677.11560059,1729.09509277,0.00000000,0.00000000,270.00000000); //object(photocopier_1) (3)
+CreateObject(2186,1563.54333496,-1678.27795410,1729.09509277,0.00000000,0.00000000,90.00000000); //object(photocopier_1) (5)
+CreateObject(2197,1568.72607422,-1664.72607422,1729.10498047,0.00000000,0.00000000,0.00000000); //object(filling_cabinet) (1)
+CreateObject(2007,1564.67858887,-1676.23291016,1729.00390625,0.00000000,0.00000000,0.00000000); //object(filing_cab_nu01) (1)
+CreateObject(2007,1565.69421387,-1679.10168457,1729.00390625,0.00000000,0.00000000,180.00000000); //object(filing_cab_nu01) (1)
+CreateObject(2007,1563.36865234,-1679.10168457,1729.00390625,0.00000000,0.00000000,180.00000000); //object(filing_cab_nu01) (1)
+CreateObject(2008,1552.15344238,-1668.14440918,1722.10498047,0.00000000,0.00000000,0.00000000); //object(officedesk1) (3)
+CreateObject(2008,1555.19653320,-1668.14440918,1722.10498047,0.00000000,0.00000000,0.00000000); //object(officedesk1) (4)
+CreateObject(2008,1552.96813965,-1664.46997070,1722.10498047,0.00000000,0.00000000,180.00000000); //object(officedesk1) (5)
+CreateObject(2008,1556.25537109,-1664.46997070,1722.10498047,0.00000000,0.00000000,180.00000000); //object(officedesk1) (6)
+CreateObject(1806,1556.27856445,-1669.21301270,1722.10498047,0.00000000,0.00000000,0.00000000); //object(med_office_chair) (2)
+CreateObject(1806,1553.14367676,-1669.21301270,1722.10498047,0.00000000,0.00000000,0.00000000); //object(med_office_chair) (5)
+CreateObject(1806,1555.33593750,-1663.33398438,1722.10498047,0.00000000,0.00000000,180.00000000); //object(med_office_chair) (8)
+CreateObject(1806,1551.99780273,-1663.32373047,1722.10498047,0.00000000,0.00000000,180.00000000); //object(med_office_chair) (10)
+CreateObject(2310,1555.25109863,-1666.83703613,1722.71142578,0.00000000,0.00000000,90.00000000); //object(mike_din_chair) (2)
+CreateObject(2310,1552.11328125,-1666.83703613,1722.71142578,0.00000000,0.00000000,90.00000000); //object(mike_din_chair) (3)
+CreateObject(2310,1552.75549316,-1665.69445801,1722.71142578,0.00000000,0.00000000,270.00000000); //object(mike_din_chair) (4)
+CreateObject(2310,1555.99475098,-1665.69445801,1722.71142578,0.00000000,0.00000000,270.00000000); //object(mike_din_chair) (5)
+CreateObject(11631,1552.77868652,-1676.85302734,1723.35778809,0.00000000,0.00000000,180.00000000); //object(ranch_desk) (1)
+CreateObject(1806,1552.12463379,-1675.85559082,1722.11193848,0.00000000,0.00000000,178.00000000); //object(med_office_chair) (1)
+CreateObject(11631,1557.91186523,-1672.41625977,1723.35778809,0.00000000,0.00000000,270.00000000); //object(ranch_desk) (1)
+CreateObject(1806,1556.80505371,-1673.08679199,1722.11193848,0.00000000,0.00000000,270.00000000); //object(med_office_chair) (1)
+CreateObject(931,1560.20507812,-1710.06445312,1724.51416016,0.00000000,0.00000000,0.00000000); //object(rack3) (1)
+CreateObject(931,1562.64257812,-1712.62792969,1724.51416016,0.00000000,0.00000000,270.00000000); //object(rack3) (2)
+CreateObject(1271,1562.61511230,-1710.03332520,1723.85656738,0.00000000,0.00000000,0.00000000); //object(gunbox) (1)
+CreateObject(3089,1562.24316406,-1714.04785156,1724.83239746,0.00000000,0.00000000,180.00000000); //object(ab_casdorlok) (4)
+CreateObject(2886,1560.97790527,-1714.12109375,1725.24279785,0.00000000,0.00000000,0.00000000); //object(sec_keypad) (1)
+CreateObject(2886,1560.94592285,-1713.98901367,1725.24279785,0.00000000,0.00000000,180.00000000); //object(sec_keypad) (1)
+CreateObject(1502,1565.73889160,-1714.00488281,1723.50341797,0.00000000,0.00000000,180.00000000); //object(gen_doorint04) (6)
+CreateObject(2191,1558.14672852,-1656.89648438,1722.10498047,0.00000000,0.00000000,270.00000000); //object(med_office2_cab) (3)
+CreateObject(2191,1557.18811035,-1661.62756348,1722.10498047,0.00000000,0.00000000,180.00000000); //object(med_office2_cab) (4)
+CreateObject(2191,1550.59179688,-1657.45019531,1722.10498047,0.00000000,0.00000000,90.00000000); //object(med_office2_cab) (5)
+CreateObject(2191,1552.55883789,-1652.45312500,1722.10498047,0.00000000,0.00000000,0.00000000); //object(med_office2_cab) (6)
+CreateObject(2198,1552.57580566,-1659.56811523,1722.10498047,0.00000000,0.00000000,0.00000000); //object(med_office2_desk_3) (1)
+CreateObject(1806,1553.57202148,-1658.10363770,1722.10498047,0.00000000,0.00000000,180.00000000); //object(med_office_chair) (8)
+CreateObject(1806,1552.63977051,-1658.05871582,1722.10498047,0.00000000,0.00000000,180.00000000); //object(med_office_chair) (8)
+CreateObject(1806,1553.21130371,-1661.07482910,1722.10498047,0.00000000,0.00000000,0.00000000); //object(med_office_chair) (8)
+CreateObject(2198,1554.92443848,-1655.05273438,1722.10498047,0.00000000,0.00000000,180.00000000); //object(med_office2_desk_3) (2)
+CreateObject(1806,1554.71972656,-1656.46240234,1722.10498047,0.00000000,0.00000000,0.00000000); //object(med_office_chair) (8)
+CreateObject(1806,1553.91113281,-1656.46875000,1722.10498047,0.00000000,0.00000000,0.00000000); //object(med_office_chair) (8)
+CreateObject(1806,1554.21862793,-1653.47058105,1722.10498047,0.00000000,0.00000000,180.00000000); //object(med_office_chair) (8)
+CreateObject(2008,1564.51647949,-1663.24877930,1717.90747070,0.00000000,0.00000000,0.00000000); //object(officedesk1) (7)
+CreateObject(2008,1561.32775879,-1663.24877930,1717.90747070,0.00000000,0.00000000,0.00000000); //object(officedesk1) (9)
+CreateObject(1811,1564.85510254,-1661.63452148,1718.56225586,0.00000000,0.00000000,90.00000000); //object(med_din_chair_5) (1)
+CreateObject(1811,1561.70935059,-1661.63452148,1718.56225586,0.00000000,0.00000000,90.00000000); //object(med_din_chair_5) (2)
+CreateObject(1806,1565.67126465,-1664.52770996,1717.94628906,0.00000000,0.00000000,0.00000000); //object(med_office_chair) (16)
+CreateObject(1806,1562.53649902,-1664.52770996,1717.94628906,0.00000000,0.00000000,0.00000000); //object(med_office_chair) (17)
+CreateObject(2921,1559.92126465,-1665.72412109,1720.67553711,0.00000000,0.00000000,258.00000000); //object(kmb_cam) (8)
+CreateObject(2891,1560.73437500,-1710.38964844,1724.64868164,0.00000000,0.00000000,0.00000000); //object(kmb_packet) (1)
+CreateObject(2901,1562.38977051,-1712.76269531,1723.90124512,0.00000000,0.00000000,270.00000000); //object(kmb_marijuana) (1)
+CreateObject(2915,1555.06225586,-1700.99914551,1723.60351562,0.00000000,0.00000000,270.00000000); //object(kmb_dumbbell2) (1)
+CreateObject(1550,1560.09948730,-1709.87280273,1725.97082520,0.00000000,0.00000000,0.00000000); //object(cj_money_bag) (1)
+CreateObject(2035,1559.82836914,-1710.27172852,1724.71862793,0.00000000,0.00000000,0.00000000); //object(cj_m16) (1)
+CreateObject(2061,1562.53686523,-1712.60485840,1724.93127441,0.00000000,0.00000000,268.00000000); //object(cj_shells1) (1)
+CreateObject(1210,1560.26184082,-1710.08776855,1723.77087402,0.00000000,0.00000000,0.00000000); //object(briefcase) (1)
+CreateObject(2201,1553.80053711,-1675.03710938,1729.88073730,0.00000000,0.00000000,0.00000000); //object(printer_1) (3)
+CreateObject(2201,1568.22265625,-1666.09301758,1729.88073730,0.00000000,0.00000000,70.00000000); //object(printer_1) (5)
+CreateObject(14744,1552.19384766,-1717.90905762,1725.06945801,0.00000000,0.00000000,0.00000000); //object(rybathroom) (1)
+CreateObject(14744,1552.19335938,-1717.80822754,1725.28747559,0.00000000,0.00000000,0.00000000); //object(rybathroom) (2)
+CreateObject(14744,1554.27587891,-1714.96997070,1725.08532715,0.00000000,0.00000000,90.00000000); //object(rybathroom) (3)
+CreateObject(2602,1552.75439453,-1664.32360840,1718.40722656,0.00000000,0.00000000,316.00000000); //object(police_cell_toilet) (1)
+CreateObject(2602,1552.79748535,-1660.47827148,1718.40722656,0.00000000,0.00000000,316.00000000); //object(police_cell_toilet) (2)
+CreateObject(2602,1552.53686523,-1656.51318359,1718.40722656,0.00000000,0.00000000,316.00000000); //object(police_cell_toilet) (3)
+CreateObject(2602,1552.79370117,-1652.37243652,1718.40722656,0.00000000,0.00000000,316.00000000); //object(police_cell_toilet) (4)</pre>
+</div></font></div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1125888">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120143.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1125894"></a>
+<div class="post classic " style="" id="post_1125894">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78102.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78102.html">Jake Winstonn</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 244<br />
+	Threads: 22<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1125894" title="Re: LSPD, completely from scratch">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by Jake Winstonn" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.03.2011, 15:53 <span class="post_edit" id="edited_by_1125894"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1125894">
+		Really Nice Jack,loving what you have done &lt;3
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1125894">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78102.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1125901"></a>
+<div class="post classic " style="" id="post_1125901">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0099/uid-99880.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0099/uid-99880.html">sDAAw</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 40<br />
+	Threads: 1<br />
+	Joined: Jul 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1125901" title="Re: LSPD, completely from scratch">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by sDAAw" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.03.2011, 15:56 <span class="post_edit" id="edited_by_1125901"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1125901">
+		meh.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1125901">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-99880.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1125906"></a>
+<div class="post classic " style="" id="post_1125906">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0112/uid-112942.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0112/uid-112942.html">Thanator</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 66<br />
+	Threads: 17<br />
+	Joined: Dec 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1125906" title="Re: LSPD, completely from scratch">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by Thanator" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.03.2011, 15:58 <span class="post_edit" id="edited_by_1125906"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1125906">
+		Cool interior!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1125906">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-112942.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1125933"></a>
+<div class="post classic " style="" id="post_1125933">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0069/uid-69169.html"><img src="../../assets/uploads/avatars/69169.png" alt="" width="55" height="33" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0069/uid-69169.html">Code8976Man</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 359<br />
+	Threads: 4<br />
+	Joined: Oct 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1125933" title="Respuesta: LSPD, completely from scratch">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by Code8976Man" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.03.2011, 16:14 <span class="post_edit" id="edited_by_1125933"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1125933">
+		I will use it, that's amazing.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1125933">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-69169.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1125966"></a>
+<div class="post classic " style="" id="post_1125966">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120921.html"><img src="../../assets/uploads/avatars/120921.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120921.html">[ProX]BlueFire</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 331<br />
+	Threads: 41<br />
+	Joined: Mar 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1125966" title="Re: LSPD, completely from scratch">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by [ProX]BlueFire" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.03.2011, 16:36 <span class="post_edit" id="edited_by_1125966"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1125966">
+		very nice<br />
+i dont get it...<br />
+what is thet "scrach"?where i download it?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1125966">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120921.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1125986"></a>
+<div class="post classic " style="" id="post_1125986">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0102/uid-102398.html"><img src="../../assets/uploads/avatars/102398.png" alt="" width="55" height="36" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0102/uid-102398.html">Mark_Weston</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 952<br />
+	Threads: 45<br />
+	Joined: Aug 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1125986" title="Re: LSPD, completely from scratch">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by Mark_Weston" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.03.2011, 16:49 <span class="post_edit" id="edited_by_1125986"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1125986">
+		sexy<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>[ProX]BlueFire</strong><br />
+<a href="../../threads/0241/tid-241697.html#pid1125966" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">very nice<br />
+i dont get it...<br />
+what is thet "scrach"?where i download it?</div>
+</td>
+</tr>
+</table>
+</div>download what?<br />
+<br />
+<font size="1">noob</font>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1125986">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-102398.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1126019"></a>
+<div class="post classic " style="" id="post_1126019">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120921.html"><img src="../../assets/uploads/avatars/120921.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120921.html">[ProX]BlueFire</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 331<br />
+	Threads: 41<br />
+	Joined: Mar 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1126019" title="Re: LSPD, completely from scratch">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by [ProX]BlueFire" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.03.2011, 17:05 <span class="post_edit" id="edited_by_1126019"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1126019">
+		1) dont swear...<br />
+2) read !
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1126019">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120921.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1126236"></a>
+<div class="post classic " style="" id="post_1126236">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78102.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78102.html">Jake Winstonn</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 244<br />
+	Threads: 22<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1126236" title="Re: LSPD, completely from scratch">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Jake Winstonn" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.03.2011, 19:31 <span class="post_edit" id="edited_by_1126236"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1126236">
+		Scratch means umm,he mapped from the 0,he re-mapped the interio by him self :P
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1126236">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78102.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1127639"></a>
+<div class="post classic " style="" id="post_1127639">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78102.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78102.html">Jake Winstonn</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 244<br />
+	Threads: 22<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1127639" title="Re: LSPD, completely from scratch">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by Jake Winstonn" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">19.03.2011, 16:14 <span class="post_edit" id="edited_by_1127639"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1127639">
+		I like  that he updated with thos openable doors.<br />
+<br />
+Check the video.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1127639">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78102.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1127647"></a>
+<div class="post classic " style="" id="post_1127647">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0113/uid-113420.html"><img src="../../assets/uploads/avatars/113420.png" alt="" width="41" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0113/uid-113420.html">ricardo178</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,599<br />
+	Threads: 164<br />
+	Joined: Dec 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1127647" title="Re: LSPD, completely from scratch">#11</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 11 by ricardo178" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">19.03.2011, 16:17 <span class="post_edit" id="edited_by_1127647"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1127647">
+		Nice
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1127647">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-113420.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1129904"></a>
+<div class="post classic " style="" id="post_1129904">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120143.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120143.html">JackBauer.</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 21<br />
+	Threads: 2<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1129904" title="Re: LSPD, completely from scratch">#12</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 12 by JackBauer." style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.03.2011, 19:10 <span class="post_edit" id="edited_by_1129904"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1129904">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>[ProX]BlueFire</strong><br />
+<a href="../../threads/0241/tid-241697.html#pid1125966" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">very nice<br />
+i dont get it...<br />
+what is thet "scrach"?where i download it?</div>
+</td>
+</tr>
+</table>
+</div><font face="Arial">You don't need to download it since the object codes are in the topic already.</font>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1129904">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120143.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1130877"></a>
+<div class="post classic " style="" id="post_1130877">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0098/uid-98053.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0098/uid-98053.html">rambq</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 58<br />
+	Threads: 0<br />
+	Joined: Jul 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1130877" title="Re: LSPD, completely from scratch">#13</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 13 by rambq" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.03.2011, 12:52 <span class="post_edit" id="edited_by_1130877"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1130877">
+		Canґt you just make a filterscript please?<br />
+i have no idea how to script that doors <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/><br />
+so if you want to make a fitlerscript then i'm happy it's very nice.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1130877">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-98053.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1133677"></a>
+<div class="post classic " style="" id="post_1133677">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120143.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120143.html">JackBauer.</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 21<br />
+	Threads: 2<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1133677" title="Re: LSPD, completely from scratch">#14</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 14 by JackBauer." style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.03.2011, 13:39 <span class="post_edit" id="edited_by_1133677"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1133677">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>rambq</strong><br />
+<a href="../../threads/0241/tid-241697.html#pid1130877" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Canґt you just make a filterscript please?<br />
+i have no idea how to script that doors <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/><br />
+so if you want to make a fitlerscript then i'm happy it's very nice.</div>
+</td>
+</tr>
+</table>
+</div><font face="Arial">Here you go, <a href="http://pastebin.com/eyPdEzSq" target="_blank">http://pastebin.com/eyPdEzSq</a>.</font>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1133677">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120143.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1133706"></a>
+<div class="post classic " style="" id="post_1133706">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0041/uid-41224.html"><img src="../../assets/uploads/avatars/41224.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0041/uid-41224.html">TPD</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 71<br />
+	Threads: 0<br />
+	Joined: Dec 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1133706" title="Re: LSPD, completely from scratch">#15</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 15 by TPD" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.03.2011, 13:50 <span class="post_edit" id="edited_by_1133706"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1133706">
+		Very nice work <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1133706">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-41224.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1134175"></a>
+<div class="post classic " style="" id="post_1134175">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0052/uid-52068.html"><img src="../../assets/uploads/avatars/52068.png" alt="" width="41" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0052/uid-52068.html">Biesmen</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,057<br />
+	Threads: 90<br />
+	Joined: May 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1134175" title="Re: LSPD, completely from scratch">#16</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 16 by Biesmen" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.03.2011, 18:25 <span class="post_edit" id="edited_by_1134175"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1134175">
+		Nice, but what's the object ID for the lockers?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1134175">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-52068.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1134204"></a>
+<div class="post classic " style="" id="post_1134204">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0003/uid-3965.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0003/uid-3965.html">Skiaffo</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 51<br />
+	Threads: 5<br />
+	Joined: Sep 2006
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1134204" title="Re: LSPD, completely from scratch">#17</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 17 by Skiaffo" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.03.2011, 18:58 <span class="post_edit" id="edited_by_1134204"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1134204">
+		Awesome job. That's some real good mapping.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1134204">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-3965.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1136575"></a>
+<div class="post classic " style="" id="post_1136575">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0052/uid-52068.html"><img src="../../assets/uploads/avatars/52068.png" alt="" width="41" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0052/uid-52068.html">Biesmen</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,057<br />
+	Threads: 90<br />
+	Joined: May 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1136575" title="Re: LSPD, completely from scratch">#18</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 18 by Biesmen" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.03.2011, 12:45 <span class="post_edit" id="edited_by_1136575"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1136575">
+		Jack, how did you disable that you can move your cam through the walls?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1136575">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-52068.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1136764"></a>
+<div class="post classic " style="" id="post_1136764">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0003/uid-3965.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0003/uid-3965.html">Skiaffo</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 51<br />
+	Threads: 5<br />
+	Joined: Sep 2006
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1136764" title="Re: LSPD, completely from scratch">#19</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 19 by Skiaffo" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.03.2011, 15:02 <span class="post_edit" id="edited_by_1136764"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1136764">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Biesmen</strong><br />
+<a href="../../threads/0241/tid-241697.html#pid1136575" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Jack, how did you disable that you can move your cam through the walls?</div>
+</td>
+</tr>
+</table>
+</div>Simply the objects are inside the +3000, -3000, +3000, -3000 SA square.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1136764">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-3965.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1137540"></a>
+<div class="post classic " style="" id="post_1137540">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0096/uid-96387.html"><img src="../../assets/uploads/avatars/96387.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0096/uid-96387.html">ToPhrESH</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 518<br />
+	Threads: 63<br />
+	Joined: Jun 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0241/tid-241697.html#pid1137540" title="Re: LSPD, completely from scratch">#20</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 20 by ToPhrESH" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.03.2011, 04:17 <span class="post_edit" id="edited_by_1137540"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1137540">
+		Not bad for scratch. <br />
+Bet alot of new RP servers will be using this.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1137540">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-96387.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0241/tid-241697.html">Next Oldest</a> | <a href="../../threads/0241/tid-241697.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="241697" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (3):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0241/tid-241697-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0241/tid-241697-page-3.html" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0241/tid-241697-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" selected="selected">---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/64.html">Maps</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

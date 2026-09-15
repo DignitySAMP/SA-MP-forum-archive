@@ -1,0 +1,1450 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Архитектура проекта</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "4404d37b19dc4a6426210404ea46766a";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Д0брого времени суток. В данном туториале я бы хотел рассказать об одном методе как можно устраивать внутренн" />
+<link rel="canonical" href="../../threads/0534/tid-534434.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="4404d37b19dc4a6426210404ea46766a" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/9.html">Non-English</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/33.html">Languages</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/32.html">Русский/Russian</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/66.html">Релизы/Releases</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0534/tid-534434.html#pid3179420">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Архитектура проекта
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid3179420"></a>
+<div class="post classic " style="" id="post_3179420">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0104/uid-104339.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0104/uid-104339.html">White_116</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,495<br />
+	Threads: 20<br />
+	Joined: Sep 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0534/tid-534434.html#pid3179420" title="Архитектура проекта">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by White_116" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.08.2014, 19:47 <span class="post_edit" id="edited_by_3179420"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3179420">
+		<div align="center"><b><font color="DarkOrange">Д0брого времени суток. </font></b></div>В данном туториале я бы хотел рассказать об одном методе как можно устраивать внутреннюю часть вашего SA-MP проекта. Как известно большая часть скриптеров хранят свои режимы всего в одном .pwn файле. На самом деле, это очень не правильное решение. Потому что, при увеличении количества кода проекта, его сложность в дальнейшей модификации значительно усложняется. Чтобы избежать значительного усложнения проекта при его модификации, вам достаточно правильно спроектировать архитектуру вашего проекта. Многие кто разбивают мод по инклудам сталкиваются с проблемой,  связать все части в одну систему. И тут начинается подключение инклудов в строгом прядке, переброс функций, создание промежуточных инклудов а иногда вовсе скриптеры входят в тупик. Как же избежать таких мучений и тупиков? - спросите вы, для этого в других языках программирования существуют:<br />
+<a href="https://ru.wikipedia.org/wiki/Заголовочный_файл" target="_blank"><b><font size="3"><u>Заголовочные файлы</u></font></b></a> Советую почитать тем, кто не знаком с ними, что бы в дальнейшем не было недопонимания.<br />
+<br />
+<font color="Red"><b>Внимание!</b></font> Если вы пользуетесь <b>Pawno</b>, то ниже предоставленный метод работать не будет. Данный метод работает на Notepad++<br />
+О том, как настроить Notepad++ вы узнаете тут: <a href="../../threads/0174/tid-174046.html" target="_blank"> <u><font size="3"><b>PAWN for SA-MP in Notepad++</b></font></u></a><br />
+<br />
+<br />
+<b><font size="5"><font color="Green">&gt;&gt;Часть Первая</font></font></b><br />
+<br />
+Для начала ознакомлю Вас с методом проектирования архитектуры.<br />
+Давайте создадим небольшой проект. Создадим папочку TestProject в любом удобном для вас месте.<br />
+В данной папочке создадим два файла, они будут главными файлами проекта, главные файлы проекта должны иметь формат "<b><font color="Magenta"><font size="4">_</font></font>*.*</b>":<br />
+<b>_main.h</b>; -Заголовочный файл, в нём мы будем указывать явные зависимости (строгий порядок подключений хидеров <b>*.h</b>)<br />
+<b>_main.pwn</b>; - Файл кода, в нём мы будем указывать явные зависимости (строгий порядок подключений файлов кода <b>*.pwn</b>)<br />
+<br />
+<b>_main.h:</b><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:119px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#if !defined _MAIN_H_</span><br/><span style="color: #2222AA;">#define _MAIN_H_</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#include &lt;a_samp&gt; //Явная зависимость</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#endif</span></div></div></pre>
+</div>
+<b>_main.pwn</b><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:151px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include &lt;stdafx.h&gt; //Предварительно откомпилированный заголовок</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#if !defined _MAIN_PWN_</span><br/><span style="color: #2222AA;">#define _MAIN_PWN_</span><br/><span style="color: #228822;">//==============================================================================</span><br/>main<span style="color: #000000;">(</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><span style="color: #000000;">}</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#endif</span></div></div></pre>
+</div>
+Создадим две папки:<br />
+<b>_Includes;</b> - В данную папку мы будем помещать инклуды других разработчиков но в формате <b>*.h</b>, например: streamer.h; mysql.h; Нужно это для того, чтобы не объявлять явные зависимости и не засорять компилятор.<br />
+<b>Source;</b> - В данной папке будут располагаться ресурсы нашего мода.<br />
+<br />
+Напишем не большой мод, будем загружать и выгружать дома и бизнесы. Так же дома и бизнесы будут дробится на разные подтипы со своим функционалом.<br />
+Перейдём в папку <b>Source</b>, создаём файлы:<br />
+<b>Callback.h:</b><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:119px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#if !defined _CALLBACK_H_</span><br/><span style="color: #2222AA;">#define _CALLBACK_H_</span><br/><span style="color: #228822;">//==============================================================================</span><br/><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#endif</span></div></div></pre>
+</div>
+<b>Callback.pwn:</b><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:311px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#if !defined _CALLBACK_PWN_</span><br/><span style="color: #2222AA;">#define _CALLBACK_PWN_</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222BB;">public</span> OnGameModeInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    LoadHouse<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Загрузим дома</span><br/>    LoadBiznes<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Загрузим бизнесы</span><br/>    reutrn <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222BB;">public</span> OnGameModeExit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    UnLoadHouse<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Выгрузим дома</span><br/>    UnLoadBiznes<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Выгрузим бизнесы</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#endif</span></div></div></pre>
+</div>
+Создадим папки: <b>House; Biznes;</b> В них создадим по два файла:<br />
+<i>TestProject/Source/House/House.h; TestProject/Source/House/House.pwn;<br />
+  TestProject/Source/Biznes/Biznes.h; TestProject/Source/Biznes/Biznes.pwn;</i><br />
+В папках две подпапки: <b>Type_0; Type_1;</b><br />
+В подпапках по два файла, уже наверное догадались какие <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/><br />
+<i>TestProject/Source/House/Type_0/House_Type_0.h<br />
+  TestProject/Source/House/Type_0/House_Type_0.pwn</i><br />
+Аналогично для Type_1 и бизнеса.<br />
+<br />
+Для примера опишем только дома. Перейдем в папку: <b>House</b><br />
+<b>House.h:</b><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:231px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#if !defined _HOUSE_H_</span><br/><span style="color: #2222AA;">#define _HOUSE_H_</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#define MAX_HOUSE           5</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222BB;">new</span> House_Count <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>;                <span style="color: #228822;">//Счетчик количества домов</span><br/><span style="color: #2222BB;">new</span> House_DB_ID<span style="color: #000000;">[</span>MAX_HOUSE<span style="color: #000000;">]</span>;         <span style="color: #228822;">//Каждый дом запоминает ИД в Базе Данных</span><br/><span style="color: #2222BB;">new</span> House_Type<span style="color: #000000;">[</span>MAX_HOUSE<span style="color: #000000;">]</span>;          <span style="color: #228822;">//Каждый дом запоминает тип</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222BB;">forward</span> LoadHouse<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">forward</span> UnLoadHouse<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#endif</span></div></div></pre>
+</div>
+<b>House.pwn:</b><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#if !defined _HOUSE_PWN_</span><br/><span style="color: #2222AA;">#define _HOUSE_PWN_</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222BB;">public</span> LoadHouse<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> MAX_HOUSE; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Побежим по всем домам</span><br/>    <span style="color: #000000;">{</span><br/>        House_DB_ID<span style="color: #000000;">[</span>House_Count<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> i; <span style="color: #228822;">//Запомним ид БД</span><br/>        House_Type<span style="color: #000000;">[</span>House_Count<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">random</span><span style="color: #000000;">(</span><span style="color: #000000;">2</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Запомним тип дома</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>House_Type<span style="color: #000000;">[</span>House_Count<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Если тип дома равен 0</span><br/>        <span style="color: #000000;">{</span><br/>            House_Create_Type_0<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Вызвать создание 0 типа</span><br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>House_Type<span style="color: #000000;">[</span>House_Count<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Если тип дома равен 1</span><br/>        <span style="color: #000000;">{</span><br/>            House_Create_Type_1<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Вызвать создание 1 типа</span><br/>        <span style="color: #000000;">}</span><br/>        House_Count<span style="color: #000000;">++</span>; <span style="color: #228822;">//Количество домов увеличилось</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> UnLoadHouse<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> House_Count; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Бежим по всем домам</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>House_Type<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Если тип дома равен 0</span><br/>        <span style="color: #000000;">{</span><br/>            House_Destroy_Type_0<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Вызвать разрушение 0 типа</span><br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>House_Type<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Если тип дома равен 1</span><br/>        <span style="color: #000000;">{</span><br/>            House_Destroy_Type_1<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Вызвать разрушение 1 типа</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#endif</span></div></div></pre>
+</div>Как видим, мы ничего не подключаем, нам не нужно задумываться о том, что у нас не объявлены переменные в зоне видимости файла, или не подключен какой либо из хидеров, мы просто пишем код.<br />
+Удобно? Надеюсь что так и есть. Давайте продолжим, перейдём в папку:<b>TestProject/Source/House/Type_0/</b><br />
+<br />
+<b>House_Type_0.h:</b><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:119px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#if !defined _HOUSE_TYPE_0_H_</span><br/><span style="color: #2222AA;">#define _HOUSE_TYPE_0_H_</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222BB;">new</span> House_Type_0_Count <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>;<br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#endif</span></div></div></pre>
+</div><b>House_Type_0.pwn:</b><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:279px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#if !defined _HOUSE_TYPE_0_PWN_</span><br/><span style="color: #2222AA;">#define _HOUSE_TYPE_0_PWN_</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222BB;">stock</span> House_Create_Type_0<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    House_Type_0_Count<span style="color: #000000;">++</span>;<br/>    <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Дом тип 0, Меня уже: %d"</span>, House_Type_0_Count<span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">stock</span> House_Destroy_Type_0<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    House_Type_0_Count<span style="color: #000000;">--</span>;<br/>    <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Дом тип 0, Меня осталось: %d"</span>, House_Type_0_Count<span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#endif</span></div></div></pre>
+</div>Даже функция <b>stock</b> находясь на уровень ниже файла <b>House.pwn</b> видна.<br />
+<br />
+Многие скажут, что это полная ересь, что оно даже компилироваться не будет. Да и вообще так нельзя делать.<br />
+Скрывать не буду, да так и есть, обычным методом данный проект не скомпилировать. Но вы наверное заметили , вначале мы используем какой-то там <b>#include &lt;stdafx.h&gt;</b> и мы нигде его не видели.<br />
+Об этом я вам сейчас расскажу и расскажу почему данный метод не работает на <b>Pawno</b>. <b>Pawno</b> - деревянный.<br />
+<br />
+<b><font size="5"><font color="Green">&gt;&gt;Часть вторая</font></font></b><br />
+<br />
+Вот мы и разобрались с архитектурой будущего проекта, но многое осталось не ясным, чтож, раскрываю карты господа.<br />
+<b>#include &lt;stdafx.h&gt;</b> - является результатом сборки, которая происходит перед компиляцией всего проекта и имеет следующий вид.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:375px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#if !defined _stdafx_h_</span><br/><span style="color: #2222AA;">#define _stdafx_h_</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#include "C:\TestProject\_main.h"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\Callback.h"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\Biznes\Biznes.h"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\Biznes\Type_0\Biznes_Type_0.h"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\Biznes\Type_1\Biznes_Type_1.h"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\House\House.h"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\House\Type_0\House_Type_0.h"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\House\Type_1\House_Type_1.h"</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#include "C:\TestProject\_main.pwn"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\Callback.pwn"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\Biznes\Biznes.pwn"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\Biznes\Type_0\Biznes_Type_0.pwn"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\Biznes\Type_1\Biznes_Type_1.pwn"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\House\House.pwn"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\House\Type_0\House_Type_0.pwn"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\House\Type_1\House_Type_1.pwn"</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#endif</span></div></div></pre>
+</div>
+Как видно из алгоритма, он в начале собирает все хидеры а дальше идёт сборка файлов кода, в результате все наши массивы, дефайны и т.п. находятся всегда вверху.<br />
+#include <b>"C:\TestProject\_main.h"</b> - так как этот файл у нас в сборке всегда первый, то мы можем прописать в нём исключения: Явные зависимости. Пример:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:167px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#if !defined _MAIN_H_</span><br/><span style="color: #2222AA;">#define _MAIN_H_</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#include &lt;a_samp&gt; //Явная зависимость</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\Biznes\Biznes.h"</span><br/><span style="color: #2222AA;">#include "C:\TestProject\Source\Callback.h" // Callback.h явно зависит от Biznes.h и теперь всё в порядке, Такие зависимости могут вызывать макросы</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222AA;">#endif</span></div></div></pre>
+</div>Тоже самое происходит с <b>#include "C:\TestProject\_main.pwn"</b>, поэтому в данном файле не рекомендую писать код.<br />
+Вы наверное подумали, что <b>stdafx.h</b> нужно постоянно собирать вручную и при каждом изменении архитектуры изменять его - конечно же нет, хотя если вам не лень, то можно.<br />
+<br />
+Для начала вам нужно написать bat файл сборщика... шучу я его уже написал. Создаём <b>в папке с компилятором</b> файл: <b>Compiler.bat</b>, правой кнопкой по файлу -&gt; изменить, вставляем ниже приведённый код. Вам также доступны некоторые настройки самого bat файла.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">@</span>rem Нужно указать расширения файлов<span style="color: #000000;">:</span> <br/><span style="color: #000000;">@</span>rem header <span style="color: #000000;">-</span> заголовочный файл, хранит переменные и forward<span style="color: #000000;">-</span>ы<br/><span style="color: #000000;">@</span>rem source <span style="color: #000000;">-</span> файл кода, хранит код программы, stock<span style="color: #000000;">-</span>и и public<span style="color: #000000;">-</span>и<br/><span style="color: #000000;">@</span>rem stdafx <span style="color: #000000;">-</span> предкомпилированный заголовок, в нём собираются все header и source файлы<br/><span style="color: #000000;">@</span>rem move_to <span style="color: #000000;">-</span> переместит скомпилированный файл в указанную директорию.<br/><span style="color: #000000;">@</span>set header<span style="color: #000000;">=</span>h<br/><span style="color: #000000;">@</span>set source<span style="color: #000000;">=</span>pwn<br/><span style="color: #000000;">@</span>set stdafx<span style="color: #000000;">=</span>stdafx<br/><span style="color: #000000;">@</span>set move_to<span style="color: #000000;">=</span>\<br/><br/><span style="color: #000000;">@</span>chcp <span style="color: #000000;">65001</span><span style="color: #000000;">&gt;</span>nul<br/><span style="color: #000000;">@</span>rem Запоминаем и выводим время старта компиляции<br/><span style="color: #000000;">@</span>setlocal EnableDelayedExpansion<br/><span style="color: #000000;">@</span>set t0<span style="color: #000000;">=!</span>time<span style="color: #000000;">!</span><br/><span style="color: #000000;">@</span>echo Время запуска<span style="color: #000000;">:</span>    <span style="color: #000000;">!</span>t0<span style="color: #000000;">!</span><br/><span style="color: #000000;">@</span>setlocal DisableDelayedExpansion<br/><br/><span style="color: #000000;">@</span>rem Автоматические переменные<br/><span style="color: #000000;">@</span>set name<span style="color: #000000;">=</span>Created_by_White_116<br/><span style="color: #000000;">@</span>set old_path_to_code<span style="color: #000000;">=</span>v1.0<br/><span style="color: #000000;">@</span>set path_to_code<span style="color: #000000;">=%</span>CD<span style="color: #000000;">%</span><br/><span style="color: #000000;">@</span>set path_to_pawn<span style="color: #000000;">=%</span>0<br/><br/><span style="color: #000000;">@</span>rem Вырежем путь до компилятора<br/><span style="color: #000000;">@</span><span style="color: #2222BB;">for</span> <span style="color: #000000;">%%</span>i in <span style="color: #000000;">(</span><span style="color: #000000;">%</span>path_to_pawn<span style="color: #000000;">%</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">do</span> <span style="color: #000000;">@</span><span style="color: #000000;">(</span>set path_to_pawn<span style="color: #000000;">=%%</span>~dpi<span style="color: #000000;">)</span><br/><br/><span style="color: #000000;">@</span>rem Ищем корневой каталог по главному файлу компиляции<br/><span style="color: #000000;">:</span>back1<br/><span style="color: #000000;">@</span><span style="color: #2222BB;">if</span> exist <span style="color: #000000;">%</span>path_to_code<span style="color: #000000;">%</span>\_<span style="color: #000000;">*</span>.<span style="color: #000000;">%</span>source<span style="color: #000000;">%</span> <span style="color: #2222BB;">goto</span> next1<br/><span style="color: #000000;">@</span><span style="color: #2222BB;">for</span> <span style="color: #000000;">%%</span>i in <span style="color: #000000;">(</span><span style="color: #000066;">"%path_to_code%<span style="color: #000099; font-weight: bold;">\.</span>."</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">do</span> <span style="color: #000000;">@</span><span style="color: #000000;">(</span>set path_to_code<span style="color: #000000;">=%%</span>~fi<span style="color: #000000;">)</span><br/><span style="color: #000000;">@</span><span style="color: #2222BB;">if</span> <span style="color: #000000;">%</span>path_to_code<span style="color: #000000;">%</span> <span style="color: #000000;">==</span> <span style="color: #000000;">%</span>old_path_to_code<span style="color: #000000;">%</span> <span style="color: #000000;">(</span><br/>    <span style="color: #000000;">@</span>echo Ошибка<span style="color: #000000;">:</span> Не найден корневой каталог для этого проекта<span style="color: #000000;">!</span> <br/>    <span style="color: #000000;">@</span><span style="color: #2222BB;">goto</span> next2<br/><span style="color: #000000;">)</span> <span style="color: #2222BB;">else</span> <span style="color: #000000;">(</span><br/>    <span style="color: #000000;">@</span>set old_path_to_code<span style="color: #000000;">=%</span>path_to_code<span style="color: #000000;">%</span><br/><span style="color: #000000;">)</span><br/><span style="color: #000000;">@</span><span style="color: #2222BB;">goto</span> <span style="color: #000000;">back1</span><br/><span style="color: #000000;">:</span>next1<br/><span style="color: #000000;">@</span>rem Ищем имя главного файла компиляции<br/><span style="color: #000000;">@</span><span style="color: #2222BB;">for</span> <span style="color: #000000;">%%</span>i in <span style="color: #000000;">(</span><span style="color: #000066;">"%path_to_code%<span style="color: #000099; font-weight: bold;">\_</span>*.%source%"</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">do</span> <span style="color: #000000;">@</span><span style="color: #000000;">(</span>set name<span style="color: #000000;">=%%</span>~ni<span style="color: #000000;">)</span><br/><br/><span style="color: #000000;">@</span>rem Заполняем Precompiled Headers<br/><span style="color: #000000;">@</span><span style="color: #000000;">(</span><br/>    <span style="color: #000000;">@</span><span style="color: #000000;">(</span>echo.<span style="color: #2222AA;">#if !defined _stdafx_h_)</span><br/>    <span style="color: #000000;">@</span><span style="color: #000000;">(</span>echo.<span style="color: #2222AA;">#define _stdafx_h_)</span><br/>    <span style="color: #000000;">@</span><span style="color: #000000;">(</span>echo.<span style="color: #228822;">//==============================================================================)</span><br/>    <span style="color: #000000;">@</span><span style="color: #2222BB;">for</span> <span style="color: #000000;">/</span>F <span style="color: #000066;">"delims="</span> <span style="color: #000000;">%%</span>i in <span style="color: #000000;">(</span><span style="color: #000066;">'dir /s /b %path_to_code%<span style="color: #000099; font-weight: bold;">\*</span>.%header%'</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">do</span> <span style="color: #000000;">@</span><span style="color: #000000;">(</span>echo.<span style="color: #2222AA;">#include "%%i")</span><br/>    <span style="color: #000000;">@</span><span style="color: #000000;">(</span>echo.<span style="color: #228822;">//==============================================================================)</span><br/>    <span style="color: #000000;">@</span><span style="color: #2222BB;">for</span> <span style="color: #000000;">/</span>F <span style="color: #000066;">"delims="</span> <span style="color: #000000;">%%</span>i in <span style="color: #000000;">(</span><span style="color: #000066;">'dir /s /b %path_to_code%<span style="color: #000099; font-weight: bold;">\*</span>.%source%'</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">do</span> <span style="color: #000000;">@</span><span style="color: #000000;">(</span>echo.<span style="color: #2222AA;">#include "%%i")</span><br/>    <span style="color: #000000;">@</span><span style="color: #000000;">(</span>echo.<span style="color: #228822;">//==============================================================================)</span><br/>    <span style="color: #000000;">@</span><span style="color: #000000;">(</span>echo.<span style="color: #2222AA;">#endif)</span><br/><span style="color: #000000;">)</span><span style="color: #000000;">&gt;%</span>path_to_pawn<span style="color: #000000;">%</span>\include\<span style="color: #000000;">%</span>stdafx<span style="color: #000000;">%</span>.<span style="color: #000000;">%</span>header<span style="color: #000000;">%</span><br/><br/><span style="color: #000000;">@</span>rem Компилируем проект<br/><span style="color: #000000;">@%</span>path_to_pawn<span style="color: #000000;">%</span>pawncc.exe <span style="color: #000000;">-</span>;<span style="color: #000000;">+</span> <span style="color: #000000;">-</span><span style="color: #000000;">(</span><span style="color: #000000;">+</span> <span style="color: #000000;">%</span>path_to_code<span style="color: #000000;">%</span>\<span style="color: #000000;">%</span>name<span style="color: #000000;">%</span>.<span style="color: #000000;">%</span>source<span style="color: #000000;">%</span> <span style="color: #000000;">-</span>o<span style="color: #000000;">%</span>path_to_code<span style="color: #000000;">%</span>\<span style="color: #000000;">%</span>name<span style="color: #000000;">%</span>.amx  <span style="color: #000000;">%</span>1 <span style="color: #000000;">%</span>2 <span style="color: #000000;">%</span>3 <span style="color: #000000;">%</span>4 <span style="color: #000000;">%</span>5 <span style="color: #000000;">%</span>6 <span style="color: #000000;">%</span>7 <span style="color: #000000;">%</span>8 <span style="color: #000000;">%</span>9<br/><br/><span style="color: #000000;">@</span>rem Если не нужно перемещать файл то перепрыгиваем, иначе перемещаем<br/><span style="color: #000000;">@</span><span style="color: #2222BB;">if</span> <span style="color: #000000;">%</span>move_to<span style="color: #000000;">%</span> <span style="color: #000000;">==</span> \ <span style="color: #2222BB;">goto</span> next2<br/><br/><span style="color: #000000;">@</span>rem Если существует файл переместить его<br/><span style="color: #000000;">@</span><span style="color: #2222BB;">if</span> exist <span style="color: #000000;">%</span>path_to_code<span style="color: #000000;">%</span>\<span style="color: #000000;">%</span>name<span style="color: #000000;">%</span>.amx <span style="color: #000000;">^</span><br/>move <span style="color: #000000;">%</span>path_to_code<span style="color: #000000;">%</span>\<span style="color: #000000;">%</span>name<span style="color: #000000;">%</span>.amx <span style="color: #000000;">%</span>move_to<span style="color: #000000;">%</span><br/><br/><span style="color: #000000;">@</span>rem Выводим время завершения и затраченное время на компиляцию<br/><span style="color: #000000;">:</span>next2<br/><span style="color: #000000;">@</span>setlocal EnableDelayedExpansion<br/><span style="color: #000000;">@</span>set t1<span style="color: #000000;">=!</span>time<span style="color: #000000;">!</span><br/><span style="color: #000000;">@</span><span style="color: #2222BB;">for</span> <span style="color: #000000;">/</span>F <span style="color: #000066;">"tokens=1-8 delims=:.,"</span> <span style="color: #000000;">%%</span>a in <span style="color: #000000;">(</span><span style="color: #000066;">"!t0: =0!:!t1: =0!"</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">do</span> <span style="color: #000000;">@</span><span style="color: #000000;">(</span>set <span style="color: #000000;">/</span>a <span style="color: #000066;">"a=(((1%%e-1%%a)*60)+1%%f-1%%b)*6000+1%%g%%h-1%%c%%d, a+=(a&gt;&gt;31) &amp; 8640000"</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">@</span>echo Время завершения<span style="color: #000000;">:</span> <span style="color: #000000;">!</span>t1<span style="color: #000000;">!</span>    Затрачено времени<span style="color: #000000;">:</span> <span style="color: #000000;">!</span>a<span style="color: #000000;">!</span><span style="color: #000000;">0</span> мс.<br/><span style="color: #000000;">@</span>setlocal DisableDelayedExpansion<br/><br/><span style="color: #000000;">@</span>rem Покинем, всё OK<span style="color: #000000;">!</span><br/><span style="color: #000000;">@</span><span style="color: #2222BB;">exit</span> <span style="color: #000000;">/</span>b <span style="color: #000000;">1</span></div></div></pre>
+</div>
+Данный bat файл умеет:<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				-Засекать время компиляции проекта.<br />
+-При редактировании любого файла проекта и при нажатии кнопки компилирования, автоматически находить главный файл проекта который и будет компилироваться, главный файл проекта должен иметь формат <b>_*.pwn</b><br />
+-Создавать  предкомпилированный заголовок, создаётся автоматически в папке с инклудами, чтобы не мудрить с подключением в проекте.<br />
+-Перемещать скомпилированный файл в указанный каталог.<br />
+-Передавать параметры компилятору.<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>Открываем <b>Notepad++</b>, переходим в Плагины/NppExec/Execute... (по умолчанию кнопка F6) и вписываем:<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				cd &#36;(CURRENT_DIRECTORY)<br />
+"P:\Сompiler.bat" -O2<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>- где: <br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<b>cd &#36;(CURRENT_DIRECTORY)</b> -указывает текущий каталог компилируемого файла.<br />
+<b>"P:\Сompiler.bat"</b> -путь до нашего батника, который <b>должен</b> лежать рядом с компилятором.<br />
+<b>-O2</b> - параметр компиляции передаваемый компилятору.<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>Открываем наш проект (см. Вложения), нажимаем Скомпилировать и радуемся.<br />
+<br />
+<b><font size="5"><font color="Green">&gt;&gt;Заключение</font></font></b><br />
+<br />
+В данном туториале мы разобрались с заголовочными файлами, с архитектурой мода, с маленькими хитростями.<br />
+Надеюсь что в данном туториале всё описано доступно и понятно.<br />
+<b>Файл проекта</b> вы можете скачать во <b>вложениях</b>.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3179420">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-104339.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3182845"></a>
+<div class="post classic " style="" id="post_3182845">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0097/uid-97477.html"><img src="../../assets/uploads/avatars/97477.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0097/uid-97477.html">xJester</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 186<br />
+	Threads: 3<br />
+	Joined: Jul 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0534/tid-534434.html#pid3182845" title="Re: Архитектура проекта">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by xJester" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">01.09.2014, 15:44 <span class="post_edit" id="edited_by_3182845"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3182845">
+		<img alt="" border="0" src="https://pbs.twimg.com/profile_images/2727748211/c3d0981ae770f926eedf4eda7505b006.jpeg"/><br />
+<br />
+Зачем так усложнять себе жизнь? Что это вообще? Это утопия языка "С" и логика прошлого века.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3182845">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-97477.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3182897"></a>
+<div class="post classic " style="" id="post_3182897">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0104/uid-104339.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0104/uid-104339.html">White_116</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,495<br />
+	Threads: 20<br />
+	Joined: Sep 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0534/tid-534434.html#pid3182897" title="Re: Архитектура проекта">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by White_116" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">01.09.2014, 16:34 <span class="post_edit" id="edited_by_3182897"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3182897">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>xJester</strong><br />
+<a href="../../threads/0534/tid-534434.html#pid3182845" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic"><img alt="" border="0" src="https://pbs.twimg.com/profile_images/2727748211/c3d0981ae770f926eedf4eda7505b006.jpeg"/><br />
+<br />
+Зачем так усложнять себе жизнь? Что это вообще? Это утопия языка "С" и логика прошлого века.</div>
+</td>
+</tr>
+</table>
+</div>Может и утопия, но для павн всё же я не нахожу иных реализаций, разве что всё в одном файле, где беготня по этому файлу занимает 25% времени. Предложите вариант попроще.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3182897">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-104339.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3183507"></a>
+<div class="post classic " style="" id="post_3183507">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0097/uid-97477.html"><img src="../../assets/uploads/avatars/97477.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0097/uid-97477.html">xJester</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 186<br />
+	Threads: 3<br />
+	Joined: Jul 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0534/tid-534434.html#pid3183507" title="Re: Архитектура проекта">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by xJester" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">02.09.2014, 07:05 <span class="post_edit" id="edited_by_3183507"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3183507">
+		Допустим у нас есть папка "myProject" с таким содержимым:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 98px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #007700">../</span><span style="color: #0000BB">gamemode</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn
+<br/>  </span><span style="color: #007700">|- </span><span style="color: #0000BB">houses</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn
+<br/>  </span><span style="color: #007700">|- </span><span style="color: #0000BB">houses
+<br/>    </span><span style="color: #007700">| - </span><span style="color: #0000BB">house</span><span style="color: #007700">-</span><span style="color: #0000BB">1.pwn
+<br/>    </span><span style="color: #007700">| - </span><span style="color: #0000BB">house</span><span style="color: #007700">-</span><span style="color: #0000BB">2.pwn 
+<br/></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>Тогда мы можем (в gamemode.pwn):<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 50px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #FF8000">#include &lt;a_samp&gt;
+<br/>#include "houses.pwn" 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>И в конце концов (в houses.pwn):<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 50px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #FF8000">#include "/houses/house-1.pwn"
+<br/>#include "/houses/house-2.pwn" 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>Вывод:<br />
+1. Зачем нужна избыточность, если мы в процессе компиляции все равно увидим ошибки (дублирования функции и т.д.). <br />
+2. Зависимость можно регулировать вынесение отдельных общих функции в файл, который будем подключать сразу после &lt;a_samp&gt;<br />
+3. Избавимся от жесткой привязки к файловой системе (#include "C:\TestProject\Source\Biznes\Type_0\Biznes_Type_0  .h").<br />
+4. Количество подключаемых файлов сократилось в 2 раза.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3183507">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-97477.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3183622"></a>
+<div class="post classic " style="" id="post_3183622">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0104/uid-104339.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0104/uid-104339.html">White_116</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,495<br />
+	Threads: 20<br />
+	Joined: Sep 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0534/tid-534434.html#pid3183622" title="Re: Архитектура проекта">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by White_116" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">02.09.2014, 09:55 <span class="post_edit" id="edited_by_3183622"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3183622">
+		Ну вот понеслось...<br />
+1) Я предложил метод который исключает:<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				Жесткой привязки к файловой системе (#include "C:\TestProject\Source\Biznes\Type_0\Biznes_Ty  pe_0 .h").<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>2) <div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				Количество подключаемых файлов сократилось в 2 раза.<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>Нам ручками ничего подключать не нужно. За нас это сделает "сборщик".<br />
+<br />
+3) Решает явные зависимости<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				Зависимость можно регулировать вынесение отдельных общих функции в файл, который будем подключать сразу после &lt;a_samp&gt;<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>Этот файл уже существует и наврятли вообще понадобится...<br />
+<br />
+4)<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 82px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #FF8000">#if !defined _HOUSE_PWN_
+<br/>#define _HOUSE_PWN_
+
+<br/>#endif 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>Данную конструкцию не обязательно везде писать, а лишь при добавлении в файла в явную зависимость, ибо "сборщик" включает все файлы и файл включённый в явную зависимость продублируется.<br />
+<br />
+5)Вот пример:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:119px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">..<span style="color: #000000;">/</span>gamemode.pwn <br/>  |<span style="color: #000000;">-</span> Some_Func.pwn <br/>  |<span style="color: #000000;">-</span> houses.pwn <br/>  |<span style="color: #000000;">-</span> houses <br/>    | <span style="color: #000000;">-</span> house<span style="color: #000000;">-</span><span style="color: #000000;">1</span>.pwn <br/>    | <span style="color: #000000;">-</span> house<span style="color: #000000;">-</span><span style="color: #000000;">2</span>.pwn</div></div></pre>
+</div><b>Some_Func.pwn </b>  имеет функцию которая будет обращаться к перемененной лежащей в <b>house-2.pwn</b>. Вывод: Компиляция заглохнет. Реши эту проблему! <br />
+Я тоже изначально придерживался данной тактики, которую вы предложили, в результате пришлось всё перемешать и получить кашу, я же предлагаю раздельное("компонентное") питание для компилятора.<br />
+<br />
+P.S. Может ты меж строк глазками пробежался и не понял основную суть, скачай проект, посмотри как всё устроено, ибо то что ты предлагаешь, является той самой проблемой, которую я пытаюсь решить данным методом.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3183622">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-104339.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3183691"></a>
+<div class="post classic " style="" id="post_3183691">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0097/uid-97477.html"><img src="../../assets/uploads/avatars/97477.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0097/uid-97477.html">xJester</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 186<br />
+	Threads: 3<br />
+	Joined: Jul 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0534/tid-534434.html#pid3183691" title="Re: Архитектура проекта">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by xJester" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">02.09.2014, 11:31 <span class="post_edit" id="edited_by_3183691"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3183691">
+		1,2 - согласен, поторопился, не вник с суть.<br />
+<br />
+3,4 -<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 114px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #007700">../</span><span style="color: #0000BB">gamemode</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn </span><span style="color: #007700">(</span><span style="color: #0000BB">forward some_func</span><span style="color: #007700">();)
+<br/>  |- </span><span style="color: #0000BB">Some_Func</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn </span><span style="color: #007700">(</span><span style="color: #0000BB">call some_func</span><span style="color: #007700">();)
+<br/>  |- </span><span style="color: #0000BB">houses</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn 
+<br/>  </span><span style="color: #007700">|- </span><span style="color: #0000BB">houses 
+<br/>    </span><span style="color: #007700">| - </span><span style="color: #0000BB">house</span><span style="color: #007700">-</span><span style="color: #0000BB">1.pwn </span><span style="color: #007700">(public </span><span style="color: #0000BB">some_func</span><span style="color: #007700">() {return </span><span style="color: #0000BB">1</span><span style="color: #007700">;} )
+<br/>    | - </span><span style="color: #0000BB">house</span><span style="color: #007700">-</span><span style="color: #0000BB">2.pwn 
+<br/></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>Проблема решена. Собственно это единственное верное решение указать компилятору что функция существует и может быть использована в коде. И неважно в каком она файле, главное что бы существовала.<br />
+<br />
+Ваш метод хорош по своему, и в чем то конечно удобен, но через чур избыточен.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3183691">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-97477.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3183738"></a>
+<div class="post classic " style="" id="post_3183738">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0104/uid-104339.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0104/uid-104339.html">White_116</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,495<br />
+	Threads: 20<br />
+	Joined: Sep 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0534/tid-534434.html#pid3183738" title="Re: Архитектура проекта">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by White_116" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">02.09.2014, 12:27 <span class="post_edit" id="edited_by_3183738"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3183738">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>xJester</strong><br />
+<a href="../../threads/0534/tid-534434.html#pid3183691" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Проблема решена. Собственно это единственное верное решение указать компилятору что функция существует и может быть использована в коде. И неважно в каком она файле, главное что бы существовала.<br />
+<br />
+Ваш метод хорош по своему, и в чем то конечно удобен, но через чур избыточен.</div>
+</td>
+</tr>
+</table>
+</div>Зачем создавать промежуточные функции? Ведь можно "на прямую" использовать сами переменные и в данном методе тоже не важно где они находятся.<br />
+<br />
+Избыточность конечно только в самих <b>header</b> файлах, но думаю не так критично в особенности тем, кто также пишет на С и С++
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3183738">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-104339.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3185773"></a>
+<div class="post classic " style="" id="post_3185773">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0097/uid-97477.html"><img src="../../assets/uploads/avatars/97477.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0097/uid-97477.html">xJester</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 186<br />
+	Threads: 3<br />
+	Joined: Jul 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0534/tid-534434.html#pid3185773" title="Re: Архитектура проекта">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by xJester" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">04.09.2014, 05:08 <span class="post_edit" id="edited_by_3185773"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3185773">
+		А зачем нам использовать переменные которые непосредственно относятся к какому-либо файлу? Глобальные  переменные тоже можно выносить в заголовки, а с локальными работать через отдельные функции.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3185773">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-97477.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3187301"></a>
+<div class="post classic " style="" id="post_3187301">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0104/uid-104339.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0104/uid-104339.html">White_116</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,495<br />
+	Threads: 20<br />
+	Joined: Sep 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0534/tid-534434.html#pid3187301" title="Re: Архитектура проекта">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by White_116" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">05.09.2014, 14:40 <span class="post_edit" id="edited_by_3187301"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3187301">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>xJester</strong><br />
+<a href="../../threads/0534/tid-534434.html#pid3185773" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">А зачем нам использовать переменные которые непосредственно относятся к какому-либо файлу? Глобальные  переменные тоже можно выносить в заголовки, а с локальными работать через отдельные функции.</div>
+</td>
+</tr>
+</table>
+</div>Для различных проверок, данный метод уже подразумевает, что они будут глобальными и видимы во всех файлах.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3187301">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-104339.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0534/tid-534434.html">Next Oldest</a> | <a href="../../threads/0534/tid-534434.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="534434" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" selected="selected">------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/9.html">Non-English</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/33.html">Languages</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/32.html">Русский/Russian</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/66.html">Релизы/Releases</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

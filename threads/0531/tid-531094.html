@@ -1,0 +1,1141 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Simplistic Admin saving/loading system using DOF2!</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "45636ffab7a39c1357163e8aebd80d8c";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Introduction Well, hello, my name is OxigEN(aka Ox1gEN on sa-mp forums) and this is my first tutorial on how to create a very simple saving/loading script. Includes needed: 1)DOF2 - credits to Double-" />
+<link rel="canonical" href="../../threads/0531/tid-531094.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="45636ffab7a39c1357163e8aebd80d8c" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0531/tid-531094.html#pid3156739">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Simplistic Admin saving/loading system using DOF2!
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid3156739"></a>
+<div class="post classic " style="" id="post_3156739">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0240/uid-240057.html"><img src="../../assets/uploads/avatars/240057.png" alt="" width="39" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0240/uid-240057.html">Ox1gEN</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 364<br />
+	Threads: 41<br />
+	Joined: Aug 2014
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0531/tid-531094.html#pid3156739" title="Simplistic Admin saving/loading system using DOF2!">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by Ox1gEN" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">10.08.2014, 20:44 <span class="post_edit" id="edited_by_3156739"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Ox1gEN; 10.08.2014 at 21:04.
+					
+					
+						Reason: Forgot to add something :)</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3156739">
+		<div align="center"><font face="Arial Black"><font size="6"><u>Introduction</u></font></font><br />
+<br />
+      Well, hello, my name is OxigEN(aka Ox1gEN on sa-mp forums) and this is my first tutorial<br />
+      on how to create a very simple saving/loading script.<br />
+<br />
+<br />
+<br />
+<font face="Arial Black"><font size="6"><u>Includes needed:</u></font></font><br />
+<br />
+1)DOF2 - credits to Double-O-Seven<br />
+2)zcmd - credits to ZeeX<br />
+3)sscanf - credits to ******<br />
+<br />
+<font face="Arial Black"><font size="6"><u>Some defines to write faster and for colors:</u></font></font><br />
+#define SCM SendClientMessage<br />
+#define COLOR_RED 0xFF0000FF<br />
+<br />
+<br />
+<font face="Arial Black"><font size="6"><u>Note before we start:</u></font></font><br />
+<br />
+      It is highly suggested to create a saving/loading login/registeration for this script<br />
+      why? Because without it any player using the name of an admin name can log-in<br />
+      and use the admin's permissions.<br />
+<br />
+<br />
+<br />
+Alright then, let's start.<br />
+<br />
+First you must download the includes:<br />
+<br />
+DOF2<br />
+zcmd<br />
+&amp;&amp; sscanf2.<br />
+<br />
+At the top of your script you must add this code:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 82px;
+		text-align: left;
+		overflow: auto">#include &lt;a_samp&gt;
+#include &lt;DOF2&gt;
+#include &lt;zcmd&gt;
+#include &lt;sscanf2&gt;</pre>
+</div>What this code does? well it bassicly includes the files to the script so we can actually do what<br />
+ we want to do in a simpler, better and more efficient way.<br />
+<br />
+Second, we need to create our enum and a variable:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 114px;
+		text-align: left;
+		overflow: auto">enum pStats
+{
+       pAdmin
+}
+
+new pInfo[MAX_PLAYERS][pStats];</pre>
+</div>So, after we had done that, let me explain what it means:<br />
+we have created an enum(move information <a href="https://wiki.sa-mp.com/wiki/Keywords:Initialisers#enum" target="_blank">here</a>for information about it) and then we have <br />
+created a variable called pInfo[MAX_PLAYERS][pStats] so we bassicly "hold" the data in a variable, <br />
+MAX_PLAYERS means it's bassicly taking the number of online max players in the server and pStats <br />
+is bassicly the enumerator's name(enum's name).<br />
+<br />
+Now let's work on our bassicly saving/loading system of the administration script <br />
+before we actually make commands about how to set someone's admin level, make him an <br />
+admin or even remove his admin completely and then save the file.<br />
+<br />
+<br />
+Before we move on to saving admins and loading them lets create a couple of simple stocks:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 482px;
+		text-align: left;
+		overflow: auto">stock pFile(playerid)
+{
+	new pName[MAX_PLAYER_NAME +1];
+	new File[50];
+	GetPlayerName(playerid,pName,MAX_PLAYER_NAME);
+	format(File,sizeof(File),"%s.ini",pName);
+	return File;
+}
+
+stock LoadPstats(playerid)
+{
+    pInfo[playerid][pAdmin] = DOF2_GetInt(pFile(playerid), "AdminLevel");
+}
+
+stock GetName(playerid)
+{
+	new pName[MAX_PLAYER_NAME];
+	
+	GetPlayerName(playerid, pName, sizeof(pName));
+	return pName;
+}
+
+stock GetName2(playerid)
+{
+	new pName2[MAX_PLAYER_NAME];
+	
+	GetPlayerName(playerid, pName2, sizeof(pName2));
+	return pName2;
+}</pre>
+</div>
+So in the first stock we find the user's path to save/load his stuff from there,<br />
+then in the second stock we load the player's stats on the server(it is useful if you are lazy<br />
+and/or don't want to write alot of stuff when player connects, etc.<br />
+<br />
+the line in the second stock:<br />
+pInfo[playerid][pAdmin] = DOF2_GetInt(pFile(playerid), "AdminLevel");<br />
+<br />
+Bassicly means that pInfo(name of the variable we created) [playerid] (because w<br />
+e used max_players) [pAdmin] (what we have in the enumerator) EQUALS (=) to DOF2_GetInt(pFile(playerid), "AdminLevel");<br />
+<br />
+Why DOF2_GetInt? Because later on in this tutorial we set a player's integer that is <br />
+called "AdminLevel" to zero<br />
+<font size="5"><u>IF</u></font> he had never logged into the server, otherwise it'll instantly load the player's stats using the stock (LoadPstats(playerid).<br />
+The pFile(playerid) part bassicly finds the player's path and Gets(DOF2_GetInt) the Int(integer) from the <br />
+player's stats and sets them automaticly once a player that has been into the server already has connect.<br />
+<br />
+Now for the third stock, GetName(playerid):<br />
+<br />
+Here we bassicly get the player's name, the player that has done a certain comm<br />
+and, <u>NOT THE PLAYER THAT THE COMMAND IS AFFECTING</u> (I had to mark this because I myself get confused with it alot since I'm still a beginner) so if we'd like to format the <br />
+message and say to the ID that the command is affecting that admin %s has made you an admin, <br />
+it'll bassicly get the player's name,<br />
+the one who did the command and not the one who the command affects.<br />
+<br />
+Now for the fourth and final stock, GetName2(id):<br />
+<br />
+Bassicly you don't really need this if in a command/public or what ever you make a <br />
+variable called id and then use GetName(id) it'll work exactly the same<br />
+, but I like to use it like so it'll be arranged better, and look better in my eyes.<br />
+<br />
+<br />
+<br />
+Okay, now that I had finished explaining all of the stocks lets move on the actual script.<br />
+<br />
+<br />
+First in the public function OnPlayerConnect(playerid) you need to do this:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 274px;
+		text-align: left;
+		overflow: auto">public OnPlayerConnect(playerid)
+{
+	if(DOF2_FileExists(pFile(playerid)))
+	{
+	    SpawnPlayer(playerid);
+	    LoadPstats(playerid);
+	}
+	else  //It is suggested to create a login/register system in order to keep people's player safe and no one could hack it (unless they have the password of course).
+	{
+	    DOF2_CreateFile(pFile(playerid));
+	    DOF2_SetInt(pFile(playerid), "AdminLevel", 0);
+	    DOF2_SaveFile();
+	    SpawnPlayer(playerid);
+	}
+	return 1;
+}</pre>
+</div>So here. We bassicly check if a certain file of the player exits using DOF2_FileExists(pFile(playerid)<br />
+this bassicly checks if the file of the player exists and it gets the name of the player so it can look<br />
+for the player's file.<br />
+<br />
+After that we do SpawnPlayer(playerid), it bassicly spawns the player <br />
+and then we Load the player's stats using our stock! LoadPstats(playerid).<br />
+<br />
+Now we have something called "else" it bassicly says that if this and this wasn't found or something else <br />
+then this should come up.<br />
+In our case It is suggested to create a registration system using DOF2 for this script but it depends<br />
+on for who you're creating the server for.<br />
+<br />
+Okay, now bassicly the else checks if a player's file DOES NOT exist then it should bassicly<br />
+create a file for the player with the name of the player (DOF2_CreateFile(pFile(playerid) ) and then it sets an integer<br />
+in the player's file called "AdminLevel" and sets it to zero using DOF2_SetInt(pFile(playerid), "AdminLevel", 0);<br />
+and then it saves the file using DOF2_SaveFile(); <br />
+<font size="5">NOTE, YOU MUST SAVE THE FILE OR ELSE THE PLAYER'S FILE WON'T SAVE...</font><br />
+and then we bassicly spawn the player using SpawnPlayer(playerid);<br />
+Then we bassicly return 1; and close the brackets.<br />
+<br />
+After we've checked if the player's file exists or not and if it doesn't we create him a file we now need to add these<br />
+lines in the public: OnPlayerDisconnect(playerid, reason)<br />
+and for that we use this code:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 114px;
+		text-align: left;
+		overflow: auto">public OnPlayerDisconnect(playerid, reason)
+{
+	DOF2_SetInt(pFile(playerid), "AdminLevel",pInfo[playerid][pAdmin]);
+	DOF2_SaveFile();
+	return 1;
+}</pre>
+</div>Here, we bassicly set and integer in the player's file for admin level once he exited, and we get that integer from<br />
+the variable we created, how? When we set a player's admin level later on.<br />
+Then we save the file again because if we don't it won't load/save the player's stats.<br />
+<br />
+BTW: if you have created more Integers for the players to save you can just add them into LoadPstats and onplayerconnect and disconnect, regularly.<br />
+<br />
+<br />
+<br />
+Okay, now after we've managed to save/load the player's stats, etc, we can move on to actually setting a player's<br />
+admin level.<br />
+To do that we first need to create a CMD with zcmd.<br />
+<br />
+So, let's create it then I'd explain how it works.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 354px;
+		text-align: left;
+		overflow: auto">CMD:setadmin(playerid, params[])
+{
+	new id, string[128], levels;
+
+	if(!IsPlayerAdmin(playerid)) return SCM(playerid, -1, "You're not an admin! Therefore you may not use this command"); //Admin RCON only.
+        else if(sscanf(params, "ud", id, levels)) return SCM(playerid, -1, "USAGE: /setadmin [ID] [AdminLevel]");
+        else if(id == INVALID_PLAYER_ID) return SCM(playerid, -1, "The id you've entered is either incorrect or invalid");
+        else if(levels &gt; 5) return SCM(playerid, COLOR_RED, "There are only FIVE availiable admin levels!");
+	if(levels &lt;= 5)
+	{
+	        format(string, sizeof(string), "Lead Admin %s(%d) has set your admin level %d. Congratulations!", GetName(playerid), playerid, levels);
+		SCM(id, COLOR_RED, string);
+		pInfo[id][pAdmin] = levels;
+		DOF2_SetInt(pFile(id), "AdminLevel", levels);
+
+		format(string, sizeof(string), "You have set %s(%d) admin level of %d.", GetName2(id), id, levels);
+		SCM(playerid, COLOR_RED, string);
+		DOF2_SaveFile();
+	}
+	return 1;
+}</pre>
+</div>
+Okay, now let me explain some stuff.<br />
+First of all we have used a regular syntax of a zcmd command,<br />
+then we created acouple of variables.<br />
+And after that we started and checked if a player's connected to rcon admin using "if(!IsPlayerAdmin(playerid))"<br />
+the "!" bassicly means "NOT" if the player is NOT an admin then do this and this.<br />
+In this case if the player isn't an admin then it'd return a client message saying that you're not an admin, etc.<br />
+<br />
+After the first party we use "else if" which bassicly means that if the player isn't an admin then don't do other stuff,<br />
+first check if the player isn't this or did that.<br />
+In the first "else if" we use sscanf to check if the player didn't write anything and then we use "ud", id, levels.<br />
+It bassicly means that "u" is a number in this case an ID and d which is a full number means that it is levels(admin levels.)<br />
+After that we return a message with the syntax or usage however you want to call it for the player, it bassicly tells<br />
+them how to use the command.<br />
+Then we create another else if to check if the ID we've entered equals to an INVALID_PLAYER_ID (I believe that<br />
+the number of an invalid player id is 60550 or something like that, not sure though.)<br />
+then we return a message saying that the id you've entered is either incorrect or invalid.<br />
+<br />
+And then we are bassicly doing another "else if" (Yes, alot of else if's <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/> ) saying that if the number of levels that<br />
+we wrote is greater than 5(You can also do &gt;= 5 which means if it's greater than OR equals to five) <br />
+then return a client message saying that there are only five available levels to choose from.<br />
+<br />
+Now here we can do "else" but I did "if" to like check exactly if the levels we want to give are lower than or equal<br />
+to five.<br />
+And if they are then it should format a message saying that admin %s([with id of] %d) has given you %d admin levels!.<br />
+And then we bassicly define the admin's name(THE ONE WHO DID THE COMMAND) by using our stock:<br />
+GetName(playerid), and to get the playerid we simply use "playerid" then to get the levels we have inserted<br />
+and given to the player we do "levels" at the end, why?<br />
+Because there are three variables we need to define within the format.<br />
+<br />
+After that we send the string to the player with the COLOR_RED.<br />
+And then we set the player's admin levels.<br />
+<br />
+We first define the variable of pInfo[MAX_PLAYERS][pStats] of our enum and set it to  "levels" the levels that<br />
+we have inserted by doing:<br />
+<br />
+pInfo[id][pAdmin] = levels;<br />
+Why we use id here instead of playerid? Becase the command doesn't affect the one who did it(the player-id) it affects the ID the one who the command was used on.<br />
+<br />
+Then we change and set the integer in DOF2 by using DOF2_SetInt(pFile(id), "AdminLevel, levels);<br />
+This is bassicly the same as the pInfo but this actually saves it and not defines it for the id.<br />
+Then we format the message for the player who has done the command telling him that you have set<br />
+%s([id of the player] %d) admin levels of %d. Then we define the variables of these % stuff to GetName2(id)<br />
+id, and levels, why GetName2(id)? So we can get the player's name that the command affects.<br />
+Then at the end like usually we Save the file in order for it to save(logic asfff) using DOF2_SaveFile();<br />
+Then we close the brackets and there you go, you've saved the player's admin level.<br />
+<br />
+Now to remove a player's admin here's the code, IF YOU HAVE understood the first code on how to set someone's<br />
+admin level then you'd understand this:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 354px;
+		text-align: left;
+		overflow: auto">CMD:removeadmin(playerid, params[])
+{
+	new id, string[128], reason[128];
+	if(DOF2_GetInt(pFile(playerid), "AdminLevel") &lt; 5) return SCM(playerid, -1, "You're not an admin! Therefore you may not use this command");
+	else if(sscanf(params, "us[50]", id, reason)) return SCM(playerid, -1, "USAGE: /removeadmin [ID] [REASON]");
+	else if(id == INVALID_PLAYER_ID) return SCM(playerid, -1, "The ID you've entered is either incorrect or invalid!");
+	else if(pInfo[id][pAdmin] == 0) return SCM(playerid, COLOR_RED, "That player isn't an admin!");
+	else
+	{
+	    format(string, sizeof(string), "Lead Admin %s(%d) has removed your admin level - Reason: %s", GetName(playerid), playerid, reason);
+	    SCM(id, COLOR_RED, string);
+
+	    format(string, sizeof(string), "You have removed %s(%d)'s administrator position! Reason: %s", GetName2(id), id, reason);
+	    SCM(playerid, COLOR_RED, string);
+
+	    pInfo[id][pAdmin] = 0;
+	    DOF2_SetInt(pFile(id), "AdminLevel", 0);
+	    DOF2_SaveFile();
+	}
+	return 1;
+}</pre>
+</div>Just go to the /setadmin part if you didn't understand this, it's very simple if you understood the first part.<br />
+<br />
+Now to make some commands using DOF2, zcmd and sscanf2!<br />
+<br />
+First lets make a /kick command using those includes:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 242px;
+		text-align: left;
+		overflow: auto">CMD:kick(playerid, params[])
+{
+	new id, reason[126], string[128];
+	if(!DOF2_GetInt(pFile(playerid), "AdminLevel")) return SCM(playerid, -1, "You're not an admin! Therefore you may not use this command");
+	else if(sscanf(params, "us[50]", id, reason)) return SCM(playerid, -1, "USAGE: /kick [ID] [REASON]");
+	else if(id == INVALID_PLAYER_ID) return SCM(playerid, -1, "The id you've entered is either incorrect or invalid");
+	else
+	{
+		format(string, sizeof(string), "[KICK]: %s(%d) has been kicked by %s(%d) - Reason: %s", GetName2(id), id, GetName(playerid), playerid, reason);
+		SendClientMessageToAll(COLOR_RED, string);
+		Kick(id);
+	}
+	return 1;
+}</pre>
+</div>This code is bassicly self explanatory why? Because I've already explained it up in the tutorial. But the part I didn't is<br />
+this "if(!DOF2_GetInt(pFile(playerid), "AdminLevel")) return SCM........"<br />
+Now the sscanf checks if you wrote nothing plus if you're using sscanf2 then you must add a string length(in this case [50]).<br />
+This bassicly means that once a player does the command it checks if a player has the correct levels needed, in this<br />
+case we use "!" because it says "NOT" and if it says "NOT" then even a player with level one admin can kick, but<br />
+a player with level zero couldn't.<br />
+<br />
+<font size="4">NOTE IF YOU'D LIKE TO CREATE A COMMAND FOR A CERTAIN ADMIN LEVE DO THIS:</font><br />
+<br />
+Instead of the "if(!DOF2_GetInt(pFile(playerid), "AdminLevel")) return SCM........" do this:<br />
+<br />
+"if(DOF2_GetInt(pFile(playerid), "AdminLevel") &lt; 2) return SCM(playerid, COLOR_RED, "You don't have permission<br />
+to do this command!");<br />
+<br />
+<br />
+<font size="5">And that's bassicly it!</font><br />
+<br />
+<br />
+<br />
+I hope I helped any of you guys who didn't know how to make it or something, because for me it took some time<br />
+to know how to make one of these.<br />
+<br />
+Once you get the hang of this you can start making permissions for other stuff, for example a police system or something<br />
+it all depends on you.<br />
+<br />
+<br />
+<font size="4">Now final thing!:</font><br />
+Add this into your script:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 98px;
+		text-align: left;
+		overflow: auto">public OnGameModeExit()
+{
+	DOF2_SaveFile(); /* Here you must DOF2_SaveFile(); in order to save the file */
+	DOF2_Exit(); /* Here you must DOF2_Exit(); in order to close DOF2 */
+}</pre>
+</div>This again saves the file and then closes and exits DOF2 once you close the server!<br />
+<br />
+<br />
+Paste Bin: <a href="http://pastebin.com/cAxt8s0z" target="_blank">http://pastebin.com/cAxt8s0z</a><br />
+<br />
+<br />
+Credits:<br />
+<br />
+Ox1gEN (me)<br />
+DOF2 - Double-O-Seven<br />
+zcmd - ZeeX<br />
+sscanf2 - ******<br />
+</div>
+<div align="left"><font size="1">First comment/topic <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/></font></div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3156739">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-240057.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3158250"></a>
+<div class="post classic " style="" id="post_3158250">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0236/uid-236264.html"><img src="../../assets/uploads/avatars/236264.png" alt="" width="55" height="28" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0236/uid-236264.html"><s>LivingLikeYouDo</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 354<br />
+	Threads: 16<br />
+	Joined: Jun 2014
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0531/tid-531094.html#pid3158250" title="Re: Simplistic Admin saving/loading system using DOF2!">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by LivingLikeYouDo" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">12.08.2014, 07:21 <span class="post_edit" id="edited_by_3158250"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3158250">
+		In which era you live?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3158250">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-236264.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3161673"></a>
+<div class="post classic " style="" id="post_3161673">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0240/uid-240057.html"><img src="../../assets/uploads/avatars/240057.png" alt="" width="39" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0240/uid-240057.html">Ox1gEN</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 364<br />
+	Threads: 41<br />
+	Joined: Aug 2014
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0531/tid-531094.html#pid3161673" title="Re: Simplistic Admin saving/loading system using DOF2!">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Ox1gEN" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">15.08.2014, 04:33 <span class="post_edit" id="edited_by_3161673"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3161673">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>LivingLikeYouDo</strong><br />
+<a href="../../threads/0531/tid-531094.html#pid3158250" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">In which era you live?</div>
+</td>
+</tr>
+</table>
+</div>lol, you made me laugh right there.<br />
+<br />
+In which era do I live, why do you ask that?<br />
+DOF2 isn't ancient and it's a great files library, I don't see the problem here.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3161673">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-240057.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0531/tid-531094.html">Next Oldest</a> | <a href="../../threads/0531/tid-531094.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="531094" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

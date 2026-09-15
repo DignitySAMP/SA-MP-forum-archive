@@ -1,0 +1,1607 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[FilterScript] Simple Animations System</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "bf357381dfe94ada41e7dcde03a7b83b";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Pretty straight forward, some animations. Won't really have to through typing every single animation command as you can read it yourself after &quot;CMD:&quot; in the code. I basically used this in my Los Santo" />
+<link rel="canonical" href="../../threads/0389/tid-389198.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="bf357381dfe94ada41e7dcde03a7b83b" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0389/tid-389198.html#pid2199125">Threaded Mode</a></span>
+				</div>
+				
+					[FilterScript] Simple Animations System
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid2199125"></a>
+<div class="post classic " style="" id="post_2199125">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0182/uid-182583.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0182/uid-182583.html"><s>Fierros</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 26<br />
+	Threads: 7<br />
+	Joined: Oct 2012
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0389/tid-389198.html#pid2199125" title="Simple Animations System">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by Fierros" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">01.11.2012, 05:58 <span class="post_edit" id="edited_by_2199125"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2199125">
+		Pretty straight forward, some animations. Won't really have to through typing every single animation command as you can read it yourself after "CMD:" in the code. I basically used this in my Los Santos server around a year ago, decided to release it to the sa-mp and eazygamers.co.cc community, enjoy everyone.<br />
+<br />
+<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">CMD:taxiL(playerid, params[])
+	{
+		 LoopingAnim(playerid,"PED","IDLE_taxi",4.0,0,1,1,1,0);
+         return 1;
+    }
+CMD:punch(playerid, params[])
+	{
+		 LoopingAnim(playerid,"MD_CHASE","MD_BIKE_Punch",4.0,0,1,1,1,0);
+         return 1;
+    }
+CMD:greet1(playerid, params[])
+	{
+		 LoopingAnim(playerid,"WUZI","Wuzi_Greet_Plyr",4.0,0,1,1,1,0);
+         return 1;
+    }
+CMD:greet2(playerid, params[])
+	{
+		 LoopingAnim(playerid,"WUZI","Wuzi_Greet_Wuzi",4.0,0,1,1,1,0);
+         return 1;
+    }
+CMD:wave(playerid, params[])
+	{
+		 LoopingAnim(playerid,"BD_FIRE ","BD_GF_Wave",4.0,0,1,1,1,0);
+         return 1;
+    }
+CMD:argue(playerid, params[])
+	{
+		 LoopingAnim(playerid,"PAULNMAC","PnM_Argue1_A",4.0,0,1,1,1,0);
+         return 1;
+    }
+CMD:sleep(playerid, params[])
+	{
+		 LoopingAnim(playerid,"INT_HOUSE","BED_In_L",4.0,0,1,1,1,0);
+         return 1;
+    }
+CMD:lean2(playerid, params[])
+	{
+		 LoopingAnim(playerid,"RYDER","Van_Lean_L",4.0,0,1,1,1,0);
+         return 1;
+    }
+
+CMD:gsign1(playerid, params[])
+	{
+		 LoopingAnim(playerid,"GHANDS","gsign1",4.0,0,1,1,1,0);
+         return 1;
+    }
+CMD:gsign2(playerid, params[])
+	{
+		 LoopingAnim(playerid,"GHANDS","gsign1LH",4.0,0,1,1,1,0);
+         return 1;
+    }
+CMD:gsign3(playerid, params[])
+	{
+		 LoopingAnim(playerid,"GHANDS","gsign2",4.0,0,1,1,1,0);
+         return 1;
+    }
+CMD:gsign4(playerid, params[])
+	{
+		 LoopingAnim(playerid,"GHANDS","gsign2LH",4.0,0,1,1,1,0);
+         return 1;
+    }
+CMD:gsign5(playerid, params[])
+	{
+		 LoopingAnim(playerid,"GHANDS","gsign3",4.0,0,1,1,1,0);
+         return 1;
+    }
+CMD:gsign6(playerid, params[])
+	{
+		 LoopingAnim(playerid,"GHANDS","gsign3LH",4.0,0,1,1,1,0);
+         return 1;
+    }
+CMD:gsign7(playerid, params[])
+	{
+		 LoopingAnim(playerid,"GHANDS","gsign4",4.0,0,1,1,1,0);
+         return 1;
+    }
+
+
+
+CMD:carjacked1(playerid, params[])
+{
+		 LoopingAnim(playerid,"PED","CAR_jackedLHS",4.0,0,1,1,1,0);
+         return 1;
+    }
+
+
+
+CMD:carjacked2(playerid, params[])
+{
+		 LoopingAnim(playerid,"PED","CAR_jackedRHS",4.0,0,1,1,1,0);
+         return 1;
+    }
+
+
+
+CMD:handsup(playerid, params[])
+{
+		LoopingAnim(playerid, "ROB_BANK","SHP_HandsUp_Scr", 4.0, 0, 1, 1, 1, 0);
+        return 1;
+    }
+
+
+
+CMD:cellin(playerid, params[])
+{
+		SetPlayerSpecialAction(playerid,SPECIAL_ACTION_USECELLPHONE);
+        return 1;
+    }
+
+
+
+CMD:cellout(playerid, params[])
+{
+		SetPlayerSpecialAction(playerid,SPECIAL_ACTION_STOPUSECELLPHONE);
+        return 1;
+    }
+
+
+
+CMD:drunk(playerid, params[])
+{
+		LoopingAnim(playerid,"PED","WALK_DRUNK",4.1,1,1,1,1,1);
+		return 1;
+    }
+
+
+
+CMD:bomb(playerid, params[])
+{
+		ClearAnimations(playerid);
+		LoopingAnim(playerid, "BOMBER","BOM_Plant_Loop",4.0,1,0,0,1,0); // Place Bomb
+		return 1;
+	}
+
+
+CMD:getarrested(playerid, params[])
+{
+	      LoopingAnim(playerid,"ped", "ARRESTgun", 4.0, 0, 1, 1, 1, -1); // Gun Arrest
+		  return 1;
+    }
+
+
+CMD:laugh(playerid, params[])
+{
+          OnePlayAnim(playerid, "RAPPING", "Laugh_01", 4.0, 0, 0, 0, 0, 0); // Laugh
+		  return 1;
+	}
+
+
+CMD:lookout(playerid, params[])
+{
+          OnePlayAnim(playerid, "SHOP", "ROB_Shifty", 4.0, 0, 0, 0, 0, 0); // Rob Lookout
+		  return 1;
+	}
+
+
+CMD:robman(playerid, params[])
+{
+          LoopingAnim(playerid, "SHOP", "ROB_Loop_Threat", 4.0, 1, 0, 0, 0, 0); // Rob
+		  return 1;
+	}
+
+
+CMD:crossarms(playerid, params[])
+{
+          LoopingAnim(playerid, "COP_AMBIENT", "Coplook_loop", 4.0, 0, 1, 1, 1, -1); // Arms crossed
+		  return 1;
+	}
+
+
+CMD:lay(playerid, params[])
+{
+          LoopingAnim(playerid,"BEACH", "bather", 4.0, 1, 0, 0, 0, 0); // Lay down
+		  return 1;
+    }
+
+
+CMD:hide(playerid, params[])
+{
+          LoopingAnim(playerid, "ped", "cower", 3.0, 1, 0, 0, 0, 0); // Taking Cover
+		  return 1;
+	}
+
+
+CMD:vomit(playerid, params[])
+{
+	      OnePlayAnim(playerid, "FOOD", "EAT_Vomit_P", 3.0, 0, 0, 0, 0, 0); // Vomit BAH!
+		  return 1;
+	}
+
+
+CMD:eat(playerid, params[])
+{
+	      OnePlayAnim(playerid, "FOOD", "EAT_Burger", 3.0, 0, 0, 0, 0, 0); // Eat Burger
+		  return 1;
+	}
+	// Wave
+
+
+
+CMD:slapass(playerid, params[])
+{
+   		OnePlayAnim(playerid, "SWEET", "sweet_ass_slap", 4.0, 0, 0, 0, 0, 0); // Ass Slapping
+ 		return 1;
+	}
+
+
+CMD:deal(playerid, params[])
+{
+          OnePlayAnim(playerid, "DEALER", "DEALER_DEAL", 4.0, 0, 0, 0, 0, 0); // Deal Drugs
+		  return 1;
+	}
+
+
+
+CMD:crack(playerid, params[])
+{
+          LoopingAnim(playerid, "CRACK", "crckdeth2", 4.0, 1, 0, 0, 0, 0); // Dieing of Crack
+		  return 1;
+	}
+
+	// Sit
+CMD:sit(playerid, params[])
+{
+          LoopingAnim(playerid,"BEACH", "ParkSit_M_loop", 4.0, 1, 0, 0, 0, 0); // Sit
+		  return 1;
+    }
+    // Idle Chat
+CMD:chat(playerid, params[])
+{
+		 LoopingAnim(playerid,"PED","IDLE_CHAT",4.0,1,0,0,1,1);
+         return 1;
+    }
+    // Idle Chat2
+CMD:chat2(playerid, params[])
+{
+		 LoopingAnim(playerid,"MISC","Idle_Chat_02",4.0,1,0,0,1,1);
+         return 1;
+    }
+    // Fucku
+CMD:fuckyou(playerid, params[])
+{
+		 OnePlayAnim(playerid,"PED","fucku",4.0,0,0,0,0,0);
+         return 1;
+    }
+    // TaiChi
+CMD:taichi(playerid, params[])
+{
+		 LoopingAnim(playerid,"PARK","Tai_Chi_Loop",4.0,1,0,0,0,0);
+         return 1;
+    }
+
+    // ChairSit
+
+    // Fall on the ground
+CMD:flip(playerid, params[])
+{
+		 LoopingAnim(playerid,"PED","KO_skid_front",4.1,0,1,1,1,0);
+         return 1;
+    }
+
+    // Fall
+CMD:backflip(playerid, params[])
+{
+		 LoopingAnim(playerid, "PED","FLOOR_hit_f", 4.0, 1, 0, 0, 0, 0);
+         return 1;
+    }
+
+    // kiss
+CMD:kiss(playerid, params[])
+{
+		 LoopingAnim(playerid, "KISSING", "Playa_Kiss_02", 3.0, 1, 1, 1, 1, 0);
+         return 1;
+    }
+
+    // Injujred
+CMD:injured(playerid, params[])
+{
+		 LoopingAnim(playerid, "SWEET", "Sweet_injuredloop", 4.0, 1, 0, 0, 0, 0);
+         return 1;
+    }
+
+
+    // Violence animations
+CMD:push(playerid, params[])
+{
+		 OnePlayAnim(playerid,"GANGS","shake_cara",4.0,0,0,0,0,0);
+         return 1;
+    }
+
+CMD:akick(playerid, params[])
+{
+		 OnePlayAnim(playerid,"POLICE","Door_Kick",4.0,0,0,0,0,0);
+         return 1;
+    }
+
+CMD:lowbodypush(playerid, params[])
+{
+		 OnePlayAnim(playerid,"GANGS","shake_carSH",4.0,0,0,0,0,0);
+         return 1;
+    }
+
+    // Spray
+CMD:spray(playerid, params[])
+{
+		 OnePlayAnim(playerid,"SPRAYCAN","spraycan_full",4.0,0,0,0,0,0);
+         return 1;
+    }
+
+    // Headbutt
+CMD:headbutt(playerid, params[])
+{
+		 OnePlayAnim(playerid,"WAYFARER","WF_Fwd",4.0,0,0,0,0,0);
+         return 1;
+    }
+
+    // Medic
+CMD:medic(playerid, params[])
+{
+		 OnePlayAnim(playerid,"MEDIC","CPR",4.0,0,0,0,0,0);
+         return 1;
+    }
+
+    // KO Face
+CMD:koface(playerid, params[])
+{
+		 LoopingAnim(playerid,"PED","KO_shot_face",4.0,0,1,1,1,0);
+         return 1;
+    }
+
+    // KO Stomach
+CMD:kostomach(playerid, params[])
+{
+		 LoopingAnim(playerid,"PED","KO_shot_stom",4.0,0,1,1,1,0);
+         return 1;
+    }
+
+    // Jump for your life!
+CMD:lifejump(playerid, params[])
+{
+		 LoopingAnim(playerid,"PED","EV_dive",4.0,0,1,1,1,0);
+         return 1;
+    }
+
+    // Exhausted
+CMD:exhaust(playerid, params[])
+{
+		 LoopingAnim(playerid,"PED","IDLE_tired",3.0,1,0,0,0,0);
+         return 1;
+    }
+
+    // Left big slap
+CMD:leftslap(playerid, params[])
+{
+		 OnePlayAnim(playerid,"PED","BIKE_elbowL",4.0,0,0,0,0,0);
+         return 1;
+    }
+
+    // Big fall
+CMD:rollfall(playerid, params[])
+{
+		 LoopingAnim(playerid,"PED","BIKE_fallR",4.0,0,1,1,1,0);
+         return 1;
+    }
+
+    // Locked
+CMD:carlock(playerid, params[])
+{
+		 OnePlayAnim(playerid,"PED","CAR_doorlocked_LHS",4.0,0,0,0,0,0);
+         return 1;
+    }
+
+    // carjack
+CMD:rcarjack1(playerid, params[])
+{
+		 OnePlayAnim(playerid,"PED","CAR_pulloutL_LHS",4.0,0,0,0,0,0);
+         return 1;
+    }
+
+    // carjack
+CMD:lcarjack1(playerid, params[])
+{
+		 OnePlayAnim(playerid,"PED","CAR_pulloutL_RHS",4.0,0,0,0,0,0);
+         return 1;
+    }
+
+    // carjack
+CMD:rcarjack2(playerid, params[])
+{
+		 OnePlayAnim(playerid,"PED","CAR_pullout_LHS",4.0,0,0,0,0,0);
+         return 1;
+    }
+
+    // carjack
+CMD:lcarjack2(playerid, params[])
+{
+		 OnePlayAnim(playerid,"PED","CAR_pullout_RHS",4.0,0,0,0,0,0);
+         return 1;
+    }
+
+    // Hood frisked
+CMD:hoodfrisked(playerid, params[])
+{
+		 LoopingAnim(playerid,"POLICE","crm_drgbst_01",4.0,0,1,1,1,0);
+         return 1;
+    }
+
+    // Lighting cigarette
+CMD:lightcig(playerid, params[])
+{
+		 OnePlayAnim(playerid,"SMOKING","M_smk_in",3.0,0,0,0,0,0);
+         return 1;
+    }
+
+    // Tap cigarette
+CMD:tapcig(playerid, params[])
+{
+		 OnePlayAnim(playerid,"SMOKING","M_smk_tap",3.0,0,0,0,0,0);
+         return 1;
+    }
+
+    // Bat stance
+CMD:bat(playerid, params[])
+{
+		 LoopingAnim(playerid,"BASEBALL","Bat_IDLE",4.0,1,1,1,1,0);
+         return 1;
+    }
+
+    // Boxing
+CMD:box(playerid, params[])
+{
+		 LoopingAnim(playerid,"GYMNASIUM","GYMshadowbox",4.0,1,1,1,1,0);
+         return 1;
+    }
+
+    // Lay 2
+CMD:lay2(playerid, params[])
+{
+		 LoopingAnim(playerid,"SUNBATHE","Lay_Bac_in",3.0,0,1,1,1,0);
+         return 1;
+    }
+
+
+
+CMD:chant(playerid, params[])
+{
+		 LoopingAnim(playerid,"RIOT","RIOT_CHANT",4.0,1,1,1,1,0);
+         return 1;
+    }
+
+
+
+CMD:fucku(playerid, params[])
+{
+		 OnePlayAnim(playerid,"RIOT","RIOT_FUKU",2.0,0,0,0,0,0);
+         return 1;
+    }
+
+
+
+CMD:shouting(playerid, params[])
+{
+		 LoopingAnim(playerid,"RIOT","RIOT_shout",4.0,1,0,0,0,0);
+         return 1;
+    }
+
+
+
+CMD:cop(playerid, params[])
+{
+		 OnePlayAnim(playerid,"SWORD","sword_block",50.0,0,1,1,1,1);
+         return 1;
+    }
+
+
+
+CMD:elbow(playerid, params[])
+{
+		 OnePlayAnim(playerid,"FIGHT_D","FightD_3",4.0,0,1,1,0,0);
+         return 1;
+    }
+
+
+
+CMD:kneekick(playerid, params[])
+{
+		 OnePlayAnim(playerid,"FIGHT_D","FightD_2",4.0,0,1,1,0,0);
+         return 1;
+    }
+
+
+
+CMD:fstance(playerid, params[])
+{
+		 LoopingAnim(playerid,"FIGHT_D","FightD_IDLE",4.0,1,1,1,1,0);
+		 return 1;
+}</pre>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2199125">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-182583.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2199136"></a>
+<div class="post classic " style="" id="post_2199136">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0183/uid-183198.html"><img src="../../assets/uploads/avatars/183198.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0183/uid-183198.html">ExpertSahil</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 135<br />
+	Threads: 11<br />
+	Joined: Oct 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0389/tid-389198.html#pid2199136" title="Re: Simple Animations System">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by ExpertSahil" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">01.11.2012, 06:13 <span class="post_edit" id="edited_by_2199136"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2199136">
+		Oh nice but put some effort next time while releasing filterscript or gamemode
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2199136">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-183198.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2200311"></a>
+<div class="post classic " style="" id="post_2200311">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0174/uid-174841.html"><img src="../../assets/uploads/avatars/174841.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0174/uid-174841.html">NoahF</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 864<br />
+	Threads: 88<br />
+	Joined: Jul 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0389/tid-389198.html#pid2200311" title="Re: Simple Animations System">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by NoahF" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">01.11.2012, 20:50 <span class="post_edit" id="edited_by_2200311"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2200311">
+		It's very simple.. but as ExpertSahil said, put some more effort into it.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2200311">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-174841.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2200624"></a>
+<div class="post classic " style="" id="post_2200624">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0182/uid-182583.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0182/uid-182583.html"><s>Fierros</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 26<br />
+	Threads: 7<br />
+	Joined: Oct 2012
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0389/tid-389198.html#pid2200624" title="Re: Simple Animations System">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by Fierros" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">02.11.2012, 00:55 <span class="post_edit" id="edited_by_2200624"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2200624">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>NoahF</strong><br />
+<a href="../../threads/0389/tid-389198.html#pid2200311" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">It's very simple.. but as ExpertSahil said, put some more effort into it.</div>
+</td>
+</tr>
+</table>
+</div>What do you want me to put in it else? I need suggestions..
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2200624">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-182583.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2201417"></a>
+<div class="post classic " style="" id="post_2201417">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0182/uid-182517.html"><img src="../../assets/uploads/avatars/182517.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0182/uid-182517.html">Hade.</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 210<br />
+	Threads: 36<br />
+	Joined: Oct 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0389/tid-389198.html#pid2201417" title="Re: Simple Animations System">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by Hade." style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">02.11.2012, 15:06 <span class="post_edit" id="edited_by_2201417"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2201417">
+		<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 434px;
+		text-align: left;
+		overflow: auto">C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(638) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(643) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(648) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(653) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(658) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(663) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(668) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(673) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(679) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(684) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(689) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(694) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(699) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(704) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(709) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(717) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(725) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(733) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(757) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(766) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(773) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(780) : error 017: undefined symbol "OnePlayAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(787) : error 017: undefined symbol "OnePlayAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(794) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(801) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(808) : error 017: undefined symbol "LoopingAnim"</pre>
+</div><img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/confused.gif" title="Huh?"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2201417">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-182517.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2202476"></a>
+<div class="post classic " style="" id="post_2202476">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0182/uid-182583.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0182/uid-182583.html"><s>Fierros</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 26<br />
+	Threads: 7<br />
+	Joined: Oct 2012
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0389/tid-389198.html#pid2202476" title="Re: Simple Animations System">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by Fierros" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">03.11.2012, 05:56 <span class="post_edit" id="edited_by_2202476"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2202476">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Hade.</strong><br />
+<a href="../../threads/0389/tid-389198.html#pid2201417" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic"><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 434px;
+		text-align: left;
+		overflow: auto">C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(638) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(643) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(648) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(653) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(658) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(663) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(668) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(673) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(679) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(684) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(689) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(694) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(699) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(704) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(709) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(717) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(725) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(733) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(757) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(766) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(773) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(780) : error 017: undefined symbol "OnePlayAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(787) : error 017: undefined symbol "OnePlayAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(794) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(801) : error 017: undefined symbol "LoopingAnim"
+C:\Users\ilmar\Desktop\Click Clack FUN Server\gamemodes\EEF1.pwn(808) : error 017: undefined symbol "LoopingAnim"</pre>
+</div><img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/confused.gif" title="Huh?"/></div>
+</td>
+</tr>
+</table>
+</div>Did you just copy and paste this under filterscriptinit?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2202476">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-182583.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2202723"></a>
+<div class="post classic " style="" id="post_2202723">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0169/uid-169659.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0169/uid-169659.html"><s>VIP475</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 204<br />
+	Threads: 31<br />
+	Joined: Jun 2012
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0389/tid-389198.html#pid2202723" title="Re: Simple Animations System">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by VIP475" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">03.11.2012, 09:48 <span class="post_edit" id="edited_by_2202723"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2202723">
+		You forgot to add a command that would show a list of all available animations.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2202723">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-169659.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2203642"></a>
+<div class="post classic " style="" id="post_2203642">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0182/uid-182436.html"><img src="../../assets/uploads/avatars/182436.png" alt="" width="54" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0182/uid-182436.html">$Bayside$</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 129<br />
+	Threads: 11<br />
+	Joined: Oct 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0389/tid-389198.html#pid2203642" title="Re: Simple Animations System">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by $Bayside$" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">03.11.2012, 19:25 <span class="post_edit" id="edited_by_2203642"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2203642">
+		I know Fierros, he's currently banned until November 17 for advertising his company.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2203642">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-182436.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0389/tid-389198.html">Next Oldest</a> | <a href="../../threads/0389/tid-389198.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="389198" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" selected="selected">-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

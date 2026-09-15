@@ -1,0 +1,2164 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Saving weapon data (MySQL)</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "9cd5dd1e46b8442d3ed364fab9eacd11";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Sorry for bumping, But i really need this. It's keep showing this errors whenever i save the weapons: Code: CMySQLQuery::Execute[] - (error #1452) Cannot add or update a child row: a foreign key const" />
+<link rel="canonical" href="../../threads/0505/tid-505081-page-3.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="9cd5dd1e46b8442d3ed364fab9eacd11" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (3):</span>
+<!-- start: multipage_prevpage -->
+<a href="../../threads/0505/tid-505081-page-2.html" class="pagination_previous">&laquo; Previous</a>
+<!-- end: multipage_prevpage --><!-- start: multipage_page -->
+<a href="../../threads/0505/tid-505081.html" class="pagination_page">1</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0505/tid-505081-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page_current -->
+ <span class="pagination_current">3</span>
+<!-- end: multipage_page_current -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0505/tid-505081-page-3.html#pid3727150">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Saving weapon data (MySQL)
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid3727150"></a>
+<div class="post classic " style="" id="post_3727150">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0274/uid-274689.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0274/uid-274689.html">oMa37</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 928<br />
+	Threads: 13<br />
+	Joined: Feb 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid3727150" title="Re: Saving weapon data (MySQL)">#41</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 41 by oMa37" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">02.07.2016, 16:27 <span class="post_edit" id="edited_by_3727150"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3727150">
+		Sorry for bumping, But i really need this.<br />
+It's keep showing this errors whenever i save the weapons:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 66px;
+		text-align: left;
+		overflow: auto">[19:08:31] [ERROR] CMySQLQuery::Execute[] - (error #1452) Cannot add or update a child row: a foreign key constraint fails (`oma`.`weapondata`, CONSTRAINT `weapondata_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `weapondata` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE)
+[19:08:31] [ERROR] CMySQLQuery::Execute[] - (error #1452) Cannot add or update a child row: a foreign key constraint fails (`oma`.`weapondata`, CONSTRAINT `weapondata_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `weapondata` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE)
+[19:08:31] [ERROR] CMySQLQuery::Execute[] - (error #1452) Cannot add or update a child row: a foreign key constraint fails (`oma`.`weapondata`, CONSTRAINT `weapondata_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `weapondata` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE)</pre>
+</div>Also i have set the ID, WeaponID as UNIQUE and PRIMARY KEY.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3727150">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-274689.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3727163"></a>
+<div class="post classic " style="" id="post_3727163">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0149/uid-149753.html"><img src="../../assets/uploads/avatars/149753.png" alt="" width="55" height="42" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0149/uid-149753.html">Konstantinos</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Spam Machine<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 11,827<br />
+	Threads: 33<br />
+	Joined: Dec 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid3727163" title="Re: Saving weapon data (MySQL)">#42</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 42 by Konstantinos" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">02.07.2016, 16:45 <span class="post_edit" id="edited_by_3727163"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3727163">
+		This error is given when trying to insert or update a row in the child table but there is no such value (for ID in your case) in the parent table. I also noticed that it says "references `weapondata` (`ID`)", it should have been the parent table instead. Post some screenshots from the table's structure -&gt; Relation view
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3727163">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-149753.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3751098"></a>
+<div class="post classic " style="" id="post_3751098">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0075/uid-75476.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0075/uid-75476.html">dragondex</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 9<br />
+	Threads: 2<br />
+	Joined: Dec 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid3751098" title="Re: Saving weapon data (MySQL)">#43</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 43 by dragondex" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">11.08.2016, 12:29 <span class="post_edit" id="edited_by_3751098"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3751098">
+		Could someone show an example on the `deleting` of the row in case someone lost his weapons?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3751098">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-75476.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3811549"></a>
+<div class="post classic " style="" id="post_3811549">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0268/uid-268540.html"><img src="../../assets/uploads/avatars/268540.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0268/uid-268540.html">knuckleduster5</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 45<br />
+	Threads: 8<br />
+	Joined: Oct 2015
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid3811549" title="Re: Saving weapon data (MySQL)">#44</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 44 by knuckleduster5" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">10.12.2016, 09:50 <span class="post_edit" id="edited_by_3811549"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3811549">
+		@Vince<br />
+<br />
+Can you upload a database file?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3811549">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-268540.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3811550"></a>
+<div class="post classic " style="" id="post_3811550">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0243/uid-243204.html"><img src="../../assets/uploads/avatars/243204.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0243/uid-243204.html">X337</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 872<br />
+	Threads: 25<br />
+	Joined: Sep 2014
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid3811550" title="Re: Saving weapon data (MySQL)">#45</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 45 by X337" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">10.12.2016, 09:52 <span class="post_edit" id="edited_by_3811550"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3811550">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>knuckleduster5</strong><br />
+<a href="../../threads/0505/tid-505081-page-3.html#pid3811549" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">@Vince<br />
+<br />
+Can you upload a database file?</div>
+</td>
+</tr>
+</table>
+</div>If you follow the tutorial, you might probably don't need that.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3811550">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-243204.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3811551"></a>
+<div class="post classic " style="" id="post_3811551">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0268/uid-268540.html"><img src="../../assets/uploads/avatars/268540.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0268/uid-268540.html">knuckleduster5</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 45<br />
+	Threads: 8<br />
+	Joined: Oct 2015
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid3811551" title="Re: Saving weapon data (MySQL)">#46</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 46 by knuckleduster5" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">10.12.2016, 10:10 <span class="post_edit" id="edited_by_3811551"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3811551">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>X337</strong><br />
+<a href="../../threads/0505/tid-505081-page-3.html#pid3811550" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">If you follow the tutorial, you might probably don't need that.</div>
+</td>
+</tr>
+</table>
+</div>I'm trying it but I can't set foreign key. My MySQL knowledge is very poor.<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/picard2.png" title="Picard"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3811551">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-268540.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3811604"></a>
+<div class="post classic " style="" id="post_3811604">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0243/uid-243204.html"><img src="../../assets/uploads/avatars/243204.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0243/uid-243204.html">X337</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 872<br />
+	Threads: 25<br />
+	Joined: Sep 2014
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid3811604" title="Re: Saving weapon data (MySQL)">#47</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 47 by X337" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">10.12.2016, 12:26 <span class="post_edit" id="edited_by_3811604"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3811604">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>knuckleduster5</strong><br />
+<a href="../../threads/0505/tid-505081-page-3.html#pid3811551" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">I'm trying it but I can't set foreign key. My MySQL knowledge is very poor.<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/picard2.png" title="Picard"/></div>
+</td>
+</tr>
+</table>
+</div>You can read this tutorial about creating foreign key: <a href="https://dev.mysql.com/doc/refman/5.6/en/create-table-foreign-keys.html" target="_blank">https://dev.mysql.com/doc/refman/5.6...eign-keys.html</a><br />
+<br />
+Or you can use "designer" or using "relation view" in phpmyadmin as already explained in this tutorial, it's much easier.<br />
+<img alt="" border="0" src="http://image.prntscr.com/image/945efaa9ec4f49ff8578cab51c6efe8b.png"/><br />
+<img alt="" border="0" src="http://image.prntscr.com/image/91c86670cdc44d858dbf4005ae6459b4.png"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3811604">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-243204.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3851091"></a>
+<div class="post classic " style="" id="post_3851091">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0252/uid-252000.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0252/uid-252000.html">nikotragedy</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 60<br />
+	Threads: 17<br />
+	Joined: Feb 2015
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid3851091" title="Re: Saving weapon data (MySQL)">#48</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 48 by nikotragedy" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">04.03.2017, 07:18 <span class="post_edit" id="edited_by_3851091"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3851091">
+		<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 66px;
+		text-align: left;
+		overflow: auto">warning 213: tag mismatch
+warning 213: tag mismatch
+ warning 213: tag mismatch</pre>
+</div><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 370px;
+		text-align: left;
+		overflow: auto">forward OnLoadPlayerWeapons(playerid);
+public OnLoadPlayerWeapons(playerid)
+{
+	new
+	    weaponid,
+	    ammo;
+
+	<b>for(new i, j = cache_get_row_count(g_SQL); i &lt; j; i++) // loop through all the rows that were found</b>
+	{
+	    <b>weaponid 	= cache_get_value_int(i, 0, g_SQL);
+	    ammo    	= cache_get_value_int(i, 1, g_SQL);</b>
+
+		if(!(0 &lt;= weaponid &lt;= 46)) // check if weapon is valid (should be)
+		{
+			printf("[info] Warning: OnLoadPlayerWeapons - Unknown weaponid '%d'. Skipping.", weaponid);
+			continue;
+		}
+
+		GivePlayerWeapon(playerid, weaponid, ammo);
+	}
+	return;
+}</pre>
+</div>Bold code = lines with errors.<br />
+<br />
+Guys, what's is the problem here? And where should I put my SELECT query? before the new weaponid?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3851091">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-252000.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3863765"></a>
+<div class="post classic " style="" id="post_3863765">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0270/uid-270443.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0270/uid-270443.html">JustNothing</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 57<br />
+	Threads: 6<br />
+	Joined: Nov 2015
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid3863765" title="Re: Saving weapon data (MySQL)">#49</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 49 by JustNothing" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">04.04.2017, 14:12 <span class="post_edit" id="edited_by_3863765"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3863765">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>nikotragedy</strong><br />
+<a href="../../threads/0505/tid-505081-page-3.html#pid3851091" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic"><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 66px;
+		text-align: left;
+		overflow: auto">warning 213: tag mismatch
+warning 213: tag mismatch
+ warning 213: tag mismatch</pre>
+</div><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 370px;
+		text-align: left;
+		overflow: auto">forward OnLoadPlayerWeapons(playerid);
+public OnLoadPlayerWeapons(playerid)
+{
+	new
+	    weaponid,
+	    ammo;
+
+	<b>for(new i, j = cache_get_row_count(g_SQL); i &lt; j; i++) // loop through all the rows that were found</b>
+	{
+	    <b>weaponid 	= cache_get_value_int(i, 0, g_SQL);
+	    ammo    	= cache_get_value_int(i, 1, g_SQL);</b>
+
+		if(!(0 &lt;= weaponid &lt;= 46)) // check if weapon is valid (should be)
+		{
+			printf("[info] Warning: OnLoadPlayerWeapons - Unknown weaponid '%d'. Skipping.", weaponid);
+			continue;
+		}
+
+		GivePlayerWeapon(playerid, weaponid, ammo);
+	}
+	return;
+}</pre>
+</div>Bold code = lines with errors.<br />
+<br />
+Guys, what's is the problem here? And where should I put my SELECT query? before the new weaponid?</div>
+</td>
+</tr>
+</table>
+</div> cache_get_value_int(i, 0, weaponid);<br />
+ cache_get_value_int(i, 1, ammo);<br />
+<br />
+no?<br />
+<br />
+<a href="https://wiki.sa-mp.com/wiki/MySQL/R40#cache_get_value_index_int" target="_blank">https://wiki.sa-mp.com/wiki/MySQL/R40...alue_index_int</a>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3863765">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-270443.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3868469"></a>
+<div class="post classic " style="" id="post_3868469">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0179/uid-179165.html"><img src="../../assets/uploads/avatars/179165.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0179/uid-179165.html">Kane</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 824<br />
+	Threads: 6<br />
+	Joined: Sep 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid3868469" title="Re: Saving weapon data (MySQL)">#50</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 50 by Kane" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">15.04.2017, 00:50 <span class="post_edit" id="edited_by_3868469"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Kane; 23/04/2017 at 12:03 PM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3868469">
+		----
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3868469">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-179165.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid4079807"></a>
+<div class="post classic " style="" id="post_4079807">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0326/uid-326443.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0326/uid-326443.html">OuDayas</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 84<br />
+	Threads: 10<br />
+	Joined: Jan 2019
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid4079807" title="Re: Saving weapon data (MySQL)">#51</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 51 by OuDayas" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.01.2019, 12:41 <span class="post_edit" id="edited_by_4079807"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_4079807">
+		I have a problem when i insert the code for load weapons when a player connect to the server, pawno get me that error how i can fix it?<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:215px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">C</span><span style="color: #000000;">:</span>\Users\ouday\OneDrive\Desktop\Giochi\samp\samp rp\samp03DL_svr_R1_win32\gamemodes\provabella.pwn<span style="color: #000000;">(</span><span style="color: #000000;">842</span><span style="color: #000000;">)</span> <span style="color: #000000;">:</span> error 017<span style="color: #000000;">:</span> undefined symbol <span style="color: #000066;">"weaponid"</span><br/><span style="color: #000000;">C</span><span style="color: #000000;">:</span>\Users\ouday\OneDrive\Desktop\Giochi\samp\samp rp\samp03DL_svr_R1_win32\gamemodes\provabella.pwn<span style="color: #000000;">(</span><span style="color: #000000;">904</span><span style="color: #000000;">)</span> <span style="color: #000000;">:</span> warning <span style="color: #000000;">219</span><span style="color: #000000;">:</span> local variable <span style="color: #000066;">"weaponid"</span> shadows a variable at a preceding level<br/><span style="color: #000000;">C</span><span style="color: #000000;">:</span>\Users\ouday\OneDrive\Desktop\Giochi\samp\samp rp\samp03DL_svr_R1_win32\gamemodes\provabella.pwn<span style="color: #000000;">(</span><span style="color: #000000;">905</span><span style="color: #000000;">)</span> <span style="color: #000000;">:</span> warning <span style="color: #000000;">219</span><span style="color: #000000;">:</span> local variable <span style="color: #000066;">"ammo"</span> shadows a variable at a preceding level<br/><span style="color: #000000;">C</span><span style="color: #000000;">:</span>\Users\ouday\OneDrive\Desktop\Giochi\samp\samp rp\samp03DL_svr_R1_win32\gamemodes\provabella.pwn<span style="color: #000000;">(</span><span style="color: #000000;">907</span><span style="color: #000000;">)</span> <span style="color: #000000;">:</span> error 017<span style="color: #000000;">:</span> undefined symbol <span style="color: #000066;">"dbrp"</span><br/><span style="color: #000000;">C</span><span style="color: #000000;">:</span>\Users\ouday\OneDrive\Desktop\Giochi\samp\samp rp\samp03DL_svr_R1_win32\gamemodes\provabella.pwn<span style="color: #000000;">(</span><span style="color: #000000;">909</span><span style="color: #000000;">)</span> <span style="color: #000000;">:</span> error 017<span style="color: #000000;">:</span> undefined symbol <span style="color: #000066;">"cache_get_row_int"</span><br/><span style="color: #000000;">C</span><span style="color: #000000;">:</span>\Users\ouday\OneDrive\Desktop\Giochi\samp\samp rp\samp03DL_svr_R1_win32\gamemodes\provabella.pwn<span style="color: #000000;">(</span><span style="color: #000000;">910</span><span style="color: #000000;">)</span> <span style="color: #000000;">:</span> error 017<span style="color: #000000;">:</span> undefined symbol <span style="color: #000066;">"cache_get_row_int"</span><br/><span style="color: #000000;">C</span><span style="color: #000000;">:</span>\Users\ouday\OneDrive\Desktop\Giochi\samp\samp rp\samp03DL_svr_R1_win32\gamemodes\provabella.pwn<span style="color: #000000;">(</span><span style="color: #000000;">901</span><span style="color: #000000;">)</span> <span style="color: #000000;">:</span> warning <span style="color: #000000;">203</span><span style="color: #000000;">:</span> symbol is never used<span style="color: #000000;">:</span> <span style="color: #000066;">"ammo"</span><br/><span style="color: #000000;">C</span><span style="color: #000000;">:</span>\Users\ouday\OneDrive\Desktop\Giochi\samp\samp rp\samp03DL_svr_R1_win32\gamemodes\provabella.pwn<span style="color: #000000;">(</span><span style="color: #000000;">901</span><span style="color: #000000;">)</span> <span style="color: #000000;">:</span> warning <span style="color: #000000;">203</span><span style="color: #000000;">:</span> symbol is never used<span style="color: #000000;">:</span> <span style="color: #000066;">"weaponid"</span><br/>Pawn compiler 3.2.3664          Copyright <span style="color: #000000;">(</span>c<span style="color: #000000;">)</span> <span style="color: #000000;">1997</span><span style="color: #000000;">-</span><span style="color: #000000;">2006</span>, ITB CompuPhase<br/><br/><br/><span style="color: #000000;">4</span> Errors.</div></div></pre>
+</div>this is the GM <a href="https://pastebin.com/uAxBXu7Y" target="_blank">GM link</a><br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Vince</strong><br />
+<a href="../../threads/0505/tid-505081.html#pid2981852" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">This is, in part, an extension on my previous tutorial regarding the general table structure and foreign keys. If you haven't read that one, I suggest you do that first.<br />
+<br />
+<u><font size="3">Weapon Information</font></u><br />
+There are 13 different weapon slots and thus a player can theoretically hold up to 13 different weapons. In practice, though, this is usually more like 4 or 5.<br />
+<br />
+<u><font size="3">Why this structure?</font></u><br />
+The table we will be creating will look like this:<br />
+<img alt="" border="0" src="http://puu.sh/7Y1My.png"/><br />
+This structure allows for a more compact view and allows for the use of aggregate functions such as COUNT(). This allows me to find out how many weapons each player has, how many players have an M4 or even the total amount of ammo currently circulating (for a specific weapon). This may all seem trivial but it is difficult, if not impossible, to achieve with your average non-normalized "weapon1, ammo1 ... weapon13, ammo13" approach.<br />
+<br />
+From the above screenshot we can deduct that the player 1 has 3 weapons: a nite stick (id 3) with 1 ammo, a desert eagle (id 24) with 21 ammo and an M4 (id 31) with 266 ammo.<br />
+<br />
+<u><font size="3">Creating the table</font></u><br />
+<b><font color="Blue">userid</font></b> is a reference to the player's unique ID which is stored in another table, along with their name, password, etc. Notice that phpMyAdmin conveniently makes the userid clickable if a foreign key exists. <b><font color="Blue">weaponid</font></b> is simply the weaponid as is returned from functions like GetPlayerWeapon and GetPlayerWeaponData. <b><font color="Blue">ammo</font></b> holds the ammunition associated with aforementioned weaponid.<br />
+<br />
+<img alt="" border="0" src="http://i.imgur.com/4m11mSS.png"/><br />
+<br />
+The options you need to edit are marked in yellow. Note that the type and attributes of the userid may differ in your case: this field needs to be declared with the exact same definition as your main userid. This may mean that you do not need to set that field to <i>unsigned</i>. The userid does need to be declared as an index though. It is neither a primary key, nor an unique key. For the weaponid we choose an unsigned tinyint since we're only dealing with non-negative numbers up to 46. The ammo is declared unsigned as well since there's no such thing as negative ammunition. Lastly, don't forget to set the engine to InnoDB. Click Save to create the table.<br />
+<br />
+<u><font size="3">Setting limits</font></u><br />
+You should've been brought to the structures tab of the table you just created. Navigate there if this isn't the case.<br />
+Before continuing, we will first impose some extra limits to avoid cluttering the table with useless data later on. Each player (userid) can only hold exactly one specific weapon (weaponid) at once. This is a UNIQUE property. Therefore, tick the checkboxes in front of userid and weaponid. Then click on the UNIQUE button underneath the table.<br />
+<br />
+<img alt="" border="0" src="http://i.imgur.com/UE8AFEO.png"/><br />
+Update 31/01/2016: click the PRIMARY KEY button instead. Each table should have a primary key.<br />
+<br />
+<u><font size="3">Creating the foreign key</font></u><br />
+You should've been brought back to the structures tab. Navigate there if this isn't the case. Underneath the structure definition you should see a link titled <i>Relation view</i>. Click this to be brought to the "relation creator".<br />
+<br />
+<img alt="" border="0" src="http://i.imgur.com/76QZOqP.png"/><br />
+<br />
+I'm creating a link to the <i>id</i> field in the table <i>playerinfo</i> in the database <i>vcnr</i>. Your table and database will be called differently. Select the proper ID. Note that for fields to show up in this list, they need to be defined as a key! We also want any changes made in the main table to be CASCADED into this table. Click Save. This concludes the table creation part in phpMyAdmin. Now back to Pawn.<br />
+<br />
+<u><font size="3">Saving</font></u><br />
+For this table, we will only use SELECT, INSERT and DELETE queries. There will be no real UPDATE queries. Instead, we will only use a special insert query:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">INSERT INTO </span><span style="color: #007700">... </span><span style="color: #0000BB">ON DUPLICATE KEY UPDATE </span><span style="color: #007700">... 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>This query will try to insert the data as normal. If this fails because the data already exists (duplicate key) it will instead perform an update. In our context this means that we will merely update the ammo if a weaponid is already present for a specific user.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:231px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span><br/>    weaponid,<br/>    ammo;<br/>    <br/><span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i; i <span style="color: #000000;">&lt;</span> <span style="color: #000000;">13</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #228822;">// looping through all weapon slots (0 - 12)</span><br/><span style="color: #000000;">{</span><br/>    GetPlayerWeaponData<span style="color: #000000;">(</span>playerid, i, weaponid, ammo<span style="color: #000000;">)</span>; <span style="color: #228822;">// get weaponid and ammo</span><br/><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>weaponid<span style="color: #000000;">)</span> <span style="color: #2222BB;">continue</span>; <span style="color: #228822;">// don't insert if there's no weapon in this slot</span><br/>    <br/>    mysql_format<span style="color: #000000;">(</span>userDB, mysqlquery, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>mysqlquery<span style="color: #000000;">)</span>, <span style="color: #000066;">"INSERT INTO player_weapons VALUES (%d, %d, %d) ON DUPLICATE KEY UPDATE ammo = %d;"</span>, PlayerInfo<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pSQLID<span style="color: #000000;">]</span>, weaponid, ammo, ammo<span style="color: #000000;">)</span>;<br/>    mysql_pquery<span style="color: #000000;">(</span>userDB, mysqlquery<span style="color: #000000;">)</span>; <span style="color: #228822;">// parallel queries</span><br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+The above snippet will insert or update all the weapons the player currently has. I am using parallel queries for speed: the order in which the inserts are performed isn't at all important. You will need to substitute the userid variable with your own. The same query can also be used stand-alone in other places. You can, for example, write a hook for GivePlayerWeapon which immediately performs an insert as soon as the weapon is given.<br />
+<br />
+<u><font size="3">Loading</font></u><br />
+Now to retrieve this data and give the players their weapons back. Our standard select query;<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">SELECT weaponid</span><span style="color: #007700">, </span><span style="color: #0000BB">ammo FROM player_weapons WHERE userid </span><span style="color: #007700">= %</span><span style="color: #0000BB">d</span><span style="color: #007700">; 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:359px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnLoadPlayerWeapons<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span><br/>        weaponid,<br/>        ammo;<br/>    <br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i, j <span style="color: #000000;">=</span> cache_get_row_count<span style="color: #000000;">(</span>userDB<span style="color: #000000;">)</span>; i <span style="color: #000000;">&lt;</span> j; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #228822;">// loop through all the rows that were found</span><br/>    <span style="color: #000000;">{</span><br/>        weaponid    <span style="color: #000000;">=</span> cache_get_row_int<span style="color: #000000;">(</span>i, <span style="color: #000000;">0</span>, userDB<span style="color: #000000;">)</span>;<br/>        ammo        <span style="color: #000000;">=</span> cache_get_row_int<span style="color: #000000;">(</span>i, <span style="color: #000000;">1</span>, userDB<span style="color: #000000;">)</span>;<br/>        <br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #000000;">(</span><span style="color: #000000;">0</span> <span style="color: #000000;">&lt;=</span> weaponid <span style="color: #000000;">&lt;=</span> <span style="color: #000000;">46</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #228822;">// check if weapon is valid (should be)</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"[info] Warning: OnLoadPlayerWeapons - Unknown weaponid '%d'. Skipping."</span>, weaponid<span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">continue</span>;<br/>        <span style="color: #000000;">}</span><br/>        <br/>        GivePlayerWeapon<span style="color: #000000;">(</span>playerid, weaponid, ammo<span style="color: #000000;">)</span>; <br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<u><font size="3">Purging obsolete data</font></u><br />
+Whenever a weapon is taken away, do not forget to delete it from the database otherwise it will be returned to the player when they next join. You could write a hook for ResetPlayerWeapons. It may also be possible that weapons that have no ammo are left behind in the table. This doesn't affect anything in-game and can be cleaned up with a query (delete where ammo = 0) when the server starts, or on a cron job.</div>
+</td>
+</tr>
+</table>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_4079807">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-326443.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid4128025"></a>
+<div class="post classic " style="" id="post_4128025">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0330/uid-330747.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0330/uid-330747.html">Nawickaz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 13<br />
+	Threads: 0<br />
+	Joined: Apr 2019
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid4128025" title="Re: Saving weapon data (MySQL)">#52</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 52 by Nawickaz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">12.01.2020, 17:16 <span class="post_edit" id="edited_by_4128025"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_4128025">
+		I have a problem compiling my code: <br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">public OnPlayerSpawn(playerid)
+{
+	new WQ[256];
+   
+    mysql_format(Database, WQ, sizeof(WQ), "SELECT `WEAPONID`, `AMMO` FROM `WEAPONDATA` WHERE `ID` = '%d'", pInfo[playerid][ID]);
+	mysql_tquery(Database, WQ, "OnLoadPlayerWeapons", "ii", playerid);
+    
+    
+    
+    
+    
+	return 1;
+}
+
+
+
+
+forward public OnLoadPlayerWeapons(playerid);
+public OnLoadPlayerWeapons(playerid)
+{
+   
+
+    for(new i, j = cache_get_row_count(WQ); i &lt; j; i++) // loop through all the rows that were found
+    {
+        weaponid    = cache_get_row_int(i, 0, WQ);
+        ammo        = cache_get_row_int(i, 1, WQ);
+
+        if(!(0 &lt;= weaponid &lt;= 46)) // check if weapon is valid (should be)
+        {
+            printf("[info] Warning: OnLoadPlayerWeapons - Unknown weaponid '%d'. Skipping.", weaponid);
+            continue;
+        }
+
+        GivePlayerWeapon(playerid, weaponid, ammo);
+    }
+    return;
+}</pre>
+</div>Geting this error: <br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 130px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">E</span><span style="color: #007700">:\</span><span style="color: #0000BB">Projektai</span><span style="color: #007700">\</span><span style="color: #0000BB">SAMP</span><span style="color: #007700">\</span><span style="color: #0000BB">Win servas prog</span><span style="color: #007700">\</span><span style="color: #0000BB">gamemodes</span><span style="color: #007700">\</span><span style="color: #0000BB">naujas</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">550</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"WQ"
+<br/></span><span style="color: #0000BB">E</span><span style="color: #007700">:\</span><span style="color: #0000BB">Projektai</span><span style="color: #007700">\</span><span style="color: #0000BB">SAMP</span><span style="color: #007700">\</span><span style="color: #0000BB">Win servas prog</span><span style="color: #007700">\</span><span style="color: #0000BB">gamemodes</span><span style="color: #007700">\</span><span style="color: #0000BB">naujas</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">552</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"cache_get_row_int"
+<br/></span><span style="color: #0000BB">E</span><span style="color: #007700">:\</span><span style="color: #0000BB">Projektai</span><span style="color: #007700">\</span><span style="color: #0000BB">SAMP</span><span style="color: #007700">\</span><span style="color: #0000BB">Win servas prog</span><span style="color: #007700">\</span><span style="color: #0000BB">gamemodes</span><span style="color: #007700">\</span><span style="color: #0000BB">naujas</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">553</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"cache_get_row_int"
+<br/></span><span style="color: #0000BB">Pawn compiler 3.2.3664              Copyright </span><span style="color: #007700">(</span><span style="color: #0000BB">c</span><span style="color: #007700">) </span><span style="color: #0000BB">1997</span><span style="color: #007700">-</span><span style="color: #0000BB">2006</span><span style="color: #007700">, </span><span style="color: #0000BB">ITB CompuPhase
+
+
+<br/>3 Errors</span><span style="color: #007700">. 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_4128025">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-330747.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid4142744"></a>
+<div class="post classic " style="" id="post_4142744">
+<div class="post_author scaleimages">
+	
+	<div class="author_information">
+			<strong><span class="largetext">Arramis</span></strong> <br />
+			<span class="smalltext">
+				Unregistered<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_guest -->
+&nbsp;
+<!-- end: postbit_author_guest -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid4142744" title="Re: Saving weapon data (MySQL)">#53</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 53 by Arramis" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.04.2020, 13:58 <span class="post_edit" id="edited_by_4142744"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_4142744">
+		Hello guys, I've just updated to this method, and I wonder..<br />
+My weapons don't get deleted from the database, how should I make a query to delete everything for the player before inserting new weapon values<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/confused.gif" title="Huh?"/> <br />
+<br />
+Thanks if anyone would explain to me
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_4142744">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid4142746"></a>
+<div class="post classic " style="" id="post_4142746">
+<div class="post_author scaleimages">
+	
+	<div class="author_information">
+			<strong><span class="largetext">Art</span></strong> <br />
+			<span class="smalltext">
+				Unregistered<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_guest -->
+&nbsp;
+<!-- end: postbit_author_guest -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid4142746" title="Re: Saving weapon data (MySQL)">#54</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 54 by Art" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.04.2020, 14:01 <span class="post_edit" id="edited_by_4142746"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_4142746">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Nawickaz</strong><br />
+<a href="../../threads/0505/tid-505081-page-3.html#pid4128025" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">I have a problem compiling my code: <br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">public OnPlayerSpawn(playerid)
+{
+	new WQ[256];
+   
+    mysql_format(Database, WQ, sizeof(WQ), "SELECT `WEAPONID`, `AMMO` FROM `WEAPONDATA` WHERE `ID` = '%d'", pInfo[playerid][ID]);
+	mysql_tquery(Database, WQ, "OnLoadPlayerWeapons", "ii", playerid);
+    
+    
+    
+    
+    
+	return 1;
+}
+
+
+
+
+forward public OnLoadPlayerWeapons(playerid);
+public OnLoadPlayerWeapons(playerid)
+{
+   
+
+    for(new i, j = cache_get_row_count(WQ); i &lt; j; i++) // loop through all the rows that were found
+    {
+        weaponid    = cache_get_row_int(i, 0, WQ);
+        ammo        = cache_get_row_int(i, 1, WQ);
+
+        if(!(0 &lt;= weaponid &lt;= 46)) // check if weapon is valid (should be)
+        {
+            printf("[info] Warning: OnLoadPlayerWeapons - Unknown weaponid '%d'. Skipping.", weaponid);
+            continue;
+        }
+
+        GivePlayerWeapon(playerid, weaponid, ammo);
+    }
+    return;
+}</pre>
+</div>Geting this error: <br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 130px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">E</span><span style="color: #007700">:\</span><span style="color: #0000BB">Projektai</span><span style="color: #007700">\</span><span style="color: #0000BB">SAMP</span><span style="color: #007700">\</span><span style="color: #0000BB">Win servas prog</span><span style="color: #007700">\</span><span style="color: #0000BB">gamemodes</span><span style="color: #007700">\</span><span style="color: #0000BB">naujas</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">550</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"WQ"
+<br/></span><span style="color: #0000BB">E</span><span style="color: #007700">:\</span><span style="color: #0000BB">Projektai</span><span style="color: #007700">\</span><span style="color: #0000BB">SAMP</span><span style="color: #007700">\</span><span style="color: #0000BB">Win servas prog</span><span style="color: #007700">\</span><span style="color: #0000BB">gamemodes</span><span style="color: #007700">\</span><span style="color: #0000BB">naujas</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">552</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"cache_get_row_int"
+<br/></span><span style="color: #0000BB">E</span><span style="color: #007700">:\</span><span style="color: #0000BB">Projektai</span><span style="color: #007700">\</span><span style="color: #0000BB">SAMP</span><span style="color: #007700">\</span><span style="color: #0000BB">Win servas prog</span><span style="color: #007700">\</span><span style="color: #0000BB">gamemodes</span><span style="color: #007700">\</span><span style="color: #0000BB">naujas</span><span style="color: #007700">.</span><span style="color: #0000BB">pwn</span><span style="color: #007700">(</span><span style="color: #0000BB">553</span><span style="color: #007700">) : </span><span style="color: #0000BB">error 017</span><span style="color: #007700">: </span><span style="color: #0000BB">undefined symbol </span><span style="color: #DD0000">"cache_get_row_int"
+<br/></span><span style="color: #0000BB">Pawn compiler 3.2.3664              Copyright </span><span style="color: #007700">(</span><span style="color: #0000BB">c</span><span style="color: #007700">) </span><span style="color: #0000BB">1997</span><span style="color: #007700">-</span><span style="color: #0000BB">2006</span><span style="color: #007700">, </span><span style="color: #0000BB">ITB CompuPhase
+
+
+<br/>3 Errors</span><span style="color: #007700">. 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div></div>
+</td>
+</tr>
+</table>
+</div>
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:423px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">// AssignPlayerWeapons</span><br/><span style="color: #2222BB;">forward</span> AssignPlayerWeapons<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> AssignPlayerWeapons<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>cache_num_rows<span style="color: #000000;">(</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/>    <br/>    <span style="color: #2222BB;">new</span><br/>        weaponid,<br/>        ammo;<br/>    <br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i; i <span style="color: #000000;">&lt;</span> cache_num_rows<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <br/>    <span style="color: #000000;">{</span><br/>        cache_get_value_name_int<span style="color: #000000;">(</span>i, <span style="color: #000066;">"weapon_colum"</span>, weaponid<span style="color: #000000;">)</span>;<br/>        cache_get_value_name_int<span style="color: #000000;">(</span>i, <span style="color: #000066;">"ammo_column"</span>, ammo<span style="color: #000000;">)</span>;<br/>        <br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #000000;">(</span><span style="color: #000000;">0</span> <span style="color: #000000;">&lt;=</span> weaponid <span style="color: #000000;">&lt;=</span> <span style="color: #000000;">46</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"[info] Warning: OnLoadPlayerWeapons - Unknown weaponid '%d'. Skipping."</span>, weaponid<span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">continue</span>;<br/>        <span style="color: #000000;">}</span><br/>        GivePlayerWeapon<span style="color: #000000;">(</span>playerid, weaponid, ammo<span style="color: #000000;">)</span>; <br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_4142746">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid4142747"></a>
+<div class="post classic " style="" id="post_4142747">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0286/uid-286760.html"><img src="../../assets/uploads/avatars/286760.png" alt="" width="55" height="28" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0286/uid-286760.html">MrCesar</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 291<br />
+	Threads: 43<br />
+	Joined: Sep 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid4142747" title="Re: Saving weapon data (MySQL)">#55</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 55 by MrCesar" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.04.2020, 14:02 <span class="post_edit" id="edited_by_4142747"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_4142747">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Arramis</strong><br />
+<a href="../../threads/0505/tid-505081-page-3.html#pid4142744" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Hello guys, I've just updated to this method, and I wonder..<br />
+My weapons don't get deleted from the database, how should I make a query to delete everything for the player before inserting new weapon values<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/confused.gif" title="Huh?"/> <br />
+<br />
+Thanks if anyone would explain to me</div>
+</td>
+</tr>
+</table>
+</div>+1 same problem here, anyone? <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/confused.gif" title="Huh?"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_4142747">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-286760.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid4142862"></a>
+<div class="post classic " style="" id="post_4142862">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0263/uid-263748.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0263/uid-263748.html">tuss</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 23<br />
+	Threads: 1<br />
+	Joined: Aug 2015
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid4142862" title="Re: Saving weapon data (MySQL)">#56</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 56 by tuss" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.04.2020, 21:54 <span class="post_edit" id="edited_by_4142862"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_4142862">
+		Thanks for this, I'm gonna use this.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_4142862">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-263748.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid4148894"></a>
+<div class="post classic " style="" id="post_4148894">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0346/uid-346903.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0346/uid-346903.html">JacksonWhite</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 52<br />
+	Threads: 1<br />
+	Joined: Apr 2020
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0505/tid-505081-page-3.html#pid4148894" title="Re: Saving weapon data (MySQL)">#57</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 57 by JacksonWhite" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">31.05.2020, 14:04 <span class="post_edit" id="edited_by_4148894"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_4148894">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				public OnLoadPlayerWeapons(playerid)<br />
+{<br />
+    new<br />
+        weaponid,<br />
+        ammo;<br />
+<br />
+    for(new i, j = cache_get_row_count (userDB); i &lt; j; i++) // loop through all the rows that were found<br />
+    {<br />
+        weaponid    = cache_get_row_int(i, 0, userDB);<br />
+        ammo        = cache_get_row_int(i, 1, userDB);<br />
+<br />
+        if(!(0 &lt;= weaponid &lt;= 46)) // check if weapon is valid (should be)<br />
+        {<br />
+            printf("[info] Warning: OnLoadPlayerWeapons - Unknown weaponid '%d'. Skipping.", weaponid);<br />
+            continue;<br />
+        }<br />
+<br />
+        GivePlayerWeapon(playerid, weaponid, ammo); <br />
+    }<br />
+    return;<br />
+}<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>Deu esse error nessa parte:<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				C:\Users\pawn\Desktop\servidor\gamemodes\Cauezin.p  wn(378<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/cool.gif" title="Cool"/> : warning 235: public function lacks forward declaration (symbol "OnLoadPlayerWeapons")<br />
+C:\Users\pawn\Desktop\servidor\gamemodes\Cauezin.p  wn(3794) : warning 213: tag mismatch<br />
+C:\Users\pawn\Desktop\servidor\gamemodes\Cauezin.p  wn(3796) : error 017: undefined symbol "cache_get_row_int"<br />
+C:\Users\pawn\Desktop\servidor\gamemodes\Cauezin.p  wn(3797) : error 017: undefined symbol "cache_get_row_int"<br />
+Pawn compiler 3.2.3664	 	 	Copyright &copy; 1997-2006, ITB CompuPhase<br />
+<br />
+<br />
+2 Errors.<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>Eu defini no topo da gm:<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				new MySQL:userDB;<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>e coloquei em OnPlayerDisconnect:<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				{<br />
+  new<br />
+    weaponid,<br />
+    ammo;<br />
+  new mysqlquery[900];<br />
+<br />
+  for(new i; i &lt; 13; i++) // looping through all weapon slots (0 - 12)<br />
+  {<br />
+    GetPlayerWeaponData(playerid, i, weaponid, ammo); // get weaponid and ammo<br />
+<br />
+    if(!weaponid) continue; // don't insert if there's no weapon in this slot<br />
+<br />
+    mysql_format(userDB, mysqlquery, sizeof(mysqlquery), "INSERT INTO player_weapons VALUES (%d, %d, %d) ON DUPLICATE KEY UPDATE ammo = %d;", Player[playerid][pSQLID], weaponid, ammo, ammo);<br />
+    mysql_pquery(userDB, mysqlquery); // parallel queries mysql_format<br />
+  }<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_4148894">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-346903.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0505/tid-505081.html">Next Oldest</a> | <a href="../../threads/0505/tid-505081.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="505081" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (3):</span>
+<!-- start: multipage_prevpage -->
+<a href="../../threads/0505/tid-505081-page-2.html" class="pagination_previous">&laquo; Previous</a>
+<!-- end: multipage_prevpage --><!-- start: multipage_page -->
+<a href="../../threads/0505/tid-505081.html" class="pagination_page">1</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0505/tid-505081-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page_current -->
+ <span class="pagination_current">3</span>
+<!-- end: multipage_page_current -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

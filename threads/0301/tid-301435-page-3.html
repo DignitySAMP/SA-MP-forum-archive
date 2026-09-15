@@ -1,0 +1,2032 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Creating dynamic signatures using PHP and MySQL.</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "c1d8f755789f39842eaba796b462c038";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="@ is used to suppress errors given out by that function. Already said 4 posts above me." />
+<link rel="canonical" href="../../threads/0301/tid-301435-page-3.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="c1d8f755789f39842eaba796b462c038" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (4):</span>
+<!-- start: multipage_prevpage -->
+<a href="../../threads/0301/tid-301435-page-2.html" class="pagination_previous">&laquo; Previous</a>
+<!-- end: multipage_prevpage --><!-- start: multipage_page -->
+<a href="../../threads/0301/tid-301435.html" class="pagination_page">1</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0301/tid-301435-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page_current -->
+ <span class="pagination_current">3</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0301/tid-301435-page-4.html" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0301/tid-301435-page-4.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0301/tid-301435-page-3.html#pid1567778">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Creating dynamic signatures using PHP and MySQL.
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid1567778"></a>
+<div class="post classic " style="" id="post_1567778">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120708.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120708.html">Nodroz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 70<br />
+	Threads: 5<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1567778" title="Re: Creating dynamic signatures using PHP and MySQL.">#41</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 41 by Nodroz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">12.12.2011, 16:10 <span class="post_edit" id="edited_by_1567778"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1567778">
+		@ is used to suppress errors given out by that function. Already said 4 posts above me. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1567778">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120708.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1575045"></a>
+<div class="post classic " style="" id="post_1575045">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0098/uid-98067.html"><img src="../../assets/uploads/avatars/98067.png" alt="" width="55" height="39" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0098/uid-98067.html">royal_king</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 597<br />
+	Threads: 4<br />
+	Joined: Jul 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1575045" title="Re: Creating dynamic signatures using PHP and MySQL.">#42</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 42 by royal_king" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.12.2011, 11:04 <span class="post_edit" id="edited_by_1575045"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1575045">
+		Very helpful and useful tutorial mate <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1575045">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-98067.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1579218"></a>
+<div class="post classic " style="" id="post_1579218">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0100/uid-100574.html"><img src="../../assets/uploads/avatars/100574.png" alt="" width="55" height="53" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0100/uid-100574.html">Niko_boy</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,336<br />
+	Threads: 30<br />
+	Joined: Aug 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1579218" title="Re: Creating dynamic signatures using PHP and MySQL.">#43</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 43 by Niko_boy" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">19.12.2011, 15:46 <span class="post_edit" id="edited_by_1579218"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1579218">
+		Failing for me i Returned with error<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				Localhost/lcsbot/signature.php?player_name=Niko_boy<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>showing :- Error in Image<br />
+<br />
+EDIT:<br />
+I EDITED EVRYTHING RIGHT
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1579218">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-100574.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1579224"></a>
+<div class="post classic " style="" id="post_1579224">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120708.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120708.html">Nodroz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 70<br />
+	Threads: 5<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1579224" title="Re: Creating dynamic signatures using PHP and MySQL.">#44</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 44 by Nodroz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">19.12.2011, 15:48 <span class="post_edit" id="edited_by_1579224"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1579224">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Jagat</strong><br />
+<a href="../../threads/0301/tid-301435-page-3.html#pid1579218" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Failing for me i Returned with error<br />
+<br />
+showing :- Error in Script.<br />
+<br />
+EDIT:<br />
+I EDITED EVRYTHING RIGHT</div>
+</td>
+</tr>
+</table>
+</div>Could you provide us with a little bit more information please?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1579224">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120708.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1579250"></a>
+<div class="post classic " style="" id="post_1579250">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0100/uid-100574.html"><img src="../../assets/uploads/avatars/100574.png" alt="" width="55" height="53" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0100/uid-100574.html">Niko_boy</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,336<br />
+	Threads: 30<br />
+	Joined: Aug 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1579250" title="Re: Creating dynamic signatures using PHP and MySQL.">#45</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 45 by Niko_boy" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">19.12.2011, 16:03 <span class="post_edit" id="edited_by_1579250"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1579250">
+		I like the tutorial ver useful but <br />
+here is more details of error i got <br />
+i removed @ from some lines too <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/razz.gif" title="Tongue"/> i saw in earlier post being useless ...<br />
+<img alt="" border="0" src="http://localhostr.com/file/CS5lzUX/oO_Oo.JPG"/><br />
+<br />
+^^^^^^^^^^^^^^<br />
+error in image :/ why?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1579250">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-100574.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1579258"></a>
+<div class="post classic " style="" id="post_1579258">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120708.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120708.html">Nodroz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 70<br />
+	Threads: 5<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1579258" title="Re: Creating dynamic signatures using PHP and MySQL.">#46</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 46 by Nodroz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">19.12.2011, 16:06 <span class="post_edit" id="edited_by_1579258"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1579258">
+		Do you have some php server installed on your computer? I'm not experienced with that stuff though. I suggest to try it on a php enabled webhost.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1579258">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120708.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1579261"></a>
+<div class="post classic " style="" id="post_1579261">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0073/uid-73170.html"><img src="../../assets/uploads/avatars/73170.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0073/uid-73170.html">TheArcher</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,334<br />
+	Threads: 62<br />
+	Joined: Dec 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1579261" title="Re: Creating dynamic signatures using PHP and MySQL.">#47</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 47 by TheArcher" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">19.12.2011, 16:07 <span class="post_edit" id="edited_by_1579261"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1579261">
+		I've tried it on localhost by using wamp, but it doesn't work.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1579261">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-73170.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1579269"></a>
+<div class="post classic " style="" id="post_1579269">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0100/uid-100574.html"><img src="../../assets/uploads/avatars/100574.png" alt="" width="55" height="53" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0100/uid-100574.html">Niko_boy</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,336<br />
+	Threads: 30<br />
+	Joined: Aug 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1579269" title="Re: Creating dynamic signatures using PHP and MySQL.">#48</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 48 by Niko_boy" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">19.12.2011, 16:12 <span class="post_edit" id="edited_by_1579269"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Niko_boy; 19.12.2011 at 16:53.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1579269">
+		i tried it on a localhost,<br />
+i know a 000webhost.com can u suggest me anyother free webhost?<br />
+<br />
+<br />
+EDIT:- the host not supporting it <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/sad.gif" title="Sad"/><br />
+<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/confused.gif" title="Huh?"/> need some help regarding free webhost that support php and mysql :/<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">HTML Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 306px;
+		text-align: left;
+		overflow: auto">PHP Error Message
+
+Warning: mysql_connect() [function.mysql-connect]: Unknown MySQL server host 'mysql12.000webhost.com Delete MySQL Database and User' (3) in /home/a9611263/public_html/sign/signature.php on line 17
+
+Free Web Hosting
+
+PHP Error Message
+
+Warning: mysql_select_db() [function.mysql-select-db]: Access denied for user 'a9611263'@'localhost' (using password: NO) in /home/a9611263/public_html/sign/signature.php on line 18
+
+Free Web Hosting
+
+PHP Error Message
+
+Warning: mysql_select_db() [function.mysql-select-db]: A link to the server could not be established in /home/a9611263/public_html/sign/signature.php on line 18
+
+Free Web Hosting
+Unable to select database. Be sure the databasename exists and online is.</pre>
+</div>
+</td>
+</tr>
+</table>
+</div>
+EVERY INFO. IS CORRECT :/
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1579269">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-100574.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1579484"></a>
+<div class="post classic " style="" id="post_1579484">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120708.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120708.html">Nodroz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 70<br />
+	Threads: 5<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1579484" title="Re: Creating dynamic signatures using PHP and MySQL.">#49</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 49 by Nodroz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">19.12.2011, 18:09 <span class="post_edit" id="edited_by_1579484"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1579484">
+		I don't think your information is correct, according to the error lines...<br />
+<br />
+Anyway, try x10hosting.com.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1579484">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120708.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1580336"></a>
+<div class="post classic " style="" id="post_1580336">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0100/uid-100574.html"><img src="../../assets/uploads/avatars/100574.png" alt="" width="55" height="53" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0100/uid-100574.html">Niko_boy</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,336<br />
+	Threads: 30<br />
+	Joined: Aug 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1580336" title="Re: Creating dynamic signatures using PHP and MySQL.">#50</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 50 by Niko_boy" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.12.2011, 09:04 <span class="post_edit" id="edited_by_1580336"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1580336">
+		I have verified everything :/ <br />
+nvm i will test it later on <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/cry.gif" title="Cry"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1580336">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-100574.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1580537"></a>
+<div class="post classic " style="" id="post_1580537">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0089/uid-89612.html"><img src="../../assets/uploads/avatars/89612.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0089/uid-89612.html">GangsTa_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,029<br />
+	Threads: 96<br />
+	Joined: May 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1580537" title="Re: Creating dynamic signatures using PHP and MySQL.">#51</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 51 by GangsTa_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.12.2011, 11:40 <span class="post_edit" id="edited_by_1580537"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1580537">
+		Very useful, REP+.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1580537">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-89612.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1580788"></a>
+<div class="post classic " style="" id="post_1580788">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0143/uid-143200.html"><img src="../../assets/uploads/avatars/143200.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0143/uid-143200.html">§с†¶e®РµРe</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 332<br />
+	Threads: 30<br />
+	Joined: Oct 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1580788" title="Re: Creating dynamic signatures using PHP and MySQL.">#52</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 52 by §с†¶e®РµРe" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.12.2011, 14:05 <span class="post_edit" id="edited_by_1580788"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1580788">
+		nice one
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1580788">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-143200.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1581210"></a>
+<div class="post classic " style="" id="post_1581210">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126726.html"><img src="../../assets/uploads/avatars/126726.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126726.html">System64</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 933<br />
+	Threads: 62<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1581210" title="Re: Creating dynamic signatures using PHP and MySQL.">#53</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 53 by System64" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.12.2011, 18:12 <span class="post_edit" id="edited_by_1581210"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1581210">
+		Just one question, I don't see links with witch I can use that image on some forums etc so this is not script for something like that, I mean that's not script for automatic updating text (score, kills etc.) on that image, if you understand me?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1581210">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126726.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1581293"></a>
+<div class="post classic " style="" id="post_1581293">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120708.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120708.html">Nodroz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 70<br />
+	Threads: 5<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1581293" title="Re: Creating dynamic signatures using PHP and MySQL.">#54</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 54 by Nodroz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.12.2011, 18:52 <span class="post_edit" id="edited_by_1581293"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1581293">
+		Just take the URL in your browserbar, copy and paste it in the forums. Add [IMG] [/IMG] tags, and there you go.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1581293">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120708.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1581326"></a>
+<div class="post classic " style="" id="post_1581326">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126726.html"><img src="../../assets/uploads/avatars/126726.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126726.html">System64</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 933<br />
+	Threads: 62<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1581326" title="Re: Creating dynamic signatures using PHP and MySQL.">#55</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 55 by System64" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.12.2011, 19:07 <span class="post_edit" id="edited_by_1581326"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1581326">
+		Ahh now I see it <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/picard2.png" title="Picard"/><img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/picard2.png" title="Picard"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1581326">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126726.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1582353"></a>
+<div class="post classic " style="" id="post_1582353">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0100/uid-100574.html"><img src="../../assets/uploads/avatars/100574.png" alt="" width="55" height="53" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0100/uid-100574.html">Niko_boy</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,336<br />
+	Threads: 30<br />
+	Joined: Aug 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1582353" title="Re: Creating dynamic signatures using PHP and MySQL.">#56</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 56 by Niko_boy" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.12.2011, 08:31 <span class="post_edit" id="edited_by_1582353"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1582353">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				I mean that's not script for automatic updating text (score, kills etc.) on that image, if you understand me?<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>Will it do so ?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1582353">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-100574.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1582394"></a>
+<div class="post classic " style="" id="post_1582394">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120708.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120708.html">Nodroz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 70<br />
+	Threads: 5<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1582394" title="Re: Creating dynamic signatures using PHP and MySQL.">#57</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 57 by Nodroz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.12.2011, 09:32 <span class="post_edit" id="edited_by_1582394"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1582394">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Jagat</strong><br />
+<a href="../../threads/0301/tid-301435-page-3.html#pid1582353" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Will it do so ?</div>
+</td>
+</tr>
+</table>
+</div>Yes, each time when you reload that page, the picture will be updated.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1582394">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120708.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1583155"></a>
+<div class="post classic " style="" id="post_1583155">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0145/uid-145619.html"><img src="../../assets/uploads/avatars/145619.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0145/uid-145619.html">Britas</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 37<br />
+	Threads: 10<br />
+	Joined: Nov 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1583155" title="Re: Creating dynamic signatures using PHP and MySQL.">#58</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 58 by Britas" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.12.2011, 16:39 <span class="post_edit" id="edited_by_1583155"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1583155">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				Warning: Cannot modify header information - headers already sent by (output started at /home/notep/domains/just-life.lt/public_html/userbar.php:1) in /home/britas/domains/samp.com/public_html/userbar.php on line 42<br />
+�PNG  IHDR���G IDATx��y|E��&gt;fz&amp;3�9C�� `�EPa�eu]9TTTtw?��� ��Є ����"�E���C�J�B���U��Q3=��23� ��ı����f�&lt;`��#5���="" �Ϙy�,��1�k��eum�5�ĩx�m�&amp;hl��q�i��gj�#g�h�o�  �Ͱ��r&#36;�6��="" ��1,�8�&lt;��!�1e�1d)b="" ��="" 1j��yji���="" x5t�j�x��4���98�c,�p=""&gt;f�a�1^�F���!���B-�������|��Oc�Bt�ǡ�8|�@�F~����@ �����Y�ز�����PKڶ@R��*� @����A*0 �������9�N@p���N;��ҳ����8PRN�񞘠�  &#36;%F%;��#@1@G�&lt;�,��g'�����#���|��-�z�*����b���������!�ǟ0@m�#\ �x39/��'���F���"�\�MAi::�lI� Nl��*� ���#h[8d�&amp;�5:�˲�%�&#36;���e+� � 1�&amp;H��{��Y-=A�GƸ�Ӊ�nwqnNWe;1ɲ�TUa3 c�����p��B�b�o&gt;%ALTYcS����ܮ�i��&#36;���Y�1��v  ���0��ݞ�8*�&#36;��� bI!H���}^��ڱ�0�����1�&#36;��dw:UE9��vU�T�X,���  �%�����W�u���k�ޱcGĥ�ݻ���ҟ���?^ݜGXY��Ւ�����Ԁ�,\�dN  NvvvNNN���G�ݺu�G�ް�S�R���5kv׮]���wN̓O&gt;��������jee�O?�x�%��:��������G��|�ʪ���z�  j��v�y�!�f�4G�ϟ�{:�p�\XQt�a��m�} �C���5k&gt;�#FF_:��1�jժ����o۩S� 6���Kｷ���~��G,x��r'?N�^��rJ��蜘_��7yy�˗�����}�  ��|��%g�}v����0``����(Bv�=�@6�!��������0�U��Y��A�e��0(!�bI�Bm��+H�fi�  �f��kG���s����ѣ�7c���7��@EEţ�&gt;l�̝{{i�|��g%���}��Ԥ�{)un����K�  ,�����?���u����/R��U��߿��+?O�,�?����9��� ��pb� !�&#36;�#� �3ˉJI�?1�t�1�!,K�noM�����ٳ��wu�ѣ����3۵k�i��G�m��?���_�����&lt;��  Q��K�G�:t�%:�Ķm[�9ҵk�T' �I�}�z�����n��F)��l��1��xE��5J)�!�6T6UUu]��F�%Ǚ�y4K�5k���y����w���l�+�������:n��1c�  ٱc���/ھ};��-��F��ӟ�RZZ:mڔݻw�&#36;IW_����Gt��yǎ��ϟ�����#'  O�ܵk !FYY��o��r�;s��^R�m��ɿG�ؓO&gt;��SO�w�yV���K/9r�)����|�~��O,�z��7�͸/����S{_�u?��yo�^�.^�d۶mӧO���Ɯy�6q�����[��`����馛/�� ())ٰa#&lt;�ܢ�^�W�O{�Ν�2��fSճ�&gt;{Kڵkg�C_}����~���%��  �"I�4��p�1�e�R�H�,���7%���ԯY�F�e���:bĈ���O&gt;�  h�v�5S~���ŋ������wѢ�#�;��Ӑ!C��ݫ�o�?���ӯ �������c�-��˵ޒx�1c��w��6�}Ŋ�+V�8t� _��9��3����N�mnݺz��c�&lt;��ч�z����zꉏ?^s�.Z�-�����/���8v�Xx��G�7�e�w��?�p}}����#�F�&amp;k׮�����  �ϟ7��/��q&gt;�nݺ�|&gt;Y�G�<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/surprised.gif" title="Shocked"/>Μ[UUy�U+V����P�n�;����R��w:���a�dY�0�3�yA�Ѳ��?  ����S{w��}׮]0x�`�����1��hMM̈́ � f`شi�OL�8顇�n�SR���.����cƌ=묳W�^}�=wq��E]��?�;~�x�5kf]]�}�˖-k߾}MMMJo���WTT������)-��O,_�*oٳg�m�ͽ�qo��zĽ~����7�9��� I�������|���gśy��Z&#36;x&lt;���ӺP�i�i[��o�����n�[[[���a���/��K_q�獽��?ޡC�e��i��~�,����.�KUU�C��|i����"�  �r�&#36;I�2a@F�F�Bz�t��`Y�s�_?Y�����G���O&lt;  ���[=v���O�_�U�VUWWG&lt;:��,;iҤ ��_�7��4ަ��6�q�����̫~�4(�F����:��!C�������\�Fo�Ir�@�WL�暫��;6l�t޼�  ���;#L��v�D�ݻw��"��?���у��E��m�RE���=�r�  �&#36; !&#36;K��(8b�� ����4W�5k�̜9k��s��s�ݻw˖-�&gt;�{�0���Ҝ���p8���;�֭[UU�������5oor��ر�ԩ�&amp;N���+W�X^YY��{,,,���{��5��p8֯�4�[AAA���z�?&amp;L��&gt;��#�x������̙��}���;&gt;��]�v͘q�Ν;_}u��'��N���vCC���-Y\X�Ə1��?��k+tРeE�1�(�Gl6��� cI�C�hh�� _�lݺ�o߾���}��u8��!C���]�v&gt;��߷o�V]]�n�'�D�ev���5`�a+++�M�z�9�&amp;M�4y��Ǐ�ݭ��bu������W_  }i����\wݵ�߅Ɏ;�m�v�Yg�|�����?�X^^�sfg��+g̸a��s  �b4�&lt;����h]}���3/��ѣ�L�p�y�~晧~ٵb0�]Ko��Aq�1_�p��T��L=��p`�%IBK@H�u�?�OR��Ȍ��f  ͚�}O0`��kJi��2e̞=�����6�ٳ�o�����̵�,����) ��� �}���sK~��ӧϙss�.++��믧�����������x�_���[��_���6(�ӹ������?e�&#36;�D���u]� 4x&lt;_~��������s��s.�h�3O?�ic�l���n���r9�N���1�1�b�t��������fYUU1I�)C�  ���fl��d&amp;3{����&gt;�aЖ���~����Ў;�|&gt;�?�mnܸ��85����  `֬٦�i���;������������&gt;�+&amp;'�ֺt�`�nw�/�PV��7����p�ms�w@���g�ȑ�w���7�=���@��뮻6mڔҍ�  �՝:uִ� ��6�R���LA����z�2�f&lt;G&amp;̈�&#36;u���3��ѣGaa���&#36;Y��1��#  �*J����ױc�� �5�.I�d,�^R9�O��Df��C������C��"7�~��'c�^��O�_��K���:���ƞ05Ί�  �?̘1c�w�y�7ݺu+((mƘa�[n�[YQQQy��t�}�@��(���&lt;�RQ�4� V�v{qqq^^�X�2��7~VTTO�VUU�l��'!���������  +/������y��M�p�Q�;V�䊊�͛�QU[�߫7�|��/!������=�̓a��}YY�iӦ���WTTl߾mѢg?�࿩��,X��n?�~�  �y�~� ��� !^o�w�m8���K�Q^^���ܺuKAA��i�5���s�}Js���p�����pB0�\\�W��V�ʵE�ߟ��#��  ������S}��f���4��FBy.�h@@6���S�)8AHj  �� Pp@)�����U�1..��{�M� (1��=~�����З��ڵĦ*{�M�v��(}���4�bnϏ�ې`�&gt;c�R*˲a  ;w�K������n�j�˲L^JĐ�������]� �w�S�&lt;��\=\Q#�O�H�s��t�GJc|є���oٯAi�A�G_�D�  C9y�ҥK��&lt;����u!�д��G��� ƘRF)��K==z��i�a��ͧpA@v�!��� !WL��B�R�ȧƼjSϊ��Yp���i++KI.kT�5O)����[�Y�,B7d��t]o߾]mmm��T�&#36;`�b�5PPD#� Sq��0�ؔ���&gt;�G{:bԦ�-�h3���b�AB(t�#F�,�!��&#36;K�2�QD�Z��l6���Ԡ�  �11�����P�Oh�(j��l��0J�P���gJ5�.�X�{�7  �?-�vuTӝ bT�\t]g�"�t�@�&lt;��nWda�ts6+j:��M�E��hqi^�8��\�Ѿ  }�&#36;s���,K Ĉ�P�ecSAn&gt;~#�7W�����:��1�1�R�&amp;�##����w�|~?�� :%,;;�b�z2G�4E�� ��VѨ3���=�T�4EQ�&#36;d�@9�YV��Q@@(C3�����N~1�㹉��  �d�^�y�����L�B4�!���t�\1�ܜW�����_Ue�]�0S�o= .�(���Ә�)��#�����`,Q�#cRT5���6�y(�uC�QU(��!F͇��t��cd��ns���VH�A)I���&#36;I  #a �K���VA�x�o�J�W�u#77��))��R���Һ�:B2��I7�  �[�6��F84^���%bT�\t]����)%�RF !� �'��S�f�I�L)�1�L�0��N�M��J)��mM��*���e�P�  QJy~�п�&lt;�O�� �ѣ�PH�B� �������D������v�H������[��Nh䈊#J-7"����T��Q a0YI�|&gt;_S�qtb�F���x]ob�X!\L��1�dK����d� \Ґ~/�2�z\&amp;sב5Ⱦ�)���&gt;!��פ���riv%7�ʊ��G�f&lt;1*h.�1�%  ���0�a,i��(���r��&#36;�t�*��5q��oЗ�тߌ���o2q��  (��b�kx�="" и��d�*jb,ޡ��a�������Ұi�td1*h.6u�nbИi0�@�&#36;  ��,€a+**r�*�q<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/sad.gif" title="Sad"/>xi�5�h��ѐm�q�d워1@x�m��ϟ�_�䱆+e�˔  ��d��i��="" �����~�ͦ�,j��a�@�%,ɻ��iҟmccc="" �i���f46�="�͡�F=�"&gt;��&#36;)�����PYY��&#36;� �Ix+gs�;S�����x�-�WM7T�4}~����A�*5bT�\xFQ�(C�1�a&#36;1`�0������ʇx&lt;�0l6[�Ѣ�F��NPh9�B�*m��!���ޚ�3B�M�bYꝞ��֔W����m����r�/�&amp;�cuik�' bQ/h.���#Uu� ����Y�ˊM����./?�v &amp;���З��%�&#36;n���BD�'�+O�/��{��&lt;�z�=Z]]��[H k�,�oM  \�9Ƅ��6��&gt;�̳��9yy�6����|��m�/6|��Y��v�z�����eyԨ� t晿�曯��;cv���W_��7�x���[ۧO�vʔ������2�y&lt;�={}�ڵs��6� ���{��k~����Z�ݞ��s]�xF�f�З7�B���QUu����F��al��N�X��D+�-��&amp;{��8Ӧ�k��������w�.}�_~9��1K�.��+��欬�Z[z�:�Sz�܍MRRR��/�y���9g�O?�������d�⊊��/�����l�ԩ�UW�bѢgyK3?"Bȁ���F�~��!S5܏=��VHic�  R�&gt;��v��U�l��mh�0*�r��]Uu��P8N��A�hz�qm�9�����A�?�輙3gΙss2�Z�����2\S�  ���LM��oLLII�/,��z���xY���,x�����z��8g�-��&lt;��#Vל�(J)!@XB7�(G��*�ۍ1���O��d=��a,!�&gt;�  �*��������F�%�gI�3�qS���}1j��6TWW���4  :b��ѣ-zcb���Ќ���SR z׭[�iӦ�s�97n&lt;��&gt;��?NP�9Տ(|�'kh�fD�r�=�(�����  &#36;�kQ��o !��fei55�M&amp;�&#36;��r��n�(јX��h���+B�b䊷���~����  W��&#36; �hj�\b!����pWU�q�Ə3����0Ȏ;�~����ছn���+���dЖ��  �s�^z�_K��ZRRbVF⧣F��ӟ�RZZ:mڔ���̍0b��ɓ'w�ZB�QVV���  o�\��ܹ���t�={f�� ܫW��[���̟?o��e�f���_̚5�������'��� BXR�Xf��1ƪ�����RJUE���&#36;w,�̒���t��D��������dh  ��Bh��g����5yK&lt;��"�1�I�cf�mK�\bt��I�c��u�TӴk��  �n��իW�7~Ѣ�M��s��k׮ݿ�m�ͭ��Z��EغuK�a��OC  �ٳg��I�8f��;���Ν;W�XN9�S��ȑnwvvvv���a��ﾽ���  N?�Y��l��駟J\]��l�+��1q⤇��w�}��w��v��������ď()�v�e�p�TV�?�Ǐ�  fͬ����/[��}��1��O?C����{�7^_�byϞ=g̸aɒ���+��ˣ��ҿƎ�`�?���ʕ�  ���MU)%c�ݖ� �zmm���0�&#36;�Rʂ1���K|E�5�����s22T�e�C;r&#36;���#U��}2  +Fe�eJ��/F�N��_QWW�gϞe˖.[��j�4�dY.//�=���'�X�Xŋ��aҤI����k���/Ż%??_Q������-[***��{lƌ��&lt;+�!��="" �dy�e�***�9��#\.��(-��3v�hitnz��="" �idat2�="" muˀ�һ�d���ݻw_y��xw{��="a�%���999���H��-?4ݩ1&lt;ޱcǩS�M�8��wW�X����2�-�&#36;9r��P�ƍ}"&gt;�i��*�7�xSV���W�M���n���GtH������  &#36;1F3U|8�@ ��x ��OV�B@)���[UU��&gt;TM�jk뎥��J�^�xnw�8��[c�[�tc ���;Ӧ��2��{�ߵk��}��m�����}��8i�*++�M�z�9�&amp;M�4y��Ǐ�ݭ���  �q�@����]�v�|������{�[o���SO���o ���-q���m��ȼ���f�.�B�x&amp;ˊ���[���YQ�С���Hfۥn�Him��� ��I-F�L��g��0�e��1���1��g&gt;�lщ�&gt;��#ӧOO��k׮=zt�  ���)i�VPP�u��x�H�4w� /���?�?���w�i��)-�e�1j�CӪx-�!�r����!�P`��X���iyyy������I}��e����ԴӠ��A�  �෈H���D���bJLǎ}&gt;���7n&lt;X3VTWWw��YӴTGn�F�#���&gt;|�  W�^_/_���n�y�W^�1~����=�+&amp;w��m��W�4پ}�����'��E��bp�qֻ��S  O=��^� ��v���PU!�0B���X�&#36;I�x'�q~~~QQQaa!B��6��E�H��  ���t:������5M�x2\�.U&lt;ޗ���kx*�a��) sRk��~��ر&lt;��S�ׯ�ҥ�Ϊ�����f�͛�6l�Olݺe��wv�ڕ��M��  �П����ڵK����o��&amp;�z�ܼ��U�VEx�`����bҤ�۵{���{�C�  ����1��о}�S�UVV���2�qѢg�q�׭Y�Q2�Y� @��0�^5�L9ȫ�Р�a��c���#PU�f�a�srr***�@�  ��UU-//7��v��s���+��:cL�u��m�]��INjmt��yo��VQQ�iӦ���͜9cϞ=Ng�Ŵ`����{�����ɏ���ׯ�  ֭�5�L���+�=z��s��h��Ͼ�vs��,\��� Ę4��;.^��7Ύ�&lt;��[�v�?����SSS�������67��v��i���0c��dt �qs0���byap�8��r�4��b�K�� 8��ݻw�֭���������f�c���x�����1͡���e&lt;�UІI껒 Pp@)�����u���S\\�#�Ȳ��z:�����А��0�=z���� !�f�����}����!P����޽�K���r���l�C�eEQ�6P  ���2#�w�������R�LsR/�DU���*�2!��(ݻwg����\�{��ЩS���l��+IR0�2 �C�!j�L�ZW`�M�a�j�իׁ�v;����������.��RjƸ�yd'  B� 2Cmmѓ�(� cI&amp;���u����޽�O?�L�#�PQQQ~~���EP�?�k�P����p���ED!  �!�I����~��'��)IRaaann�����O���U@prR�F���&gt;|  ئ�!����t=��zmM��n�СC��H�ԣG����0� l�D�tM��f �W��d��1Fid%;B!�K�.f��iEEE�,�0�� ��vu��AXH� Ĩ c0ư&#36;�|v�1]!�0�x&lt;��� nw:�ݻus�\�@�0�c�H���Zpmo��Ă�?)��RF��D� JRUQ��������r1�t�n��2*Ir~~�����&#36;h��E� 3Ȳ\RRb���~?��m ^BB2w�3F���  �=BHuuu �q�����v�B�@�+����N]��R��K,&#36;�Aȕ��(���I�t����r9�NbVq%!��v|C��!F�!ԡC�ө� SU��% ^/��a,a���h�4��@|�o�FʕP.y=�7#������*hP%�P  P�����3!�0^PD���'��`f��t���F����As�&#36;I�4��a  �a�Z�Rƀ(��&lt;��JS�D�̚���y̽�!��B�&gt;� (m0�%*Ic�cD#���n�,�̗������Gwl�e��D�QAs�AB\��P^�1%�/�y7�N%�KF,9��,c.�� _�hЗDM�(��@�R���0FL�1��AXj��~�?SU�ǝ�%P����90`h�8y8bTp&lt;��(�3YP0E��C  �n~&gt;���J�&#36;�P �lQKC*d�Y!4�e�X���Z`�P�ŝN�-��nBdY@|!]׏K|A3���90p�s��O����bT��~?!��P.�ad�z �慕=S��#�1F ��a����5^��e-�h,�h�fP�3����H��v�srrE�1�\�dY�!~��n��2�aJ��  �6�D�����:�ajB� 2���܌��!��T՚ߴ{Z�(�!u�QFx����V�OXm&#36;H�p��ƔP�*  '�=z���h�fƂ�Ge��RB���1���|�c�� Nj��u������&amp;�0�~��f��m ��}3�`g��Y&#36;&#36;)Њ�b�*ef6Qf-g�G !!����VH��|���u:�#e���,ɄP��|~!F�/S��� PT����(c�k�����P[ [7���P�&lt; B� 2��뺮˲��R�n�;4�J!&#36;C����/�)Um6J)�(���`�� ���rB���)���S ���R�aTVV��l��lI��r���n�d�RB c������Zp�=��(=6�c�wCQIx�����͝[B� 2�����;�5MS�]'QBt=���뭫����&lt;�O𪪪&#36;a����SJ].7!�U C���: B`IO�4MSU5�*����UT`��%T�4��^YY��xE�e�0�&lt;a�08,��wN�e��P[�"�̛�C[�q!F�����Rj�����x�������&gt;�?Z�q?x�7&lt;''����D�b �DYE@أ�(��n�W\�R�m��1�ܛ����|�xv��ZH�nZ�R:m\�&gt;�̳��9yy�6����|��m�/.+�ϯΚ5�k׮w�q{��qK x�3fltQ� .5�^�z�ݻw͚����MdY5�A��y毿���x��=���`ڴ�]4n�޽�K�������cܸ��:��.]�&lt;�����W^�9�\�c��-��������h^^޼y�%�||�?|���[__� ��/�[������� �ТsK����9�i�b�_��uuuo��V ()�v��cF�:�����W�S���S0�[Zb�Q�F�}~t�]w�=z��6|�l�����7�g�أG����ڧ���{���󔆆������c�#�  �K/�l��Y����l� 3���߮^�a�^��p�̒�����k��}��|}�ڼ|�9��N��իM�ӑ  #G�8�ά�������1ƚ��u���KgK�z��k�fǾ��[7��L�m\��#G�}�~&lt;�#�="" ??���z��=""&gt;�`u�C�:t�G�~��U�V^u��sH&lt;c,h�  F)�D�6^�x&lt;��K_1����4�ӹl�+���{�)�����'^h(�%  ���3`�׹��lCuuu�����iT��xa�TD�u�ݔ��{.B�]v�e�x�b��_���ȑ�.�l�)����Ќ�s}&lt;�G���?�`z|�V��O1�^  �ߥ�C�sH&lt;x&lt;���l�&gt;߫c���0x�劊���E9��8�|wx�+;Y�x  Q l o���f�j8��(BHUU3��ҥ����|��t���k��2f̘�ܼ����x��/�g�q�+&amp;�}~qq�?n䑇x�AkUUǍ?f̘��"� ;v�x��E۷o�9�ܹ���t�={f���?\ݯ_�;��ktٻ��{TVVZ�w�����u  �V�O ܫW��[�@�&amp;~D�t���ȑ# �C���[��-Li�Y7��=��`}L����޳ZS���j��p{z~�J24����%F'N��p8֯_�����?н{�/��C��g�u���͘q�m[�������_{mE�Ν~���n�i�5�LY�n��իǍ�h��ӦMݹ����F��vgggg�4����{ڴ�o��:/#��Z�S]]ݩSg~i~�NHھu:��_~E]]ݞ={�-[�l����ȧ�~�yo��֬Y�{����E�㷘��˗�z�U��ɱv3�e  ���z��s�_~)޳n���ܼ[o�&amp;����g�0`��w����O�۷���ϸ�ʫx`&lt;��(��?�5�-[�TTT̛�،7�&amp;�&#36;|S�N��:t�SN=�|��sH�/�ɽLfc�B��m��c�)��v~W�,� ���&gt;��2:�[b:��sh�� �����OAg,��^_�w��ݱ�M&amp;/F�����/F��s���r�peQQ�x�KJ����Xoa����F��޽{O�pIii���p8�  �:lܸqw��W3�5�}��M�z� 7̜5k6��ӏ���&lt;2o��m��&#36;IG����7n����N;�WI&gt;�I���w����  r�-�]6��ۻdɋ�g�d�!�QM�,�(��L�:��I#uU�s��*���n�ISy�ǔ�s  ��?�i��QS�t[���� �s5�������%���4gn�'�g�����h31�D���nw�N�!C��{��v�|  ��o߾���zݺOR�ƴi�������%%%6l���n�q6�ٳ����yu  ��I� 6�Ӳ�2��Imm���J�M��/�{l���!&lt;|����R���wR�B\!E�=��4���}b�1�N��  YH�V�Z�u���a�[��ח��kY���Ю<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/cool.gif" title="Cool"/>y�xgg<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/razz.gif" title="Tongue"/>XP�n�\�'B�6�={������B  ���[�L�2 fϞ���fm����_s���3gΪ��^�l�C�o)))���(7��w��գG  �.]��&gt;%M� �nݚ�#b�hбc���nBEE�5T&gt;�^/���%̀'���*6�b1 ��R^t;�v��O\ �����J�F��/�lw��V�ۤ�ƍ����� �V�*�h�X�nm�&gt;}�M���c�y�E�s:-�;v����̝��ƍ�8kL&gt;|x���/5�}��w�;sg�B� ��1g�-����}�ev��e�w�u��0bW^y�����K�M���o~s��  Ey��gR]5����F��ԢA{h�o�b�c��9�!OCJs;Ƥ��ǚ�ч��V�Ԥ{'�r�,�  ˠ�ZUD���bŊ��7��K/+..��믋��N?�#G����}&gt;��c/x�ɧ֯_ߥK�Yg�U[[�Ĺ�ֹyyy�V�J#fB;�O;�W999���9�7���۷o��&amp;]ޮ�����ݻ�:t��n�)@��f��ݻ�)��\�#G�&lt;�Ă]�~�&#36;)%����~@Q�R��ɹ�?��Buuu��B(Z?���d�nW  !��[WW���ne�:f&amp;�ܿ��D� 퍘'H�h����Ε}�SF}�,^p�fB�6�@ p����p�́�9�_}�ݷs����3��{f�ϟ��JKK�M���W_Μ9����p�  �ϊ��ғ���ߞ��_|�iժw���v���.�4�򲲲ŋ_\����ֿ��o۾}�ݻwo���ƍ���~Y�% ���T���y�Z�&lt;�l�c�jvga="" ��]���j�������В��o�f^��mj����h'�w�="" p="" p@)��ϡma��=""&gt;���͛�I�!�&amp;),,�ر�a�B�RVV� ?H4��a�u]g�L���&lt;�IH࢘�&amp;E�:TYY})777//����)�-#,��;��M&gt;�Z_h�=,=���aoO���_]yMv��j���̅��s�:6yX���x�8������m���,���ԩ�  0���&amp;�&#36;�6��\ҥ4�a&gt;�/++��7�A�x��������t���=��Z��i������5r��A�ֱC  Qٞ`d&gt;�13��)?%���Т2�m&amp;���W����ݻ�u������߻w﫯F�  Nf�nO��jmF`�1c��h'F1�c5�w�:���U� �Ɋ��GD�RzX7,�svmܹ�)1z�ض9���+;l+p���9���� S=��B�6�񫯾:f̘�.�H����E��]�b��(^�cl�\B��r��f]�3`0���0�&#36;Q����1&amp;�1��&#36;I�̋D�:�c�Us��/Mc�U��hj�s�&#36;��Ƥok����Z] �:���#�}4B�6B�o����XX���l6{��I0ơ�����{ �c�(%�!I��C����F"I��*��~"�ޛ��aHqIn��e�IյI�~V�M�  �d���ڠЉ��;�1*h��D7c�c�JbDp(B(X#aL��� �2�^c�QJ)!�O��/��NC�Dh�����[w=%I璠��^���V�A�ĸo�K��An9�dB���e�\�ɲ�iZJ��rss  �ԬU����܉E)�&#36;�&lt;��+{��i����c���L����r陶G�:��w��,PB� 2!!D�e�Gv"�SM�d�#˚�{� �t��Q�Xd� ��&amp;[�eYF544��(4��e��jsM��kS�8�3�F` �wYuLk��f����D�g!F��R�v�ݒ���vI���.���~�_UUB�  �&gt;�0��M����]���,��4x�Y�;� 7=g�n��/x&lt; �rV?U�ɛ͍CM*�����[�,B� 2!�dclM� [JƘ���Lu�(&gt;B�R��O��a6-��m1�Q�(4��:ѱf�PAа�����)��ɼ�:HD�{ �`�z��V: �B�0p&#36;��Қ�Ɍ�jR}c �����=YbT�"�@�o��( +���%�233Y�Ճu��������2#D SƘ��fn�42}S��y�7��x���ͥ�5ULV�L�IDAT���ۨ���A��  �Wмl�y�YW٢��s�� ��՚"RS�&amp;�jMnzNz%��K�nZ��#dh�ڨ�E`A���&lt;���(v���  M�9.Is�U��7QJ�z��@@�uY��e�P�y�ik�Kb�^�u����9  B�f!F-B �U@( �*�@�%YV����(�B)�p+!���0�a�RRBQc[l��TY�5͎16�p+�4n&amp;���ir��K���`N�B�R��h  ��%K }��8�vg�B��j���I� ��r�m�[�����-�ј��xՐ-��������j(I�f�E�)c"�rNN��K��SjAE�Y�ji�����&lt;��l  �&#36;!�Zc������?�Oy�.7EX��B�QAK�k�A8u2`,ŋ��8U����  �;~�h����}���;������eY���(��d�f��mx�zK׼&#36;���c  ���&gt;z�.IR����K�Q^�^�e�С�Y�j��IR䒜{��Q܀� &amp;&#36;��l- �#ش.L�8���bT�R��~]�16�2�Yn�D����⼼\� �1�0М1F)�y��\P�D��ή�����b|a���R�v�].�9�C�&#36;�Ў-��#�#��v�iO��3�4�A����`��CfI��Ng����'�&gt;)�Ӊ0�vK�Q֬����͡U��%~#�  ��E����!��*B�5F'&amp;B� Z�Т�d�I��\x��e_P��@����W��AKN�S�4�PJ)!���a  P������RI�0F�(E��G�k-c����nJ�a���W65R��`�,k���Y�B��Bʭ�(EE�}&gt;�����+  �L�E ˲�媫�C"����!Ĩ�E@���s3%g�3;;�,��33544� �{ШNHh4�2A��&amp;���\��a�z �02�����|Ji��� а�&#36;�*&#36;CRb�� @�V'cuuu^����%I������*/��1v�܌1^/&gt;�+���4h&#36;@-��1�V�0̼|�d͍uZ�U�r:���j�0:uꤪ �N��IF��o�����5|�M��D#�З��J&lt;ƞo.�e٬&gt;��A  �1E��\���K&lt;�T�%�%�E��D0�&#36;IU�`�R�1�y�yܒ I��i�w��4���x�/_�6�&gt;C��6ARb�&lt;U-=��Dt�f�{��XaI�ᛑ"bQ�x�'� d]@��qm]�y�&#36;I�,������U���Ѷ��~�Z�-=� �x�x��c?��9P�b�M���^  �#@1@G�&lt;�,�� '=�z�*�{T��C�')m��j P��HM�'���#@-��6��VXA˓�6�d���T9ɛ�\�?��^�6A��  ` @�ج�#��{�( � *�@ �z�fC�5; -؃?���Z&gt;|��x�/1f�߈-��+c�b���+@���`js⩿�;�y�����M^:.? �1b�H����m�"���_���� ƀE_��0d=�1�(E�A�!F�v0O) �����W�K;��F�[:'Cc���'�,35��ߨ1�^�#�YZ��R�A�v�AYڃ���i�W�n�8ԁ����R�W  �@ �@ �@ �@ �@ �@ Z+�c��Jm���IEND�B`�<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>Why<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/confused.gif" title="Huh?"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1583155">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-145619.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1601748"></a>
+<div class="post classic " style="" id="post_1601748">
+<div class="post_author scaleimages">
+	
+	<div class="author_information">
+			<strong><span class="largetext">Riddy</span></strong> <br />
+			<span class="smalltext">
+				Unregistered<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_guest -->
+&nbsp;
+<!-- end: postbit_author_guest -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid1601748" title="Re: Creating dynamic signatures using PHP and MySQL.">#59</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 59 by Riddy" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">31.12.2011, 16:19 <span class="post_edit" id="edited_by_1601748"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1601748">
+		Can you make dynamic signatures through FTP instead fo MySQL?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1601748">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2119130"></a>
+<div class="post classic " style="" id="post_2119130">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0128/uid-128994.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0128/uid-128994.html">aleck</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 16<br />
+	Threads: 5<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435-page-3.html#pid2119130" title="Re: Creating dynamic signatures using PHP and MySQL.">#60</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 60 by aleck" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">15.09.2012, 11:58 <span class="post_edit" id="edited_by_2119130"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2119130">
+		Got some problems i get that script and edited on my database , the point it's he display image but don't show stats my code it's :<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">&lt;?  
+/* 
+***Made by: Nodroz*** 
+*** Enjoy your signatures! *** 
+*/ 
+
+&#36;username="test"; //Your MySQL Username. 
+&#36;password="test"; // Your MySQL Pass. 
+&#36;database="test"; // Your MySQL database. 
+&#36;host="localhost"; // Your MySQL host. This is "localhost" or the IP specified by your hosting company. 
+
+&#36;player_name=&#36;_GET['player_name']; // This gets the player his name from the previous page. 
+
+/* Next, we will make a connection to the mysql.  
+If it can't connect, it'll print on the screen: Unable to select database. Be sure the databasename exists and online is. */ 
+
+mysql_connect(&#36;host,&#36;username,&#36;password); // Connection to the database. 
+@mysql_select_db(&#36;database) or die( "Unable to select database. Be sure the databasename exists and online is."); //Selection of the database. If it can't read the database, it'll give an error. 
+
+/* To protect MySQL injection. */ 
+&#36;player_name = stripslashes(&#36;player_name); 
+&#36;player_name = mysql_real_escape_string(&#36;player_name); 
+
+
+
+&#36;query="SELECT * FROM users WHERE Username='&#36;player_name'"; // Gets all the information about the player. 
+&#36;result=mysql_query(&#36;query); 
+&#36;i=mysql_num_rows(&#36;result); // Here we are counting how many rows this result gives us. 
+
+/* We will now put the player's information into variables so we can use them more easily. */ 
+/* DON'T FORGET: The names should be exact the same as in your mysql db.*/ 
+
+if (&#36;i == 1) // If the user has been correct, then it'll give us 1 row. If its 1 row, then it'll proceed with the code. 
+{ 
+         
+    &#36;Playername=mysql_result(&#36;result,0,"Username"); // Gets the username of the player and put it in the variable &#36;Playername. 
+    &#36;Money=mysql_result(&#36;result,0,"Bank"); // Gets the money of the player and put it in the variable &#36;Money. 
+    &#36;Score=mysql_result(&#36;result,0,"Level"); // Gets the score of the player and put it in the variable &#36;Score. 
+
+
+    // Creating of the .png image.  
+    header('Content-Type: image/png;'); 
+    &#36;im = @imagecreatefrompng('sign.png') or die("Cannot select the correct image. Please contact the webmaster."); // Don't forget to put your picture there. 
+    &#36;text_color = imagecolorallocate(&#36;im, 197,197,199); // RED, GREEN, BLUE --&gt; Go to <a href="http://www.colorpicker.com" target="_blank" rel="noopener" class="mycode_url">www.colorpicker.com</a>, select a nice color. Copy the R/G/B letters provided by  
+    &#36;text_username = "&#36;Playername"; // This gets the information about player name to be showed in the picture. 
+    &#36;text_score = "&#36;Score"; // Same as above ^^ 
+    &#36;text_money = "&#36;Money"; // Same as above ^^ 
+    &#36;font = 'calibri.ttf'; //Upload your custum font to the directory where this file is placed. Then change the name here. 
+    /* USAGE OF THE imagettftext: First (&#36;im) shouldn't be changed. (16) is the text-size. (0) is the angle of your text. Change it, and you'll see what's going on. (20) is de X-coordinate of the text. 
+    (36) is the Y-coordinate of the text. */ 
+    imagettftext(&#36;im, 16, 0, 20, 36, &#36;text_color, &#36;font, &#36;text_username); // Prints the username in the picture.  
+    imagettftext(&#36;im, 16, 0, 72, 69, &#36;text_color, &#36;font, &#36;text_score); // Prints the score in the picture. 
+    imagettftext(&#36;im, 16, 0, 72, 99, &#36;text_color, &#36;font, &#36;text_money); // Prints the money in the picture. 
+    imagepng(&#36;im); 
+    imagedestroy(&#36;im); 
+} else echo('Username is not in our database. Please try again.'); // If the username doesn't exist (so the row is 0) then it'll give en error. 
+
+mysql_close(); 
+
+?&gt;</pre>
+</div>i miss something?!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2119130">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-128994.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0301/tid-301435.html">Next Oldest</a> | <a href="../../threads/0301/tid-301435.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="301435" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (4):</span>
+<!-- start: multipage_prevpage -->
+<a href="../../threads/0301/tid-301435-page-2.html" class="pagination_previous">&laquo; Previous</a>
+<!-- end: multipage_prevpage --><!-- start: multipage_page -->
+<a href="../../threads/0301/tid-301435.html" class="pagination_page">1</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0301/tid-301435-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page_current -->
+ <span class="pagination_current">3</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0301/tid-301435-page-4.html" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0301/tid-301435-page-4.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

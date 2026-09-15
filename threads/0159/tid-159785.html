@@ -1,0 +1,2714 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Making a MySQL system</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "640aa1001887ab92ae04a26649806fe8";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Making a MySQL system! Introduction I decided to make this because MySQL owns! It's totally remade from the last code in this thread. from Pvars to variables because Pvars are less efficient. I've sti" />
+<link rel="canonical" href="../../threads/0159/tid-159785.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="640aa1001887ab92ae04a26649806fe8" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (4):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0159/tid-159785-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0159/tid-159785-page-3.html" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0159/tid-159785-page-4.html" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0159/tid-159785-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0159/tid-159785.html#pid752036">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Making a MySQL system
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid752036"></a>
+<div class="post classic " style="" id="post_752036">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0023/uid-23565.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0023/uid-23565.html">[HiC]TheKiller</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,629<br />
+	Threads: 40<br />
+	Joined: Mar 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid752036" title="Making a MySQL system">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by [HiC]TheKiller" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.07.2010, 14:08 <span class="post_edit" id="edited_by_752036"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by [HiC]TheKiller; 20/05/2012 at 10:10 AM.
+					
+					
+						Reason: Typo</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_752036">
+		<div align="center"><b><font color="red"><font size="10">Making a MySQL system!</font></font></b></div>
+<b><font color="blue">Introduction</font></b><br />
+I decided to make this because MySQL owns! It's totally remade from the last code in this thread. from Pvars to variables because Pvars are less efficient. I've still included the auto login system. The database will be the exact same name but I'll make the table name different. If you are having issues with your script download the full server + the filterscript <a href="http://www.filejungle.com/f/xk5X8T/mysql.rar" target="_blank">http://www.filejungle.com/f/xk5X8T/mysql.rar</a><br />
+<br />
+<b><font color="red">What do I need?</font></b><br />
+You will need the following things to be able to do this tutorial. <ul><li>The latest wamp server (<a href="http://*******/o2qXyZ" target="_blank">http://*******/o2qXyZ</a>) - Skip this step if you don't want to test <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/></li>
+<li><b><a href="../../threads/0056/tid-56564.html" target="_blank">This</a></b> MySQL plugin.</li>
+</ul>
+<br />
+Now that wamp and the MySQL plugin has been set up in the right directories we can start the script. For any script that you are using mysql, you must have the includes<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:55px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include &lt;a_samp&gt;</span><br/><span style="color: #2222AA;">#include &lt;a_mysql&gt;</span></div></div></pre>
+</div>
+Now, before we start the actual code, we are going to make defines with out SQL information so it's easier for connecting / editing later on. This information should be provided by your host or it will be the following if you are using wamp<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:87px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#define mysql_host "127.0.0.1" //Has to be a string</span><br/><span style="color: #2222AA;">#define mysql_user "root" //Has to be a string</span><br/><span style="color: #2222AA;">#define mysql_password "" //There is none for wamp unless you set one.</span><br/><span style="color: #2222AA;">#define mysql_database "sa-mp" //Has to be a string</span></div></div></pre>
+</div>
+Now, the first thing that we must do to be able to use MySQL is connect to the MySQL database. We will be using our defined information above. We will also going to be creating the table if it doesn't exist here rather then manually doing it in PhpMyAdmin. <br />
+<br />
+We will be following this format <br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">CREATE TABLE IF NOT EXISTS TABLENAME(STRUCTURE)</pre>
+</div>If you want to add further fields to the table later on, create a script and use mysql query like we will be doing for creating the table. <br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 50px;
+		text-align: left;
+		overflow: auto">ALTER TABLE table_name
+ADD column_name datatype</pre>
+</div>For more information on datatypes visit <a href="http://www.w3schools.com/sql/sql_datatypes.asp" target="_blank">this link</a>.<br />
+<br />
+The mysql functions used in this snippet is <a href="https://wiki.sa-mp.com/wiki/MySQL#mysql_connect" target="_blank">mysql_connect</a> and <a href="https://wiki.sa-mp.com/wiki/MySQL#mysql_query" target="_blank">mysql_query</a>.<br />
+<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:231px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnGameModeInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    mysql_connect<span style="color: #000000;">(</span>mysql_host, mysql_user, mysql_database, mysql_password<span style="color: #000000;">)</span>;<br/>    mysql_query<span style="color: #000000;">(</span><span style="color: #000066;">"CREATE TABLE IF NOT EXISTS playerdata(user VARCHAR(24), password VARCHAR(41), score INT(20), money INT(20), IP VARCHAR(16) )"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">//Fields:</span><br/>    <span style="color: #228822;">//Field Name - Use - Type</span><br/>    <span style="color: #228822;">//user- Player Name - String</span><br/>    <span style="color: #228822;">//password- Players password - String</span><br/>    <span style="color: #228822;">//score - Players score - int</span><br/>    <span style="color: #228822;">//money - Players Cash - int</span><br/>    <span style="color: #228822;">//IP - Players IP - int</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Now that we have connected to the database, we are going to check on OnPlayerConnect what dialog we are going to show for the player or if the player should be auto-logged in. We are going to use a global variable called Money given as we cannot give the player money on OnPlayerConnect / OnPlayerRequestClass The functions that are being used in this part of the tutorial are <a href="https://wiki.sa-mp.com/wiki/MySQL#mysql_query" target="_blank">mysql_query</a>, <a href="https://wiki.sa-mp.com/wiki/MySQL#mysql_fetch_field_row" target="_blank">mysql_fetch_field_row</a>, <a href="https://wiki.sa-mp.com/wiki/MySQL#mysql_num_rows" target="_blank">mysql_num_rows</a>, <a href="https://wiki.sa-mp.com/wiki/MySQL#mysql_store_result" target="_blank">mysql_store_result</a> and <a href="https://wiki.sa-mp.com/wiki/MySQL#mysql_free_result" target="_blank">mysql_free_result</a>. We will be using our first Query and there are multiple different statements for queries. We are starting by using the SELECT statement which can be modelled in this format:<br />
+<br />
+<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> IsRegistered<span style="color: #000000;">[</span>MAX_PLAYERS<span style="color: #000000;">]</span>; <br/><span style="color: #228822;">//We are using this variable so we don't have to query later to </span><br/><span style="color: #228822;">//check if the player is registered in the database.</span><br/><br/><span style="color: #2222BB;">new</span> MoneyGiven<span style="color: #000000;">[</span>MAX_PLAYERS<span style="color: #000000;">]</span>; <span style="color: #228822;">//Explained in the paragraph above.</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerConnect<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    MoneyGiven<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">-</span><span style="color: #000000;">1</span>; <span style="color: #228822;">//Resets the variable that you will discover later in the tutorial.</span><br/>    <span style="color: #2222BB;">new</span> query<span style="color: #000000;">[</span><span style="color: #000000;">200</span><span style="color: #000000;">]</span>, pname<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>; <span style="color: #228822;">//Creates our variables.</span><br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, pname, <span style="color: #000000;">24</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Gets the players name</span><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>, <span style="color: #000066;">"SELECT IP FROM `playerdata` WHERE user = '%s' LIMIT 1"</span>, pname<span style="color: #000000;">)</span>; <span style="color: #228822;">//Formats the query, view above the code for a explanation</span><br/>    mysql_query<span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>; <span style="color: #228822;">//This is our query function to query the string</span><br/>    mysql_store_result<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//We store the result.</span><br/>    <span style="color: #2222BB;">new</span> rows <span style="color: #000000;">=</span> mysql_num_rows<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//We get how many rows the query returned.</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>rows<span style="color: #000000;">)</span> <br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">//If the rows are equal to 0. This means that the query did not find </span><br/>        <span style="color: #228822;">//anyone under the name we connected under in the database.</span><br/>        <span style="color: #228822;">//So here we send the player the register dialog.</span><br/>        ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">15000</span>, DIALOG_STYLE_INPUT, <span style="color: #000066;">"Register"</span>,<span style="color: #000066;">"Your user is {FF0000}not{FFFFFF} registered! Please {0000FF}register{FFFFFF} with a password below!"</span>,<span style="color: #000066;">"Register"</span>,<span style="color: #000066;">"Cancel"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Shows our register dialog :).</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>rows <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">//If the rows are equal to 1, this means there is a player already registered </span><br/>        <span style="color: #228822;">//so we can initiate the login dialog to the player or check if the players</span><br/>        <span style="color: #228822;">//current IP is the same one as in the database.</span><br/>        <span style="color: #2222BB;">new</span> IP<span style="color: #000000;">[</span><span style="color: #000000;">2</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">16</span><span style="color: #000000;">]</span>; <span style="color: #228822;">//We create a variable with two IP strings, one for retrieving the mysql field and one for GetPlayerIP.</span><br/>        mysql_fetch_field_row<span style="color: #000000;">(</span>IP<span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span>,<span style="color: #000066;">"IP"</span><span style="color: #000000;">)</span>;<br/>        GetPlayerIp<span style="color: #000000;">(</span>playerid, IP<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, <span style="color: #000000;">16</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>IP<span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">!=</span> <span style="color: #000000;">0</span> <span style="color: #000000;">&amp;&amp;</span> <span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span>IP<span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span>, IP<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, true<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Checks that the MySQL IP has a value and that they are the same.</span><br/>        <span style="color: #000000;">{</span><br/>            MySQL_Login<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>IP<span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> || <span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span>IP<span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span>, IP<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, true<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">15500</span>, DIALOG_STYLE_INPUT, <span style="color: #000066;">"Login"</span>,<span style="color: #000066;">"Your user is {FF0000}registered{FFFFFF}! Please {0000FF}login{FFFFFF} with your password below!"</span>,<span style="color: #000066;">"Login"</span>,<span style="color: #000066;">"Cancel"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Shows our login dialog :).</span><br/>            IsRegistered<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>; <span style="color: #228822;">//Sets the registered variable to 1 (Shows that the player is registered).</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    mysql_free_result<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <br/>    <span style="color: #228822;">//You must always free the mysql result to avoid</span><br/>    <span style="color: #228822;">//there being massive memory usage.</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Now that we have finished the OnPlayerConnect stuff, we are going to make our dialog responses. These are basic and require no MySQL for the register part and a single query to check if the password is right on our login dialog. We will be using the functions <a href="https://wiki.sa-mp.com/wiki/MySQL#mysql_query" target="_blank">mysql_query</a>, <a href="https://wiki.sa-mp.com/wiki/MySQL#mysql_real_escape_string" target="_blank">mysql_real_escape_string</a> and <a href="https://wiki.sa-mp.com/wiki/MySQL#mysql_num_rows" target="_blank">mysql_num_rows</a>.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnDialogResponse<span style="color: #000000;">(</span>playerid, dialogid, response, listitem, inputtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>dialogid <span style="color: #000000;">==</span> <span style="color: #000000;">15000</span><span style="color: #000000;">)</span> <span style="color: #228822;">//If Dialog is our register dialog</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>response<span style="color: #000000;">)</span> <span style="color: #228822;">//If they click the button register</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span> || <span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span> <span style="color: #000000;">&gt;</span> <span style="color: #000000;">100</span><span style="color: #000000;">)</span>  <span style="color: #228822;">//Password is not 1 to 100 characters</span><br/>            <span style="color: #000000;">{</span><br/>                SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFF0000, <span style="color: #000066;">"You must insert a password between 1-100 characters!"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Sends the client a error message</span><br/>                ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">15000</span>, DIALOG_STYLE_INPUT, <span style="color: #000066;">"Register"</span>,<span style="color: #000066;">"Your user is {FF0000}not{FFFFFF} registered! Please {0000FF}register{FFFFFF} with a password below!<span style="color: #000099; font-weight: bold;">\n</span> {FF0000}ERROR:Please enter a password between 1-100 characters!"</span>,<span style="color: #000066;">"Register"</span>,<span style="color: #000066;">"Cancel"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Shows our register dialog :).</span><br/>            <span style="color: #000000;">}</span><br/>            <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span> <span style="color: #000000;">&gt;</span> <span style="color: #000000;">0</span> <span style="color: #000000;">&amp;&amp;</span> <span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span> <span style="color: #000000;">&lt;</span> <span style="color: #000000;">100</span><span style="color: #000000;">)</span> <br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #2222BB;">new</span> escpass<span style="color: #000000;">[</span><span style="color: #000000;">100</span><span style="color: #000000;">]</span>;<br/>                mysql_real_escape_string<span style="color: #000000;">(</span>inputtext, escpass<span style="color: #000000;">)</span>;<br/>                MySQL_Register<span style="color: #000000;">(</span>playerid, escpass<span style="color: #000000;">)</span>; <br/>            <span style="color: #000000;">}</span><br/>            <span style="color: #228822;">//If the password is between 1 and 100 characters then we will</span><br/>            <span style="color: #228822;">//call our MySQL_register function which will register the player.</span><br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>response<span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>                SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFF0000, <span style="color: #000066;">"You must register before logging in!"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Sends the client a error message</span><br/>                ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">15000</span>, DIALOG_STYLE_INPUT, <span style="color: #000066;">"Register"</span>,<span style="color: #000066;">"Your user is {FF0000}not{FFFFFF} registered! Please {0000FF}register{FFFFFF} with a password below!<span style="color: #000099; font-weight: bold;">\n</span> {FF0000}ERROR:Please enter a password !"</span>,<span style="color: #000066;">"Register"</span>,<span style="color: #000066;">"Cancel"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Shows our register dialog :).</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>dialogid <span style="color: #000000;">==</span> <span style="color: #000000;">15500</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Dialog login</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>response<span style="color: #000000;">)</span> <span style="color: #228822;">//If they click the cancel button</span><br/>        <span style="color: #000000;">{</span><br/>                SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFF0000, <span style="color: #000066;">"You must login before you spawn!"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Sends the client a error message</span><br/>                ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">15500</span>, DIALOG_STYLE_INPUT, <span style="color: #000066;">"Login"</span>,<span style="color: #000066;">"Your user is {FF0000}registered{FFFFFF}! Please {0000FF}login{FFFFFF} with your password below!<span style="color: #000099; font-weight: bold;">\n</span>{FF0000} You must login before you spawn!"</span>,<span style="color: #000066;">"Login"</span>,<span style="color: #000066;">"Cancel"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Shows our login dialog :).</span><br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>response<span style="color: #000000;">)</span> <span style="color: #228822;">//If the player clicked login</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">new</span> query<span style="color: #000000;">[</span><span style="color: #000000;">200</span><span style="color: #000000;">]</span>, pname<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>, escapepass<span style="color: #000000;">[</span><span style="color: #000000;">100</span><span style="color: #000000;">]</span>; <span style="color: #228822;">//</span><br/>            GetPlayerName<span style="color: #000000;">(</span>playerid, pname, <span style="color: #000000;">24</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Gets the players name</span><br/>            mysql_real_escape_string<span style="color: #000000;">(</span>inputtext, escapepass<span style="color: #000000;">)</span>; <span style="color: #228822;">//We escape the inputtext to avoid SQL injections.</span><br/>            <span style="color: #222222;">format</span><span style="color: #000000;">(</span>query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>, <span style="color: #000066;">"SELECT `user` FROM playerdata WHERE user = '%s' AND password = SHA1('%s')"</span>, pname, escapepass<span style="color: #000000;">)</span>;<br/>            mysql_query<span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/>            mysql_store_result<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">new</span> numrows <span style="color: #000000;">=</span> mysql_num_rows<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>numrows <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> MySQL_Login<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/>            <span style="color: #228822;">//This means that there is a user in the database with the same</span><br/>            <span style="color: #228822;">//password that we typed, we now proceed by using the login function.</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>numrows<span style="color: #000000;">)</span> <br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #228822;">//This means that the password that the player</span><br/>                <span style="color: #228822;">//typed was incorrect and we will resend the dialog.</span><br/>                ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">15500</span>, DIALOG_STYLE_INPUT, <span style="color: #000066;">"Login"</span>,<span style="color: #000066;">"Your user is {FF0000}registered{FFFFFF}! Please {0000FF}login{FFFFFF} with your password below!<span style="color: #000099; font-weight: bold;">\n</span>{FF0000} The password you typed was incorrect!"</span>,<span style="color: #000066;">"Login"</span>,<span style="color: #000066;">"Cancel"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Shows our login dialog :).</span><br/>                SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFF0000, <span style="color: #000066;">"Incorrect password!"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Sends the client a error message</span><br/>            <span style="color: #000000;">}</span><br/>            mysql_free_result<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Remember to always free a result if you stored one!</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Now that we have done our register and login dialogs, we are now moving onto our MySQL functions. These functions are MySQL_register and MySQL_login. We are going to use one variable called Logged to show that the player is logged in. We already have checked if the player is ready to register or login so, all we need to do is retrieve and set values in these functions. We are going to use the INSERT INTO statement in the register function, the structure of this is:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">INSERT INTO table_name (column1, column2, column3,...) VALUES (value1, value2, value3,...)</pre>
+</div>In the following code, we will be using <a href="https://wiki.sa-mp.com/wiki/MySQL#mysql_fetch_field_row" target="_blank">mysql_fetch_field_row</a> and <a href="https://wiki.sa-mp.com/wiki/MySQL#mysql_fetch_row_format" target="_blank">mysql_fetch_row_format</a> that we haven't used before.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> Logged<span style="color: #000000;">[</span>MAX_PLAYERS<span style="color: #000000;">]</span>; <span style="color: #228822;">//The variable to check if the player is logged.</span><br/><br/><span style="color: #228822;">//NOTE:Passwordstring has already been escaped. If you want to use</span><br/><span style="color: #228822;">//this in another script, make sure that you escape the passwordstring</span><br/><span style="color: #228822;">//before you </span><br/><span style="color: #2222BB;">stock</span> MySQL_Register<span style="color: #000000;">(</span>playerid, passwordstring<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> query<span style="color: #000000;">[</span><span style="color: #000000;">200</span><span style="color: #000000;">]</span>, pname<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>, IP<span style="color: #000000;">[</span><span style="color: #000000;">16</span><span style="color: #000000;">]</span>;<br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, pname, <span style="color: #000000;">24</span><span style="color: #000000;">)</span>;<br/>    GetPlayerIp<span style="color: #000000;">(</span>playerid, IP, <span style="color: #000000;">16</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>, <span style="color: #000066;">"INSERT INTO playerdata (user, password, score, money, IP) VALUES('%s', SHA1('%s'), 0, 0, '%s')"</span>, pname, passwordstring, IP<span style="color: #000000;">)</span>;<br/>    mysql_query<span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">//We do not need to store or free a result as it</span><br/>    <span style="color: #228822;">//is not a select statement. We can now send the</span><br/>    <span style="color: #228822;">//client a registration success message and set the</span><br/>    <span style="color: #228822;">//Login variable to 1.</span><br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"You have been registered on this server!"</span><span style="color: #000000;">)</span>;<br/>    Logged<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>; <span style="color: #228822;">//Sets the login variable</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">stock</span> MySQL_Login<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> query<span style="color: #000000;">[</span><span style="color: #000000;">300</span><span style="color: #000000;">]</span>, pname<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>, savingstring<span style="color: #000000;">[</span><span style="color: #000000;">20</span><span style="color: #000000;">]</span>;<br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, pname, <span style="color: #000000;">24</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>, <span style="color: #000066;">"SELECT * FROM playerdata WHERE user = '%s'"</span>, pname<span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">//We only select the variables that we want to use.</span><br/>    <span style="color: #228822;">//We don't need things like the password string or the user string.</span><br/>    mysql_query<span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>; <span style="color: #228822;">//Queries the result</span><br/>    mysql_store_result<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Store a result because it's a SELECT statement.</span><br/>    <span style="color: #2222BB;">while</span><span style="color: #000000;">(</span>mysql_fetch_row_format<span style="color: #000000;">(</span>query,<span style="color: #000066;">"|"</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">//We use while so that it does a single query, not multiple</span><br/>        <span style="color: #228822;">//Especially when we have more variables. If there is more </span><br/>        <span style="color: #228822;">//Variables, you should just split the line with sscanf. To </span><br/>        <span style="color: #228822;">//Make it easier.</span><br/>        mysql_fetch_field_row<span style="color: #000000;">(</span>savingstring, <span style="color: #000066;">"score"</span><span style="color: #000000;">)</span>; SetPlayerScore<span style="color: #000000;">(</span>playerid, <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>savingstring<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>        mysql_fetch_field_row<span style="color: #000000;">(</span>savingstring, <span style="color: #000066;">"money"</span><span style="color: #000000;">)</span>; MoneyGiven<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>savingstring<span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">//If you are wondering why I'm using savingstring instead</span><br/>        <span style="color: #228822;">//Of a variable like using MoneyGiven right away, it's because</span><br/>        <span style="color: #228822;">//mysql_fetch_field_row requires a string.</span><br/>    <span style="color: #000000;">}</span><br/>    mysql_free_result<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//We must always free a stored result</span><br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"You have been logged in!"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Sends the client a message.</span><br/>    Logged<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>; <span style="color: #228822;">//Sets our logged in variable to one</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Now that we have done the register and loading part of it, we have to now get onto saving the data on OnPlayerDisconnect. This is a totally different statement to the previous ones too. We are going to use the UPDATE statement. The update statement format is<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">UPDATE table_name SET column1=value, column2=value2,... WHERE some_column=some_value</pre>
+</div>This is just a simple get variables + put them into the query.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:295px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerDisconnect<span style="color: #000000;">(</span>playerid, reason<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Logged<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">//If the player disconnects before registering,</span><br/>        <span style="color: #228822;">//we want to make sure it doesn't try update</span><br/>        <span style="color: #228822;">//so we check if the player is logged in.</span><br/>        <span style="color: #2222BB;">new</span> score <span style="color: #000000;">=</span> GetPlayerScore<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>; <span style="color: #228822;">//Gets players score</span><br/>        <span style="color: #2222BB;">new</span> money <span style="color: #000000;">=</span> GetPlayerMoney<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>; <span style="color: #228822;">//Gets players money</span><br/>        <span style="color: #2222BB;">new</span> query<span style="color: #000000;">[</span><span style="color: #000000;">200</span><span style="color: #000000;">]</span>, pname<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>; <span style="color: #228822;">//Creates the variables </span><br/>        GetPlayerName<span style="color: #000000;">(</span>playerid, pname, <span style="color: #000000;">24</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Gets the players name.</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>, <span style="color: #000066;">"UPDATE playerdata SET score=%d, money=%d WHERE user='%s'"</span>, score, money, pname<span style="color: #000000;">)</span>;<br/>        mysql_query<span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">//No need to store a result for a update string</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+We have almost finished! All we have is to edit two small things in two callbacks. There isn't much explaining to do for the following code. OnPlayerSpawn gives the player their cash and OnPlayerRequestClass prevents the player from spawning if not logged in.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:183px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerSpawn<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>MoneyGiven<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">!=</span> <span style="color: #000000;">-</span><span style="color: #000000;">1</span><span style="color: #000000;">)</span> <br/>    <span style="color: #000000;">{</span><br/>        GivePlayerMoney<span style="color: #000000;">(</span>playerid, MoneyGiven<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        MoneyGiven<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">-</span><span style="color: #000000;">1</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #228822;">//Gives the player money if they haven't received it yet</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:295px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerRequestSpawn<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>Logged<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #228822;">//If the player isn't logged in and (s)he tries to spawn.</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>IsRegistered<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">)</span>  <span style="color: #228822;">//If the player isn't registered</span><br/>        <span style="color: #000000;">{</span><br/>            ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">15000</span>, DIALOG_STYLE_INPUT, <span style="color: #000066;">"Register"</span>,<span style="color: #000066;">"Your user is {FF0000}not{FFFFFF} registered! Please {0000FF}register{FFFFFF} with a password below!<span style="color: #000099; font-weight: bold;">\n</span> {FF0000}ERROR:You must register before spawning!"</span>,<span style="color: #000066;">"Register"</span>,<span style="color: #000066;">"Cancel"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Shows our register dialog :).</span><br/>            <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>; <span style="color: #228822;">//Prevents the player from spawning</span><br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsRegistered<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Our handy variable comes into use now</span><br/>        <span style="color: #000000;">{</span><br/>            ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">15500</span>, DIALOG_STYLE_INPUT, <span style="color: #000066;">"Login"</span>,<span style="color: #000066;">"Your user is {FF0000}registered{FFFFFF}! Please {0000FF}login{FFFFFF} with your password below!<span style="color: #000099; font-weight: bold;">\n</span>{FF0000} You must login before you spawn!"</span>,<span style="color: #000066;">"Login"</span>,<span style="color: #000066;">"Cancel"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Shows our login dialog :).</span><br/>            <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>; <span style="color: #228822;">//Prevents the player from spawning</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Now, I'm going to explain how to add a extra variable(s) to saving / loading. For this, I'm going to use the variable X Position. You can either edit the table in PhpMyAdmin or make a temporary script and do this<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:119px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnFilterScriptInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>     mysql_connect<span style="color: #000000;">(</span>mysql_host, mysql_user, mysql_database, mysql_password<span style="color: #000000;">)</span>;<br/>     mysql_query<span style="color: #000000;">(</span><span style="color: #000066;">"ALTER TABLE playerdata ADD XPOS FLOAT"</span><span style="color: #000000;">)</span>;<br/>     <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Then we go into the MySQL_Register function and edit this line<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #222222;">format</span><span style="color: #000000;">(</span>query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>, <span style="color: #000066;">"INSERT INTO playerdata (user, password, score, money, IP) VALUES('%s', SHA1('%s'), 0, 0, '%s', 0.0)"</span>, pname, passwordstring, IP<span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+And add below the other mysql_fetch_feild_rows's.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">mysql_fetch_field_row<span style="color: #000000;">(</span>savingstring, <span style="color: #000066;">"XPOS"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">/*XPOS VARIABLE*/</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>savingstring<span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+Lastly, we need to edit the saving query.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #222222;">format</span><span style="color: #000000;">(</span>query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>, <span style="color: #000066;">"UPDATE playerdata SET score=%d, money=%d, XPOS=%f WHERE user='%s'"</span>, score, money, <span style="color: #228822;">/*XPOS VARIABLE*/</span>, pname<span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+<font color="Cyan"><b>CURRENT NOTES</b></font><br />
+<b>1.</b> Change the query sizes if you are using a lot of variables.<br />
+<b>2.</b> Field names are case sensitive<br />
+<b>3.</b> Post any bugs here <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>.<br />
+<b>4.</b> All passwords are hashed with SHA1, that means you cannot decrypt SHA1 passwords once they are set. For more information, visit the <a href="http://en.wikipedia.org/wiki/SHA-1" target="_blank">Wikipedia Page</a><br />
+<b>5.</b> For all strings, you must surround them with ' and '. So a string would be represented as username = '%s' and not username = %s.<br />
+<br />
+<font color="Pink"><b>Conclusion</b></font><br />
+I hope that you guys have learnt something from this. If you have any questions, post them here. I've fully edited this as of the 9th of August. My MSN is in my signature if anyone needs me <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>.<br />
+<br />
+<br />
+<font size="7">PHP PART (PART 2)</font><br />
+<br />
+<br />
+<b><font color="Magenta">Introduction</font></b><br />
+I decided to make this tutorial because I had a basic one on my other MySQL tutorial and a lot of people used it. This is a continue on from my <b><a href="../../threads/0159/tid-159785.html" target="_blank">MySQL tutorial</a></b> but it can be easily modified so that you can make it fit for your server. This tutorial requires almost no knowledge at all because I'm going to explain <b>everything</b> step by step. If you are stuck on a step, post here and I'll fix the tutorial up with a better explanation. For testing this, you need something that can run PHP. You are able to use the <a href="http://*******/o2qXyZ" target="_blank">WAMP server</a> and later on I'll explain how you can do that. If you are having trouble making any of these files, you can download it all at <a href="http://www.filejungle.com/f/Yp5ENE/mysql.rar" target="_blank">http://www.filejungle.com/f/Yp5ENE/mysql.rar</a>.<br />
+<br />
+<font color="Cyan"><b>Straight to the basics</b></font><br />
+We are going to start off with the most basic things possible. If you already know basic PHP / HTML you can skip this step and go straight to building the UCP. I'm going to explain how we implement PHP onto our webpage and how we print the information. We will start with PHP tags and commenting.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 146px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php
+<br/></span><span style="color: #FF8000">//This is where PHP code goes in here. This is also how you can comment in PHP (Similar to PAWN).
+<br/>/*
+<br/>This is a multiple line 
+<br/>comment that we can use
+<br/>up multiple lines to comment :D.
+<br/>*/
+<br/></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>OK, so what we have learnt from the above code is that we have to put all of our PHP code inside php tags (&lt;?php to open and ?&gt; to close). We have also learnt that we can comment in a very similar way to PAWN. <br />
+<br />
+Now that we have got the extremely basic stuff out of the way, I'm going to show you how we print information from PHP onto our webpage. It's really simple, it's like printing information into the sa-mp console using print / printf except we are printing it to the webpage.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 162px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php
+<br/></span><span style="color: #FF8000">//This is where PHP code goes in here. This is also how you can comment in PHP (Similar to PAWN).
+<br/>/*
+<br/>This is a multiple line 
+<br/>comment that we can use
+<br/>up multiple lines to comment :D.
+<br/>*/
+<br/></span><span style="color: #007700">echo </span><span style="color: #DD0000">"Hello World"</span><span style="color: #007700">;
+<br/></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>The above code will print to our page the text "Hello World". This shows us that we can print anything from PHP onto our webpage for the viewers to see. We must remember that with the same in pawn, we have semi colons at the end of every function. Now lets take a look into how we create and use variables in PHP<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 50px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&#36;string </span><span style="color: #007700">= </span><span style="color: #DD0000">"It's A Wonderful Day!"</span><span style="color: #007700">;
+<br/>echo </span><span style="color: #DD0000">"Hello World </span><span style="color: #0000BB">&#36;string</span><span style="color: #DD0000">"</span><span style="color: #007700">; 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>The above code will print "Hello World It's A Wonderful Day!" because we are inserting a string inside another one. We are going to be using this later on to insert a value such as a stats value that we are going to print to the user. Now that we have finished the real basic PHP side of things, I'll explain a bit of the basic HTML that we are going to be using.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">HTML Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 98px;
+		text-align: left;
+		overflow: auto"><span style="color:#FF8000">&lt;form name=<span style="color:#0000FF">"input"</span> action=<span style="color:#0000FF">"next.php"</span> method=<span style="color:#0000FF">"post"</span>&gt;</span>
+Username: <span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"text"</span> name=<span style="color:#0000FF">"user"</span> /&gt;</span> <span style="color:#000080">&lt;br /&gt;</span>
+<span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"submit"</span> value=<span style="color:#0000FF">"Submit"</span> /&gt;</span>
+<span style="color:#FF8000">&lt;/form&gt;</span>
+<i><span style="color:#000080">&lt;!-- This is a comment! --&gt;</span></i></pre>
+</div>The code above is probably the only HTML we are going to be using in this tutorial. The form tag creates a form that activates the action when you press the submit button. With HTML, functions are surrounded by '&lt;' and '&gt;'. Some functions have closing and opening tags. If they have closing tags (only the form function in this case) they do not have a '/' at the end of the tag. The input tag gives us a type of input whether it be a password box, a normal text box or a submit button. The &lt;br /&gt; tag is just for a new line, we are using it so that the submit button is on the line under the username text field because otherwise it would look silly having everything on a single line. Of course we don't stop here with this code because we still have to make the next.php to tell us what to do when we click that submit button and the action is called. We are using the post method in the form so we will use the post function in PHP to retrieve the information.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 50px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&#36;typedinformation  </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">"user"</span><span style="color: #007700">];
+<br/>echo </span><span style="color: #DD0000">"You have typed the username </span><span style="color: #0000BB">&#36;typedinformation</span><span style="color: #DD0000"> in the box!"</span><span style="color: #007700">; 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>The code above is setting the variable &#36;typedinformation to the posted information from the previous page and then telling you what you typed in the box. We will also check if anything was even submitted into the box or if the person went to the next.php page straight away. If the person goes to the next.php page directly and there is no post variable then the PHP code will return errors and we don't want that to happen.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 162px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #007700">if(!isset(</span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">"user"</span><span style="color: #007700">]))
+<br/>{
+<br/>    echo </span><span style="color: #DD0000">"There is no value for the user variable"</span><span style="color: #007700">;
+<br/>}
+<br/>else
+<br/>{
+<br/>    </span><span style="color: #0000BB">&#36;typedinformation  </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">"user"</span><span style="color: #007700">];
+<br/>    echo </span><span style="color: #DD0000">"You have typed the username </span><span style="color: #0000BB">&#36;typedinformation</span><span style="color: #DD0000"> in the box!"</span><span style="color: #007700">;
+<br/>} 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>The isset function tells us if the variable exists and it will not return errors if it doesn't. This way we will not get a PHP error telling us that the variable doesn't exist if we go directly onto the page. It will say "There is no value for the user variable" instead. Last but not least is linking to other pages using HTML, it's really basic and we use it so that the people can go on the stats page and other pages.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">HTML Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto"><span style="color:#008000">&lt;a href=<span style="color:#0000FF">"index.php"</span>&gt;</span>This will go to the index page<span style="color:#008000">&lt;/a&gt;</span></pre>
+</div>The above code is pretty self explanatory. If you click on the text "This will go to the index page", the HTML will redirect it straight to the index.php page.<br />
+<br />
+<b><font color="Purple"><font size="4">Lets get started!</font></font></b><br />
+<br />
+<font size="2"><font color="Blue"><b>Saving the pages</b></font></font><br />
+Each page will have a name above it that you have to save the file as because they all link together. Save the pages as all undercase letters. To save these documents, you can use Microsoft Notepad. Copy and paste the code into notepad -&gt; Save As -&gt; Save Type As - All Files -&gt; Enter the name of the document -&gt; Press the save button.<br />
+<br />
+<font size="2"><font color="Plum"><b>Wamp with PHP</b></font></font><br />
+You may not know this yet but you cannot open PHP documents in your browser and it will just work. All you have to do it put it in your WAMP server directory -&gt; WWW -&gt; Create a file called samp. Then visit <a href="http://localhost/samp" target="_blank">http://localhost/samp</a>.<br />
+<br />
+<font size="2"><font color="Green"><b>Pages</b></font></font><br />
+<br />
+<b>The variables page</b><br />
+We are starting off with creating a variables page that will have our database information so it can be edited easily later. This saves you having to copy and paste all of this information onto each page, you can use the PHP include function like including a .inc with PAWN.<br />
+<br />
+<br />
+<b>Page Name:</b> variables.php<br />
+<b>Use:</b> Saving the database variables<br />
+<b>Language:</b> PHP<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 114px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php
+<br/>&#36;dbservername </span><span style="color: #007700">= </span><span style="color: #DD0000">"127.0.0.1"</span><span style="color: #007700">;
+<br/></span><span style="color: #0000BB">&#36;dbusername </span><span style="color: #007700">= </span><span style="color: #DD0000">"root"</span><span style="color: #007700">;
+<br/></span><span style="color: #0000BB">&#36;dbpassword </span><span style="color: #007700">= </span><span style="color: #DD0000">""</span><span style="color: #007700">;
+<br/></span><span style="color: #0000BB">&#36;dbname </span><span style="color: #007700">= </span><span style="color: #DD0000">"sa-mp"</span><span style="color: #007700">;
+<br/></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><b>More Explanation:</b> The information above will obviously be changed by you to suit your needs because not everyone will have the same information.<br />
+<br />
+<br />
+<font size="2"><b>The login page</b></font><br />
+For the login page, we are going to be using 2 pages. One page is the page with the form and the other page is going to be the page that checks if our information is correct.<br />
+<br />
+<b>Page Name:</b> index.html<br />
+<b>Use:</b> Getting the information for the PHP file<br />
+<b>Language:</b> HTML<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">HTML Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 98px;
+		text-align: left;
+		overflow: auto"><span style="color:#FF8000">&lt;form name=<span style="color:#0000FF">"input"</span> action=<span style="color:#0000FF">"login.php"</span> method=<span style="color:#0000FF">"post"</span>&gt;</span> <i><span style="color:#000080">&lt;!-- This is the form that will redirect to our next page using the post method when we click the submit button --&gt;</span></i>
+Username: <span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"text"</span> name=<span style="color:#0000FF">"user"</span> /&gt;</span> <span style="color:#000080">&lt;br /&gt;</span> <i><span style="color:#000080">&lt;!-- This is the text field that records our username and posts it to the PHP file --&gt;</span></i> 
+Password: <span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"password"</span> name=<span style="color:#0000FF">"password"</span> /&gt;</span> <span style="color:#000080">&lt;br /&gt;</span> <i><span style="color:#000080">&lt;!-- This is the password field that records our password and posts it to the PHP file. --&gt;</span></i> 
+<span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"submit"</span> value=<span style="color:#0000FF">"Submit"</span> /&gt;</span> <i><span style="color:#000080">&lt;!-- The submit button --&gt;</span></i>
+<span style="color:#FF8000">&lt;/form&gt;</span> <i><span style="color:#000080">&lt;!-- End of the form --&gt;</span></i></pre>
+</div><b>More Explanation:</b> This will be a page with 2 input fields, one password box and one text box. The password box shows *'s instead of the actual letters so that you cant see what someone is typing. This is pretty much explained above in the basics section.<br />
+<br />
+<b>Page Name:</b> login.php<br />
+<b>Use:</b> Checking if the user is correct / password is correct then showing them the  UCP.<br />
+<b>Language:</b> PHP<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php
+<br/>session_start</span><span style="color: #007700">(); </span><span style="color: #FF8000">//Starts our session variables, more explained below.
+<br/>//Firstly we need to check if the information is posted
+<br/></span><span style="color: #007700">if((!isset(</span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">"user"</span><span style="color: #007700">]) || !isset(</span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">"password"</span><span style="color: #007700">])) &amp;&amp; !isset(</span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">"username"</span><span style="color: #007700">])) </span><span style="color: #FF8000">//Session variable will be explained below
+<br/></span><span style="color: #007700">{
+<br/>    echo </span><span style="color: #DD0000">"There was no values for username or password posted!"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Echoes that there is no username or password posted.
+<br/></span><span style="color: #007700">}
+<br/>else
+<br/>{
+<br/>    include(</span><span style="color: #DD0000">"variables.php"</span><span style="color: #007700">); </span><span style="color: #FF8000">//This includes our variables, same type of style as PAWN
+<br/>    </span><span style="color: #0000BB">&#36;connection </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_connect</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;dbservername</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;dbusername</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;dbpassword</span><span style="color: #007700">); 
+<br/>    </span><span style="color: #FF8000">/* 
+<br/>    We connect to the database here with the variables in our variables.php. 
+<br/>    mysql_connect(HOST, USERNAME, PASSWORD)
+<br/>    */
+<br/>    </span><span style="color: #0000BB">mysql_select_db</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;dbname</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;connection</span><span style="color: #007700">); 
+<br/>    </span><span style="color: #FF8000">/* 
+<br/>    We have a separate function to connect to our database (a bit silly tbh). 
+<br/>    mysql_select_db(DATABASE NAME, CONNECTION IDENTIFIER)
+<br/>    */
+<br/>    //Below we are making sure the people submitting the information are not trying to MySQL inject or find a XSS     vulnerability. We are going to strip it of html elements using  mysql_escape_string.
+<br/>    </span><span style="color: #007700">if(!isset(</span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">"username"</span><span style="color: #007700">]))
+<br/>    {
+<br/>        </span><span style="color: #0000BB">&#36;username </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">"user"</span><span style="color: #007700">]); </span><span style="color: #FF8000">//This gets the user variable.
+<br/>        </span><span style="color: #0000BB">&#36;password </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">"password"</span><span style="color: #007700">]); </span><span style="color: #FF8000">//This gets the password variable.
+<br/>    </span><span style="color: #007700">}
+<br/>    else </span><span style="color: #0000BB">&#36;username </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">"username"</span><span style="color: #007700">]); </span><span style="color: #FF8000">//Sets the username to the saved     session variable!
+<br/>    /*
+<br/>    Below we check if the user exists with the password that the user entered. 
+<br/>    This is where you will have to change the variables if you are not using my
+<br/>    mysql tutorial as a guideline.
+<br/>    */
+
+<br/>    </span><span style="color: #007700">if(!isset(</span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">"username"</span><span style="color: #007700">]))  </span><span style="color: #0000BB">&#36;result </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_query</span><span style="color: #007700">(</span><span style="color: #DD0000">"SELECT * FROM `playerdata` WHERE user='</span><span style="color: #0000BB">&#36;username</span><span style="color: #DD0000">'     AND password=SHA1('</span><span style="color: #0000BB">&#36;password</span><span style="color: #DD0000">')"</span><span style="color: #007700">);
+<br/>    </span><span style="color: #FF8000">/*Queries the database to see if there is a user and password the same as what we have entered.
+<br/>    Passwords are encoded with SHA1 so they have to be converted to that before we compare (My MySQL tutorial).
+<br/>    Explained further in further explanation */
+<br/>    </span><span style="color: #007700">else </span><span style="color: #0000BB">&#36;result </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_query</span><span style="color: #007700">(</span><span style="color: #DD0000">"SELECT * FROM `playerdata` WHERE user='</span><span style="color: #0000BB">&#36;username</span><span style="color: #DD0000">'"</span><span style="color: #007700">);
+<br/>    </span><span style="color: #FF8000">/* 
+<br/>    If you are wondering why I've checked if the session variables
+<br/>    are set, read the further explanation at the bottom.
+<br/>    */
+
+<br/>    </span><span style="color: #007700">if(!</span><span style="color: #0000BB">mysql_num_rows</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">))
+<br/>    </span><span style="color: #FF8000">/*
+<br/>    Checks if it has returned anything with the password and username that we 
+<br/>    have entered. If there is nothing, it will return 0. If there is a user the same
+<br/>    with the same password, it will return 1. mysql_num_rows requires the resource
+<br/>    result from mysql_query, this is one of the differences to PAWN.
+<br/>    */
+<br/>    </span><span style="color: #007700">{
+<br/>        </span><span style="color: #FF8000">//No matches
+<br/>        </span><span style="color: #007700">echo </span><span style="color: #DD0000">"The password or username you have entered is incorrect."</span><span style="color: #007700">;
+<br/>    }
+<br/>    else
+<br/>    {
+<br/>        </span><span style="color: #FF8000">//We found a match! Now we are going to get the information 
+<br/>        </span><span style="color: #0000BB">&#36;row </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_fetch_assoc</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">);
+<br/>        </span><span style="color: #FF8000">/*
+<br/>        The code above is just making it so we can retrieve the values such
+<br/>        as the players score and money so that we can print it to show the 
+<br/>        user what their stats are. mysql_fetch_assoc pretty much allows us to
+<br/>        fetch the arrays by name rather than by the order that they are in.
+<br/>        &#36;row['score'] instead of lets say &#36;row[2]. This pretty much goes through
+<br/>        */
+<br/>        </span><span style="color: #0000BB">&#36;score </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;row</span><span style="color: #007700">[</span><span style="color: #DD0000">"score"</span><span style="color: #007700">]; </span><span style="color: #FF8000">//Sets the variables to the value of score
+<br/>        </span><span style="color: #0000BB">&#36;money </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;row</span><span style="color: #007700">[</span><span style="color: #DD0000">"money"</span><span style="color: #007700">]; </span><span style="color: #FF8000">//Sets the variables to the value of score
+<br/>        </span><span style="color: #0000BB">&#36;currentip </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;row</span><span style="color: #007700">[</span><span style="color: #DD0000">"IP"</span><span style="color: #007700">]; </span><span style="color: #FF8000">//Sets the variables to the value of IP
+<br/>        </span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">"username"</span><span style="color: #007700">] = </span><span style="color: #0000BB">&#36;username</span><span style="color: #007700">;
+<br/>        </span><span style="color: #FF8000">/*
+<br/>        The code above is so that we don't have to log in every page. 
+<br/>        Session variables are pretty much server sided variables for a 
+<br/>        certain person. It's so we do not have to log in on every page
+<br/>        of the website that we visit.
+<br/>        */
+<br/>        </span><span style="color: #007700">echo </span><span style="color: #DD0000">"Welcome </span><span style="color: #0000BB">&#36;username</span><span style="color: #DD0000"> to the user control panel! &lt;br /&gt;"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Will print "Welcome [HiC]TheKiller to the user control panel!" then it will go onto a new line.
+<br/>        </span><span style="color: #007700">echo </span><span style="color: #DD0000">"Score: </span><span style="color: #0000BB">&#36;score</span><span style="color: #DD0000"> &lt;br /&gt;"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Will print my score
+<br/>        </span><span style="color: #007700">echo </span><span style="color: #DD0000">"Money: </span><span style="color: #0000BB">&#36;money</span><span style="color: #DD0000"> &lt;br /&gt;"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Will print my cash
+<br/>        </span><span style="color: #007700">echo </span><span style="color: #DD0000">"Current IP address on your account: </span><span style="color: #0000BB">&#36;currentip</span><span style="color: #DD0000"> &lt;br /&gt;"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Will print my current IP. You can take this out if you want.
+<br/>        </span><span style="color: #007700">echo </span><span style="color: #DD0000">"&lt;a href='../../unavailable.html'&gt;Change your password&lt;/a&gt;&lt;br /&gt;"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Links to the change password page.
+<br/>        </span><span style="color: #007700">echo </span><span style="color: #DD0000">"&lt;a href='../../unavailable.html'&gt;Set your auto login IP&lt;/a&gt;&lt;br /&gt;"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Links to the auto login IP page
+<br/>        </span><span style="color: #007700">echo </span><span style="color: #DD0000">"&lt;a href='../../unavailable.html'&gt;View another players statistics&lt;/a&gt;&lt;br /&gt;"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Links to the stats page.
+<br/>        </span><span style="color: #007700">echo </span><span style="color: #DD0000">"&lt;a href='../../unavailable.html'&gt;Logout&lt;/a&gt;&lt;br /&gt;"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Links to the logout page
+<br/>        </span><span style="color: #0000BB">mysql_close</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;connection</span><span style="color: #007700">); </span><span style="color: #FF8000">//Closes the MySQL connection.
+<br/>    </span><span style="color: #007700">}
+<br/>}
+<br/></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><b>Further Explanation:</b> Firstly, the above serves 2 purposes, one being checking if the player information is correct and the second being showing the information if the player is already logged in. The session cookies allow us to do this and some parts are not called if the information is incorrect. The other functions are pretty much explained, for more information on mysql_fetch_assoc visit the <a href="http://php.net/manual/en/function.mysql-fetch-assoc.php" target="_blank">PHP website</a>.<br />
+<br />
+<b>Page Name:</b> setip.php<br />
+<b>Use:</b> Sets the Auto login IP for the player, if you press the link, it will set the persons current ip.<br />
+<b>Language:</b> PHP<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 418px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php
+<br/>session_start</span><span style="color: #007700">(); </span><span style="color: #FF8000">//Starts our session variables.
+<br/></span><span style="color: #007700">if(!isset(</span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">"username"</span><span style="color: #007700">]))
+<br/>{
+<br/>    echo </span><span style="color: #DD0000">"You need to be logged in to set your IP!"</span><span style="color: #007700">;
+<br/>}
+<br/>else
+<br/>{
+<br/>    include(</span><span style="color: #DD0000">"variables.php"</span><span style="color: #007700">); </span><span style="color: #FF8000">//Includes our variables
+<br/>    </span><span style="color: #0000BB">&#36;connection </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_connect</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;dbservername</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;dbusername</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;dbpassword</span><span style="color: #007700">);  </span><span style="color: #FF8000">//Connects to the server
+<br/>    </span><span style="color: #0000BB">mysql_select_db</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;dbname</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;connection</span><span style="color: #007700">);  </span><span style="color: #FF8000">//Connects to the database
+<br/>    </span><span style="color: #0000BB">&#36;ip </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;_SERVER</span><span style="color: #007700">[</span><span style="color: #DD0000">"REMOTE_ADDR"</span><span style="color: #007700">]; </span><span style="color: #FF8000">//&#36;_SERVER["REMOTE_ADDR"] gets the current IP of the person viewing the website
+<br/>    </span><span style="color: #0000BB">&#36;username </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">"username"</span><span style="color: #007700">]); </span><span style="color: #FF8000">//Get the username from our session variable
+<br/>    </span><span style="color: #0000BB">mysql_query</span><span style="color: #007700">(</span><span style="color: #DD0000">"UPDATE playerdata SET IP = '</span><span style="color: #0000BB">&#36;ip</span><span style="color: #DD0000">' WHERE user='</span><span style="color: #0000BB">&#36;username</span><span style="color: #DD0000">'"</span><span style="color: #007700">); </span><span style="color: #FF8000">//Updates the IP
+<br/>    </span><span style="color: #007700">echo </span><span style="color: #DD0000">"IP set, redirecting in 5 seconds!"</span><span style="color: #007700">;
+<br/>    echo </span><span style="color: #DD0000">"&lt;meta http-equiv='Refresh' content='5;url=login.php' /&gt;"</span><span style="color: #007700">;
+<br/>    </span><span style="color: #FF8000">/*
+<br/>    The above code tells the server that it should redirect
+<br/>    us in 5 seconds to the login.php page. It will refresh
+<br/>    the page to the other page if you kind of understand
+<br/>    what I'm trying to say :).
+<br/>    */
+<br/>    </span><span style="color: #0000BB">mysql_close</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;connection</span><span style="color: #007700">); </span><span style="color: #FF8000">//Closes the MySQL connection.
+<br/></span><span style="color: #007700">}
+<br/></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><b>Further Explanation:</b> There isn't much to further explain here other than it gets the username and updates the IP value. You already know what the Update query does from the mysql tutorial above.<br />
+<br />
+<b>Page Name:</b> logout.php<br />
+<b>Use:</b> Logs the player out, deletes the session variable.<br />
+<b>Language:</b> PHP<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 114px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php
+<br/>session_start</span><span style="color: #007700">(); </span><span style="color: #FF8000">//Starts our session variables.
+<br/></span><span style="color: #007700">unset(</span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">"username"</span><span style="color: #007700">]); </span><span style="color: #FF8000">//Deletes the session variable
+<br/></span><span style="color: #007700">echo </span><span style="color: #DD0000">"Logged out! Redirecting in 5 seconds."</span><span style="color: #007700">; </span><span style="color: #FF8000">//Shows that it's logged out.
+<br/></span><span style="color: #007700">echo </span><span style="color: #DD0000">"&lt;meta http-equiv='Refresh' content='5;url=index.html' /&gt;"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Redirects us to the main page 5 seconds later.
+<br/></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><b>Further Explanation:</b> None needed.<br />
+<br />
+<b>Page Name:</b> stats.html<br />
+<b>Use:</b> Goes to a input page for a player to enter the name of the persons stats he wants to view.<br />
+<b>Language:</b> HTML<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">HTML Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 82px;
+		text-align: left;
+		overflow: auto"><span style="color:#FF8000">&lt;form name=<span style="color:#0000FF">"input"</span> action=<span style="color:#0000FF">"statview.php"</span> method=<span style="color:#0000FF">"post"</span>&gt;</span> <i><span style="color:#000080">&lt;!-- Goes to statview.php when the submit button is clicked. --&gt;</span></i>
+Username: <span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"text"</span> name=<span style="color:#0000FF">"user"</span> /&gt;</span> <span style="color:#000080">&lt;br /&gt;</span> <i><span style="color:#000080">&lt;!-- User field --&gt;</span></i>
+<span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"submit"</span> value=<span style="color:#0000FF">"Submit"</span> /&gt;</span> <i><span style="color:#000080">&lt;!-- Submit button --&gt;</span></i>
+<span style="color:#FF8000">&lt;/form&gt;</span> <i><span style="color:#000080">&lt;!-- Closing the form tag --&gt;</span></i></pre>
+</div><b>Further Explanation:</b> None needed.<br />
+<br />
+<b>Page Name:</b> statview.php<br />
+<b>Use:</b> Views the players stats that another played typed<br />
+<b>Language:</b> PHP<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 434px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php
+<br/></span><span style="color: #007700">if(!isset(</span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">"user"</span><span style="color: #007700">])) echo </span><span style="color: #DD0000">"No input value found!"</span><span style="color: #007700">;
+<br/>else
+<br/>{
+<br/>    </span><span style="color: #0000BB">&#36;username </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">"user"</span><span style="color: #007700">]); </span><span style="color: #FF8000">//Escapes the post value from the stats.html
+<br/>    </span><span style="color: #007700">include(</span><span style="color: #DD0000">"variables.php"</span><span style="color: #007700">); </span><span style="color: #FF8000">//Our handy dandy includes page!
+<br/>    </span><span style="color: #0000BB">&#36;connection </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_connect</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;dbservername</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;dbusername</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;dbpassword</span><span style="color: #007700">);  </span><span style="color: #FF8000">//Connects to the server
+<br/>    </span><span style="color: #0000BB">mysql_select_db</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;dbname</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;connection</span><span style="color: #007700">);  </span><span style="color: #FF8000">//Connects to the database
+<br/>    </span><span style="color: #0000BB">&#36;result </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_query</span><span style="color: #007700">(</span><span style="color: #DD0000">"SELECT score, money FROM playerdata WHERE user = '</span><span style="color: #0000BB">&#36;username</span><span style="color: #DD0000">'"</span><span style="color: #007700">); </span><span style="color: #FF8000">//Selects the users score and money from the database.
+<br/>    </span><span style="color: #007700">if(!</span><span style="color: #0000BB">mysql_num_rows</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">)) </span><span style="color: #FF8000">//If we could find the users data
+<br/>    </span><span style="color: #007700">{
+<br/>        echo </span><span style="color: #DD0000">"No user found"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Self explanatory :).
+<br/>        </span><span style="color: #007700">echo </span><span style="color: #DD0000">"&lt;meta http-equiv='Refresh' content='5;url=stats.html' /&gt;"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Redirects us back to the stat page 5 seconds later.
+<br/>    </span><span style="color: #007700">}
+<br/>    else
+<br/>    {
+<br/>       </span><span style="color: #0000BB">&#36;array </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_fetch_array</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">, </span><span style="color: #0000BB">MYSQL_ASSOC</span><span style="color: #007700">); </span><span style="color: #FF8000">//Fetches our variables for us.
+<br/>       </span><span style="color: #0000BB">&#36;score </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;array</span><span style="color: #007700">[</span><span style="color: #DD0000">'score'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//Sets &#36;score to the result in our database for the players score.
+<br/>       </span><span style="color: #0000BB">&#36;money </span><span style="color: #007700">= </span><span style="color: #0000BB">&#36;array</span><span style="color: #007700">[</span><span style="color: #DD0000">'money'</span><span style="color: #007700">]; </span><span style="color: #FF8000">//Sets &#36;money to the result in our database for the players money.
+<br/>       </span><span style="color: #007700">echo </span><span style="color: #DD0000">"</span><span style="color: #0000BB">&#36;username</span><span style="color: #DD0000"> has </span><span style="color: #0000BB">&#36;score</span><span style="color: #DD0000"> score and &#36;</span><span style="color: #0000BB">&#36;money</span><span style="color: #DD0000"> cash!"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Will output "[HiC]TheKiller has 20 score and &#36;1000 cash"
+<br/>       </span><span style="color: #007700">echo </span><span style="color: #DD0000">"&lt;br /&gt;&lt;a href='../../unavailable.html'&gt;Go back to the stats page&lt;/a&gt;"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Goes onto a new line and then gives us a link to go back to our other page.
+<br/>    </span><span style="color: #007700">}
+<br/>    </span><span style="color: #0000BB">mysql_close</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;connection</span><span style="color: #007700">);
+<br/>}
+
+<br/></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><b>Further Explanation:</b> It's nothing new in the above. We first make our value safe, check if the user exists inside the database, then we get the users score and money using mysql_fetch_array and send the info to the user.<br />
+<br />
+<b>Page Name:</b> changepass.html<br />
+<b>Use:</b> Will send the input to the next page so the user can change their password.<br />
+<b>Language:</b> HTML<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">HTML Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 114px;
+		text-align: left;
+		overflow: auto"><span style="color:#FF8000">&lt;form name=<span style="color:#0000FF">"input"</span> action=<span style="color:#0000FF">"changepass.php"</span> method=<span style="color:#0000FF">"post"</span>&gt;</span> <i><span style="color:#000080">&lt;!-- Goes to changepass.php when the submit button is clicked. --&gt;</span></i>
+Current Password: <span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"password"</span> name=<span style="color:#0000FF">"currentpassword"</span> /&gt;</span> <span style="color:#000080">&lt;br /&gt;</span> <i><span style="color:#000080">&lt;!-- Current Password field --&gt;</span></i>
+New password: <span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"password"</span> name=<span style="color:#0000FF">"newpass"</span> /&gt;</span> <span style="color:#000080">&lt;br /&gt;</span> <i><span style="color:#000080">&lt;!-- The new password --&gt;</span></i>
+Confirm new password: <span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"password"</span> name=<span style="color:#0000FF">"newpassconfirm"</span> /&gt;</span> <span style="color:#000080">&lt;br /&gt;</span> <i><span style="color:#000080">&lt;!-- User field --&gt;</span></i>
+<span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"submit"</span> value=<span style="color:#0000FF">"Submit"</span> /&gt;</span> <i><span style="color:#000080">&lt;!-- Submit button --&gt;</span></i>
+<span style="color:#FF8000">&lt;/form&gt;</span> <i><span style="color:#000080">&lt;!-- Closing the form tag --&gt;</span></i></pre>
+</div><b>Further Explanation:</b> None needed.<br />
+<br />
+<b>Page Name:</b> changepass.php<br />
+<b>Use:</b> Changes the players password from the posted information from changepass.html<br />
+<b>Language:</b> PHP<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;?php
+<br/>session_start</span><span style="color: #007700">(); </span><span style="color: #FF8000">//Starts our session variables.
+<br/></span><span style="color: #007700">if(!isset(</span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">"username"</span><span style="color: #007700">])) echo </span><span style="color: #DD0000">"You are not logged in!"</span><span style="color: #007700">; </span><span style="color: #FF8000">//If the player isn't logged in
+<br/></span><span style="color: #007700">else
+<br/>{
+<br/>    </span><span style="color: #FF8000">/*
+<br/>    Firstly we are going to check if the person typed the same thing for 
+<br/>    the confirmation password and the new password. It's better to do
+<br/>    that first, so we don't need to open a database connection for 
+<br/>    nothing.
+<br/>    */
+<br/>    </span><span style="color: #0000BB">&#36;newpass </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">'newpass'</span><span style="color: #007700">]); </span><span style="color: #FF8000">//Makes our newpass safe
+<br/>    </span><span style="color: #0000BB">&#36;newpassconfirm </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">'newpassconfirm'</span><span style="color: #007700">]); </span><span style="color: #FF8000">//Makes our confirm pass safe
+<br/>    </span><span style="color: #0000BB">&#36;password </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;_POST</span><span style="color: #007700">[</span><span style="color: #DD0000">'currentpassword'</span><span style="color: #007700">]); </span><span style="color: #FF8000">// Makes our current pass safe
+<br/>    </span><span style="color: #0000BB">&#36;username </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;_SESSION</span><span style="color: #007700">[</span><span style="color: #DD0000">"username"</span><span style="color: #007700">]); </span><span style="color: #FF8000">//Makes our username safe.
+<br/>    </span><span style="color: #007700">if(</span><span style="color: #0000BB">&#36;newpass </span><span style="color: #007700">!= </span><span style="color: #0000BB">&#36;newpassconfirm</span><span style="color: #007700">) </span><span style="color: #FF8000">//If the confirmation pass isn't the same
+<br/>    </span><span style="color: #007700">{
+<br/>        echo </span><span style="color: #DD0000">"Your new password was not the same as your confirmation password!"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Sends the user a message that it's not the same
+<br/>        </span><span style="color: #007700">echo </span><span style="color: #DD0000">"&lt;meta http-equiv='Refresh' content='5;url=changepass.html' /&gt;"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Redirects us back to the pass page 5 seconds later.
+<br/>    </span><span style="color: #007700">}
+<br/>    else
+<br/>    {
+<br/>        include(</span><span style="color: #DD0000">"variables.php"</span><span style="color: #007700">); </span><span style="color: #FF8000">//Our handy dandy includes page!
+<br/>        </span><span style="color: #0000BB">&#36;connection </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_connect</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;dbservername</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;dbusername</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;dbpassword</span><span style="color: #007700">);  </span><span style="color: #FF8000">//Connects to the server
+<br/>        </span><span style="color: #0000BB">mysql_select_db</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;dbname</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;connection</span><span style="color: #007700">);  </span><span style="color: #FF8000">//Connects to the database
+<br/>        </span><span style="color: #0000BB">&#36;result </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_query</span><span style="color: #007700">(</span><span style="color: #DD0000">"SELECT password FROM playerdata WHERE user = '</span><span style="color: #0000BB">&#36;username</span><span style="color: #DD0000">' AND password = SHA1('</span><span style="color: #0000BB">&#36;password</span><span style="color: #DD0000">')"</span><span style="color: #007700">); </span><span style="color: #FF8000">//Tries to find the line where our user and password are the ones we have specified.
+<br/>        </span><span style="color: #007700">if(!</span><span style="color: #0000BB">mysql_num_rows</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">)) </span><span style="color: #FF8000">//Current password is incorrect
+<br/>        </span><span style="color: #007700">{
+<br/>            echo </span><span style="color: #DD0000">"The current password typed is incorrect!"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Sends the user a message
+<br/>            </span><span style="color: #007700">echo </span><span style="color: #DD0000">"&lt;meta http-equiv='Refresh' content='5;url=changepass.html' /&gt;"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Redirects us back to the pass page 5 seconds later.
+<br/>        </span><span style="color: #007700">}
+<br/>        else </span><span style="color: #FF8000">//All the information is good to insert, our current password matches etc.
+<br/>        </span><span style="color: #007700">{
+<br/>            </span><span style="color: #0000BB">mysql_query</span><span style="color: #007700">(</span><span style="color: #DD0000">"UPDATE playerdata SET password = SHA1('</span><span style="color: #0000BB">&#36;newpass</span><span style="color: #DD0000">') WHERE user = '</span><span style="color: #0000BB">&#36;username</span><span style="color: #DD0000">'"</span><span style="color: #007700">);
+<br/>            echo </span><span style="color: #DD0000">"The current password has been changed"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Sends the user a message
+<br/>            </span><span style="color: #007700">echo </span><span style="color: #DD0000">"&lt;meta http-equiv='Refresh' content='5;url=login.php' /&gt;"</span><span style="color: #007700">; </span><span style="color: #FF8000">//Redirects us back to the player page 5 seconds later.
+<br/>        </span><span style="color: #007700">}
+<br/>        </span><span style="color: #0000BB">mysql_close</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;connection</span><span style="color: #007700">); </span><span style="color: #FF8000">//Closes our connection ;).
+<br/>    </span><span style="color: #007700">}
+<br/>}
+<br/></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><b>Further Explanation:</b> Nothing new, it explains it all in the code.<br />
+<br />
+<b>Conclusion</b><br />
+This took a while to make and it may have a few bugs, so please make sure to tell me if their is any. If you have any questions about this part of the tutorial, add me on MSN or ask in this topic.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_752036">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-23565.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid752038"></a>
+<div class="post classic " style="" id="post_752038">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0061/uid-61747.html"><img src="../../assets/uploads/avatars/61747.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0061/uid-61747.html">ViruZZzZ_ChiLLL</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,645<br />
+	Threads: 100<br />
+	Joined: Aug 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid752038" title="Re: Making a MySQL system">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by ViruZZzZ_ChiLLL" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.07.2010, 14:10 <span class="post_edit" id="edited_by_752038"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_752038">
+		First!!<br />
+<br />
+Awesome tut, [Hic]TheKiller <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/> :O
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_752038">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-61747.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid752042"></a>
+<div class="post classic " style="" id="post_752042">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0023/uid-23565.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0023/uid-23565.html">[HiC]TheKiller</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,629<br />
+	Threads: 40<br />
+	Joined: Mar 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid752042" title="Re: Making a MySQL system">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by [HiC]TheKiller" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.07.2010, 14:14 <span class="post_edit" id="edited_by_752042"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_752042">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>ViruZZzZ_ChiLLL</strong><br />
+<a href="../../threads/0159/tid-159785.html#pid752038" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">First!!<br />
+<br />
+Awesome tut, [Hic]TheKiller <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/> :O</div>
+</td>
+</tr>
+</table>
+</div>Thanks <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_752042">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-23565.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid752121"></a>
+<div class="post classic " style="" id="post_752121">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0061/uid-61319.html"><img src="../../assets/uploads/avatars/61319.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0061/uid-61319.html">DiddyBop</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 666<br />
+	Threads: 94<br />
+	Joined: Aug 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid752121" title="Re: Making a MySQL system">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by DiddyBop" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.07.2010, 15:26 <span class="post_edit" id="edited_by_752121"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_752121">
+		good job sexeh. now ima go eat a dohnut for brakfast.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_752121">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-61319.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid752128"></a>
+<div class="post classic " style="" id="post_752128">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0075/uid-75627.html"><img src="../../assets/uploads/avatars/75627.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0075/uid-75627.html">willsuckformoney</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,494<br />
+	Threads: 120<br />
+	Joined: Dec 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid752128" title="Re: Making a MySQL system">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by willsuckformoney" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.07.2010, 15:29 <span class="post_edit" id="edited_by_752128"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_752128">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>LilGunna</strong><br />
+<a href="../../threads/0159/tid-159785.html#pid752121" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">good job sexeh. now ima go eat a dohnut for brakfast.</div>
+</td>
+</tr>
+</table>
+</div>lulz fatteh! xD and good work HiC 3 hours worth it lol
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_752128">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-75627.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid752167"></a>
+<div class="post classic " style="" id="post_752167">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0080/uid-80862.html"><img src="../../assets/uploads/avatars/80862.png" alt="" width="47" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0080/uid-80862.html">hab2ever</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 278<br />
+	Threads: 28<br />
+	Joined: Feb 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid752167" title="Re: Making a MySQL system">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by hab2ever" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.07.2010, 16:00 <span class="post_edit" id="edited_by_752167"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_752167">
+		Wow! really awesome <br />
+thanks ...
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_752167">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-80862.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid752175"></a>
+<div class="post classic " style="" id="post_752175">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0069/uid-69868.html"><img src="../../assets/uploads/avatars/69868.png" alt="" width="52" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0069/uid-69868.html">Jeffry</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,594<br />
+	Threads: 61<br />
+	Joined: Oct 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid752175" title="Re: Making a MySQL system">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by Jeffry" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.07.2010, 16:15 <span class="post_edit" id="edited_by_752175"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_752175">
+		This might be usefull for me soon. Good job.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_752175">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-69868.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid752199"></a>
+<div class="post classic " style="" id="post_752199">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0087/uid-87324.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0087/uid-87324.html">[DK]JaloNik</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 240<br />
+	Threads: 13<br />
+	Joined: Apr 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid752199" title="Re: Making a MySQL system">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by [DK]JaloNik" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.07.2010, 16:43 <span class="post_edit" id="edited_by_752199"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_752199">
+		Awesomeness
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_752199">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-87324.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid752507"></a>
+<div class="post classic " style="" id="post_752507">
+<div class="post_author scaleimages">
+	
+	<div class="author_information">
+			<strong><span class="largetext">Guest3598475934857938411</span></strong> <br />
+			<span class="smalltext">
+				Unregistered<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_guest -->
+&nbsp;
+<!-- end: postbit_author_guest -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid752507" title="Re: Making a MySQL system">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Guest3598475934857938411" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.07.2010, 20:45 <span class="post_edit" id="edited_by_752507"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_752507">
+		I don't hate MySql but it can be sql injected easily!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_752507">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid752757"></a>
+<div class="post classic " style="" id="post_752757">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0023/uid-23565.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0023/uid-23565.html">[HiC]TheKiller</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,629<br />
+	Threads: 40<br />
+	Joined: Mar 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid752757" title="Re: Making a MySQL system">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by [HiC]TheKiller" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">15.07.2010, 00:43 <span class="post_edit" id="edited_by_752757"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_752757">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>LilGunna</strong><br />
+<a href="../../threads/0159/tid-159785.html#pid752121" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">good job sexeh. now ima go eat a dohnut for brakfast.</div>
+</td>
+</tr>
+</table>
+</div>I ate a crumpet <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>.<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>willsuckformoney</strong><br />
+<a href="../../threads/0159/tid-159785.html#pid752128" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">lulz fatteh! xD and good work HiC 3 hours worth it lol</div>
+</td>
+</tr>
+</table>
+</div>Lol, I worked from 11PM - 2AM D=. <br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>hab2ever</strong><br />
+<a href="../../threads/0159/tid-159785.html#pid752167" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Wow! really awesome <br />
+thanks ...</div>
+</td>
+</tr>
+</table>
+</div>Thanks<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Jeffry</strong><br />
+<a href="../../threads/0159/tid-159785.html#pid752175" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">This might be usefull for me soon. Good job.</div>
+</td>
+</tr>
+</table>
+</div>No problem <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/><br />
+<br />
+For the last 2 comments (For some reason my net won't open them)<br />
+<br />
+Thanks and I know MySQL can be injected easly, I will add things so it makes it harder for hackers <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_752757">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-23565.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid753035"></a>
+<div class="post classic " style="" id="post_753035">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0037/uid-37431.html"><img src="../../assets/uploads/avatars/37431.png" alt="" width="46" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0037/uid-37431.html">Hiddos</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,304<br />
+	Threads: 58<br />
+	Joined: Sep 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid753035" title="Re: Making a MySQL system">#11</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 11 by Hiddos" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">15.07.2010, 09:24 <span class="post_edit" id="edited_by_753035"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_753035">
+		Meh, I'm still using fopen &amp; frwite and that boring stuff, just because I didn't felt like doing MySQL. But reading this tutorial, I'll give it a try.<br />
+<br />
+Thanks Killer, awesome tut.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_753035">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-37431.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid753069"></a>
+<div class="post classic " style="" id="post_753069">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0075/uid-75627.html"><img src="../../assets/uploads/avatars/75627.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0075/uid-75627.html">willsuckformoney</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,494<br />
+	Threads: 120<br />
+	Joined: Dec 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid753069" title="Re: Making a MySQL system">#12</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 12 by willsuckformoney" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">15.07.2010, 10:13 <span class="post_edit" id="edited_by_753069"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_753069">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>[HiC]TheKiller</strong><br />
+<a href="../../threads/0159/tid-159785.html#pid752757" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">I ate a crumpet <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>.<br />
+<br />
+<br />
+<br />
+Lol, I worked from 11PM - 2AM D=. <br />
+<br />
+<br />
+<br />
+Thanks<br />
+<br />
+<br />
+<br />
+No problem <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/><br />
+<br />
+For the last 2 comments (For some reason my net won't open them)<br />
+<br />
+Thanks and I know MySQL can be injected easly, I will add things so it makes it harder for hackers <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>.</div>
+</td>
+</tr>
+</table>
+</div>
+want me to rub?? <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/surprised.gif" title="Shocked"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_753069">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-75627.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid754257"></a>
+<div class="post classic " style="" id="post_754257">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0097/uid-97403.html"><img src="../../assets/uploads/avatars/97403.png" alt="" width="53" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0097/uid-97403.html">FireCat</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,322<br />
+	Threads: 260<br />
+	Joined: Jul 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid754257" title="Re: Making a MySQL system">#13</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 13 by FireCat" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">16.07.2010, 09:57 <span class="post_edit" id="edited_by_754257"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_754257">
+		<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/razz.gif" title="Tongue"/> hey epro
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_754257">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-97403.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid765165"></a>
+<div class="post classic " style="" id="post_765165">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0083/uid-83218.html"><img src="../../assets/uploads/avatars/83218.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0083/uid-83218.html">Carlton</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 687<br />
+	Threads: 28<br />
+	Joined: Mar 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid765165" title="Re: Making a MySQL system">#14</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 14 by Carlton" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">24.07.2010, 01:22 <span class="post_edit" id="edited_by_765165"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_765165">
+		@RealCop228<br />
+<br />
+Password: &lt;inputbox&gt; (That's obviously an input box for your password)<br />
+<br />
+I then write inside of the box:<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				'; DROP TABLE SA-MP;<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>That's injection.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_765165">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-83218.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid765175"></a>
+<div class="post classic " style="" id="post_765175">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0080/uid-80385.html"><img src="../../assets/uploads/avatars/80385.png" alt="" width="46" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0080/uid-80385.html">Scenario</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Godfather<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 7,801<br />
+	Threads: 187<br />
+	Joined: Feb 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid765175" title="Re: Making a MySQL system">#15</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 15 by Scenario" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">24.07.2010, 01:39 <span class="post_edit" id="edited_by_765175"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_765175">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Carlton</strong><br />
+<a href="../../threads/0159/tid-159785.html#pid765165" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">@RealCop228<br />
+<br />
+Password: &lt;inputbox&gt; (That's obviously an input box for your password)<br />
+<br />
+I then write inside of the box:<br />
+<br />
+<br />
+<br />
+That's injection.</div>
+</td>
+</tr>
+</table>
+</div>Yikes! That doesn't sound good, how could I fix that?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_765175">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-80385.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid775012"></a>
+<div class="post classic " style="" id="post_775012">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0065/uid-65388.html"><img src="../../assets/uploads/avatars/65388.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0065/uid-65388.html">legodude</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 601<br />
+	Threads: 74<br />
+	Joined: Sep 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid775012" title="Re: Making a MySQL system">#16</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 16 by legodude" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">01.08.2010, 19:25 <span class="post_edit" id="edited_by_775012"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_775012">
+		when i start samp server it says to me:<br />
+Cant Load LIBMYSQL.dll(heavily shortened and really with capitals)<br />
+<br />
+HELP!!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_775012">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-65388.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid825504"></a>
+<div class="post classic " style="" id="post_825504">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0033/uid-33833.html"><img src="../../assets/uploads/avatars/33833.png" alt="" width="55" height="44" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0033/uid-33833.html">skaTim</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 214<br />
+	Threads: 13<br />
+	Joined: Jul 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid825504" title="Re: Making a MySQL system">#17</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 17 by skaTim" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">05.09.2010, 11:47 <span class="post_edit" id="edited_by_825504"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_825504">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>legodude</strong><br />
+<a href="../../threads/0159/tid-159785.html#pid775012" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">when i start samp server it says to me:<br />
+Cant Load LIBMYSQL.dll(heavily shortened and really with capitals)<br />
+<br />
+HELP!!</div>
+</td>
+</tr>
+</table>
+</div>Same problem, any suggestions?<br />
+<br />
+Thank you.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_825504">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-33833.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid841834"></a>
+<div class="post classic " style="" id="post_841834">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0023/uid-23565.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0023/uid-23565.html">[HiC]TheKiller</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,629<br />
+	Threads: 40<br />
+	Joined: Mar 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid841834" title="Re: Making a MySQL system">#18</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 18 by [HiC]TheKiller" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.09.2010, 10:10 <span class="post_edit" id="edited_by_841834"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_841834">
+		Hiddos, you pretty much will get the hang of it if you understand the basics here. It took me a while to get a hang of MySQL but there was no tutorials around then. <br />
+<br />
+Also, to all the other posts about security. I'll add escapes all the SQL queries tomorrow.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_841834">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-23565.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid841986"></a>
+<div class="post classic " style="" id="post_841986">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0037/uid-37431.html"><img src="../../assets/uploads/avatars/37431.png" alt="" width="46" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0037/uid-37431.html">Hiddos</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,304<br />
+	Threads: 58<br />
+	Joined: Sep 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid841986" title="Re: Making a MySQL system">#19</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 19 by Hiddos" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.09.2010, 13:36 <span class="post_edit" id="edited_by_841986"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_841986">
+		Thanks for explaining, but what are mostly the advantages of SQL, when compared to fwrite, if I do NOT use it for anything but saving (No connection with anything different then the server to save player stats).<br />
+<br />
+Thanks in advance ^^
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_841986">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-37431.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid842288"></a>
+<div class="post classic " style="" id="post_842288">
+<div class="post_author scaleimages">
+	
+	<div class="author_information">
+			<strong><span class="largetext">[03]Garsino</span></strong> <br />
+			<span class="smalltext">
+				Unregistered<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_guest -->
+&nbsp;
+<!-- end: postbit_author_guest -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0159/tid-159785.html#pid842288" title="Re: Making a MySQL system">#20</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 20 by [03]Garsino" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.09.2010, 17:45 <span class="post_edit" id="edited_by_842288"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_842288">
+		Excellent, I learnt a lot from this, thanks!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_842288">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0159/tid-159785.html">Next Oldest</a> | <a href="../../threads/0159/tid-159785.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="159785" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (4):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0159/tid-159785-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0159/tid-159785-page-3.html" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0159/tid-159785-page-4.html" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0159/tid-159785-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

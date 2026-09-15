@@ -1,0 +1,1357 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[FilterScript] Sistema de Eventos</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "54c782860397c420a4c59086c358aba3";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Sistema de Eventos ( Beta ) Este fs contйm cerca de 17 comandos para administradores no modo rcon. Alйm de conter 2 comandos para players. Este Fs e ъtil para aqueles que curtem configurar o seu pr" />
+<link rel="canonical" href="../../threads/0465/tid-465232.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="54c782860397c420a4c59086c358aba3" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/9.html">Non-English</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/33.html">Languages</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/34.html">Português/Portuguese</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/56.html">Lançamentos/Releases</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0465/tid-465232.html#pid2705152">Threaded Mode</a></span>
+				</div>
+				
+					[FilterScript] Sistema de Eventos
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid2705152"></a>
+<div class="post classic " style="" id="post_2705152">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0136/uid-136880.html"><img src="../../assets/uploads/avatars/136880.png" alt="" width="49" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0136/uid-136880.html">Diogo123</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,150<br />
+	Threads: 57<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0465/tid-465232.html#pid2705152" title="Sistema de Eventos">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by Diogo123" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.09.2013, 13:57 <span class="post_edit" id="edited_by_2705152"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2705152">
+		<font size="5"><div align="center"><font color="Red"><font face="Comic Sans MS">Sistema de Eventos ( Beta )</font></font></div></font><br />
+<br />
+<div align="center"><font face="Arial Narrow">Este fs contйm cerca de 17 comandos para administradores no modo rcon.<br />
+Alйm de conter 2 comandos para players.<br />
+<br />
+Este Fs e ъtil para aqueles que curtem configurar o seu prуprio estilo de evento... muito ъtil para servidores de STUNT / DM / TDM <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/razz.gif" title="Tongue"/><br />
+<br />
+<br />
+*<font size="4"><font color="Red"><font face="Arial Narrow">Comandos Admin Rcon</font></font></font><br />
+<br />
+<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/EVW<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/ABRIREVENTO<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/ECARRO<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/EWEAPON<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/ECOLETE<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/EVIDA<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/CONTAR<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/EKICK<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/ECONGELAR<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/EDESCONGELAR<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/EDESARMAR<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/ESKIN<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/EFECHAR<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/EKITRUN<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/EKITWALK<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/EKITGRANADAS<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/ERECVIDA<br />
+<br />
+<br />
+* <font size="4"><font color="Red"><font face="Arial Narrow">Comandos para players </font></font></font><br />
+<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/EVENTO<br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/arrow.gif" title="smiley"/>/SAIREVENTO<br />
+<br />
+<br />
+* <font size="4"><font color="Red"><font face="Arial Narrow">Como instalar</font></font></font><br />
+<br />
+1є Copie o cуdigo no final do tуpico.<br />
+2є Vб em pawno &gt; New.pwn &gt; ctrl + a &gt; apague tudo e cole a fs e salve apуs isso compile ( F5 ).<br />
+3є Coloque no seu server cfg na linha filter scripts o nome que vocк salvou o FS.<br />
+4є Logue no seu server e aproveite.<br />
+<br />
+<br />
+* <font color="Red"><font size="4"><font face="Arial Narrow">Info Filter Script</font></font></font><br />
+<br />
+Linhas : 521<br />
+<br />
+Comandos Admin Rcon : 17<br />
+<br />
+Comandos Players : 2<br />
+<br />
+Erros : N / D / A.<br />
+<br />
+Versгo : 0.4 ( Beta ).<br />
+<br />
+Bugs : Nenhum encontrado. <br />
+<br />
+Tamanho .AMX : 26KB<br />
+<br />
+Tamanho .PWN :19KB<br />
+<br />
+<br />
+* <font size="4"><font color="Red"><font face="Arial Narrow">ChangeLog</font></font></font><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:231px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">/*<br/><br/>-* 0.1 Release<br/><br/>-* 0.2 Nick do player nгo aparecendo no /Evento ( Bug Fixado )<br/>-* 0.2 Mudanзa do cуdigo em sн.<br/><br/><br/>-* 0.3 Comando adicionado /SairEvento<br/><br/>-* 0.4 Bug do comando inexistente fixado.<br/><br/>*/</span></div></div></pre>
+</div>
+* Crйditos<br />
+<br />
+* Diogo123 ( Tw0.P4c___. )<br />
+* ZeXX Include Zcmd Link : <a href="http://www.mediafire.com/download/29gl7wcp1vd8t2g/zcmd.inc" target="_blank">http://www.mediafire.com/download/29...d8t2g/zcmd.inc</a><br />
+* ****** Include SSCANF2 Link : <a href="../../unavailable.html" target="_blank">https://forum.sa-mp.com/showthread.php?tid=120356</a><br />
+<br />
+<br />
+* <font color="Red"><font size="4"><font face="Arial Narrow">Cуdigo</font></font></font><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include &lt;a_samp&gt;</span><br/><span style="color: #2222AA;">#include &lt;zcmd&gt;</span><br/><span style="color: #2222AA;">#include &lt;sscanf2&gt;</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #2222BB;">new</span><br/>    <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>EventoOnOff        ,<br/>    <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>EvenT0 <span style="color: #000000;">[</span> <span style="color: #000000;">100</span> <span style="color: #000000;">]</span>     ,<br/>    <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>EventoPos <span style="color: #000000;">[</span> <span style="color: #000000;">4</span> <span style="color: #000000;">]</span>   ,<br/>    EventoInt               ,<br/>    EventoVW                ,<br/>    <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>Regenerar <span style="color: #000000;">=</span> false  ,<br/>    iString2 <span style="color: #000000;">[</span> <span style="color: #000000;">129</span> <span style="color: #000000;">+</span> <span style="color: #000000;">1</span> <span style="color: #000000;">]</span><br/>;<br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #2222AA;">#define versao                                                                 "0.4"</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222BB;">forward</span> Count<span style="color: #000000;">(</span>Contagem<span style="color: #000000;">)</span>;<br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #2222BB;">public</span> OnFilterScriptInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"<span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"<span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"TEventSystem Feito Por : Tw0.P4c__. Ou Diogo123"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"<span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"<span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"Carregado Versгo : "</span>versao<span style="color: #000066;">""</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222BB;">public</span> OnFilterScriptExit<span style="color: #000000;">(</span><span style="color: #000000;">)</span>                                                     <span style="color: #2222BB;">return</span> <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"Descarregado"</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> OnPlayerConnect<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>                                                <span style="color: #2222BB;">return</span> EvenT0 <span style="color: #000000;">[</span> playerid <span style="color: #000000;">]</span> <span style="color: #000000;">=</span> false ;<br/><span style="color: #2222BB;">public</span> OnPlayerDisconnect<span style="color: #000000;">(</span>playerid, reason<span style="color: #000000;">)</span>                                     <span style="color: #2222BB;">return</span> EvenT0 <span style="color: #000000;">[</span> playerid <span style="color: #000000;">]</span> <span style="color: #000000;">=</span> false ;<br/><span style="color: #2222BB;">public</span> OnPlayerSpawn<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>                                                  <span style="color: #2222BB;">return</span> EvenT0 <span style="color: #000000;">[</span> playerid <span style="color: #000000;">]</span> <span style="color: #000000;">=</span> false ;<br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #2222BB;">public</span> OnPlayerDeath<span style="color: #000000;">(</span>playerid, killerid, reason<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    EvenT0 <span style="color: #000000;">[</span> playerid <span style="color: #000000;">]</span> <span style="color: #000000;">=</span> false ;<br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> killerid <span style="color: #000000;">]</span> <span style="color: #000000;">==</span> true <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> Regenerar <span style="color: #000000;">==</span> true <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            SetPlayerHealth <span style="color: #000000;">(</span> killerid , <span style="color: #000000;">100.0</span> <span style="color: #000000;">)</span> ;<br/>            SetPlayerArmour <span style="color: #000000;">(</span> killerid , <span style="color: #000000;">100.0</span> <span style="color: #000000;">)</span> ;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">//================================ [ EVENT SYSTEM ] ==========================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>abrirevento<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    EventoOnOff <span style="color: #000000;">=</span> true;<br/>    EvenT0<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> true;<br/>    <br/>    GetPlayerPos <span style="color: #000000;">(</span> playerid , EventoPos <span style="color: #000000;">[</span> <span style="color: #000000;">0</span> <span style="color: #000000;">]</span> , EventoPos <span style="color: #000000;">[</span> <span style="color: #000000;">1</span> <span style="color: #000000;">]</span> , EventoPos <span style="color: #000000;">[</span> <span style="color: #000000;">2</span> <span style="color: #000000;">]</span> <span style="color: #000000;">)</span> ;<br/>    GetPlayerFacingAngle <span style="color: #000000;">(</span> playerid , EventoPos <span style="color: #000000;">[</span> <span style="color: #000000;">3</span> <span style="color: #000000;">]</span> <span style="color: #000000;">)</span> ;<br/>    EventoInt <span style="color: #000000;">=</span> GetPlayerInterior <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> ;<br/>    EventoVW <span style="color: #000000;">=</span> GetPlayerVirtualWorld <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> ;<br/><br/>    SendClientMessageToAll <span style="color: #000000;">(</span> 0xFFFFFFFF,<span style="color: #000066;">" "</span> <span style="color: #000000;">)</span> ;<br/>    SendClientMessageToAll <span style="color: #000000;">(</span> 0xFF00FFFF,<span style="color: #000066;">"[ EVENTO ] : EVENTO ABERTO USE ' /EVENTO ' !"</span> <span style="color: #000000;">)</span> ;<br/>    SendClientMessageToAll <span style="color: #000000;">(</span> 0xFFFFFFFF,<span style="color: #000066;">" "</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>efechar<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"O Evento estб fechado."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> v , b <span style="color: #000000;">=</span> GetMaxPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; v <span style="color: #000000;">!=</span> b; v<span style="color: #000000;">++</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> v <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            EvenT0 <span style="color: #000000;">[</span> v <span style="color: #000000;">]</span> <span style="color: #000000;">=</span> true ;<br/>            EventoOnOff <span style="color: #000000;">=</span> false ;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">//==============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>sairevento<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> playerid <span style="color: #000000;">]</span> <span style="color: #000000;">==</span> true <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">new</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>Health;<br/>        GetPlayerHealth <span style="color: #000000;">(</span> playerid , Health <span style="color: #000000;">)</span> ;<br/><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> Health <span style="color: #000000;">&lt;</span> <span style="color: #000000;">30.0</span> <span style="color: #000000;">)</span><br/>            <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid, 0xFF0000FF, <span style="color: #000066;">"{F81414}[ERROR] Sua vida estб muito baixa."</span> <span style="color: #000000;">)</span> ;<br/>            <br/>        SpawnPlayer <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> ;<br/>        ResetPlayerWeapons <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> ;<br/>        <br/>        EvenT0 <span style="color: #000000;">[</span> playerid <span style="color: #000000;">]</span> <span style="color: #000000;">=</span> false ;<br/>        <br/>        SetPlayerVirtualWorld <span style="color: #000000;">(</span> playerid , <span style="color: #000000;">0</span> <span style="color: #000000;">)</span> ;<br/>        SetPlayerInterior <span style="color: #000000;">(</span> playerid , <span style="color: #000000;">0</span> <span style="color: #000000;">)</span> ;<br/>        ResetPlayerWeapons <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> ;<br/>        <br/>        PlayerPlaySound <span style="color: #000000;">(</span> playerid , <span style="color: #000000;">1057</span> , <span style="color: #000000;">0.0</span> , <span style="color: #000000;">0.0</span> , <span style="color: #000000;">0.0</span> <span style="color: #000000;">)</span> ;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>evento<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> playerid <span style="color: #000000;">]</span> <span style="color: #000000;">==</span> true <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x9FFF00FF , <span style="color: #000066;">"{F81414}[ERROR]: Vocк nгo pode usar comando no evento , use /SairEvento para sair!"</span> <span style="color: #000000;">)</span> ;<br/>        <br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">new</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>Health;<br/>    GetPlayerHealth <span style="color: #000000;">(</span> playerid , Health <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> Health <span style="color: #000000;">&lt;</span> <span style="color: #000000;">30.0</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid, 0xFF0000FF, <span style="color: #000066;">"{F81414}[ERROR] Sua vida estб muito baixa."</span> <span style="color: #000000;">)</span> ;<br/><br/>    EvenT0 <span style="color: #000000;">[</span> playerid <span style="color: #000000;">]</span> <span style="color: #000000;">=</span> true ;<br/>    ResetPlayerWeapons <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> ;<br/>    <br/>    <span style="color: #222222;">format</span> <span style="color: #000000;">(</span> iString2 , <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span> iString2 <span style="color: #000000;">)</span> , <span style="color: #000066;">"{FFFFFF}' %s ' {F81414}Foi para o Evento {FFFFFF}( /EVENTO )"</span>, GetPName <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span> ;<br/>    SendClientMessageToAll <span style="color: #000000;">(</span> 0x88FF9FFF , iString2 <span style="color: #000000;">)</span> ;<br/>    <br/>    SetPlayerPos <span style="color: #000000;">(</span> playerid , EventoPos <span style="color: #000000;">[</span> <span style="color: #000000;">0</span> <span style="color: #000000;">]</span> , EventoPos <span style="color: #000000;">[</span> <span style="color: #000000;">1</span> <span style="color: #000000;">]</span> , EventoPos <span style="color: #000000;">[</span> <span style="color: #000000;">2</span> <span style="color: #000000;">]</span> <span style="color: #000000;">)</span> ;<br/>    SetPlayerFacingAngle <span style="color: #000000;">(</span> playerid , EventoPos <span style="color: #000000;">[</span> <span style="color: #000000;">3</span> <span style="color: #000000;">]</span> <span style="color: #000000;">)</span> ;<br/>    SetPlayerInterior <span style="color: #000000;">(</span> playerid , EventoInt <span style="color: #000000;">)</span> ;<br/>    SetPlayerVirtualWorld <span style="color: #000000;">(</span> playerid , EventoVW <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>ecarro<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">new</span><br/>        Modelo,<br/>        Cor1,<br/>        Cor2<br/>    ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> sscanf <span style="color: #000000;">(</span> params , <span style="color: #000066;">"ddd"</span> , Modelo , Cor1 , Cor2 <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}/Ecar [ ID ] [ IDCOR1 ] [ IDCOR2 ]"</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">new</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>CarPos<span style="color: #000000;">[</span><span style="color: #000000;">4</span><span style="color: #000000;">]</span>, CarID;<br/><br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> v, b <span style="color: #000000;">=</span> GetMaxPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; v <span style="color: #000000;">!=</span> b; v<span style="color: #000000;">++</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> v <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            GetPlayerFacingAngle <span style="color: #000000;">(</span> v , CarPos <span style="color: #000000;">[</span> <span style="color: #000000;">3</span> <span style="color: #000000;">]</span> <span style="color: #000000;">)</span> ;<br/>            GetPlayerPos <span style="color: #000000;">(</span> v , CarPos <span style="color: #000000;">[</span> <span style="color: #000000;">0</span> <span style="color: #000000;">]</span> , CarPos <span style="color: #000000;">[</span> <span style="color: #000000;">1</span> <span style="color: #000000;">]</span> , CarPos <span style="color: #000000;">[</span> <span style="color: #000000;">2</span> <span style="color: #000000;">]</span> <span style="color: #000000;">)</span> ;<br/>            CarID <span style="color: #000000;">=</span> CreateVehicle <span style="color: #000000;">(</span> Modelo , CarPos <span style="color: #000000;">[</span> <span style="color: #000000;">0</span> <span style="color: #000000;">]</span> <span style="color: #000000;">+</span><span style="color: #000000;">2</span> , CarPos <span style="color: #000000;">[</span> <span style="color: #000000;">1</span> <span style="color: #000000;">]</span> , CarPos <span style="color: #000000;">[</span> <span style="color: #000000;">2</span> <span style="color: #000000;">]</span> , CarPos <span style="color: #000000;">[</span> <span style="color: #000000;">3</span> <span style="color: #000000;">]</span> , Cor1 , Cor2 , 0x00C0FFFF <span style="color: #000000;">)</span> ;<br/>            LinkVehicleToInterior <span style="color: #000000;">(</span> CarID , EventoInt <span style="color: #000000;">)</span> ;<br/>            SetVehicleVirtualWorld <span style="color: #000000;">(</span> CarID , EventoVW <span style="color: #000000;">)</span> ;<br/>            PutPlayerInVehicle <span style="color: #000000;">(</span> v , CarID , <span style="color: #000000;">0</span> <span style="color: #000000;">)</span> ;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>eweapon<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">new</span><br/>        Arma,<br/>        Municao<br/>    ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> sscanf <span style="color: #000000;">(</span> params , <span style="color: #000066;">"dd"</span> , Arma , Municao <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}/Eweapon [ WEAPON ID ] [ BALAS ]"</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> v, b <span style="color: #000000;">=</span> GetMaxPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; v <span style="color: #000000;">!=</span> b; v<span style="color: #000000;">++</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> v <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            GivePlayerWeapon <span style="color: #000000;">(</span> v , Arma , Municao <span style="color: #000000;">)</span> ;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>ecolete<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">new</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>Colete;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> sscanf <span style="color: #000000;">(</span> params , <span style="color: #000066;">"f"</span>, Colete <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}/Ecolete [ 0 - 100 ]"</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> v, b <span style="color: #000000;">=</span> GetMaxPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; v <span style="color: #000000;">!=</span> b; v<span style="color: #000000;">++</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> v <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            SetPlayerArmour <span style="color: #000000;">(</span> v , Colete <span style="color: #000000;">)</span> ;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>ekitrun<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> v, b <span style="color: #000000;">=</span> GetMaxPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; v <span style="color: #000000;">!=</span> b; v<span style="color: #000000;">++</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> v <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            GivePlayerWeapon<span style="color: #000000;">(</span> v , <span style="color: #000000;">22</span> , <span style="color: #000000;">150</span><span style="color: #000000;">)</span>;<br/>            GivePlayerWeapon<span style="color: #000000;">(</span> v , <span style="color: #000000;">26</span> , <span style="color: #000000;">150</span><span style="color: #000000;">)</span>;<br/>            GivePlayerWeapon<span style="color: #000000;">(</span> v , <span style="color: #000000;">28</span> , <span style="color: #000000;">150</span><span style="color: #000000;">)</span>;<br/>            <br/>            ResetPlayerWeapons<span style="color: #000000;">(</span> v <span style="color: #000000;">)</span>;<br/>            <br/>            GivePlayerWeapon<span style="color: #000000;">(</span> v , <span style="color: #000000;">22</span> , <span style="color: #000000;">150</span><span style="color: #000000;">)</span>;<br/>            GivePlayerWeapon<span style="color: #000000;">(</span> v , <span style="color: #000000;">26</span> , <span style="color: #000000;">150</span><span style="color: #000000;">)</span>;<br/>            GivePlayerWeapon<span style="color: #000000;">(</span> v , <span style="color: #000000;">28</span> , <span style="color: #000000;">150</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>erecvida<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Regenerar <span style="color: #000000;">==</span> false<span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        Regenerar <span style="color: #000000;">=</span> true;<br/>    <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">else</span><br/>    <span style="color: #000000;">{</span><br/>        Regenerar <span style="color: #000000;">=</span> false;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> i, b <span style="color: #000000;">=</span> GetMaxPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; i <span style="color: #000000;">!=</span> b; i<span style="color: #000000;">++</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> i <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            GameTextForPlayer<span style="color: #000000;">(</span>playerid,<span style="color: #000066;">"~n~~n~~n~~n~~n~~n~~r~MATE A TODOS!"</span>, <span style="color: #000000;">5000</span>, <span style="color: #000000;">5</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>ekitwalk<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> v, b <span style="color: #000000;">=</span> GetMaxPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; v <span style="color: #000000;">!=</span> b; v<span style="color: #000000;">++</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> v <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            GivePlayerWeapon<span style="color: #000000;">(</span> v , <span style="color: #000000;">24</span> , <span style="color: #000000;">150</span><span style="color: #000000;">)</span>;<br/>            GivePlayerWeapon<span style="color: #000000;">(</span> v , <span style="color: #000000;">25</span> , <span style="color: #000000;">150</span><span style="color: #000000;">)</span>;<br/>            GivePlayerWeapon<span style="color: #000000;">(</span> v , <span style="color: #000000;">34</span> , <span style="color: #000000;">150</span><span style="color: #000000;">)</span>;<br/>            <br/>            ResetPlayerWeapons<span style="color: #000000;">(</span> v <span style="color: #000000;">)</span>;<br/>            <br/>            GivePlayerWeapon<span style="color: #000000;">(</span> v , <span style="color: #000000;">24</span> , <span style="color: #000000;">150</span><span style="color: #000000;">)</span>;<br/>            GivePlayerWeapon<span style="color: #000000;">(</span> v , <span style="color: #000000;">25</span> , <span style="color: #000000;">150</span><span style="color: #000000;">)</span>;<br/>            GivePlayerWeapon<span style="color: #000000;">(</span> v , <span style="color: #000000;">34</span> , <span style="color: #000000;">150</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>ekitgranadas<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> v, b <span style="color: #000000;">=</span> GetMaxPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; v <span style="color: #000000;">!=</span> b; v<span style="color: #000000;">++</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> v <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            GivePlayerWeapon<span style="color: #000000;">(</span> v , <span style="color: #000000;">16</span> , <span style="color: #000000;">250</span><span style="color: #000000;">)</span>;<br/>            <br/>            ResetPlayerWeapons<span style="color: #000000;">(</span> v <span style="color: #000000;">)</span>;<br/>            <br/>            GivePlayerWeapon<span style="color: #000000;">(</span> v , <span style="color: #000000;">16</span> , <span style="color: #000000;">250</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>evw<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">new</span> world;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> sscanf <span style="color: #000000;">(</span> params , <span style="color: #000066;">"i"</span> , world <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}/Evw [ World ]"</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> v, b <span style="color: #000000;">=</span> GetMaxPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; v <span style="color: #000000;">!=</span> b; v<span style="color: #000000;">++</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> v <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            SetPlayerVirtualWorld <span style="color: #000000;">(</span> v , world <span style="color: #000000;">)</span> ;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>evida<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">new</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>Vida;<br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> sscanf <span style="color: #000000;">(</span> params , <span style="color: #000066;">"f"</span> , Vida <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}/Evida [ 0 - 100 ]"</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> v, b <span style="color: #000000;">=</span> GetMaxPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; v <span style="color: #000000;">!=</span> b; v<span style="color: #000000;">++</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> v <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            SetPlayerHealth <span style="color: #000000;">(</span> v , Vida <span style="color: #000000;">)</span> ;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>contar<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    Count <span style="color: #000000;">(</span> <span style="color: #000000;">5</span> <span style="color: #000000;">)</span> ;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>ekick<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">new</span> ID;<br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> sscanf <span style="color: #000000;">(</span> params , <span style="color: #000066;">"r"</span> , ID <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}/Ekick [ ID ]"</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EvenT0 <span style="color: #000000;">[</span> ID <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Este player nгo estб no evento."</span> <span style="color: #000000;">)</span> ;<br/><br/>    SpawnPlayer <span style="color: #000000;">(</span> ID <span style="color: #000000;">)</span> ;<br/>    SendClientMessage <span style="color: #000000;">(</span> ID , 0x00C0FFFF , <span style="color: #000066;">"[INFO]: Vocк foi kickado do evento."</span> <span style="color: #000000;">)</span> ;<br/>    EvenT0 <span style="color: #000000;">[</span> ID <span style="color: #000000;">]</span> <span style="color: #000000;">=</span> false ;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>econgelar<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> v, b <span style="color: #000000;">=</span> GetMaxPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; v <span style="color: #000000;">!=</span> b; v<span style="color: #000000;">++</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> v <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            TogglePlayerControllable <span style="color: #000000;">(</span> v , false <span style="color: #000000;">)</span> ;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>edescongelar<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> v, b <span style="color: #000000;">=</span> GetMaxPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; v <span style="color: #000000;">!=</span> b; v<span style="color: #000000;">++</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> v <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            TogglePlayerControllable <span style="color: #000000;">(</span> v , true <span style="color: #000000;">)</span> ;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>edesarmar<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> v, b <span style="color: #000000;">=</span> GetMaxPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; v <span style="color: #000000;">!=</span> b; v<span style="color: #000000;">++</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> v <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            ResetPlayerWeapons <span style="color: #000000;">(</span> v <span style="color: #000000;">)</span> ;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>eskin<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>EventoOnOff <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}[ERRO]: O Evento nгo estб aberto."</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">new</span> Skin;<br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> sscanf <span style="color: #000000;">(</span> params , <span style="color: #000066;">"d"</span> , Skin <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"{F81414}/Eskin [ ID Skin ]"</span> <span style="color: #000000;">)</span> ;<br/><br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> v, b <span style="color: #000000;">=</span> GetMaxPlayers<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; v <span style="color: #000000;">!=</span> b; v<span style="color: #000000;">++</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> EvenT0 <span style="color: #000000;">[</span> v <span style="color: #000000;">]</span> <span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            SetPlayerSkin <span style="color: #000000;">(</span> v , Skin <span style="color: #000000;">)</span> ;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>ecmd<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> <span style="color: #000000;">!</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage <span style="color: #000000;">(</span> playerid , 0x00C0FFFF , <span style="color: #000066;">"Vocк nгo pode usar este comando.."</span><span style="color: #000000;">)</span> ;<br/>        <br/>    <span style="color: #2222BB;">new</span> EvenTHelP<span style="color: #000000;">[</span><span style="color: #000000;">1450</span><span style="color: #000000;">]</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000066;">"{FFFFFF}======================================================================<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000066;">"{c6a65a}Commands Event<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000066;">"{c6a65a}/evw &gt;&gt; Seta o mundo virtual de todos no evento &lt;&lt;.<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000066;">"{c6a65a}/Abrirevento &gt;&gt; Abre o Evento &lt;&lt;.<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000066;">"{c6a65a}/Ecarro &gt;&gt; Cria um carro para todos no evento &lt;&lt;.<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000066;">"{c6a65a}/Eweapon &gt;&gt; Da uma arma a todos do evento &lt;&lt;.<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000066;">"{c6a65a}/Ecolete &gt;&gt; Da colete a todos do evento &lt;&lt;.<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000066;">"{c6a65a}/Evida &gt;&gt; Da vida a todos do evento &lt;&lt;<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000066;">"{c6a65a}/Contar &gt;&gt; Comeзa uma contagem &lt;&lt;<span style="color: #000099; font-weight: bold;">\n</span>/Ekick &gt;&gt; Kicka um player do evento &lt;&lt;<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000066;">"{c6a65a}/Econgelar &gt;&gt; Congela todos do evento &lt;&lt;<span style="color: #000099; font-weight: bold;">\n</span>/Edescongelar &gt;&gt; Descongela todos do evento &lt;&lt;<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000066;">"{c6a65a}/Edesarmar &gt;&gt; Desarma todos do evento &lt;&lt;<span style="color: #000099; font-weight: bold;">\n</span>/Eskin &gt;&gt; Seta skin de todos do evento &lt;&lt;<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000066;">"{c6a65a}/Efechar &gt;&gt; Pausa o evento &lt;&lt;<span style="color: #000099; font-weight: bold;">\n</span>/Ekitrun &gt;&gt; Armas Running &lt;&lt; ( Weapons Id &gt; 22 , 26 , 28 &lt; )<span style="color: #000099; font-weight: bold;">\n</span>/Ekitwalk &gt;&gt; Armas Walking &lt;&lt; ( Weapons Id &gt; 24 , 25 , 34 &lt; )<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000066;">"{c6a65a}/Ekitgranadas &gt;&gt; Kit de Granadas &lt;&lt;<span style="color: #000099; font-weight: bold;">\n</span>/Erecvida &gt;&gt; Ao matar recupera vida / colete &lt;&lt;.<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strcat</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000066;">"{FFFFFF}======================================================================<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    ShowPlayerDialog<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">7897</span>,DIALOG_STYLE_MSGBOX,<span style="color: #000066;">"{FFFF00}Help Event"</span>,EvenTHelP,<span style="color: #000066;">"Fechar"</span>,<span style="color: #000066;">""</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strdel</span><span style="color: #000000;">(</span>EvenTHelP,<span style="color: #000000;">0</span>,<span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>EvenTHelP<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #2222BB;">public</span> Count<span style="color: #000000;">(</span>Contagem<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #222222;">format</span> <span style="color: #000000;">(</span> iString2 , <span style="color: #000000;">3</span> , <span style="color: #000066;">"%d"</span> , Contagem <span style="color: #000000;">)</span> ;<br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> Contagem <span style="color: #000000;">&gt;</span> <span style="color: #000000;">0</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        GameTextForAll <span style="color: #000000;">(</span> iString2 , <span style="color: #000000;">700</span> , <span style="color: #000000;">5</span> <span style="color: #000000;">)</span> ;<br/>        SetTimerEx <span style="color: #000000;">(</span> <span style="color: #000066;">"Count"</span> , <span style="color: #000000;">1000</span> , false , <span style="color: #000066;">"i"</span> , Contagem<span style="color: #000000;">-</span><span style="color: #000000;">1</span> <span style="color: #000000;">)</span> ;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">else</span> GameTextForAll <span style="color: #000000;">(</span> <span style="color: #000066;">"~r~Go Go Go!"</span> , <span style="color: #000000;">1000</span> , <span style="color: #000000;">5</span> <span style="color: #000000;">)</span> ;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// =============================================================================</span><br/><span style="color: #2222BB;">stock</span> GetPName <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> gName <span style="color: #000000;">[</span> MAX_PLAYER_NAME <span style="color: #000000;">]</span> ;<br/>    GetPlayerName <span style="color: #000000;">(</span> playerid , gName , <span style="color: #2222BB;">sizeof</span> gName <span style="color: #000000;">)</span> ;<br/>    <span style="color: #2222BB;">return</span> gName;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<br />
+Espero que gostem.<br />
+</font></div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2705152">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-136880.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2705159"></a>
+<div class="post classic " style="" id="post_2705159">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0195/uid-195100.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0195/uid-195100.html">Juniiro3</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,800<br />
+	Threads: 67<br />
+	Joined: Feb 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0465/tid-465232.html#pid2705159" title="Re: Sistema de Eventos">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by Juniiro3" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.09.2013, 14:01 <span class="post_edit" id="edited_by_2705159"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2705159">
+		Bom trabalho <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/><br />
+<br />
++ Rep
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2705159">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-195100.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2705170"></a>
+<div class="post classic " style="" id="post_2705170">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0204/uid-204089.html"><img src="../../assets/uploads/avatars/204089.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0204/uid-204089.html">ThiagoMK</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 718<br />
+	Threads: 109<br />
+	Joined: May 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0465/tid-465232.html#pid2705170" title="Re: Sistema de Eventos">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by ThiagoMK" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.09.2013, 14:10 <span class="post_edit" id="edited_by_2705170"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2705170">
+		@Edit<br />
+Legal ja tinha um fs desse mais em dialog..
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2705170">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-204089.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2705186"></a>
+<div class="post classic " style="" id="post_2705186">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0184/uid-184410.html"><img src="../../assets/uploads/avatars/184410.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0184/uid-184410.html">PT</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Godfather<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 7,185<br />
+	Threads: 5<br />
+	Joined: Nov 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0465/tid-465232.html#pid2705186" title="Re: Sistema de Eventos">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by PT" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.09.2013, 14:23 <span class="post_edit" id="edited_by_2705186"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2705186">
+		Boa iniciativa, bom trabalho
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2705186">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-184410.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2705192"></a>
+<div class="post classic " style="" id="post_2705192">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0136/uid-136880.html"><img src="../../assets/uploads/avatars/136880.png" alt="" width="49" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0136/uid-136880.html">Diogo123</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,150<br />
+	Threads: 57<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0465/tid-465232.html#pid2705192" title="Re: Sistema de Eventos">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by Diogo123" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.09.2013, 14:25 <span class="post_edit" id="edited_by_2705192"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2705192">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Juniiro3</strong><br />
+<a href="../../threads/0465/tid-465232.html#pid2705159" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Bom trabalho <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/><br />
+<br />
++ Rep</div>
+</td>
+</tr>
+</table>
+</div>Valeu man.<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>PT</strong><br />
+<a href="../../threads/0465/tid-465232.html#pid2705159" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Boa iniciativa, bom trabalho</div>
+</td>
+</tr>
+</table>
+</div>valeu <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2705192">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-136880.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2705299"></a>
+<div class="post classic " style="" id="post_2705299">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0135/uid-135587.html"><img src="../../assets/uploads/avatars/135587.png" alt="" width="44" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0135/uid-135587.html">WLSF</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,540<br />
+	Threads: 40<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0465/tid-465232.html#pid2705299" title="Re: Sistema de Eventos">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by WLSF" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.09.2013, 15:15 <span class="post_edit" id="edited_by_2705299"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2705299">
+		Bacana, se parece com alguns que jб vi por aqui.(a ideia)<br />
+<br />
++2rep.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2705299">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-135587.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2705302"></a>
+<div class="post classic " style="" id="post_2705302">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0207/uid-207474.html"><img src="../../assets/uploads/avatars/207474.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0207/uid-207474.html">Coe1</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,043<br />
+	Threads: 16<br />
+	Joined: Jul 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0465/tid-465232.html#pid2705302" title="Re: Sistema de Eventos">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by Coe1" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.09.2013, 15:17 <span class="post_edit" id="edited_by_2705302"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2705302">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>PT</strong><br />
+<a href="../../threads/0465/tid-465232.html#pid2705186" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Boa iniciativa, bom trabalho</div>
+</td>
+</tr>
+</table>
+</div><font face="Tahoma">Iniciativa? lol? </font><br />
+<br />
+<font face="Tahoma">Ficou bacana, parabйns. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/mrgreen.gif" title="afro"/></font>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2705302">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-207474.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2705304"></a>
+<div class="post classic " style="" id="post_2705304">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0205/uid-205224.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0205/uid-205224.html">AndersonAq</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 178<br />
+	Threads: 55<br />
+	Joined: Jun 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0465/tid-465232.html#pid2705304" title="Re: Sistema de Eventos">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by AndersonAq" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.09.2013, 15:18 <span class="post_edit" id="edited_by_2705304"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2705304">
+		Legal, mas..<br />
+<br />
+pode me ajudar nisso? й sobre seu sistema<br />
+<br />
+<a href="../../threads/0465/tid-465249.html" target="_blank">https://forum.sa-mp.com/showthread.php?tid=465249</a>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2705304">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-205224.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2705327"></a>
+<div class="post classic " style="" id="post_2705327">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0136/uid-136880.html"><img src="../../assets/uploads/avatars/136880.png" alt="" width="49" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0136/uid-136880.html">Diogo123</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,150<br />
+	Threads: 57<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0465/tid-465232.html#pid2705327" title="Re: Sistema de Eventos">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Diogo123" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.09.2013, 15:30 <span class="post_edit" id="edited_by_2705327"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Diogo123; 21.09.2013 at 16:26.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2705327">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Willian_Luigi</strong><br />
+<a href="../../threads/0465/tid-465232.html#pid2705299" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Bacana, se parece com alguns que jб vi por aqui.(a ideia)<br />
+<br />
++2rep.</div>
+</td>
+</tr>
+</table>
+</div>Valeu ;p<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Coe1</strong><br />
+<a href="../../threads/0465/tid-465232.html#pid2705302" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic"><font face="Tahoma">Iniciativa? lol? </font><br />
+<br />
+<font face="Tahoma">Ficou bacana, parabйns. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/mrgreen.gif" title="afro"/></font></div>
+</td>
+</tr>
+</table>
+</div>Vlw <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/razz.gif" title="Tongue"/><br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>AndersonAq</strong><br />
+<a href="../../threads/0465/tid-465232.html#pid2705304" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Legal, mas..<br />
+<br />
+pode me ajudar nisso? й sobre seu sistema<br />
+<br />
+<a href="../../threads/0465/tid-465249.html" target="_blank">https://forum.sa-mp.com/showthread.php?tid=465249</a></div>
+</td>
+</tr>
+</table>
+</div>eu te mandei uma mp vк se funciona ...<br />
+<br />
+@Edit para quem tiver a mesma dъvida que ele <br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:55px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">//coloca fora do loop</span><br/>SendClientMessageToAll  <span style="color: #000000;">(</span> <span style="color: #000000;">-</span><span style="color: #000000;">1</span> , <span style="color: #000066;">"Fechado"</span> <span style="color: #000000;">)</span> ;</div></div></pre>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2705327">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-136880.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2705488"></a>
+<div class="post classic " style="" id="post_2705488">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0212/uid-212946.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0212/uid-212946.html">iFucK</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 113<br />
+	Threads: 5<br />
+	Joined: Aug 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0465/tid-465232.html#pid2705488" title="Re: Sistema de Eventos">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by iFucK" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.09.2013, 17:27 <span class="post_edit" id="edited_by_2705488"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2705488">
+		Fico muito bom man, parabйns. +REP
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2705488">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-212946.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0465/tid-465232.html">Next Oldest</a> | <a href="../../threads/0465/tid-465232.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="465232" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" selected="selected">------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/9.html">Non-English</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/33.html">Languages</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/34.html">Português/Portuguese</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/56.html">Lançamentos/Releases</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

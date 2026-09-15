@@ -1,0 +1,2457 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Creating dynamic signatures using PHP and MySQL.</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "5709a9536c997eaf7f6496a9860a6b2f";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Hello everybody, According to my thread: Dynamic Signatures?, I'm here with the tutorial. What can I use this for? You can use dynamic signatures to first of all, show your statistics from in-game to" />
+<link rel="canonical" href="../../threads/0301/tid-301435.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="5709a9536c997eaf7f6496a9860a6b2f" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (4):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0301/tid-301435-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0301/tid-301435-page-3.html" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0301/tid-301435-page-4.html" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0301/tid-301435-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0301/tid-301435.html#pid1553115">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Creating dynamic signatures using PHP and MySQL.
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid1553115"></a>
+<div class="post classic " style="" id="post_1553115">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120708.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120708.html">Nodroz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 70<br />
+	Threads: 5<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1553115" title="Creating dynamic signatures using PHP and MySQL.">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by Nodroz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">04.12.2011, 10:53 <span class="post_edit" id="edited_by_1553115"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Nodroz; 10.12.2011 at 16:24.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1553115">
+		Hello everybody,<br />
+<br />
+According to my thread: <a href="../../threads/0301/tid-301273.html" target="_blank">Dynamic Signatures?</a>, I'm here with the tutorial.<br />
+<br />
+<font color="Teal"><u><b><font size="4">What can I use this for?</font></b></u></font><br />
+You can use dynamic signatures to first of all, show your statistics from in-game to everybody else. It can also be used to advertise your server.<br />
+<br />
+<font color="Teal"><u><b><font size="4">What do I need?</font></b></u></font><ul><li>You need a webhosting which has PHP installed. You can't use homehost, except if you have installed some php server. I won't go any deeper into that because there are enough tutorials about that.</li>
+<li>I recommend using Notepad ++ to script in.</li>
+<li>A signature image that you'll use to put the player information in.</li>
+<li>MySQL Database.</li>
+<li>I also recommend to use a little php script to get your X/Y coordinates of your picture. You can do without it, but it will take some more time. Click here for more information about X/Y coorindates <a href="http://www.emanueleferonato.com/2006/09/02/click-image-and-get-coordinates-with-javascript/" target="_blank">http://www.emanueleferonato.com/2006...th-javascript/</a></li>
+<li>A custom font. --&gt; <a href="http://www.dafont.com" target="_blank">www.dafont.com</a> &lt;---</li>
+</ul>
+<br />
+<br />
+<font color="Teal"><u><b><font size="4">(Optional) Part 1: Making "playername input page". </font></b></u></font><br />
+<i>This part is optional as you can do it perfect without it.</i> <i>You can save this page as <b>index.html</b></i><br />
+<font color="Red"><b>Please not that this script doesn't use any design.</b></font><br />
+<br />
+This page will ask for a playername and send it to the php page to make an image with the player's stats..<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">HTML Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 274px;
+		text-align: left;
+		overflow: auto"><span style="color:#000080">&lt;html&gt;</span> 
+<span style="color:#000080">&lt;head&gt;</span>
+        <span style="color:#000080">&lt;title&gt;</span>My title here<span style="color:#000080">&lt;/title&gt;</span>
+<span style="color:#000080">&lt;/head&gt;</span>
+        <span style="color:#000080">&lt;h1&gt;</span>Signature configuration.<span style="color:#000080">&lt;/h1&gt;</span>
+        <span style="color:#000080">&lt;p&gt;</span>Hello and welcome to the image configuration page.<span style="color:#000080">&lt;br /&gt;</span>
+        Before you can make your signature, we need in-game name, exact as it is.<span style="color:#000080">&lt;/p&gt;</span>
+       
+        <span style="color:#FF8000">&lt;form action=<span style="color:#0000FF">"signature.php"</span> method=<span style="color:#0000FF">"get"</span>&gt;</span> <i>&lt;!-- When you click the "send" button, this information will be send to the "signature.php" page. If you're using another php page, you need to change "signature.php" to the file you called it. --&gt;</i>
+        Playername: <span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"text"</span> name=<span style="color:#0000FF">"player_name"</span>&gt;</span><span style="color:#000080">&lt;br&gt;</span>  <i><span style="color:#000080">&lt;!-- This is a little text box which will ask for you playername. --&gt;</span></i>
+       <span style="color:#FF8000">&lt;input type=<span style="color:#0000FF">"Submit"</span>&gt;</span> <i><span style="color:#000080">&lt;!-- A "send" button. --&gt;</span></i>
+       <span style="color:#FF8000">&lt;/form&gt;</span>
+
+
+<span style="color:#000080">&lt;/body&gt;</span>
+<span style="color:#000080">&lt;/html&gt;</span></pre>
+</div>This very simple html page will look like this:<br />
+<img alt="" border="0" src="http://i1132.photobucket.com/albums/m565/Nodroz/signature.png"/><br />
+<br />
+<br />
+<br />
+<font color="Teal"><u><b><font size="4">(Optional) Part 2: Getting playername information from the html page.</font></b></u></font><br />
+<i>We will now work in signature.php. If you're using another name, you need to change the signature.php to the file you called this one. See previous code. ^^ </i><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&#36;player_name</span><span style="color: #007700">=</span><span style="color: #0000BB">&#36;_GET</span><span style="color: #007700">[</span><span style="color: #DD0000">'player_name'</span><span style="color: #007700">]; </span><span style="color: #FF8000">// This gets the player his name from the previous page. 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+<br />
+<font color="Teal"><u><b><font size="4">Part 3: Connecting to MySQL database.</font></b></u></font><br />
+<b>You need your mysql details for this part such as username, password, database and host.</b><br />
+This should be in the same file as <b>part 2</b>.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 178px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #FF8000">/* Let's start by configuring your mysql details. */
+<br/></span><span style="color: #0000BB">&#36;username</span><span style="color: #007700">=</span><span style="color: #DD0000">""</span><span style="color: #007700">; </span><span style="color: #FF8000">//Your MySQL Username.
+<br/></span><span style="color: #0000BB">&#36;password</span><span style="color: #007700">=</span><span style="color: #DD0000">""</span><span style="color: #007700">; </span><span style="color: #FF8000">// Your MySQL Pass.
+<br/></span><span style="color: #0000BB">&#36;database</span><span style="color: #007700">=</span><span style="color: #DD0000">""</span><span style="color: #007700">; </span><span style="color: #FF8000">// Your MySQL database.
+<br/></span><span style="color: #0000BB">&#36;host</span><span style="color: #007700">=</span><span style="color: #DD0000">""</span><span style="color: #007700">; </span><span style="color: #FF8000">// Your MySQL host. This is "localhost" or the IP specified by your hosting company.
+
+<br/>/* Next, we will make a connection to the mysql. 
+<br/>If it can't connect, it'll print on the screen: Unable to select database. Be sure the databasename exists and online is. */
+<br/></span><span style="color: #0000BB">mysql_connect</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;host</span><span style="color: #007700">,</span><span style="color: #0000BB">&#36;username</span><span style="color: #007700">,</span><span style="color: #0000BB">&#36;password</span><span style="color: #007700">); </span><span style="color: #FF8000">// Connection to the database.
+<br/></span><span style="color: #007700">@</span><span style="color: #0000BB">mysql_select_db</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;database</span><span style="color: #007700">) or die( </span><span style="color: #DD0000">"Unable to select database. Be sure the databasename exists and online is."</span><span style="color: #007700">); 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><font color="Teal"><u><b><font size="4">Part 4: Protect Mysql injection.</font></b></u></font><br />
+This should be in the same file as <b>part 2</b>.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 66px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #FF8000">/* To protect MySQL injection. */
+<br/></span><span style="color: #0000BB">&#36;player_name </span><span style="color: #007700">= </span><span style="color: #0000BB">stripslashes</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;player_name</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">&#36;player_name </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_real_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;player_name</span><span style="color: #007700">); 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+<font color="Teal"><u><b><font size="4">Part 5: Getting player information from the database.</font></b></u></font><br />
+This should be in the same file as <b>part 2</b>.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 290px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&#36;query</span><span style="color: #007700">=</span><span style="color: #DD0000">"SELECT * FROM users WHERE Playername='</span><span style="color: #0000BB">&#36;player_name</span><span style="color: #DD0000">'"</span><span style="color: #007700">; </span><span style="color: #FF8000">// Gets all the information about the player.
+<br/></span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">=</span><span style="color: #0000BB">mysql_query</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;query</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">&#36;i</span><span style="color: #007700">=</span><span style="color: #0000BB">mysql_num_rows</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">); </span><span style="color: #FF8000">// Here we are counting how many rows this result gives us.
+
+<br/>/* We will now put the player's information into variables so we can use them more easily. */
+<br/>/* DON'T FORGET: The names should be exact the same as in your mysql db.*/
+
+<br/></span><span style="color: #007700">if (</span><span style="color: #0000BB">&#36;i </span><span style="color: #007700">== </span><span style="color: #0000BB">1</span><span style="color: #007700">) </span><span style="color: #FF8000">// If the user has been correct, then it'll give us 1 row. If its 1 row, then it'll proceed with the code.
+<br/></span><span style="color: #007700">{
+
+<br/>    </span><span style="color: #0000BB">&#36;Playername</span><span style="color: #007700">=</span><span style="color: #0000BB">mysql_result</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">,</span><span style="color: #0000BB">0</span><span style="color: #007700">,</span><span style="color: #DD0000">"Playername"</span><span style="color: #007700">); </span><span style="color: #FF8000">// Gets the username of the player and put it in the variable &#36;Playername.
+<br/>    </span><span style="color: #0000BB">&#36;Money</span><span style="color: #007700">=</span><span style="color: #0000BB">mysql_result</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">,</span><span style="color: #0000BB">0</span><span style="color: #007700">,</span><span style="color: #DD0000">"Money"</span><span style="color: #007700">); </span><span style="color: #FF8000">// Gets the money of the player and put it in the variable &#36;Money.
+<br/>    </span><span style="color: #0000BB">&#36;Score</span><span style="color: #007700">=</span><span style="color: #0000BB">mysql_result</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">,</span><span style="color: #0000BB">0</span><span style="color: #007700">,</span><span style="color: #DD0000">"Score"</span><span style="color: #007700">); </span><span style="color: #FF8000">// Gets the score of the player and put it in the variable &#36;Score.
+
+<br/>/*****ADD PART 6 HERE ******/
+
+<br/></span><span style="color: #007700">} else echo(</span><span style="color: #DD0000">'Username is not in our database. Please try again.'</span><span style="color: #007700">); </span><span style="color: #FF8000">// If the username doesn't exist (so the row is 0) then it'll give en error. 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>We now have all the information about the player. However, we don't do anything with the player veriables.<br />
+<br />
+<br />
+<br />
+<font color="Teal"><u><b><font size="4">Part 6: Making png image with the player's variables.</font></b></u></font><br />
+This should be in the same file as <b>part 2</b>.<br />
+I use the &#36;text_XXXX variable as I personally think this is easier to work with.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 258px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #FF8000">// Creating of the .png image. 
+<br/>    </span><span style="color: #0000BB">header</span><span style="color: #007700">(</span><span style="color: #DD0000">'Content-Type: image/png;'</span><span style="color: #007700">); </span><span style="color: #FF8000">// Don't touch this. We use this to tell the script we're working with an image.
+<br/>    </span><span style="color: #0000BB">&#36;im </span><span style="color: #007700">= @</span><span style="color: #0000BB">imagecreatefrompng</span><span style="color: #007700">(</span><span style="color: #DD0000">'mypicture.png'</span><span style="color: #007700">) or die(</span><span style="color: #DD0000">"Cannot select the correct image. Please contact the webmaster."</span><span style="color: #007700">); </span><span style="color: #FF8000">// Don't forget to put your picture there. Eg: playersig.png
+<br/>    </span><span style="color: #0000BB">&#36;text_color </span><span style="color: #007700">= </span><span style="color: #0000BB">imagecolorallocate</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;im</span><span style="color: #007700">, </span><span style="color: #0000BB">197</span><span style="color: #007700">,</span><span style="color: #0000BB">197</span><span style="color: #007700">,</span><span style="color: #0000BB">199</span><span style="color: #007700">); </span><span style="color: #FF8000">// RED, GREEN, BLUE --&gt; Go to <a href="http://www.colorpicker.com" target="_blank" rel="noopener" class="mycode_url">www.colorpicker.com</a>, select a nice color, copy the R/G/B letters provided by colorpicker and put them here.
+<br/>    </span><span style="color: #0000BB">&#36;text_username </span><span style="color: #007700">= </span><span style="color: #DD0000">"</span><span style="color: #0000BB">&#36;Playername</span><span style="color: #DD0000">"</span><span style="color: #007700">; </span><span style="color: #FF8000">// This gets the information: player name to be showed in the picture.
+<br/>    </span><span style="color: #0000BB">&#36;text_score </span><span style="color: #007700">= </span><span style="color: #DD0000">"</span><span style="color: #0000BB">&#36;Score</span><span style="color: #DD0000">"</span><span style="color: #007700">; </span><span style="color: #FF8000">// Same as above but with score.
+<br/>    </span><span style="color: #0000BB">&#36;text_money </span><span style="color: #007700">= </span><span style="color: #DD0000">"</span><span style="color: #0000BB">&#36;Money</span><span style="color: #DD0000">"</span><span style="color: #007700">; </span><span style="color: #FF8000">// Same as above but with money.
+<br/>    </span><span style="color: #0000BB">&#36;font </span><span style="color: #007700">= </span><span style="color: #DD0000">'myfont.ttf'</span><span style="color: #007700">; </span><span style="color: #FF8000">//Upload your custom font to the directory where this file is placed. Then change the name here.
+<br/>    /* USAGE OF THE imagettftext: First (&#36;im) shouldn't be changed. (16) is the text-size. (0) is the angle of your text. Change it, and you'll see what's going on. (20) is de X-coordinate of the text.
+<br/>    (36) is the Y-coordinate of the text. */
+<br/>    </span><span style="color: #0000BB">imagettftext</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;im</span><span style="color: #007700">, </span><span style="color: #0000BB">16</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">20</span><span style="color: #007700">, </span><span style="color: #0000BB">36</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;text_color</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;font</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;text_username</span><span style="color: #007700">); </span><span style="color: #FF8000">// Prints the username in the picture. 
+<br/>    </span><span style="color: #0000BB">imagettftext</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;im</span><span style="color: #007700">, </span><span style="color: #0000BB">16</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">72</span><span style="color: #007700">, </span><span style="color: #0000BB">69</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;text_color</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;font</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;text_score</span><span style="color: #007700">); </span><span style="color: #FF8000">// Prints the score in the picture.
+<br/>    </span><span style="color: #0000BB">imagettftext</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;im</span><span style="color: #007700">, </span><span style="color: #0000BB">16</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">72</span><span style="color: #007700">, </span><span style="color: #0000BB">99</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;text_color</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;font</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;text_money</span><span style="color: #007700">); </span><span style="color: #FF8000">// Prints the money in the picture.
+<br/>    </span><span style="color: #0000BB">imagepng</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;im</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">imagedestroy</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;im</span><span style="color: #007700">); 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+<b><font color="Red">This should be at the end of the script. We use this to close the mysql connection, else your server will be overloaded in some time.</font></b><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">mysql_close</span><span style="color: #007700">(); 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+<font color="Teal"><u><b><font size="4">Part 7:Combining everything.</font></b></u></font><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&lt;? 
+<br/></span><span style="color: #FF8000">/*
+<br/>***Made by: Nodroz***
+<br/>*** Enjoy your signatures! ***
+<br/>*/
+
+<br/></span><span style="color: #0000BB">&#36;username</span><span style="color: #007700">=</span><span style="color: #DD0000">""</span><span style="color: #007700">; </span><span style="color: #FF8000">//Your MySQL Username.
+<br/></span><span style="color: #0000BB">&#36;password</span><span style="color: #007700">=</span><span style="color: #DD0000">""</span><span style="color: #007700">; </span><span style="color: #FF8000">// Your MySQL Pass.
+<br/></span><span style="color: #0000BB">&#36;database</span><span style="color: #007700">=</span><span style="color: #DD0000">""</span><span style="color: #007700">; </span><span style="color: #FF8000">// Your MySQL database.
+<br/></span><span style="color: #0000BB">&#36;host</span><span style="color: #007700">=</span><span style="color: #DD0000">""</span><span style="color: #007700">; </span><span style="color: #FF8000">// Your MySQL host. This is "localhost" or the IP specified by your hosting company.
+
+<br/></span><span style="color: #0000BB">&#36;player_name</span><span style="color: #007700">=</span><span style="color: #0000BB">&#36;_GET</span><span style="color: #007700">[</span><span style="color: #DD0000">'player_name'</span><span style="color: #007700">]; </span><span style="color: #FF8000">// This gets the player his name from the previous page.
+
+<br/>/* Next, we will make a connection to the mysql. 
+<br/>If it can't connect, it'll print on the screen: Unable to select database. Be sure the databasename exists and online is. */
+
+<br/></span><span style="color: #0000BB">mysql_connect</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;host</span><span style="color: #007700">,</span><span style="color: #0000BB">&#36;username</span><span style="color: #007700">,</span><span style="color: #0000BB">&#36;password</span><span style="color: #007700">); </span><span style="color: #FF8000">// Connection to the database.
+<br/></span><span style="color: #007700">@</span><span style="color: #0000BB">mysql_select_db</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;database</span><span style="color: #007700">) or die( </span><span style="color: #DD0000">"Unable to select database. Be sure the databasename exists and online is."</span><span style="color: #007700">); </span><span style="color: #FF8000">//Selection of the database. If it can't read the database, it'll give an error.
+
+<br/>/* To protect MySQL injection. */
+<br/></span><span style="color: #0000BB">&#36;player_name </span><span style="color: #007700">= </span><span style="color: #0000BB">stripslashes</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;player_name</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">&#36;player_name </span><span style="color: #007700">= </span><span style="color: #0000BB">mysql_real_escape_string</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;player_name</span><span style="color: #007700">);
+
+
+
+<br/></span><span style="color: #0000BB">&#36;query</span><span style="color: #007700">=</span><span style="color: #DD0000">"SELECT * FROM users WHERE Playername='</span><span style="color: #0000BB">&#36;player_name</span><span style="color: #DD0000">'"</span><span style="color: #007700">; </span><span style="color: #FF8000">// Gets all the information about the player.
+<br/></span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">=</span><span style="color: #0000BB">mysql_query</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;query</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">&#36;i</span><span style="color: #007700">=</span><span style="color: #0000BB">mysql_num_rows</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">); </span><span style="color: #FF8000">// Here we are counting how many rows this result gives us.
+
+<br/>/* We will now put the player's information into variables so we can use them more easily. */
+<br/>/* DON'T FORGET: The names should be exact the same as in your mysql db.*/
+
+<br/></span><span style="color: #007700">if (</span><span style="color: #0000BB">&#36;i </span><span style="color: #007700">== </span><span style="color: #0000BB">1</span><span style="color: #007700">) </span><span style="color: #FF8000">// If the user has been correct, then it'll give us 1 row. If its 1 row, then it'll proceed with the code.
+<br/></span><span style="color: #007700">{
+<br/>        
+<br/>    </span><span style="color: #0000BB">&#36;Playername</span><span style="color: #007700">=</span><span style="color: #0000BB">mysql_result</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">,</span><span style="color: #0000BB">0</span><span style="color: #007700">,</span><span style="color: #DD0000">"Playername"</span><span style="color: #007700">); </span><span style="color: #FF8000">// Gets the username of the player and put it in the variable &#36;Playername.
+<br/>    </span><span style="color: #0000BB">&#36;Money</span><span style="color: #007700">=</span><span style="color: #0000BB">mysql_result</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">,</span><span style="color: #0000BB">0</span><span style="color: #007700">,</span><span style="color: #DD0000">"Money"</span><span style="color: #007700">); </span><span style="color: #FF8000">// Gets the money of the player and put it in the variable &#36;Money.
+<br/>    </span><span style="color: #0000BB">&#36;Score</span><span style="color: #007700">=</span><span style="color: #0000BB">mysql_result</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;result</span><span style="color: #007700">,</span><span style="color: #0000BB">0</span><span style="color: #007700">,</span><span style="color: #DD0000">"Score"</span><span style="color: #007700">); </span><span style="color: #FF8000">// Gets the score of the player and put it in the variable &#36;Score.
+
+
+<br/>    // Creating of the .png image. 
+<br/>    </span><span style="color: #0000BB">header</span><span style="color: #007700">(</span><span style="color: #DD0000">'Content-Type: image/png;'</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">&#36;im </span><span style="color: #007700">= @</span><span style="color: #0000BB">imagecreatefrompng</span><span style="color: #007700">(</span><span style="color: #DD0000">'mypicture.png'</span><span style="color: #007700">) or die(</span><span style="color: #DD0000">"Cannot select the correct image. Please contact the webmaster."</span><span style="color: #007700">); </span><span style="color: #FF8000">// Don't forget to put your picture there.
+<br/>    </span><span style="color: #0000BB">&#36;text_color </span><span style="color: #007700">= </span><span style="color: #0000BB">imagecolorallocate</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;im</span><span style="color: #007700">, </span><span style="color: #0000BB">197</span><span style="color: #007700">,</span><span style="color: #0000BB">197</span><span style="color: #007700">,</span><span style="color: #0000BB">199</span><span style="color: #007700">); </span><span style="color: #FF8000">// RED, GREEN, BLUE --&gt; Go to <a href="http://www.colorpicker.com" target="_blank" rel="noopener" class="mycode_url">www.colorpicker.com</a>, select a nice color. Copy the R/G/B letters provided by colorpicker and put them here.
+<br/>    </span><span style="color: #0000BB">&#36;text_username </span><span style="color: #007700">= </span><span style="color: #DD0000">"</span><span style="color: #0000BB">&#36;Playername</span><span style="color: #DD0000">"</span><span style="color: #007700">; </span><span style="color: #FF8000">// This gets the information about player name to be showed in the picture.
+<br/>    </span><span style="color: #0000BB">&#36;text_score </span><span style="color: #007700">= </span><span style="color: #DD0000">"</span><span style="color: #0000BB">&#36;Score</span><span style="color: #DD0000">"</span><span style="color: #007700">; </span><span style="color: #FF8000">// Same as above ^^
+<br/>    </span><span style="color: #0000BB">&#36;text_money </span><span style="color: #007700">= </span><span style="color: #DD0000">"</span><span style="color: #0000BB">&#36;Money</span><span style="color: #DD0000">"</span><span style="color: #007700">; </span><span style="color: #FF8000">// Same as above ^^
+<br/>    </span><span style="color: #0000BB">&#36;font </span><span style="color: #007700">= </span><span style="color: #DD0000">'myfont.ttf'</span><span style="color: #007700">; </span><span style="color: #FF8000">//Upload your custum font to the directory where this file is placed. Then change the name here.
+<br/>    /* USAGE OF THE imagettftext: First (&#36;im) shouldn't be changed. (16) is the text-size. (0) is the angle of your text. Change it, and you'll see what's going on. (20) is de X-coordinate of the text.
+<br/>    (36) is the Y-coordinate of the text. */
+<br/>    </span><span style="color: #0000BB">imagettftext</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;im</span><span style="color: #007700">, </span><span style="color: #0000BB">16</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">20</span><span style="color: #007700">, </span><span style="color: #0000BB">36</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;text_color</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;font</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;text_username</span><span style="color: #007700">); </span><span style="color: #FF8000">// Prints the username in the picture. 
+<br/>    </span><span style="color: #0000BB">imagettftext</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;im</span><span style="color: #007700">, </span><span style="color: #0000BB">16</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">72</span><span style="color: #007700">, </span><span style="color: #0000BB">69</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;text_color</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;font</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;text_score</span><span style="color: #007700">); </span><span style="color: #FF8000">// Prints the score in the picture.
+<br/>    </span><span style="color: #0000BB">imagettftext</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;im</span><span style="color: #007700">, </span><span style="color: #0000BB">16</span><span style="color: #007700">, </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">72</span><span style="color: #007700">, </span><span style="color: #0000BB">99</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;text_color</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;font</span><span style="color: #007700">, </span><span style="color: #0000BB">&#36;text_money</span><span style="color: #007700">); </span><span style="color: #FF8000">// Prints the money in the picture.
+<br/>    </span><span style="color: #0000BB">imagepng</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;im</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">imagedestroy</span><span style="color: #007700">(</span><span style="color: #0000BB">&#36;im</span><span style="color: #007700">);
+<br/>} else echo(</span><span style="color: #DD0000">'Username is not in our database. Please try again.'</span><span style="color: #007700">); </span><span style="color: #FF8000">// If the username doesn't exist (so the row is 0) then it'll give en error.
+
+<br/></span><span style="color: #0000BB">mysql_close</span><span style="color: #007700">();
+
+<br/></span><span style="color: #0000BB">?&gt;</span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+<br />
+<font color="Teal"><u><b><font size="4">Part 8: The final result:</font></b></u></font><br />
+<a href="http://www.airportwars.com" target="_blank"><img alt="" border="0" src="http://airportwars.com/aw/insert.php?player_name=Nodroz"/></a><br />
+<br />
+<br />
+<b><u>Please comment and rate.<br />
+If you're encountering any problem, just send me a PM and I'll help you out.<br />
+If you see any mistakes in the script, just let me know below.<br />
+I hope you like this tutorial as it took me more than an hour to make.</u></b><br />
+<br />
+Regards,<br />
+Nodroz
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1553115">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120708.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1553120"></a>
+<div class="post classic " style="" id="post_1553120">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0078/uid-78597.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0078/uid-78597.html">Ash.</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,082<br />
+	Threads: 118<br />
+	Joined: Jan 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1553120" title="Re: Creating dynamic signatures using PHP and MySQL.">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by Ash." style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">04.12.2011, 10:54 <span class="post_edit" id="edited_by_1553120"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1553120">
+		This is a really sweet tutorial!<br />
+<br />
+Well done. Just out of interest. For servers that use INI file systems, could the PHP function parse_ini_file() be used, instead of connecting to a database?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1553120">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-78597.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1553638"></a>
+<div class="post classic " style="" id="post_1553638">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0144/uid-144574.html"><img src="../../assets/uploads/avatars/144574.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0144/uid-144574.html">xantowskii</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3<br />
+	Threads: 0<br />
+	Joined: Nov 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1553638" title="Re: Creating dynamic signatures using PHP and MySQL.">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by xantowskii" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">04.12.2011, 15:27 <span class="post_edit" id="edited_by_1553638"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1553638">
+		<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&#36;query</span><span style="color: #007700">=</span><span style="color: #DD0000">"SELECT * FROM users WHERE Playername='</span><span style="color: #0000BB">&#36;player_name</span><span style="color: #DD0000">'"</span><span style="color: #007700">; 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>Shouldn't it be <br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&#36;query</span><span style="color: #007700">=</span><span style="color: #DD0000">"SELECT * FROM users WHERE Playername='</span><span style="color: #0000BB">&#36;player_name</span><span style="color: #DD0000">' LIMIT 1"</span><span style="color: #007700">; 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1553638">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-144574.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1553687"></a>
+<div class="post classic " style="" id="post_1553687">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120708.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120708.html">Nodroz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 70<br />
+	Threads: 5<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1553687" title="Re: Creating dynamic signatures using PHP and MySQL.">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by Nodroz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">04.12.2011, 15:42 <span class="post_edit" id="edited_by_1553687"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1553687">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>xantowskii</strong><br />
+<a href="../../threads/0301/tid-301435.html#pid1553638" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic"><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&#36;query</span><span style="color: #007700">=</span><span style="color: #DD0000">"SELECT * FROM users WHERE Playername='</span><span style="color: #0000BB">&#36;player_name</span><span style="color: #DD0000">'"</span><span style="color: #007700">; 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>Shouldn't it be <br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&#36;query</span><span style="color: #007700">=</span><span style="color: #DD0000">"SELECT * FROM users WHERE Playername='</span><span style="color: #0000BB">&#36;player_name</span><span style="color: #DD0000">' LIMIT 1"</span><span style="color: #007700">; 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div></div>
+</td>
+</tr>
+</table>
+</div>Well, that could be yes. However, you can only have 1 same playername in the database... so I don't think it'll change anything to the result.<br />
+<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				This is a really sweet tutorial!<br />
+<br />
+Well done. Just out of interest. For servers that use INI file systems, could the PHP function parse_ini_file() be used, instead of connecting to a database?<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>Sorry, but I don't know how to do this. I'll look up some more information about this. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/wink.png" title="Wink"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1553687">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120708.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1554329"></a>
+<div class="post classic " style="" id="post_1554329">
+<div class="post_author scaleimages">
+	
+	<div class="author_information">
+			<strong><span class="largetext">Unknown123</span></strong> <br />
+			<span class="smalltext">
+				Unregistered<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_guest -->
+&nbsp;
+<!-- end: postbit_author_guest -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1554329" title="Re: Creating dynamic signatures using PHP and MySQL.">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by Unknown123" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">04.12.2011, 21:27 <span class="post_edit" id="edited_by_1554329"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1554329">
+		I use a free php host to test, i have uploaded .php, .html, picture and font. but when i enter my name ingame, an blank page appears<br />
+<br />
+Edit: now the image appear but no info
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1554329">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1554404"></a>
+<div class="post classic " style="" id="post_1554404">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0106/uid-106463.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0106/uid-106463.html">kirk</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 221<br />
+	Threads: 0<br />
+	Joined: Oct 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1554404" title="Respuesta: Re: Creating dynamic signatures using PHP and MySQL.">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by kirk" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">04.12.2011, 22:08 <span class="post_edit" id="edited_by_1554404"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by kirk; 05.12.2011 at 01:27.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1554404">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>xantowskii</strong><br />
+<a href="../../threads/0301/tid-301435.html#pid1553638" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic"><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&#36;query</span><span style="color: #007700">=</span><span style="color: #DD0000">"SELECT * FROM users WHERE Playername='</span><span style="color: #0000BB">&#36;player_name</span><span style="color: #DD0000">'"</span><span style="color: #007700">; 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>Shouldn't it be <br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">&#36;query</span><span style="color: #007700">=</span><span style="color: #DD0000">"SELECT * FROM users WHERE Playername='</span><span style="color: #0000BB">&#36;player_name</span><span style="color: #DD0000">' LIMIT 1"</span><span style="color: #007700">; 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div></div>
+</td>
+</tr>
+</table>
+</div>I suggest you to read whats "LIMIT 1" used for since for a while everyone here tends to reply saying it will freeze your server/host if you dont use it, when it doesnt happen and depends on the query you are executing, use a bit of common sense and re read the query again.<br />
+<br />
+Select all from the table 'users' where the field 'Playername' equals to (your user name).<br />
+<br />
+Now try to register the same name two or more times, i dont think so there would be two rows with the same name.<br />
+<br />
+Use limit 1 if, for example, you are selecting the ammount of posts, probably 100 guys with the same post count decide to call that query at the same time, usually happens ; ) or it doesnt?.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1554404">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-106463.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1554798"></a>
+<div class="post classic " style="" id="post_1554798">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0144/uid-144574.html"><img src="../../assets/uploads/avatars/144574.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0144/uid-144574.html">xantowskii</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3<br />
+	Threads: 0<br />
+	Joined: Nov 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1554798" title="Re: Respuesta: Re: Creating dynamic signatures using PHP and MySQL.">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by xantowskii" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">05.12.2011, 06:02 <span class="post_edit" id="edited_by_1554798"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by xantowskii; 05.12.2011 at 07:05.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1554798">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>kirk</strong><br />
+<a href="../../threads/0301/tid-301435.html#pid1554404" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">I suggest you to read whats "LIMIT 1" used for since for a while everyone here tends to reply saying it will freeze your server/host if you dont use it, when it doesnt happen and depends on the query you are executing, use a bit of common sense and re read the query again.<br />
+<br />
+Select all from the table 'users' where the field 'Playername' equals to (your user name).<br />
+<br />
+Now try to register the same name two or more times, i dont think so there would be two rows with the same name.<br />
+<br />
+Use limit 1 if, for example, you are selecting the ammount of posts, probably 100 guys with the same post count decide to call that query at the same time, usually happens ; ) or it doesnt?.</div>
+</td>
+</tr>
+</table>
+</div><a href="http://dev.mysql.com/doc/refman/5.0/en/limit-optimization.html" target="_blank">LIMIT</a> acts as a INDEX key and it optimizes your Query. If you have 100k accounts it would take long to load the data, LIMIT statement makes it quicker. And not making use of it is really a stupid idea (especially in MyISAM engine).<br />
+<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Nodroz</strong><br />
+<a href="../../threads/0301/tid-301435.html#pid1553687" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Well, that could be yes. However, you can only have 1 same playername in the database... so I don't think it'll change anything to the result.</div>
+</td>
+</tr>
+</table>
+</div>LIMIT is used to Optimize the query. I didn't say anything about player name.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1554798">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-144574.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1554829"></a>
+<div class="post classic " style="" id="post_1554829">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0037/uid-37431.html"><img src="../../assets/uploads/avatars/37431.png" alt="" width="46" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0037/uid-37431.html">Hiddos</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,304<br />
+	Threads: 58<br />
+	Joined: Sep 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1554829" title="Re: Creating dynamic signatures using PHP and MySQL.">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by Hiddos" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">05.12.2011, 06:40 <span class="post_edit" id="edited_by_1554829"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1554829">
+		Sweet! I was just thinking about this the other day (And TheKiller removing his tutorial about it <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/sad.gif" title="Sad"/>). Thanks a lot!<br />
+<br />
+PS: Did you find that picture on ******? I actually had a signature once which had exactly the same background image, lol.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1554829">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-37431.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1554843"></a>
+<div class="post classic " style="" id="post_1554843">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0023/uid-23565.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0023/uid-23565.html">[HiC]TheKiller</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,629<br />
+	Threads: 40<br />
+	Joined: Mar 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1554843" title="Re: Creating dynamic signatures using PHP and MySQL.">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by [HiC]TheKiller" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">05.12.2011, 06:49 <span class="post_edit" id="edited_by_1554843"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1554843">
+		Not a bad tutorial on creating dynamic signatures, quite a few people would find it helpful. If I were to suggest something, it would be to add more explanation about the HTML and explain the basics of PHP so that the reader understands what they are doing rather then copying and pasting.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1554843">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-23565.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1555278"></a>
+<div class="post classic " style="" id="post_1555278">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120708.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120708.html">Nodroz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 70<br />
+	Threads: 5<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1555278" title="Re: Creating dynamic signatures using PHP and MySQL.">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by Nodroz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">05.12.2011, 15:17 <span class="post_edit" id="edited_by_1555278"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1555278">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Hiddos</strong><br />
+<a href="../../threads/0301/tid-301435.html#pid1554829" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Sweet! I was just thinking about this the other day (And TheKiller removing his tutorial about it <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/sad.gif" title="Sad"/>). Thanks a lot!<br />
+<br />
+PS: Did you find that picture on ******? I actually had a signature once which had exactly the same background image, lol.</div>
+</td>
+</tr>
+</table>
+</div>This has been made by a friend of me. I don't know where he got it from. Could be from ******, however had added the logo and text boxes.<br />
+<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>[HiC]TheKiller</strong><br />
+<a href="../../threads/0301/tid-301435.html#pid1554843" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Not a bad tutorial on creating dynamic signatures, quite a few people would find it helpful. .</div>
+</td>
+</tr>
+</table>
+</div>Thank you.<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>[HiC]TheKiller</strong><br />
+<a href="../../threads/0301/tid-301435.html#pid1554843" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">If I were to suggest something, it would be to add more explanation about the HTML and explain the basics of PHP so that the reader understands what they are doing rather then copying and pasting.</div>
+</td>
+</tr>
+</table>
+</div>I guess I've already explained a lot of stuff what that the specified line of the script is used for. Maybe it isn't clear enough for some people ?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1555278">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120708.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1555309"></a>
+<div class="post classic " style="" id="post_1555309">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120708.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120708.html">Nodroz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 70<br />
+	Threads: 5<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1555309" title="Re: Creating dynamic signatures using PHP and MySQL.">#11</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 11 by Nodroz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">05.12.2011, 15:39 <span class="post_edit" id="edited_by_1555309"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1555309">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>******</strong><br />
+<a href="../../unavailable.html" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">PLEASE learn when to use "string" and 'string' - that PHP code makes me cringe!</div>
+</td>
+</tr>
+</table>
+</div>I don't see any problem in my script so far? Do you?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1555309">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120708.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1555353"></a>
+<div class="post classic " style="" id="post_1555353">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120708.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120708.html">Nodroz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 70<br />
+	Threads: 5<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1555353" title="Re: Creating dynamic signatures using PHP and MySQL.">#12</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 12 by Nodroz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">05.12.2011, 16:00 <span class="post_edit" id="edited_by_1555353"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1555353">
+		They both means just the same you're right. I'm not that experienced with php either, so any additional is welcome! I shall change it as soon as possible. Thank you.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1555353">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120708.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1555362"></a>
+<div class="post classic " style="" id="post_1555362">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0116/uid-116765.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0116/uid-116765.html">Speed</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 206<br />
+	Threads: 47<br />
+	Joined: Jan 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1555362" title="Re: Creating dynamic signatures using PHP and MySQL.">#13</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 13 by Speed" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">05.12.2011, 16:03 <span class="post_edit" id="edited_by_1555362"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1555362">
+		awesome work..
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1555362">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-116765.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1556659"></a>
+<div class="post classic " style="" id="post_1556659">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126726.html"><img src="../../assets/uploads/avatars/126726.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126726.html">System64</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 933<br />
+	Threads: 62<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1556659" title="Re: Creating dynamic signatures using PHP and MySQL.">#14</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 14 by System64" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">06.12.2011, 11:14 <span class="post_edit" id="edited_by_1556659"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1556659">
+		I must try this, awesome job <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1556659">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126726.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1556784"></a>
+<div class="post classic " style="" id="post_1556784">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0052/uid-52068.html"><img src="../../assets/uploads/avatars/52068.png" alt="" width="41" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0052/uid-52068.html">Biesmen</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,057<br />
+	Threads: 90<br />
+	Joined: May 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1556784" title="Re: Creating dynamic signatures using PHP and MySQL.">#15</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 15 by Biesmen" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">06.12.2011, 12:52 <span class="post_edit" id="edited_by_1556784"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1556784">
+		I am totally not experienced with this stuff on PHP, but how do you find the correct coordinates to place the information at, on the image?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1556784">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-52068.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1556785"></a>
+<div class="post classic " style="" id="post_1556785">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0116/uid-116765.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0116/uid-116765.html">Speed</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 206<br />
+	Threads: 47<br />
+	Joined: Jan 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1556785" title="Re: Creating dynamic signatures using PHP and MySQL.">#16</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 16 by Speed" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">06.12.2011, 12:52 <span class="post_edit" id="edited_by_1556785"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1556785">
+		If i use this i must have MySql system saving accounts or i can have .ini?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1556785">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-116765.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1556787"></a>
+<div class="post classic " style="" id="post_1556787">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0110/uid-110421.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0110/uid-110421.html">No Fear</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 131<br />
+	Threads: 38<br />
+	Joined: Nov 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1556787" title="Re: Creating dynamic signatures using PHP and MySQL.">#17</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 17 by No Fear" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">06.12.2011, 12:54 <span class="post_edit" id="edited_by_1556787"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1556787">
+		Maybe you can create a already done script, how many times i try, it gives mes error :/
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1556787">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-110421.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1556992"></a>
+<div class="post classic " style="" id="post_1556992">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120708.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120708.html">Nodroz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 70<br />
+	Threads: 5<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1556992" title="Re: Creating dynamic signatures using PHP and MySQL.">#18</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 18 by Nodroz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">06.12.2011, 15:08 <span class="post_edit" id="edited_by_1556992"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1556992">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>No Fear</strong><br />
+<a href="../../threads/0301/tid-301435.html#pid1556787" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Maybe you can create a already done script, how many times i try, it gives mes error :/</div>
+</td>
+</tr>
+</table>
+</div>What errors are you getting ?<br />
+<br />
+<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Speed</strong><br />
+<a href="../../threads/0301/tid-301435.html#pid1556785" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">If i use this i must have MySql system saving accounts or i can have .ini?</div>
+</td>
+</tr>
+</table>
+</div>This is only for MySQL so far. Sorry.<br />
+<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Biesmen</strong><br />
+<a href="../../threads/0301/tid-301435.html#pid1556784" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">I am totally not experienced with this stuff on PHP, but how do you find the correct coordinates to place the information at, on the image?</div>
+</td>
+</tr>
+</table>
+</div>You have 2 options:<br />
+1.  Do it manual. This mean you type in some coordinates and see where it shows. Then you slowly adjust the coordinate until it's in the place. This might take some time.<br />
+<br />
+2. Using a little php or javascript. You can see more information about this <a href="http://www.emanueleferonato.com/2006/09/02/click-image-and-get-coordinates-with-javascript/" target="_blank">here.</a>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1556992">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120708.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1557104"></a>
+<div class="post classic " style="" id="post_1557104">
+<div class="post_author scaleimages">
+	
+	<div class="author_information">
+			<strong><span class="largetext">Unknown123</span></strong> <br />
+			<span class="smalltext">
+				Unregistered<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_guest -->
+&nbsp;
+<!-- end: postbit_author_guest -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1557104" title="Re: Creating dynamic signatures using PHP and MySQL.">#19</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 19 by Unknown123" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">06.12.2011, 16:31 <span class="post_edit" id="edited_by_1557104"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1557104">
+		i got first page working where i enter my name, <br />
+and the 2 page i got some trouble, pic load but no text appears. what can be wrong? how to fix?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1557104">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1557155"></a>
+<div class="post classic " style="" id="post_1557155">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0120/uid-120708.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0120/uid-120708.html">Nodroz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 70<br />
+	Threads: 5<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0301/tid-301435.html#pid1557155" title="Re: Creating dynamic signatures using PHP and MySQL.">#20</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 20 by Nodroz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">06.12.2011, 17:05 <span class="post_edit" id="edited_by_1557155"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1557155">
+		Are you loading the correct information from your mysql database ?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1557155">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-120708.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0301/tid-301435.html">Next Oldest</a> | <a href="../../threads/0301/tid-301435.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="301435" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (4):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0301/tid-301435-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0301/tid-301435-page-3.html" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0301/tid-301435-page-4.html" class="pagination_page">4</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0301/tid-301435-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

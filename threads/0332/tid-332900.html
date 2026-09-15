@@ -1,0 +1,1374 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Criando sistema de casas em MySQL</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "82520f3723ad54ac2375113d866fc422";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Criaзгo sistema de casas em MySQL Boas pessoal, hoje irei ensinar como vocкs podem fazer o vosso sistema de casas em MySQL, primeiro de tudo vocкs deverгo saber usar MySQL, neste caso eu irei usa" />
+<link rel="canonical" href="../../threads/0332/tid-332900.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="82520f3723ad54ac2375113d866fc422" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/9.html">Non-English</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/33.html">Languages</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/34.html">Português/Portuguese</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/56.html">Lançamentos/Releases</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0332/tid-332900.html#pid1787018">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Criando sistema de casas em MySQL
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid1787018"></a>
+<div class="post classic " style="" id="post_1787018">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0133/uid-133113.html"><img src="../../assets/uploads/avatars/133113.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0133/uid-133113.html">RebeloX</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,172<br />
+	Threads: 81<br />
+	Joined: Jul 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0332/tid-332900.html#pid1787018" title="Criando sistema de casas em MySQL">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by RebeloX" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">09.04.2012, 18:21 <span class="post_edit" id="edited_by_1787018"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by RebeloX; 09.04.2012 at 20:02.
+					
+					
+						Reason: Atualizaзгo - Obrigado Pedro (:</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1787018">
+		<font face="Trebuchet MS"><br />
+<font size="4"><div align="center">Criaзгo sistema de casas em MySQL</div></font><br />
+<br />
+<div align="center"><img alt="" border="0" src="http://daigo.org/wordpress/wp-content/uploads/2011/08/Logo-mysql.jpg"/></div>
+<i>Boas pessoal, hoje irei ensinar como vocкs podem fazer o vosso sistema de casas em MySQL, primeiro de tudo vocкs deverгo saber usar MySQL, neste caso eu irei usar o <a href="../../threads/0056/tid-56564.html" target="_blank">Plugin</a> do <font color="#0697C7"><b>BlueG</b></font> a R7 que й o update mais recente que ele fez, entгo vamos lб comeзar.</i><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:455px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#define M_HOUSE (100) //Aqui serб o mбximo de casas do servidor, coloque as que vocк quiser...</span><br/><span style="color: #2222BB;">new</span> entrou<span style="color: #000000;">[</span>MAX_PLAYERS<span style="color: #000000;">]</span>;<br/><span style="color: #2222BB;">new</span> ChaveCasa<span style="color: #000000;">[</span>MAX_PLAYERS<span style="color: #000000;">]</span>;<br/><span style="color: #2222BB;">new</span> MysqlC; <span style="color: #228822;">//Estб й uma variбvel que iremos usar mais para a frente.</span><br/><span style="color: #2222BB;">new</span> <span style="color: #2222BB;">const</span><br/>    mysql_host<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">"localhost"</span>, <span style="color: #228822;">//Nгo troque</span><br/>    mysql_user<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">"root"</span>, <span style="color: #228822;">//Nгo troque</span><br/>    mysql_password <span style="color: #000000;">=</span> <span style="color: #000066;">"1234"</span>, <span style="color: #228822;">//mude para a password do seu MySQL</span><br/>    mysql_database<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">"samp"</span>; <span style="color: #228822;">//esta й a nossa database, vocк deverб criar uma assim.</span><br/><br/><span style="color: #2222BB;">new</span> query<span style="color: #000000;">[</span><span style="color: #000000;">500</span><span style="color: #000000;">]</span>; <span style="color: #228822;">//Sim iremos necessitar de 500 cйlulas.</span><br/><br/><span style="color: #2222BB;">enum</span> hInfo<span style="color: #000000;">{</span><br/>    hOwner<span style="color: #000000;">[</span><span style="color: #000000;">25</span><span style="color: #000000;">]</span>, <span style="color: #228822;">//Aqui serб gravado o nome do comprador...</span><br/>    <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>hEX, <span style="color: #228822;">//Coordenada da entrada X</span><br/>    <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>hEY, <span style="color: #228822;">//Coordenada da entrada Y</span><br/>    <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>hEZ, <span style="color: #228822;">//Coordenada da entrada Z</span><br/>    <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>hSX, <span style="color: #228822;">//Coordenada para a saнda X</span><br/>    <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>hSY, <span style="color: #228822;">//Coordenada para a saнda Y</span><br/>    <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>hSZ, <span style="color: #228822;">//Coordenada para a saнda Z</span><br/>    hMundo, <span style="color: #228822;">//Aqui serб o mundo da casa</span><br/>    hInt, <span style="color: #228822;">//Aqui serб o interior da casa</span><br/>    hVenda, <span style="color: #228822;">//Aqui serб uma variбvel para verificar se a casa estб a venda ou nгo.</span><br/>    hPreco, <span style="color: #228822;">//Aqui serб o preзo da casa.</span><br/>    hLock <span style="color: #228822;">//Aqui serб uma variбvel para trancar a casa.</span><br/><span style="color: #000000;">}</span>;<br/><span style="color: #2222BB;">new</span> HouseInfo<span style="color: #000000;">[</span>M_HOUSE<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hInfo<span style="color: #000000;">]</span>;</div></div></pre>
+</div>
+<i>Bem, no fim disto nуs deveremos comeзar pela conexгo a database e a criaзгo da tabela no MySQL.</i><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">//OnGameModeInIt</span><br/>MysqlStartConnection<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/><br/><span style="color: #228822;">//Fim do GM</span><br/><br/><span style="color: #2222BB;">forward</span> MysqlStartConnection<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> MysqlStartConnection<span style="color: #000000;">(</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    MysqlC <span style="color: #000000;">=</span> mysql_connect<span style="color: #000000;">(</span>mysql_host,mysql_user,mysql_database,mysql_password<span style="color: #000000;">)</span>; <span style="color: #228822;">//aqui й a conexгo a database</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>MysqlC<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>        <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"Foi impossivel conectar a database, reveja as definiзхes novamente"</span><span style="color: #000000;">)</span>;<br/>        SendRconCommand<span style="color: #000000;">(</span><span style="color: #000066;">"exit"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Iremos fechar o servidor para nгo haver problemas com as casas...</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"Conectado a database."</span><span style="color: #000000;">)</span>;<br/>    mysql_function_query<span style="color: #000000;">(</span>MysqlC, <br/>        <span style="color: #000066;">"CREATE TABLE IF NOT EXISTS `casas` ( <span style="color: #000099; font-weight: bold;">\</span><br/>            `id` int(11) NOT NULL AUTO_INCREMENT, <span style="color: #000099; font-weight: bold;">\</span><br/>            `owner` varchar(25) NOT NULL, <span style="color: #000099; font-weight: bold;">\</span><br/>            `EX` double NOT NULL, <span style="color: #000099; font-weight: bold;">\</span><br/>            `EY` double NOT NULL, <span style="color: #000099; font-weight: bold;">\</span><br/>            `EZ` double NOT NULL, <span style="color: #000099; font-weight: bold;">\</span><br/>            `Interior` int(11) NOT NULL, <span style="color: #000099; font-weight: bold;">\</span><br/>            `Mundo` int(11) NOT NULL, <span style="color: #000099; font-weight: bold;">\</span><br/>            `Venda` int(11) NOT NULL, <span style="color: #000099; font-weight: bold;">\</span><br/>            `Preco` int(11) NOT NULL, <span style="color: #000099; font-weight: bold;">\</span><br/>            PRIMARY KEY (`id`) <span style="color: #000099; font-weight: bold;">\</span><br/>        )"</span>,false,<span style="color: #000066;">"r@MysqlStartConnection"</span>,<span style="color: #000066;">"s"</span>,<span style="color: #000066;">"casas"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">//Aqui iremos criar uma tabela com esses parвmetros caso nгo existir, depois iremos mandar uma resposta de sucesso para a public r@MysqlStartConnection.</span><br/>    LoadHouse<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Eu gosto muito de usar funзхes inglesas, poupгo mais espaзo...</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">forward</span> r<span style="color: #000000;">@</span>MysqlStartConnection<span style="color: #000000;">(</span>text<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> r<span style="color: #000000;">@</span>MysqlStartConnection<span style="color: #000000;">(</span>text<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"tabela %s criada com sucesso"</span>,text<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<i>Pronto, estб parte й muito simples, vocк apenas tem que fazer isso, o que nгo й nada difнcil, na minha opiniгo, para quem nгo sabe esta й a nova versгo do Mysql que й a R7 que o <font color="#0697C7"><b>BlueG</b></font> fez, ela tem uma funзгo nova, quer dizer nгo й bem nova, й uma nova versгo do <b>"mysql_query"</b> ela й a <b>mysql_function_query</b>, ela faz o seguinte, ela conecta-se com a database, depois faz o query que vocк escreveu, depois manda uma resposta para uma callback com os parвmetros que vocк usou. Й muito simples, agora vamos para o sistema de Spawn de casas.</i><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">forward</span> LoadHouse<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> LoadHouse<span style="color: #000000;">(</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i<span style="color: #000000;">&lt;</span>M_HOUSE; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>        mysql_format<span style="color: #000000;">(</span>MysqlC,query,<span style="color: #000066;">"SELECT * FROM `casas` WHERE id=%d"</span>,i<span style="color: #000000;">)</span>; <span style="color: #228822;">//Aqui iremos formatar o nosso query, isto significa assim "SELECIONAR TUDO DA TABELA `casas` ONDE o id й igual a %d", lembrando que o * й igual a TUDO, vocк tem que usar * nгo pode usar ALL й sempre * ou o parвmetro em especifico.</span><br/>        mysql_function_query<span style="color: #000000;">(</span>MysqlC,query,true,<span style="color: #000066;">"r@LoadHouse"</span>,<span style="color: #000066;">"i"</span>,i<span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">forward</span> r<span style="color: #000000;">@</span>LoadHouse<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> r<span style="color: #000000;">@</span>LoadHouse<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> rows,fields;<br/>    cache_get_data<span style="color: #000000;">(</span>rows,fields,MysqlC<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"owner"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strmid</span><span style="color: #000000;">(</span>query,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hOwner<span style="color: #000000;">]</span>,<span style="color: #000000;">0</span>,<span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>,<span style="color: #000000;">255</span><span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"EX"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEX<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">floatstr</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"EZ"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">floatstr</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"EZ"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">floatstr</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Interior"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hInt<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Mundo"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hMundo<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Venda"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hVenda<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Preco"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hPreco<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/>    <br/>    CreateExit<span style="color: #000000;">(</span>i,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hInt<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">forward</span> CreateExit<span style="color: #000000;">(</span>i,var<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> CreateExit<span style="color: #000000;">(</span>i,var<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>var <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>        HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hSX<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">223.1929</span>;<br/>        HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hSY<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">1287.0780</span>;<br/>        HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hSZ<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">1082.1406</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>var <span style="color: #000000;">==</span> <span style="color: #000000;">2</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>        HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hSX<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">225.756989</span>;<br/>        HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hSY<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">1240.000000</span>;<br/>        HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hSZ<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">1082.149902</span>;    <br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #228822;">//Enfim vб adicionando mais interiores e pegando a coordenada da saнda deles...</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<i>Bem agora vamos comeзar por criar alguns comandos bбsicos. Vamos comeзar por um comando para criar as casas.</i><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>criarcasa<span style="color: #000000;">(</span>playerid,params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>isnull<span style="color: #000000;">(</span>params<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"USE: /criarcasa [ID da casa]"</span><span style="color: #000000;">)</span>;<br/>    CheckHouse<span style="color: #000000;">(</span><span style="color: #222222;">strval</span><span style="color: #000000;">(</span>params<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">forward</span> CheckHouse<span style="color: #000000;">(</span>playerid,var<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> CheckHouse<span style="color: #000000;">(</span>playerid,var<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    mysql_format<span style="color: #000000;">(</span>MysqlC,query,<span style="color: #000066;">"SELECT * FROM `casas` WHERE id=%d"</span>,var<span style="color: #000000;">)</span>;<br/>    mysql_function_query<span style="color: #000000;">(</span>MysqlC,query,true,<span style="color: #000066;">"r@CheckHouse"</span>,<span style="color: #000066;">"ii"</span>,playerid,var<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">forward</span> r<span style="color: #000000;">@</span>CheckHouse<span style="color: #000000;">(</span>playerid,var<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> r<span style="color: #000000;">@</span>CheckHouse<span style="color: #000000;">(</span>playerid,var<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> rows,fields;<br/>    cache_get_data<span style="color: #000000;">(</span>rows,fields<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>rows<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"Jб existe uma casa com este id..."</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">new</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>hPos<span style="color: #000000;">[</span><span style="color: #000000;">3</span><span style="color: #000000;">]</span>;<br/>        GetPlayerPos<span style="color: #000000;">(</span>playerid,hPos<span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span>,hPos<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>,hPos<span style="color: #000000;">[</span><span style="color: #000000;">2</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEX<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> hPos<span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span>;<br/>        HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEY<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> hPos<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>;<br/>        HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> hPos<span style="color: #000000;">[</span><span style="color: #000000;">2</span><span style="color: #000000;">]</span>;<br/><br/>        mysql_format<span style="color: #000000;">(</span>MysqlS,query,<span style="color: #000066;">"INSERT INTO `casas` (owner,EX,EY,EZ,mundo,interior,venda,preco) VALUES ('EM-VENDA',%f,%f,%f,1,1,1,1000);"</span>,HouseInfo<span style="color: #000000;">[</span>hid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEX<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>hid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEY<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>hid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        mysql_function_query<span style="color: #000000;">(</span>MysqlS,query,true,<span style="color: #000066;">"r@CheckSave"</span>,<span style="color: #000066;">"i"</span>,playerid<span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">forward</span> r<span style="color: #000000;">@</span>CheckSave<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> r<span style="color: #000000;">@</span>CheckSave<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    SCM<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"Casa Criada Com sucesso."</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<i>Pronto, agora vocк pode fazer como quiser, isto й apenas uma base digamos, vocк pode criar como quer ou usar o meu sistema de casas que estarei criando brevemente, agora vamos passar para o comando de compra, entrada, venda e saнda que й muito simples, apenas veja.</i><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>comprarcasa<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> pname<span style="color: #000000;">[</span><span style="color: #000000;">25</span><span style="color: #000000;">]</span>,money <span style="color: #000000;">=</span> GetPlayerMoney<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/>    GetPlayerName<span style="color: #000000;">(</span>playerid,pname,<span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pname<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i<span style="color: #000000;">=</span><span style="color: #000000;">0</span>; i<span style="color: #000000;">&lt;</span>M_HOUSE; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerInRangeOfPoint<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">10</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEX<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEY<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>ChaveCasa<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">!=</span> <span style="color: #000000;">9999</span><span style="color: #000000;">)</span><br/>                <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"Ei nigga vocк jб tem uma casa, vende ela (/vendercasa)"</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hVenda<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>                f<span style="color: #000000;">(</span>money <span style="color: #000000;">&gt;</span> HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hPreco<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>                    GivePlayerMoney<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span>HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hPreco<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>                    <span style="color: #222222;">strmid</span><span style="color: #000000;">(</span>pname,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hOwner<span style="color: #000000;">]</span>,<span style="color: #000000;">0</span>,<span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>pname<span style="color: #000000;">)</span>,<span style="color: #000000;">255</span><span style="color: #000000;">)</span>;<br/>                    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>result,<span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>result<span style="color: #000000;">)</span>,<span style="color: #000066;">"Vocк pagou %d&#36; pela casa, sua chave й %d"</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hPreco<span style="color: #000000;">]</span>,i<span style="color: #000000;">)</span>;<br/>                    SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,result<span style="color: #000000;">)</span>;<br/>                    ChaveCasa<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> i;<br/>                    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hVenda<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>;<br/>                        UpdateHouse<span style="color: #000000;">(</span>playerid,housei<span style="color: #000000;">)</span>;<br/><br/>                    <span style="color: #000000;">}</span><br/>                <span style="color: #2222BB;">else</span><br/>                    <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"Vocк nгo tem esse dinheiro..."</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>sair<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i<span style="color: #000000;">=</span><span style="color: #000000;">0</span>; i<span style="color: #000000;">&lt;</span>M_HOUSE; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerInRangeOfPoint<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">3</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hSX<span style="color: #000000;">]</span>, HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hSY<span style="color: #000000;">]</span>, HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hSZ<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Entrou<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> i<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>                                SetPlayerInterior<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>                SetPlayerPos<span style="color: #000000;">(</span>playerid,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEX<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEY<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>                SetCameraBehindPlayer<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/>                SetPlayerVirtualWorld<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>                Entrou<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">9999</span>;<br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>entrar<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i<span style="color: #000000;">=</span><span style="color: #000000;">0</span>; i<span style="color: #000000;">&lt;</span>M_HOUSE; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerInRangeOfPoint<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">10</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEX<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEY<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hLocked<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">0</span> || ChaveCasa<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> i<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>                SetPlayerInterior<span style="color: #000000;">(</span>playerid,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hInt<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>                SetPlayerVirtualWorld<span style="color: #000000;">(</span>playerid,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hWorld<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>                SetPlayerPos<span style="color: #000000;">(</span>playerid,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hSX<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hSY<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hSZ<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>                GameTextForPlayer<span style="color: #000000;">(</span>playerid,<span style="color: #000066;">"~g~Bem Vindo a casa"</span>,<span style="color: #000000;">3000</span>,<span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/>                Entrou<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> i;<br/>            <span style="color: #000000;">}</span><br/>            <span style="color: #2222BB;">else</span> <span style="color: #000000;">{</span><br/>                GameTextForPlayer<span style="color: #000000;">(</span>playerid,<span style="color: #000066;">"~r~Trancada use /destrancar"</span>,<span style="color: #000000;">3000</span>,<span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>trancar<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i<span style="color: #000000;">=</span><span style="color: #000000;">0</span>; i<span style="color: #000000;">&lt;</span>M_HOUSE; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerInRangeOfPoint<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">10</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEX<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEY<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>ChaveCasa<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> i<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>                <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hLocked<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>                    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hLocked<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>;<br/>                    GameTextForPlayer<span style="color: #000000;">(</span>playerid,<span style="color: #000066;">"~r~Casa trandaca"</span>,<span style="color: #000000;">3000</span>,<span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #000000;">}</span><br/>                <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hLocked<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>                    SCM<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"((A sua casa jб estб destrancada, use /trancar para trancar a mesma.))"</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #000000;">}</span><br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>destrancar<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i<span style="color: #000000;">=</span><span style="color: #000000;">0</span>; i<span style="color: #000000;">&lt;</span>M_HOUSE; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerInRangeOfPoint<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">10</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEX<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEY<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>ChaveCasa<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> i<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>                <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hLocked<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>                    SCM<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"((A sua casa jб estб destrancada, use /trancar para trancar a mesma.))"</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #000000;">}</span><br/>                <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hLocked<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>                    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hLocked<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>;<br/>                    GameTextForPlayer<span style="color: #000000;">(</span>playerid,<span style="color: #000066;">"~g~Casa destrandaca"</span>,<span style="color: #000000;">3000</span>,<span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #000000;">}</span><br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>vendercasa<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>ChaveCasa<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">9999</span><span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SCM<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"ERRO: vocк nгo tem nenhuma casa."</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">else</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">new</span> housei <span style="color: #000000;">=</span> ChaveCasa<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span>;<br/>        GivePlayerMoney<span style="color: #000000;">(</span>playerid,HouseInfo<span style="color: #000000;">[</span>housei<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hPreco<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        HouseInfo<span style="color: #000000;">[</span>housei<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hVenda<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>;<br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>result,<span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>result<span style="color: #000000;">)</span>,<span style="color: #000066;">"~w~Vocк vendeu a sua casa por ~g~%d&#36;"</span>,HouseInfo<span style="color: #000000;">[</span>housei<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hPreco<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        GameTextForPlayer<span style="color: #000000;">(</span>playerid,result,<span style="color: #000000;">3000</span>,<span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/>        ChaveCasa<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">9999</span>;<br/>        UpdateHouse<span style="color: #000000;">(</span>playerid,housei<span style="color: #000000;">)</span>;<br/><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">forward</span> UpdateHouse<span style="color: #000000;">(</span>playerid,hid<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> UpdateHouse<span style="color: #000000;">(</span>playerid,hid<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    mysql_format<span style="color: #000000;">(</span>MysqlS,query,<span style="color: #000066;">"UPDATE `casas` SET owner='%s' , venda=%d WHERE id=%d"</span>,HouseInfo<span style="color: #000000;">[</span>hid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hOwner<span style="color: #000000;">]</span>,HouseInfo<span style="color: #000000;">[</span>hid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hVenda<span style="color: #000000;">]</span>,hid<span style="color: #000000;">)</span>;<br/>    mysql_function_query<span style="color: #000000;">(</span>MysqlS,query,true,<span style="color: #000066;">"r@UpdateHouse"</span>,<span style="color: #000066;">"ii"</span>,playerid,hid<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><span style="color: #000000;">[</span><span style="color: #000000;">/</span>i<span style="color: #000000;">]</span></div></div></pre>
+</div><i><br />
+<br />
+Bem por agora й isto pessoal, eu acho que jб deu para entender, acho que nгo preciso de explicar comandinho por comandinho, pois este tutorial й grande, mas bem, espero que gostem, eu estarei a fazer um sistema de criaзгo de casas caso queiram usar ele eu irei atualizar a pбgina quando o mesmo tiver feito, lembrando que ele gravarб em MySQL pessoal.<br />
+<br />
+<font size="5"><i>~Le Crйditos</i></font><ul><li><b><font color="#0697C7"><i>BlueX</i></font></b><ul><li><a href="http://forum.sa-mp.com/member.php?u=133113" target="_blank">Criaзгo do tutorial.</a></li>
+</ul></li>
+<li><b><font color="#0697C7"><i>BlueG</i></font></b><ul><li><a href="http://forum.sa-mp.com/member.php?u=13918" target="_blank">Criaзгo do MySQL Plugin</a></li>
+</ul></li>
+<li><b><font color="#0697C7"><i>Stewie</i></font></b><ul><li><a href="http://forum.sa-mp.com/member.php?u=13918" target="_blank">Um grande amigo e o cara que me ensinou tudo de MySQL, mano tu й foda</a></li>
+</ul></li>
+</ul></i></font>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1787018">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-133113.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1787032"></a>
+<div class="post classic " style="" id="post_1787032">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0146/uid-146128.html"><img src="../../assets/uploads/avatars/146128.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0146/uid-146128.html">paulor</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,116<br />
+	Threads: 26<br />
+	Joined: Nov 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0332/tid-332900.html#pid1787032" title="Re: Criando sistema de casas em MySQL">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by paulor" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">09.04.2012, 18:28 <span class="post_edit" id="edited_by_1787032"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1787032">
+		Legal, para quem esses dias tava querendo aprender mysql ta otimo! Perfect...
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1787032">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-146128.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1787037"></a>
+<div class="post classic " style="" id="post_1787037">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0140/uid-140036.html"><img src="../../assets/uploads/avatars/140036.png" alt="" width="42" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0140/uid-140036.html">Jason`</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,459<br />
+	Threads: 64<br />
+	Joined: Sep 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0332/tid-332900.html#pid1787037" title="Re: Criando sistema de casas em MySQL">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Jason`" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">09.04.2012, 18:30 <span class="post_edit" id="edited_by_1787037"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1787037">
+		Excelente
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1787037">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-140036.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1787041"></a>
+<div class="post classic " style="" id="post_1787041">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0156/uid-156290.html"><img src="../../assets/uploads/avatars/156290.png" alt="" width="15" height="15" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0156/uid-156290.html">Đeagle</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 488<br />
+	Threads: 6<br />
+	Joined: Feb 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0332/tid-332900.html#pid1787041" title="Re: Criando sistema de casas em MySQL">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by Đeagle" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">09.04.2012, 18:32 <span class="post_edit" id="edited_by_1787041"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1787041">
+		Уtimo tutorial.<br />
+Irб ser bastante ъtil.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1787041">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-156290.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1787047"></a>
+<div class="post classic " style="" id="post_1787047">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0133/uid-133113.html"><img src="../../assets/uploads/avatars/133113.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0133/uid-133113.html">RebeloX</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,172<br />
+	Threads: 81<br />
+	Joined: Jul 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0332/tid-332900.html#pid1787047" title="Re: Criando sistema de casas em MySQL">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by RebeloX" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">09.04.2012, 18:33 <span class="post_edit" id="edited_by_1787047"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1787047">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>x'ReyaLp</strong><br />
+<a href="../../unavailable.html" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Bueno Script!</div>
+</td>
+</tr>
+</table>
+</div>Thanks <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.gif" title="Grin"/><br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>paulor</strong><br />
+<a href="../../threads/0332/tid-332900.html#pid1787032" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Legal, para quem esses dias tava querendo aprender mysql ta otimo! Perfect...</div>
+</td>
+</tr>
+</table>
+</div>Sim, eu acho que MySQL nгo й nada dificil, sinceramente, desde que eu entrei em contacto com a programaзгo quem me ensinou muita coisa foi o Stewie, ele sim й foda mano, cara ele falou para eu usar ZCMD ai eu falei que nunca conseguiria usar ZCMD, aconteceu o mesmo com o MySQL eu falei que nunca ia conseguir, mas viu, o problema й que eu nunca tentei, sempre tente, nada й difнcil, apenas й difнcil se vocк nгo tentar Valeu Paulinho <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.gif" title="Grin"/><br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Pedro_Miranda</strong><br />
+<a href="../../threads/0332/tid-332900.html#pid1787037" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Excelente</div>
+</td>
+</tr>
+</table>
+</div>Yap, thanks :P<br />
+<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Đeagle</strong><br />
+<a href="../../threads/0332/tid-332900.html#pid1787041" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Уtimo tutorial.<br />
+Irб ser bastante ъtil.</div>
+</td>
+</tr>
+</table>
+</div>Eu gosto de fazer coisas uteis :3<br />
+<br />
+Eu tava a pensar em fazer umas videoaulas de MySQL, alguйm quer aprender? o:
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1787047">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-133113.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1787074"></a>
+<div class="post classic " style="" id="post_1787074">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0156/uid-156290.html"><img src="../../assets/uploads/avatars/156290.png" alt="" width="15" height="15" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0156/uid-156290.html">Đeagle</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 488<br />
+	Threads: 6<br />
+	Joined: Feb 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0332/tid-332900.html#pid1787074" title="Re: Criando sistema de casas em MySQL">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by Đeagle" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">09.04.2012, 18:41 <span class="post_edit" id="edited_by_1787074"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1787074">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>BlueX</strong><br />
+<a href="../../threads/0332/tid-332900.html#pid1787047" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Eu tava a pensar em fazer umas videoaulas de MySQL, alguйm quer aprender? o:</div>
+</td>
+</tr>
+</table>
+</div>Se possнvel.<br />
+Eu estava a pensar que MySQL й um bixo de sete cabeзas, mais eu estou estudando cуdigos e tutoriais como o seu aqui, e estou vendo que nгo й bem assim.<br />
+<br />
+Mais se possнvel, faзa essa vнdeo-aula por gentileza, assim ajuda-rб bastante usuбrios alйm de mim.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1787074">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-156290.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1787080"></a>
+<div class="post classic " style="" id="post_1787080">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0146/uid-146128.html"><img src="../../assets/uploads/avatars/146128.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0146/uid-146128.html">paulor</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,116<br />
+	Threads: 26<br />
+	Joined: Nov 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0332/tid-332900.html#pid1787080" title="Re: Criando sistema de casas em MySQL">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by paulor" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">09.04.2012, 18:42 <span class="post_edit" id="edited_by_1787080"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1787080">
+		Sim, claro. Dps q vc aprende a logica, tudo fica mais facil! pois toda linguagem q conheзo tem seus if e else. Hehe
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1787080">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-146128.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1787169"></a>
+<div class="post classic " style="" id="post_1787169">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0140/uid-140036.html"><img src="../../assets/uploads/avatars/140036.png" alt="" width="42" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0140/uid-140036.html">Jason`</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,459<br />
+	Threads: 64<br />
+	Joined: Sep 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0332/tid-332900.html#pid1787169" title="Re: Criando sistema de casas em MySQL">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by Jason`" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">09.04.2012, 19:08 <span class="post_edit" id="edited_by_1787169"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1787169">
+		Sу uma coisa<br />
+<br />
+ali no r@LoadHouse(var) ao invйs de 'i' nгo seria 'var' ?  <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">forward</span> r<span style="color: #000000;">@</span>LoadHouse<span style="color: #000000;">(</span>var<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> r<span style="color: #000000;">@</span>LoadHouse<span style="color: #000000;">(</span>var<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> rows,fields;<br/>    cache_get_data<span style="color: #000000;">(</span>rows,fields,MysqlC<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"owner"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strmid</span><span style="color: #000000;">(</span>query,HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hOwner<span style="color: #000000;">]</span>,<span style="color: #000000;">0</span>,<span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>,<span style="color: #000000;">255</span><span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"EX"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEX<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">floatstr</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"EZ"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">floatstr</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"EZ"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">floatstr</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Interior"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hInt<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Mundo"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hMundo<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Venda"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hVenda<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Preco"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hPreco<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    CreateExit<span style="color: #000000;">(</span>var,HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hInt<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1787169">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-140036.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1787218"></a>
+<div class="post classic " style="" id="post_1787218">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0133/uid-133113.html"><img src="../../assets/uploads/avatars/133113.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0133/uid-133113.html">RebeloX</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,172<br />
+	Threads: 81<br />
+	Joined: Jul 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0332/tid-332900.html#pid1787218" title="Re: Criando sistema de casas em MySQL">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by RebeloX" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">09.04.2012, 19:22 <span class="post_edit" id="edited_by_1787218"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1787218">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Pedro_Miranda</strong><br />
+<a href="../../threads/0332/tid-332900.html#pid1787169" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Sу uma coisa<br />
+<br />
+ali no r@LoadHouse(var) ao invйs de 'i' nгo seria 'var' ?  <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">forward</span> r<span style="color: #000000;">@</span>LoadHouse<span style="color: #000000;">(</span>var<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> r<span style="color: #000000;">@</span>LoadHouse<span style="color: #000000;">(</span>var<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> rows,fields;<br/>    cache_get_data<span style="color: #000000;">(</span>rows,fields,MysqlC<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"owner"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strmid</span><span style="color: #000000;">(</span>query,HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hOwner<span style="color: #000000;">]</span>,<span style="color: #000000;">0</span>,<span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>,<span style="color: #000000;">255</span><span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"EX"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEX<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">floatstr</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"EZ"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">floatstr</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"EZ"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">floatstr</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Interior"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hInt<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Mundo"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hMundo<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Venda"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hVenda<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Preco"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hPreco<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    CreateExit<span style="color: #000000;">(</span>var,HouseInfo<span style="color: #000000;">[</span>var<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hInt<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div></div>
+</td>
+</tr>
+</table>
+</div>Como assim? e.e vocк me confundiu agora, vocк estб dizendo porque eu estou a usar var em vez de i? o var й a variavel da public mesmo, ao transferir o i para essa public ela vai se transformar em var e.e esses codes todos estгo no meu gm que eu estou a desenvolver, ai tem coisas que sгo minhas e nгo mostrei para todos kkk'<br />
+<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>BreakDriFT</strong><br />
+<a href="../../unavailable.html" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Vai ajudar muita gente.</div>
+</td>
+</tr>
+</table>
+</div>Espero que sim (:
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1787218">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-133113.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1787246"></a>
+<div class="post classic " style="" id="post_1787246">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0140/uid-140036.html"><img src="../../assets/uploads/avatars/140036.png" alt="" width="42" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0140/uid-140036.html">Jason`</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,459<br />
+	Threads: 64<br />
+	Joined: Sep 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0332/tid-332900.html#pid1787246" title="Re: Criando sistema de casas em MySQL">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by Jason`" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">09.04.2012, 19:30 <span class="post_edit" id="edited_by_1787246"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1787246">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>BlueX</strong><br />
+<a href="../../threads/0332/tid-332900.html#pid1787218" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Como assim? e.e vocк me confundiu agora, vocк estб dizendo porque eu estou a usar var em vez de i? o var й a variavel da public mesmo, ao transferir o i para essa public ela vai se transformar em var e.e esses codes todos estгo no meu gm que eu estou a desenvolver, ai tem coisas que sгo minhas e nгo mostrei para todos kkk'<br />
+<br />
+<br />
+<br />
+<br />
+Espero que sim (:</div>
+</td>
+</tr>
+</table>
+</div>Nгo quis dizer isto.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:199px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include &lt;a_samp&gt;</span><br/><br/><span style="color: #2222BB;">forward</span> oi<span style="color: #000000;">(</span>var<span style="color: #000000;">)</span>;<br/><br/><span style="color: #2222BB;">stock</span> daroi<span style="color: #000000;">(</span>id<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> oi<span style="color: #000000;">(</span>id<span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> oi<span style="color: #000000;">(</span>var<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>id,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"oi"</span><span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 114px;
+		text-align: left;
+		overflow: auto">
+C:\Users\Pedro Miranda.Pedro-PC\Desktop\Script\filterscripts\teste2.pwn(11) : error 017: undefined symbol "id"
+Pawn compiler 3.2.3664	 	 	Copyright &copy; 1997-2006, ITB CompuPhase
+
+
+1 Error.</pre>
+</div>Foi mais o menos o que vocк fez ali, veja sua public:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">forward</span> r<span style="color: #000000;">@</span>LoadHouse<span style="color: #000000;">(</span>var<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> r<span style="color: #000000;">@</span>LoadHouse<span style="color: #000000;">(</span>var<span style="color: #000000;">)</span><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> rows,fields;<br/>    cache_get_data<span style="color: #000000;">(</span>rows,fields,MysqlC<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"owner"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">strmid</span><span style="color: #000000;">(</span>query,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hOwner<span style="color: #000000;">]</span>,<span style="color: #000000;">0</span>,<span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>,<span style="color: #000000;">255</span><span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"EX"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEX<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">floatstr</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"EZ"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">floatstr</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"EZ"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hEZ<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">floatstr</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Interior"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hInt<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Mundo"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hMundo<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Venda"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hVenda<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/><br/>    cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>,<span style="color: #000066;">"Preco"</span>,query,MysqlC<span style="color: #000000;">)</span>;<br/>    HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hPreco<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #222222;">strval</span><span style="color: #000000;">(</span>query<span style="color: #000000;">)</span>;<br/>    <br/>    CreateExit<span style="color: #000000;">(</span>i,HouseInfo<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>hInt<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Aquilo acarretarб em ' undefined symbol "i" ' posto que a variбvel da public й 'var', pelo menos foi o que ocorreu aqui em meu teste
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1787246">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-140036.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0332/tid-332900.html">Next Oldest</a> | <a href="../../threads/0332/tid-332900.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="332900" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" selected="selected">------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/9.html">Non-English</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/33.html">Languages</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/34.html">Português/Portuguese</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/56.html">Lançamentos/Releases</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

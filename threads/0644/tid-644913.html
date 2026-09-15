@@ -1,0 +1,2190 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Include] MenuStore (Build dynamic stores with TextDraws)</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "ff15a1d4533e2cab9dce84ae372432d7";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="• MenuStore.inc This include allows you to create many types of stores using Textdraws. • Demonstration Click on the image to see the video. • Functions PHP Code: stock MenuStore_AddItem(playeri" />
+<link rel="canonical" href="../../threads/0644/tid-644913.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="ff15a1d4533e2cab9dce84ae372432d7" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/83.html">Includes</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (3):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0644/tid-644913-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0644/tid-644913-page-3.html" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0644/tid-644913-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0644/tid-644913.html#pid3956260">Threaded Mode</a></span>
+				</div>
+				
+					[Include] MenuStore (Build dynamic stores with TextDraws)
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid3956260"></a>
+<div class="post classic " style="" id="post_3956260">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0178/uid-178553.html"><img src="../../assets/uploads/avatars/178553.png" alt="" width="55" height="49" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0178/uid-178553.html">CaioTJF</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 545<br />
+	Threads: 15<br />
+	Joined: Sep 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3956260" title="MenuStore (Build dynamic stores with TextDraws)">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by CaioTJF" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">16.11.2017, 15:40 <span class="post_edit" id="edited_by_3956260"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by CaioTJF; 21/11/2017 at 05:40 PM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3956260">
+		<font size="5">• <b>MenuStore.inc</b></font><br />
+<br />
+This include allows you to create many types of stores using Textdraws.<br />
+<br />
+<font size="3">• <b>Demonstration</b></font><br />
+<br />
+<a href="https://youtu.be/e4rJO3Oszps" target="_blank"><img alt="" border="0" src="https://i.imgur.com/gH1k6t4.jpg"/><br />
+</a><br />
+<a href="https://youtu.be/e4rJO3Oszps" target="_blank">Click on the image to see the video.<br />
+</a><br />
+<font size="3">• <b>Functions</b></font><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">stock MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">itemid</span><span style="color: #007700">, </span><span style="color: #0000BB">modelid</span><span style="color: #007700">, </span><span style="color: #0000BB">name</span><span style="color: #007700">[], </span><span style="color: #0000BB">price</span><span style="color: #007700">, </span><span style="color: #0000BB">description</span><span style="color: #007700">[] = </span><span style="color: #0000BB">EOS</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">description_size </span><span style="color: #007700">= </span><span style="color: #0000BB">0.0</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">description_line_jump </span><span style="color: #007700">= </span><span style="color: #0000BB">true</span><span style="color: #007700">, </span><span style="color: #0000BB">stack </span><span style="color: #007700">= </span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">rotX </span><span style="color: #007700">= </span><span style="color: #0000BB">0.0</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">rotY </span><span style="color: #007700">= </span><span style="color: #0000BB">0.0</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">rotZ </span><span style="color: #007700">= </span><span style="color: #0000BB">0.0</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">zoom </span><span style="color: #007700">= </span><span style="color: #0000BB">1.0</span><span style="color: #007700">) 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><ul><li> <i>"itemid"</i> - Item ID, will serve as "key", each item must have unique ID.</li>
+<li> <i>"modelid"</i> - Model of the item that will be displayed in the preview.</li>
+<li> <i>"name"</i> - Item name.</li>
+<li> <i>"price"</i> - Item price.</li>
+<li> <i>"description"</i> - Item description.</li>
+<li> <i>"Float:description_size"</i> - Increase description box, value default is 0.0.</li>
+<li> <i>"bool:description_line_jump"</i> - Automatic line break or not</li>
+<li> <i>"stack"</i> - Above 1, the item can be stacked in the cart.</li>
+<li> <i>"rotX", "rotY", "rotZ"</i> - Preview Rotation.</li>
+<li> <i>"Float:zoom "</i> - Preview Zoom.</li>
+</ul>
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">stock MenuStore_Open</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">menuid</span><span style="color: #007700">[], </span><span style="color: #0000BB">store_name</span><span style="color: #007700">[], </span><span style="color: #0000BB">money_sign</span><span style="color: #007700">[] = </span><span style="color: #0000BB">MS_DEFAULT_MONEY_SIGN</span><span style="color: #007700">, </span><span style="color: #0000BB">button_confirm</span><span style="color: #007700">[] = </span><span style="color: #0000BB">MS_DEFAULT_CONFIRM</span><span style="color: #007700">) 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><ul><li> <i>"menuid"</i> - It works just like easyDialog, you can by any name without having to define it.</li>
+<li> <i>"store_name"</i> - Store name.</li>
+<li> <i>"money_sign"</i> - Money sign, the default is "&#36;"</li>
+<li> <i>"button_confirm"</i> - Name of the confirm button, the default value is "Buy".<br />
+</li>
+</ul>
+<br />
+<font size="3">• <b>Code Example</b></font><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">
+<br/></span><span style="color: #007700">if(</span><span style="color: #0000BB">strcmp</span><span style="color: #007700">(</span><span style="color: #0000BB">cmd</span><span style="color: #007700">, </span><span style="color: #DD0000">"/store"</span><span style="color: #007700">, </span><span style="color: #0000BB">true</span><span style="color: #007700">) == </span><span style="color: #0000BB">0</span><span style="color: #007700">)
+<br/>{
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #0000BB">342</span><span style="color: #007700">, </span><span style="color: #DD0000">"Granade"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Throw to explode."</span><span style="color: #007700">, </span><span style="color: #0000BB">200</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">2</span><span style="color: #007700">, </span><span style="color: #0000BB">344</span><span style="color: #007700">, </span><span style="color: #DD0000">"Molotov"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Throw to set fire to something."</span><span style="color: #007700">, </span><span style="color: #0000BB">200</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">3</span><span style="color: #007700">, </span><span style="color: #0000BB">346</span><span style="color: #007700">, </span><span style="color: #DD0000">"9mm Pistol"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Pistol with low firepower."</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">4</span><span style="color: #007700">, </span><span style="color: #0000BB">347</span><span style="color: #007700">, </span><span style="color: #DD0000">"Silenced 9mm"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Pistol with low firepower."</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">5</span><span style="color: #007700">, </span><span style="color: #0000BB">348</span><span style="color: #007700">, </span><span style="color: #DD0000">"Desert Eagle"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Pistol with high firepower."</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">6</span><span style="color: #007700">, </span><span style="color: #0000BB">349</span><span style="color: #007700">, </span><span style="color: #DD0000">"Shotgun"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Normal Shotgun."</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">7</span><span style="color: #007700">, </span><span style="color: #0000BB">350</span><span style="color: #007700">, </span><span style="color: #DD0000">"Sawnoff Shotgun"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Powerfull Shotgun."</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">8</span><span style="color: #007700">, </span><span style="color: #0000BB">351</span><span style="color: #007700">, </span><span style="color: #DD0000">"Combat Shotgun"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Powerfull Shotgun."</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">9</span><span style="color: #007700">, </span><span style="color: #0000BB">352</span><span style="color: #007700">, </span><span style="color: #DD0000">"Micro SMG"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Two-handed machine gun."</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">10</span><span style="color: #007700">, </span><span style="color: #0000BB">353</span><span style="color: #007700">, </span><span style="color: #DD0000">"MP5"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Machine gun."</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">11</span><span style="color: #007700">, </span><span style="color: #0000BB">355</span><span style="color: #007700">, </span><span style="color: #DD0000">"AK-47"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Powerfull Rifle."</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">12</span><span style="color: #007700">, </span><span style="color: #0000BB">356</span><span style="color: #007700">, </span><span style="color: #DD0000">"M4"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Powerfull Rifle."</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">13</span><span style="color: #007700">, </span><span style="color: #0000BB">372</span><span style="color: #007700">, </span><span style="color: #DD0000">"Tec-9"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Powerfull machine gun."</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">14</span><span style="color: #007700">, </span><span style="color: #0000BB">357</span><span style="color: #007700">, </span><span style="color: #DD0000">"Country Rifle"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Normal Rifle."</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_AddItem</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">15</span><span style="color: #007700">, </span><span style="color: #0000BB">358</span><span style="color: #007700">, </span><span style="color: #DD0000">"Sniper Rifle"</span><span style="color: #007700">, </span><span style="color: #0000BB">500</span><span style="color: #007700">, </span><span style="color: #DD0000">"Powerfull Rifle."</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">MenuStore_Show</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">Weapon_Shop</span><span style="color: #007700">, </span><span style="color: #DD0000">"Shop Weapons"</span><span style="color: #007700">);
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/></span><span style="color: #0000BB">Store</span><span style="color: #007700">:</span><span style="color: #0000BB">Weapon_Shop</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">response</span><span style="color: #007700">, </span><span style="color: #0000BB">itemid</span><span style="color: #007700">, </span><span style="color: #0000BB">modelid</span><span style="color: #007700">, </span><span style="color: #0000BB">price</span><span style="color: #007700">, </span><span style="color: #0000BB">amount</span><span style="color: #007700">, </span><span style="color: #0000BB">itemname</span><span style="color: #007700">[])
+<br/>{
+<br/>    if(!</span><span style="color: #0000BB">response</span><span style="color: #007700">)
+<br/>        return </span><span style="color: #0000BB">true</span><span style="color: #007700">;
+
+<br/>    if(</span><span style="color: #0000BB">GetPlayerMoney</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">) &lt; </span><span style="color: #0000BB">price</span><span style="color: #007700">)
+<br/>        return </span><span style="color: #0000BB">SendClientMessage</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, -</span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #DD0000">"You don't have enough money."</span><span style="color: #007700">);
+
+<br/>    if(</span><span style="color: #0000BB">amount </span><span style="color: #007700">== </span><span style="color: #0000BB">1</span><span style="color: #007700">) {
+<br/>        </span><span style="color: #0000BB">GivePlayerWeapon</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">GetWeaponIDFromModel</span><span style="color: #007700">(</span><span style="color: #0000BB">modelid</span><span style="color: #007700">), </span><span style="color: #0000BB">200</span><span style="color: #007700">);
+<br/>    }
+<br/>    else {
+<br/>        </span><span style="color: #0000BB">GivePlayerWeapon</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">GetWeaponIDFromModel</span><span style="color: #007700">(</span><span style="color: #0000BB">modelid</span><span style="color: #007700">), </span><span style="color: #0000BB">amount</span><span style="color: #007700">);
+<br/>    }
+<br/>    
+<br/>    new </span><span style="color: #0000BB">string</span><span style="color: #007700">[</span><span style="color: #0000BB">128</span><span style="color: #007700">];
+<br/>    </span><span style="color: #0000BB">format</span><span style="color: #007700">(</span><span style="color: #0000BB">string</span><span style="color: #007700">, </span><span style="color: #0000BB">128</span><span style="color: #007700">, </span><span style="color: #DD0000">"You bought %dx %s"</span><span style="color: #007700">, </span><span style="color: #0000BB">amount</span><span style="color: #007700">, </span><span style="color: #0000BB">itemname</span><span style="color: #007700">);
+<br/>    </span><span style="color: #0000BB">SendClientMessage</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, -</span><span style="color: #0000BB">1</span><span style="color: #007700">, </span><span style="color: #0000BB">string</span><span style="color: #007700">);
+<br/>    
+<br/>    </span><span style="color: #0000BB">GivePlayerMoney</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, -</span><span style="color: #0000BB">price</span><span style="color: #007700">);
+<br/>    return </span><span style="color: #0000BB">true</span><span style="color: #007700">;
+<br/>}
+
+<br/></span><span style="color: #0000BB">stock GetWeaponIDFromModel</span><span style="color: #007700">(</span><span style="color: #0000BB">modelid</span><span style="color: #007700">)
+<br/>{
+<br/>    new </span><span style="color: #0000BB">idweapon</span><span style="color: #007700">;
+<br/>    switch(</span><span style="color: #0000BB">modelid</span><span style="color: #007700">)
+<br/>    {
+<br/>        case </span><span style="color: #0000BB">331</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">1</span><span style="color: #007700">; </span><span style="color: #FF8000">// Brass Knuckles
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">333</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">2</span><span style="color: #007700">; </span><span style="color: #FF8000">// Golf Club
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">334</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">3</span><span style="color: #007700">; </span><span style="color: #FF8000">// Nightstick
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">335</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">4</span><span style="color: #007700">; </span><span style="color: #FF8000">// Knife
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">336</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">5</span><span style="color: #007700">; </span><span style="color: #FF8000">// Baseball Bat
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">337</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">6</span><span style="color: #007700">; </span><span style="color: #FF8000">// Shovel
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">338</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">7</span><span style="color: #007700">; </span><span style="color: #FF8000">// Pool Cue
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">339</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">8</span><span style="color: #007700">; </span><span style="color: #FF8000">// Katana
+<br/>           </span><span style="color: #007700">case </span><span style="color: #0000BB">341</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">9</span><span style="color: #007700">; </span><span style="color: #FF8000">// Chainsaw
+<br/>           </span><span style="color: #007700">case </span><span style="color: #0000BB">321</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">10</span><span style="color: #007700">; </span><span style="color: #FF8000">// Double-ended Dildo
+<br/>           </span><span style="color: #007700">case </span><span style="color: #0000BB">325</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">14</span><span style="color: #007700">; </span><span style="color: #FF8000">// Flowers
+<br/>           </span><span style="color: #007700">case </span><span style="color: #0000BB">326</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">15</span><span style="color: #007700">; </span><span style="color: #FF8000">// Cane
+<br/>           </span><span style="color: #007700">case </span><span style="color: #0000BB">342</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">16</span><span style="color: #007700">; </span><span style="color: #FF8000">// Grenade
+<br/>           </span><span style="color: #007700">case </span><span style="color: #0000BB">343</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">17</span><span style="color: #007700">; </span><span style="color: #FF8000">// Tear Gas
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">344</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">18</span><span style="color: #007700">; </span><span style="color: #FF8000">// Molotov Cocktail
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">346</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">22</span><span style="color: #007700">; </span><span style="color: #FF8000">// 9mm
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">347</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">23</span><span style="color: #007700">; </span><span style="color: #FF8000">// Silenced 9mm
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">348</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">24</span><span style="color: #007700">; </span><span style="color: #FF8000">// Desert Eagle
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">349</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">25</span><span style="color: #007700">; </span><span style="color: #FF8000">// Shotgun
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">350</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">26</span><span style="color: #007700">; </span><span style="color: #FF8000">// Sawnoff
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">351</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">27</span><span style="color: #007700">; </span><span style="color: #FF8000">// Combat Shotgun
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">352</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">28</span><span style="color: #007700">; </span><span style="color: #FF8000">// Micro SMG/Uzi
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">353</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">29</span><span style="color: #007700">; </span><span style="color: #FF8000">// MP5
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">355</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">30</span><span style="color: #007700">; </span><span style="color: #FF8000">// AK-47
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">356</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">31</span><span style="color: #007700">; </span><span style="color: #FF8000">// M4
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">372</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">32</span><span style="color: #007700">; </span><span style="color: #FF8000">// Tec-9
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">357</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">33</span><span style="color: #007700">; </span><span style="color: #FF8000">// Country Rifle
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">358</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">34</span><span style="color: #007700">; </span><span style="color: #FF8000">// Sniper Rifle
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">359</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">35</span><span style="color: #007700">; </span><span style="color: #FF8000">// RPG
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">360</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">36</span><span style="color: #007700">; </span><span style="color: #FF8000">// HS Rocket
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">361</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">37</span><span style="color: #007700">; </span><span style="color: #FF8000">// Flamethrower
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">362</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">38</span><span style="color: #007700">; </span><span style="color: #FF8000">// Minigun
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">363</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">39</span><span style="color: #007700">;</span><span style="color: #FF8000">// Satchel Charge + Detonator
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">365</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">41</span><span style="color: #007700">; </span><span style="color: #FF8000">// Spraycan
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">366</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">42</span><span style="color: #007700">; </span><span style="color: #FF8000">// Fire Extinguisher
+<br/>        </span><span style="color: #007700">case </span><span style="color: #0000BB">367</span><span style="color: #007700">: </span><span style="color: #0000BB">idweapon </span><span style="color: #007700">= </span><span style="color: #0000BB">43</span><span style="color: #007700">; </span><span style="color: #FF8000">// Camera
+<br/>    </span><span style="color: #007700">}
+<br/>    return </span><span style="color: #0000BB">idweapon</span><span style="color: #007700">;
+<br/>} 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><font size="3">• <b>Download</b></font><br />
+<br />
+<a href="https://github.com/Coystark/MenuStore/blob/master/MenuStore.inc" target="_blank">Github</a><br />
+<br />
+<font size="1">Sorry for my English, it's not my native language.</font>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3956260">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-178553.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3956263"></a>
+<div class="post classic " style="" id="post_3956263">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0282/uid-282620.html"><img src="../../assets/uploads/avatars/282620.png" alt="" width="41" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0282/uid-282620.html">Eoussama</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,076<br />
+	Threads: 70<br />
+	Joined: Jul 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3956263" title="Re: MenuStore (Build dynamic stores with TextDraws)">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by Eoussama" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">16.11.2017, 15:44 <span class="post_edit" id="edited_by_3956263"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3956263">
+		+Rep for the neat design!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3956263">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-282620.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3956264"></a>
+<div class="post classic " style="" id="post_3956264">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0169/uid-169807.html"><img src="../../assets/uploads/avatars/169807.png" alt="" width="55" height="53" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0169/uid-169807.html">Pottus</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 4,885<br />
+	Threads: 57<br />
+	Joined: Jun 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3956264" title="Re: MenuStore (Build dynamic stores with TextDraws)">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Pottus" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">16.11.2017, 15:50 <span class="post_edit" id="edited_by_3956264"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3956264">
+		You should always use global textdraws where possible there is a lot of player textdraws wasted here plus extra overhead to create them needlessly.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3956264">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-169807.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3956270"></a>
+<div class="post classic " style="" id="post_3956270">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0178/uid-178553.html"><img src="../../assets/uploads/avatars/178553.png" alt="" width="55" height="49" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0178/uid-178553.html">CaioTJF</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 545<br />
+	Threads: 15<br />
+	Joined: Sep 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3956270" title="Re: MenuStore (Build dynamic stores with TextDraws)">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by CaioTJF" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">16.11.2017, 16:04 <span class="post_edit" id="edited_by_3956270"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3956270">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Pottus</strong><br />
+<a href="../../threads/0644/tid-644913.html#pid3956264" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">You should always use global textdraws where possible there is a lot of player textdraws wasted here plus extra overhead to create them needlessly.</div>
+</td>
+</tr>
+</table>
+</div>The include uses 53 Player Textdraws, and they are destroyed when MenuStore_Close () is called.<br />
+<br />
+That is, with the menu open there are still 203 spaces of textdraws.<br />
+<br />
+This will only give you trouble if you create 203 textdraws at the same time WITH the menu open. But maybe I do an update by changing that.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3956270">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-178553.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3956274"></a>
+<div class="post classic " style="" id="post_3956274">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0254/uid-254696.html"><img src="../../assets/uploads/avatars/254696.png" alt="" width="33" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0254/uid-254696.html">ExTaZZ69</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 128<br />
+	Threads: 6<br />
+	Joined: Mar 2015
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3956274" title="Re: MenuStore (Build dynamic stores with TextDraws)">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by ExTaZZ69" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">16.11.2017, 16:11 <span class="post_edit" id="edited_by_3956274"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3956274">
+		Just convert the static ones to global (that black and gray backgrounds, arrows, etc).
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3956274">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-254696.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3956280"></a>
+<div class="post classic " style="" id="post_3956280">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0178/uid-178553.html"><img src="../../assets/uploads/avatars/178553.png" alt="" width="55" height="49" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0178/uid-178553.html">CaioTJF</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 545<br />
+	Threads: 15<br />
+	Joined: Sep 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3956280" title="Re: MenuStore (Build dynamic stores with TextDraws)">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by CaioTJF" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">16.11.2017, 16:26 <span class="post_edit" id="edited_by_3956280"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3956280">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>ExTaZZ69</strong><br />
+<a href="../../threads/0644/tid-644913.html#pid3956274" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Just convert the static ones to global (that black and gray backgrounds, arrows, etc).</div>
+</td>
+</tr>
+</table>
+</div>Next update I'll do it <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3956280">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-178553.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3956305"></a>
+<div class="post classic " style="" id="post_3956305">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0245/uid-245435.html"><img src="../../assets/uploads/avatars/245435.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0245/uid-245435.html">HydraHumza</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 626<br />
+	Threads: 46<br />
+	Joined: Oct 2014
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3956305" title="Re: MenuStore (Build dynamic stores with TextDraws)">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by HydraHumza" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">16.11.2017, 17:29 <span class="post_edit" id="edited_by_3956305"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3956305">
+		Looks promising. Keep up the good work. REP+
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3956305">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-245435.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3956760"></a>
+<div class="post classic " style="" id="post_3956760">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0178/uid-178553.html"><img src="../../assets/uploads/avatars/178553.png" alt="" width="55" height="49" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0178/uid-178553.html">CaioTJF</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 545<br />
+	Threads: 15<br />
+	Joined: Sep 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3956760" title="Re: MenuStore (Build dynamic stores with TextDraws)">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by CaioTJF" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.11.2017, 17:18 <span class="post_edit" id="edited_by_3956760"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3956760">
+		Version 3.0<br />
+<br />
+- Some PlayerTDs have been transformed into GlobalTDs<br />
+- Fixed bugs
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3956760">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-178553.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3956783"></a>
+<div class="post classic " style="" id="post_3956783">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0184/uid-184410.html"><img src="../../assets/uploads/avatars/184410.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0184/uid-184410.html">PT</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Godfather<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 7,185<br />
+	Threads: 5<br />
+	Joined: Nov 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3956783" title="Re: MenuStore (Build dynamic stores with TextDraws)">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by PT" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.11.2017, 18:18 <span class="post_edit" id="edited_by_3956783"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3956783">
+		I think Pottus will be happy now.<br />
+<br />
+Nice work by the way
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3956783">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-184410.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3956914"></a>
+<div class="post classic " style="" id="post_3956914">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0302/uid-302228.html"><img src="../../assets/uploads/avatars/302228.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0302/uid-302228.html"><s>Xeon™</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 457<br />
+	Threads: 7<br />
+	Joined: Jul 2017
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3956914" title="Re: MenuStore (Build dynamic stores with TextDraws)">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by Xeon™" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.11.2017, 21:57 <span class="post_edit" id="edited_by_3956914"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3956914">
+		Some people doesn't know even what is dynamic (Dynamic mysql connection, dynamic stores, dynamic npc creator) <br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/picard2.png" title="Picard"/><br />
+<br />
+Anyways, the text draws are nice, good job
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3956914">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-302228.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3956917"></a>
+<div class="post classic " style="" id="post_3956917">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0156/uid-156433.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0156/uid-156433.html">nG Inverse</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 58<br />
+	Threads: 7<br />
+	Joined: Feb 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3956917" title="Re: MenuStore (Build dynamic stores with TextDraws)">#11</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 11 by nG Inverse" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">17.11.2017, 22:06 <span class="post_edit" id="edited_by_3956917"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3956917">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Xeon™</strong><br />
+<a href="../../threads/0644/tid-644913.html#pid3956914" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Some people doesn't know even what is dynamic (Dynamic mysql connection, dynamic stores, dynamic npc creator) <br />
+<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/picard2.png" title="Picard"/><br />
+<br />
+Anyways, the text draws are nice, good job</div>
+</td>
+</tr>
+</table>
+</div>This is dynamic. So not sure what you're talking about...<br />
+<br />
+On topic; Great job! I love the design. I will put this to use.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3956917">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-156433.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3957267"></a>
+<div class="post classic " style="" id="post_3957267">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0169/uid-169807.html"><img src="../../assets/uploads/avatars/169807.png" alt="" width="55" height="53" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0169/uid-169807.html">Pottus</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 4,885<br />
+	Threads: 57<br />
+	Joined: Jun 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3957267" title="Re: MenuStore (Build dynamic stores with TextDraws)">#12</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 12 by Pottus" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.11.2017, 16:53 <span class="post_edit" id="edited_by_3957267"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3957267">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>PT</strong><br />
+<a href="../../threads/0644/tid-644913.html#pid3956783" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">I think Pottus will be happy now.<br />
+<br />
+Nice work by the way</div>
+</td>
+</tr>
+</table>
+</div>It is good practice now his next release he knows what to do <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/><br />
+<br />
+4-stars from me it's good.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3957267">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-169807.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3957269"></a>
+<div class="post classic " style="" id="post_3957269">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0287/uid-287146.html"><img src="../../assets/uploads/avatars/287146.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0287/uid-287146.html">cuber</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 849<br />
+	Threads: 4<br />
+	Joined: Oct 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3957269" title="Re: MenuStore (Build dynamic stores with TextDraws)">#13</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 13 by cuber" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.11.2017, 16:58 <span class="post_edit" id="edited_by_3957269"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3957269">
+		Good job!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3957269">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-287146.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3957730"></a>
+<div class="post classic " style="" id="post_3957730">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0302/uid-302228.html"><img src="../../assets/uploads/avatars/302228.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0302/uid-302228.html"><s>Xeon™</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 457<br />
+	Threads: 7<br />
+	Joined: Jul 2017
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3957730" title="Re: MenuStore (Build dynamic stores with TextDraws)">#14</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 14 by Xeon™" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">19.11.2017, 15:59 <span class="post_edit" id="edited_by_3957730"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3957730">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>nG Inverse</strong><br />
+<a href="../../threads/0644/tid-644913.html#pid3956917" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">This is dynamic. So not sure what you're talking about...<br />
+<br />
+On topic; Great job! I love the design. I will put this to use.</div>
+</td>
+</tr>
+</table>
+</div>what the dynamic thing on it? what is dynamic?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3957730">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-302228.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3957832"></a>
+<div class="post classic " style="" id="post_3957832">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0162/uid-162421.html"><img src="../../assets/uploads/avatars/162421.png" alt="" width="52" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0162/uid-162421.html">DanDRT</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,347<br />
+	Threads: 44<br />
+	Joined: Apr 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3957832" title="Re: MenuStore (Build dynamic stores with TextDraws)">#15</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 15 by DanDRT" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">19.11.2017, 19:58 <span class="post_edit" id="edited_by_3957832"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3957832">
+		@Xeon - Dude, the definition of dynamic isn't so closed as you think, open your mind and don't be a idiot with the people.<br />
+<br />
+Good job, Caio! +REP
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3957832">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-162421.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3958255"></a>
+<div class="post classic " style="" id="post_3958255">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0228/uid-228440.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0228/uid-228440.html">xiaoniao</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 43<br />
+	Threads: 11<br />
+	Joined: Mar 2014
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3958255" title="Re: MenuStore (Build dynamic stores with TextDraws)">#16</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 16 by xiaoniao" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.11.2017, 01:54 <span class="post_edit" id="edited_by_3958255"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3958255">
+		Very nice design, keep update
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3958255">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-228440.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3958431"></a>
+<div class="post classic " style="" id="post_3958431">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0178/uid-178553.html"><img src="../../assets/uploads/avatars/178553.png" alt="" width="55" height="49" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0178/uid-178553.html">CaioTJF</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 545<br />
+	Threads: 15<br />
+	Joined: Sep 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3958431" title="Re: MenuStore (Build dynamic stores with TextDraws)">#17</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 17 by CaioTJF" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.11.2017, 17:42 <span class="post_edit" id="edited_by_3958431"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3958431">
+		Update 4.0<br />
+<br />
+- Now using strpack in strings<br />
+- Now you can increase the size of the description BOX<br />
+- Now you can choose whether to automatically break line in the description or not<br />
+<br />
+Exemple<br />
+<br />
+<img alt="" border="0" src="https://i.imgur.com/9xY94OG.jpg"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3958431">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-178553.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3961814"></a>
+<div class="post classic " style="" id="post_3961814">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0191/uid-191462.html"><img src="../../assets/uploads/avatars/191462.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0191/uid-191462.html">Sellize</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 708<br />
+	Threads: 140<br />
+	Joined: Jan 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3961814" title="Re: MenuStore (Build dynamic stores with TextDraws)">#18</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 18 by Sellize" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">01.12.2017, 10:10 <span class="post_edit" id="edited_by_3961814"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3961814">
+		I really, really appreciate this. This is so awesome and it looks great.<br />
+<br />
+Thank you!<br />
+<br />
+edit: server seems to crash after OnPlayerSpawn, any idea why this happens?<br />
+<br />
+edit2: crashdetect log:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 98px;
+		text-align: left;
+		overflow: auto">[12:30:53] [debug] Server crashed while executing script.amx
+[12:30:53] [debug] AMX backtrace:
+[12:30:53] [debug] #0 native CallLocalFunction () [004743b0] from samp-server.exe
+[12:30:53] [debug] #1 00008bec in ?? (0x00000000, 0x00001b5b, 0x00000001, 0xffffffff, 0x04d02218, 0x00000001, 0x00000000, 0x00000000, 0x00000014, 0x00000000, ... &lt;1073741813 arguments&gt;) from script.amx
+[12:30:53] [debug] #2 00020f58 in public OnDialogResponse (0x00000000, 0x00001b5b, 0x00000001, 0xffffffff, 0x04d02218) from script.amx</pre>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3961814">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-191462.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3961829"></a>
+<div class="post classic " style="" id="post_3961829">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0097/uid-97562.html"><img src="../../assets/uploads/avatars/97562.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0097/uid-97562.html">Gforcez</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 777<br />
+	Threads: 25<br />
+	Joined: Jul 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3961829" title="Re: MenuStore (Build dynamic stores with TextDraws)">#19</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 19 by Gforcez" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">01.12.2017, 11:08 <span class="post_edit" id="edited_by_3961829"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3961829">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>DanDRT</strong><br />
+<a href="../../threads/0644/tid-644913.html#pid3957832" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">@Xeon - Dude, the definition of dynamic isn't so closed as you think, open your mind and don't be a idiot with the people.<br />
+<br />
+Good job, Caio! +REP</div>
+</td>
+</tr>
+</table>
+</div>Xeon means, you have to recompile and restart the script to change the stores. His definition of dynamic is that you don't have to recompile or restart the server for the stores (in this context) to change, storing the values in a database for example and reading those values whenever you show the shop textdraws.<br />
+<br />
+OT: This looks pretty nice. Good job! This can be very useful and a nice replacement for 'dialog stores'.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3961829">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-97562.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3961877"></a>
+<div class="post classic " style="" id="post_3961877">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0178/uid-178553.html"><img src="../../assets/uploads/avatars/178553.png" alt="" width="55" height="49" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0178/uid-178553.html">CaioTJF</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 545<br />
+	Threads: 15<br />
+	Joined: Sep 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0644/tid-644913.html#pid3961877" title="Re: MenuStore (Build dynamic stores with TextDraws)">#20</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 20 by CaioTJF" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">01.12.2017, 15:05 <span class="post_edit" id="edited_by_3961877"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3961877">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Sellize</strong><br />
+<a href="../../threads/0644/tid-644913.html#pid3961814" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">I really, really appreciate this. This is so awesome and it looks great.<br />
+<br />
+Thank you!<br />
+<br />
+edit: server seems to crash after OnPlayerSpawn, any idea why this happens?<br />
+<br />
+edit2: crashdetect log:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 98px;
+		text-align: left;
+		overflow: auto">[12:30:53] [debug] Server crashed while executing script.amx
+[12:30:53] [debug] AMX backtrace:
+[12:30:53] [debug] #0 native CallLocalFunction () [004743b0] from samp-server.exe
+[12:30:53] [debug] #1 00008bec in ?? (0x00000000, 0x00001b5b, 0x00000001, 0xffffffff, 0x04d02218, 0x00000001, 0x00000000, 0x00000000, 0x00000014, 0x00000000, ... &lt;1073741813 arguments&gt;) from script.amx
+[12:30:53] [debug] #2 00020f58 in public OnDialogResponse (0x00000000, 0x00001b5b, 0x00000001, 0xffffffff, 0x04d02218) from script.amx</pre>
+</div></div>
+</td>
+</tr>
+</table>
+</div>Thanks for reporting it, fixed.<br />
+<br />
+Version 4.1 (thanks Jelly)<br />
+<br />
+- Fixed crash on OnDialogResponse (CallLocalFunction removed from callbacks)<br />
+- Little adjustments
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3961877">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-178553.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0644/tid-644913.html">Next Oldest</a> | <a href="../../threads/0644/tid-644913.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="644913" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (3):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0644/tid-644913-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_page -->
+<a href="../../threads/0644/tid-644913-page-3.html" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0644/tid-644913-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" selected="selected">---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/83.html">Includes</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

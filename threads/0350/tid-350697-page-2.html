@@ -1,0 +1,1983 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[FilterScript] Universal Object Editor (attach roads, generate loops)</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "875a5b9d5b9214f95b67d49f50f37c9e";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Really easy to use Here's a little map that I created in less than two days with this editor. http://www.youtube.com/watch?v=k0aWLtH8wTc" />
+<link rel="canonical" href="../../threads/0350/tid-350697-page-2.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="875a5b9d5b9214f95b67d49f50f37c9e" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (3):</span>
+<!-- start: multipage_prevpage -->
+<a href="../../threads/0350/tid-350697.html" class="pagination_previous">&laquo; Previous</a>
+<!-- end: multipage_prevpage --><!-- start: multipage_page -->
+<a href="../../threads/0350/tid-350697.html" class="pagination_page">1</a>
+<!-- end: multipage_page --><!-- start: multipage_page_current -->
+ <span class="pagination_current">2</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0350/tid-350697-page-3.html" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0350/tid-350697-page-3.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0350/tid-350697-page-2.html#pid1954324">Threaded Mode</a></span>
+				</div>
+				
+					[FilterScript] Universal Object Editor (attach roads, generate loops)
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid1954324"></a>
+<div class="post classic " style="" id="post_1954324">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0169/uid-169022.html"><img src="../../assets/uploads/avatars/169022.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0169/uid-169022.html">Youarex</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 165<br />
+	Threads: 14<br />
+	Joined: Jun 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid1954324" title="Re: Universal Object Editor (attach roads, generate loops)">#21</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 21 by Youarex" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.06.2012, 14:46 <span class="post_edit" id="edited_by_1954324"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Youarex; 29.06.2012 at 15:49.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1954324">
+		Really easy to use <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/> Here's a little map that I created in less than two days with this editor.<br />
+<br />
+[ame]http://www.youtube.com/watch?v=k0aWLtH8wTc[/ame]
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1954324">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-169022.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1954345"></a>
+<div class="post classic " style="" id="post_1954345">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0158/uid-158660.html"><img src="../../assets/uploads/avatars/158660.png" alt="" width="55" height="49" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0158/uid-158660.html">Lordzy</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,698<br />
+	Threads: 37<br />
+	Joined: Mar 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid1954345" title="Re: Universal Object Editor (attach roads, generate loops)">#22</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 22 by Lordzy" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.06.2012, 14:56 <span class="post_edit" id="edited_by_1954345"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1954345">
+		Perfect +rep.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1954345">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-158660.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1954367"></a>
+<div class="post classic " style="" id="post_1954367">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0155/uid-155789.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0155/uid-155789.html">ThaSourceGaming</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 30<br />
+	Threads: 1<br />
+	Joined: Feb 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid1954367" title="Re: Universal Object Editor (attach roads, generate loops)">#23</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 23 by ThaSourceGaming" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.06.2012, 15:09 <span class="post_edit" id="edited_by_1954367"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1954367">
+		Very good for events and such <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1954367">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-155789.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1954369"></a>
+<div class="post classic " style="" id="post_1954369">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0149/uid-149216.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0149/uid-149216.html">HighPitchedVoice</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 257<br />
+	Threads: 43<br />
+	Joined: Dec 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid1954369" title="Re: Universal Object Editor (attach roads, generate loops)">#24</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 24 by HighPitchedVoice" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.06.2012, 15:10 <span class="post_edit" id="edited_by_1954369"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1954369">
+		Really great!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1954369">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-149216.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2097664"></a>
+<div class="post classic " style="" id="post_2097664">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0129/uid-129569.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0129/uid-129569.html">Luke_James</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 399<br />
+	Threads: 77<br />
+	Joined: Jun 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2097664" title="Re: Universal Object Editor (attach roads, generate loops)">#25</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 25 by Luke_James" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">03.09.2012, 11:06 <span class="post_edit" id="edited_by_2097664"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2097664">
+		Can this be used live on a server, so you can add/edit/remove objects in real-time? and do they save upon server restart?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2097664">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-129569.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2098136"></a>
+<div class="post classic " style="" id="post_2098136">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0114/uid-114165.html"><img src="../../assets/uploads/avatars/114165.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0114/uid-114165.html">Stylock</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 315<br />
+	Threads: 6<br />
+	Joined: Dec 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2098136" title="Re: Universal Object Editor (attach roads, generate loops)">#26</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 26 by Stylock" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">03.09.2012, 15:40 <span class="post_edit" id="edited_by_2098136"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2098136">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Luke_James</strong><br />
+<a href="../../threads/0350/tid-350697-page-2.html#pid2097664" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Can this be used live on a server, so you can add/edit/remove objects in real-time? and do they save upon server restart?</div>
+</td>
+</tr>
+</table>
+</div>Yeah, you can use it on a live server, but that's not really what it's designed for. Objects don't save on server restart and they are destroyed after their creator leaves the server.<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>[HLF]Southclaw</strong><br />
+<a href="../../unavailable.html" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">I really wish I could use this, but the object clicking feature just doesn't work on my PC D:<br />
+<br />
+Has anyone else come across this problem?</div>
+</td>
+</tr>
+</table>
+</div>I've come across this bug, but I didn't really look for a solution because the same script worked perfectly fine on my bro's PC. Alternatively, I could use /esel command anyway, so I just let it be. Now that you also have this stupid bug, there must be a common cause! Maybe numpadless keyboard? Anyway, right now I can't look for a bugfix because I don't have GTASA installed, but if you find the solution, let me know.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2098136">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-114165.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2099351"></a>
+<div class="post classic " style="" id="post_2099351">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0177/uid-177997.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0177/uid-177997.html">Jack Kreuz</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 15<br />
+	Threads: 0<br />
+	Joined: Aug 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2099351" title="Re: Universal Object Editor (attach roads, generate loops)">#27</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 27 by Jack Kreuz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">04.09.2012, 08:27 <span class="post_edit" id="edited_by_2099351"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2099351">
+		Very nice, and very useful for me<img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2099351">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-177997.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2101328"></a>
+<div class="post classic " style="" id="post_2101328">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0114/uid-114165.html"><img src="../../assets/uploads/avatars/114165.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0114/uid-114165.html">Stylock</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 315<br />
+	Threads: 6<br />
+	Joined: Dec 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2101328" title="Re: Universal Object Editor (attach roads, generate loops)">#28</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 28 by Stylock" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">05.09.2012, 14:37 <span class="post_edit" id="edited_by_2101328"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2101328">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Patrik356b</strong><br />
+<a href="../../unavailable.html" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">I'd like to see an import function that can take Create(Dynamic)Object lines and turn it into project files.</div>
+</td>
+</tr>
+</table>
+</div>That's a great suggestion! In fact, I think it would be an essential addition for the editor. I don't know why I didn't think of that before. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/confused.png" title="Confused"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2101328">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-114165.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2135009"></a>
+<div class="post classic " style="" id="post_2135009">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0129/uid-129519.html"><img src="../../assets/uploads/avatars/129519.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0129/uid-129519.html">[TC]XxJuggaloxX</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 148<br />
+	Threads: 31<br />
+	Joined: Jun 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2135009" title="Re: Universal Object Editor (attach roads, generate loops)">#29</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 29 by [TC]XxJuggaloxX" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.09.2012, 21:51 <span class="post_edit" id="edited_by_2135009"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2135009">
+		It just kicks me out of world boundaries every time I attempt to use Fly Mode.<br />
+<br />
+6/10
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2135009">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-129519.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2135418"></a>
+<div class="post classic " style="" id="post_2135418">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0179/uid-179421.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0179/uid-179421.html">Fernado</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 39<br />
+	Threads: 11<br />
+	Joined: Sep 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2135418" title="Re: Universal Object Editor (attach roads, generate loops)">#30</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 30 by Fernado" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">24.09.2012, 06:01 <span class="post_edit" id="edited_by_2135418"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2135418">
+		Cool work +Rep
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2135418">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-179421.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2135472"></a>
+<div class="post classic " style="" id="post_2135472">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0180/uid-180279.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0180/uid-180279.html">Q_Lite</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 112<br />
+	Threads: 6<br />
+	Joined: Sep 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2135472" title="Re: Universal Object Editor (attach roads, generate loops)">#31</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 31 by Q_Lite" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">24.09.2012, 07:05 <span class="post_edit" id="edited_by_2135472"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2135472">
+		great work
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2135472">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-180279.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2378740"></a>
+<div class="post classic " style="" id="post_2378740">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0125/uid-125576.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0125/uid-125576.html">richardcor91</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 80<br />
+	Threads: 7<br />
+	Joined: Apr 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2378740" title="Re: Universal Object Editor (attach roads, generate loops)">#32</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 32 by richardcor91" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">11.02.2013, 20:22 <span class="post_edit" id="edited_by_2378740"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2378740">
+		Regarding the road attachs feature, you are using some matrixes to calculate the right road position, like this:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 210px;
+		text-align: left;
+		overflow: auto">			
+//18791
+{0x4265C7AE, 0x41766E98,-0x40F05532, 0x00000000, 0x00000000, 0x41B40000},
+{0x42D88625, 0x4211CDD3, 0x00000000, 0x00000000, 0x00000000, 0x41B40000},
+{0x42900A3D, 0x41EEA5E3, 0x00000000, 0x00000000, 0x00000000, 0x42340000},
+{0x4297DC29, 0x41B878D5, 0x00000000,-0x3E900000, 0x00000000, 0x41B40000},
+{0x4297DC29, 0x41B878D5, 0x00000000, 0x41700000, 0x00000000, 0x41B40000},
+{0x4265C7AE, 0x41766E98,-0x40F05532, 0x00000000, 0x00000000, 0x41B40000},
+{0x4265C28F, 0x41766666,-0x40F05532, 0x00000000, 0x00000000, 0x41B40000},
+{0x4265999A, 0x417620C5,-0x4010D845, 0x00000000, 0x40F00000, 0x41B40000},
+{0x4233AE14,-0x417D70A4, 0x41B8F1AA, 0x00000000, 0x00000000, 0x41F00000},
+{0x42D88625, 0x4211CDD3, 0x00000000, 0x00000000, 0x00000000, 0x41B40000}</pre>
+</div>I don't understand exactly what you are doing, but I would like to know if you could give me a similar matrix to use the object 18791 as a right turn, just like in this picture (red):<br />
+<br />
+<img alt="" border="0" src="http://s12.postimage.org/wtey1a2zx/image.jpg"/><br />
+<br />
+Thanks!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2378740">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-125576.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2379526"></a>
+<div class="post classic " style="" id="post_2379526">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0114/uid-114165.html"><img src="../../assets/uploads/avatars/114165.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0114/uid-114165.html">Stylock</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 315<br />
+	Threads: 6<br />
+	Joined: Dec 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2379526" title="Re: Universal Object Editor (attach roads, generate loops)">#33</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 33 by Stylock" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">12.02.2013, 11:32 <span class="post_edit" id="edited_by_2379526"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2379526">
+		Hi, those are just offset values converted to hex.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:215px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">//18791</span><br/><span style="color: #228822;">//offset_x   offset_y    offset_z    rot_x       rot_y       rot_z</span><br/><span style="color: #000000;">{</span>0x4265C7AE, 0x41766E98,<span style="color: #000000;">-</span>0x40F05532, 0x00000000, 0x00000000, 0x41B40000<span style="color: #000000;">}</span>, <span style="color: #228822;">//offsets for 18788</span><br/><span style="color: #000000;">{</span>0x42D88625, 0x4211CDD3, 0x00000000, 0x00000000, 0x00000000, 0x41B40000<span style="color: #000000;">}</span>, <span style="color: #228822;">//offsets for 18789</span><br/><span style="color: #000000;">{</span>0x42900A3D, 0x41EEA5E3, 0x00000000, 0x00000000, 0x00000000, 0x42340000<span style="color: #000000;">}</span>, <span style="color: #228822;">//offsets for 18791</span><br/><span style="color: #000000;">{</span>0x4297DC29, 0x41B878D5, 0x00000000,<span style="color: #000000;">-</span>0x3E900000, 0x00000000, 0x41B40000<span style="color: #000000;">}</span>, <span style="color: #228822;">//offsets for 18792</span><br/><span style="color: #000000;">{</span>0x4297DC29, 0x41B878D5, 0x00000000, 0x41700000, 0x00000000, 0x41B40000<span style="color: #000000;">}</span>, <span style="color: #228822;">//offsets for 18793</span><br/><span style="color: #000000;">{</span>0x4265C7AE, 0x41766E98,<span style="color: #000000;">-</span>0x40F05532, 0x00000000, 0x00000000, 0x41B40000<span style="color: #000000;">}</span>, <span style="color: #228822;">//offsets for 18794</span><br/><span style="color: #000000;">{</span>0x4265C28F, 0x41766666,<span style="color: #000000;">-</span>0x40F05532, 0x00000000, 0x00000000, 0x41B40000<span style="color: #000000;">}</span>, <span style="color: #228822;">//offsets for 18795</span><br/><span style="color: #000000;">{</span>0x4265999A, 0x417620C5,<span style="color: #000000;">-</span>0x4010D845, 0x00000000, 0x40F00000, 0x41B40000<span style="color: #000000;">}</span>, <span style="color: #228822;">//offsets for 18796</span><br/><span style="color: #000000;">{</span>0x4233AE14,<span style="color: #000000;">-</span>0x417D70A4, 0x41B8F1AA, 0x00000000, 0x00000000, 0x41F00000<span style="color: #000000;">}</span>, <span style="color: #228822;">//offsets for 18801</span><br/><span style="color: #000000;">{</span>0x42D88625, 0x4211CDD3, 0x00000000, 0x00000000, 0x00000000, 0x41B40000<span style="color: #000000;">}</span>  <span style="color: #228822;">//offsets for 18803</span></div></div></pre>
+</div>
+If you want more readable values, run the "offset" array through the following code and see server_log.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:247px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">// convert to float</span><br/>    <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"static const"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"<span style="color: #000099; font-weight: bold;">\t</span>offset[][][] ="</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"{"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>offset<span style="color: #000000;">)</span>; <span style="color: #000000;">++</span>i<span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"<span style="color: #000099; font-weight: bold;">\t</span>{"</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> x <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; x <span style="color: #000000;">&lt;</span> <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>offset<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #000000;">+</span>x<span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"<span style="color: #000099; font-weight: bold;">\t</span><span style="color: #000099; font-weight: bold;">\t</span>{%5.06f, %5.06f, %5.06f, %5.06f, %5.06f, %5.06f},"</span>, offset<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>x<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span>, offset<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>x<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, offset<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>x<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">2</span><span style="color: #000000;">]</span>, offset<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>x<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">3</span><span style="color: #000000;">]</span>, offset<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>x<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">4</span><span style="color: #000000;">]</span>, offset<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>x<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">5</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"<span style="color: #000099; font-weight: bold;">\t</span>},"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"}"</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+Anyways, for exmaple, to make 18791 turn right when attached to 18788 (straight road), you would need to manipulate 18788's 18791 offset values a bit. Right now I can't tell how exactly they need to be manipulated. Basically, in most cases, changing certain position offsets to the opposite sign (positive to negative and vice versa) will do the trick, but it might not always work. I'm not sure about the Z rotation. You either need to change its sign or add 180 degrees to its current rotation. Example:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 82px;
+		text-align: left;
+		overflow: auto">//18788 (ROAD TO LEFT)
+{offset_x, offset_y, offset_z, rot_x, rot_y, rot_z}, //offsets for 18788
+{offset_x, offset_y, offset_z, rot_x, rot_y, rot_z}, //offsets for 18789
+{offset_x, offset_y, offset_z, rot_x, rot_y, rot_z}, //offsets for 18791</pre>
+</div><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 82px;
+		text-align: left;
+		overflow: auto">//18788 (ROAD TO RIGHT)
+{offset_x, offset_y, offset_z, rot_x, rot_y, rot_z}, //offsets for 18788
+{offset_x, offset_y, offset_z, rot_x, rot_y, rot_z}, //offsets for 18789
+{offset_x,<font color="Red">-offset_y</font>, offset_z, rot_x, rot_y, <font color="Red">rot_z + 180.0</font>}, //offsets for 18791</pre>
+</div>That's just a random guess. You may need to change other offsets aswell.<br />
+<br />
+Make sense? <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2379526">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-114165.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2379905"></a>
+<div class="post classic " style="" id="post_2379905">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0125/uid-125576.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0125/uid-125576.html">richardcor91</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 80<br />
+	Threads: 7<br />
+	Joined: Apr 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2379905" title="Re: Universal Object Editor (attach roads, generate loops)">#34</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 34 by richardcor91" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">12.02.2013, 16:07 <span class="post_edit" id="edited_by_2379905"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2379905">
+		Yes, it does! Thanks <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/><br />
+Actually, I think with some math it's possible to calculate those values via some "reversed" use of the EDIT_FloatGetPosAndRot function. I mean, if we manually positionate two objects, we can calculate the offsets given their current positions and rotations. But it does not seem easy at all :/
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2379905">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-125576.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2380007"></a>
+<div class="post classic " style="" id="post_2380007">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0114/uid-114165.html"><img src="../../assets/uploads/avatars/114165.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0114/uid-114165.html">Stylock</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 315<br />
+	Threads: 6<br />
+	Joined: Dec 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2380007" title="Re: Universal Object Editor (attach roads, generate loops)">#35</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 35 by Stylock" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">12.02.2013, 17:11 <span class="post_edit" id="edited_by_2380007"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2380007">
+		There's no need to reverse engineer anything. To get the offsets, you need to set object A's position and rotation to 0, and then place object B whereever you want it to be in relation to object A. Object B's position and rotation are the offsets (if that makes any sense).<br />
+<br />
+Anyways, I managed to get some offsets correct, but I didn't calculate all of them.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">static</span> <span style="color: #2222BB;">const</span><br/>        <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>offset<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">// 18788</span><br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">39.994998</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">94.995002</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">58.970001</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.752999</span>,     <span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">157.500000</span><span style="color: #000000;">}</span>, <span style="color: #228822;">// 18791</span><br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">59.994998</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.561200</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">59.994998</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.561200</span>,    <span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">39.994998</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">39.994998</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">39.930000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">1.307000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">22.320999</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">9.671600</span>,    <span style="color: #000000;">23.679500</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">94.995002</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span>,<br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">// 18789</span><br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">94.995002</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">149.994995</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">113.970001</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.752999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">157.500000</span><span style="color: #000000;">}</span>, <span style="color: #228822;">// 18791</span><br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">114.995002</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">114.995002</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">94.995002</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">94.995002</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">94.934997</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">1.868399</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">77.400001</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">9.689000</span>,    <span style="color: #000000;">23.118999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.099999</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">149.994995</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span>,<br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">// 18791</span><br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">-</span><span style="color: #000000;">57.444999</span>,    <span style="color: #000000;">15.402000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">157.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span> <span style="color: #000000;">-</span><span style="color: #000000;">108.262001</span>,    <span style="color: #000000;">36.451000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">157.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #228822;">// 18791 right from itself (-72.019996,    29.830999,     0.000000,     0.000000,     0.000000,   315.000000)</span><br/>            <span style="color: #228822;">// 18791 left from itself  (-77.953445,    15.504273,     0.000000,     0.000000,     0.000000,   180.000000)</span><br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">-</span><span style="color: #000000;">72.019996</span>,    <span style="color: #000000;">29.830999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">315.000000</span><span style="color: #000000;">}</span>, <span style="color: #228822;">// right from itself</span><br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">-</span><span style="color: #000000;">75.930000</span>,    <span style="color: #000000;">23.059000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">157.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">-</span><span style="color: #000000;">75.930000</span>,    <span style="color: #000000;">23.059000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">157.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">-</span><span style="color: #000000;">57.444999</span>,    <span style="color: #000000;">15.402000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">157.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">-</span><span style="color: #000000;">57.439998</span>,    <span style="color: #000000;">15.399999</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">157.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">-</span><span style="color: #000000;">57.400001</span>,    <span style="color: #000000;">15.383000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">1.868399</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span>,   <span style="color: #000000;">157.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">-</span><span style="color: #000000;">44.919998</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.254999</span>,    <span style="color: #000000;">23.118000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">165.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span> <span style="color: #000000;">-</span><span style="color: #000000;">108.262001</span>,    <span style="color: #000000;">36.451000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">157.500000</span><span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span>,<br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">// 18792</span><br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">59.994998</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">114.995002</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">78.970001</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.752999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">157.500000</span><span style="color: #000000;">}</span>, <span style="color: #228822;">// 18791</span><br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">79.995002</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">79.995002</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">59.994998</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">59.994998</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">59.935001</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">1.868399</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">42.439998</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">9.671999</span>,    <span style="color: #000000;">23.118999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">114.995002</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span>,<br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">// 18793</span><br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">59.994998</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">114.995002</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">78.970001</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.752999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">157.500000</span><span style="color: #000000;">}</span>, <span style="color: #228822;">// 18791</span><br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">79.995002</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">79.995002</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">59.994998</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">59.994998</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">59.935001</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">1.868399</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">42.439998</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">9.671999</span>,    <span style="color: #000000;">23.118999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">114.995002</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span>,<br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">// 18794 (18791 right turn not supported)</span><br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">39.194999</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">10.411000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">92.180000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">25.188999</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">57.388000</span>,     <span style="color: #000000;">7.739999</span>,    <span style="color: #000000;">15.862000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">5.677000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">13.899999</span>,    <span style="color: #000000;">21.785999</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">58.387001</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.029999</span>,    <span style="color: #000000;">16.050500</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">14.477000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.383999</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">3.979000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">58.387001</span>,     <span style="color: #000000;">0.029999</span>,    <span style="color: #000000;">16.051000</span>,    <span style="color: #000000;">14.477000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.383999</span>,     <span style="color: #000000;">3.979000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">39.194999</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">10.411000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">39.194999</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">10.411000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">39.479999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">9.133999</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.500000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">16.059999</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">9.673000</span>,    <span style="color: #000000;">28.732999</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">1.924999</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">7.099999</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">92.180000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">25.188999</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span>,<br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">// 18795 (18791 right turn not supported)</span><br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">38.861999</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">10.366499</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">91.992599</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">24.603000</span>,     <span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">59.204601</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.790400</span>,     <span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">58.181999</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.543499</span>,     <span style="color: #000000;">0.561200</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">58.181999</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.543499</span>,     <span style="color: #000000;">0.561200</span>,    <span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">38.861999</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">10.366499</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">38.865398</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">10.367500</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">38.807998</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">10.352199</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">1.307000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">19.407199</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.166999</span>,    <span style="color: #000000;">23.680000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.400000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">91.992599</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">24.603000</span>,     <span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span><span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span>,<br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">// 18796 (18791 right turn not supported)</span><br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">39.759998</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">3.915999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">94.370002</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">10.539999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">58.590999</span>,     <span style="color: #000000;">7.751999</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">6.248000</span>,     <span style="color: #000000;">3.098999</span>,     <span style="color: #000000;">7.500000</span>,    <span style="color: #000000;">22.291999</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">59.646999</span>,     <span style="color: #000000;">0.017000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">5.966000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">14.862999</span>,     <span style="color: #000000;">7.760000</span>,     <span style="color: #000000;">2.026999</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">59.646999</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.017000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">5.967000</span>,    <span style="color: #000000;">14.862999</span>,     <span style="color: #000000;">7.760000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">2.026999</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">39.759998</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">3.915999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">39.759998</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">3.915999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">39.540000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">5.205500</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">25.450000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">9.684000</span>,    <span style="color: #000000;">21.850000</span>,     <span style="color: #000000;">0.934000</span>,     <span style="color: #000000;">7.500000</span>,     <span style="color: #000000;">7.099999</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">94.370002</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">10.539999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span>,<br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">// 18801 (18791 right turn not supported)</span><br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">21.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">12.380000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">23.680000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.099999</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">75.500000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">19.167999</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">23.118000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.099999</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">40.813999</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.308000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">23.118000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">15.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">40.813999</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.128000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">23.118000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.010000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">40.813999</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.128999</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">23.117000</span>,    <span style="color: #000000;">14.989999</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">20.979999</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">12.517999</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">23.680000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">21.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">12.380000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">23.680000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.099999</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">20.920000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">12.510000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">24.985000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.009999</span>,     <span style="color: #000000;">7.500000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>    <span style="color: #000000;">2.390000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">19.812000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">75.500000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">19.167999</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">23.118000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">7.099999</span><span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span>,<br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">// 18803 (18791 right turn not supported)</span><br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">94.995002</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">149.994995</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">113.970001</span>,     <span style="color: #000000;">7.752999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">22.500000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">114.995002</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">114.995002</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">15.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">94.995002</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">94.995002</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">0.561200</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">94.934997</span>,     <span style="color: #000000;">0.000000</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">1.868399</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.500000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>   <span style="color: #000000;">77.400001</span>,    <span style="color: #000000;">-</span><span style="color: #000000;">9.689000</span>,    <span style="color: #000000;">23.118999</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">7.099999</span><span style="color: #000000;">}</span>,<br/>            <span style="color: #000000;">{</span>  <span style="color: #000000;">149.994995</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span>,     <span style="color: #000000;">0.000000</span><span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span>;</div></div></pre>
+</div>With those offsets road 18791 turns to the right. Though only roads 18788, 18789 18791, 18792 and 18793 are supported.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2380007">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-114165.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2380423"></a>
+<div class="post classic " style="" id="post_2380423">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0125/uid-125576.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0125/uid-125576.html">richardcor91</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 80<br />
+	Threads: 7<br />
+	Joined: Apr 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2380423" title="Re: Universal Object Editor (attach roads, generate loops)">#36</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 36 by richardcor91" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">12.02.2013, 21:16 <span class="post_edit" id="edited_by_2380423"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2380423">
+		You are right man, thanks a lot!<br />
+I will try it soon.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2380423">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-125576.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2380540"></a>
+<div class="post classic " style="" id="post_2380540">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0145/uid-145658.html"><img src="../../assets/uploads/avatars/145658.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0145/uid-145658.html">AnGeL_KRAMER</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 117<br />
+	Threads: 30<br />
+	Joined: Nov 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2380540" title="Re: Universal Object Editor (attach roads, generate loops)">#37</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 37 by AnGeL_KRAMER" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">12.02.2013, 23:38 <span class="post_edit" id="edited_by_2380540"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2380540">
+		NICEEEEE
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2380540">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-145658.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2380693"></a>
+<div class="post classic " style="" id="post_2380693">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0125/uid-125576.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0125/uid-125576.html">richardcor91</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 80<br />
+	Threads: 7<br />
+	Joined: Apr 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2380693" title="Re: Universal Object Editor (attach roads, generate loops)">#38</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 38 by richardcor91" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.02.2013, 02:39 <span class="post_edit" id="edited_by_2380693"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2380693">
+		Yes, I also tested it and basically is {offset_x,-offset_y, offset_z, rot_x, rot_y, 180.0 - rot_z} :P<br />
+Now it's time to create a bunch of matrixes with many objects <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.gif" title="Grin"/><br />
+Thanks!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2380693">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-125576.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2380817"></a>
+<div class="post classic " style="" id="post_2380817">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0060/uid-60174.html"><img src="../../assets/uploads/avatars/60174.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0060/uid-60174.html">QuaTTrO</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 525<br />
+	Threads: 11<br />
+	Joined: Aug 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2380817" title="Re: Universal Object Editor (attach roads, generate loops)">#39</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 39 by QuaTTrO" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.02.2013, 07:23 <span class="post_edit" id="edited_by_2380817"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2380817">
+		Awesome. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2380817">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-60174.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2381586"></a>
+<div class="post classic " style="" id="post_2381586">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0114/uid-114165.html"><img src="../../assets/uploads/avatars/114165.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0114/uid-114165.html">Stylock</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 315<br />
+	Threads: 6<br />
+	Joined: Dec 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0350/tid-350697-page-2.html#pid2381586" title="Re: Universal Object Editor (attach roads, generate loops)">#40</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 40 by Stylock" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">13.02.2013, 17:51 <span class="post_edit" id="edited_by_2381586"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2381586">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>richardcor91</strong><br />
+<a href="../../threads/0350/tid-350697-page-2.html#pid2380693" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Yes, I also tested it and basically is {offset_x,-offset_y, offset_z, rot_x, rot_y, 180.0 - rot_z} :P<br />
+Now it's time to create a bunch of matrixes with many objects <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.gif" title="Grin"/><br />
+Thanks!</div>
+</td>
+</tr>
+</table>
+</div>If you wish, you can get the offsets of tube objects (18808...). That's a bit time consuming, but it's just a suggestion. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/razz.gif" title="Tongue"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2381586">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-114165.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0350/tid-350697.html">Next Oldest</a> | <a href="../../threads/0350/tid-350697.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="350697" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (3):</span>
+<!-- start: multipage_prevpage -->
+<a href="../../threads/0350/tid-350697.html" class="pagination_previous">&laquo; Previous</a>
+<!-- end: multipage_prevpage --><!-- start: multipage_page -->
+<a href="../../threads/0350/tid-350697.html" class="pagination_page">1</a>
+<!-- end: multipage_page --><!-- start: multipage_page_current -->
+ <span class="pagination_current">2</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0350/tid-350697-page-3.html" class="pagination_page">3</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0350/tid-350697-page-3.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" selected="selected">-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

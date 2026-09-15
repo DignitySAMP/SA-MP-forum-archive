@@ -1,0 +1,712 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[FilterScript] Creating Teleports</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "626092aa4b9f90446162ce4847abb5d8";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Creating Teleports Description: It is simple and short script, with this you can simple creating teleports by means of one command. Bugs: If you don't returned 1 in callback OnPlayerCommandText you ha" />
+<link rel="canonical" href="../../threads/0422/tid-422919.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="626092aa4b9f90446162ce4847abb5d8" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0422/tid-422919.html#pid2429866">Threaded Mode</a></span>
+				</div>
+				
+					[FilterScript] Creating Teleports
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid2429866"></a>
+<div class="post classic " style="" id="post_2429866">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0197/uid-197084.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0197/uid-197084.html">Ranchend1998</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 4<br />
+	Threads: 1<br />
+	Joined: Mar 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422919.html#pid2429866" title="Creating Teleports">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by Ranchend1998" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">15.03.2013, 22:07 <span class="post_edit" id="edited_by_2429866"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2429866">
+		<font color="RoyalBlue"><div align="center"><font face="Impact"><font size="7">Creating Teleports</font></font></div></font><br />
+<br />
+<font color="DarkOrange"><div align="left"><font face="Book Antiqua"><font size="4">Description:</font></font></div></font><br />
+<b>It is simple and short script, with this you can simple creating teleports by means of one command.</b><br />
+<br />
+<font color="DarkOrange"><div align="left"><font face="Book Antiqua"><font size="4">Bugs:</font></font></div></font><br />
+<b>If you don't returned 1 in callback OnPlayerCommandText you have error in game.</b><br />
+<br />
+<font color="DarkOrange"><div align="left"><font face="Book Antiqua"><font size="4">Credits:</font></font></div></font><br />
+<b>Ranchend1998 - For created this script.</b><br />
+<br />
+<font color="DarkOrange"><div align="left"><font face="Book Antiqua"><font size="4">Using:</font></font></div></font><br />
+<b>First you must logged in as rcon administrator. Next type /Createteleport [Command]. The teleports is save in file Teleports.ini. Now copy lines from Teleports.ini and paste it to callback OnPlayerCommandText.</b><br />
+<br />
+<font color="RoyalBlue"><div align="center"><font face="Impact"><font size="7">Download</font></font></div></font><br />
+<br />
+<div align="center"><a href="http://www.solidfiles.com/d/d816f61cd5/" target="_blank"><font size="7">Solidfiles</font></a><br />
+<a href="http://pastebin.com/7nfwSdv8" target="_blank"><font size="7">Pastebin</font></a></div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2429866">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-197084.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2430287"></a>
+<div class="post classic " style="" id="post_2430287">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0197/uid-197084.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0197/uid-197084.html">Ranchend1998</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 4<br />
+	Threads: 1<br />
+	Joined: Mar 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422919.html#pid2430287" title="Re: Creating Teleports">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by Ranchend1998" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">16.03.2013, 07:31 <span class="post_edit" id="edited_by_2430287"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Ranchend1998; 16.03.2013 at 09:08.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2430287">
+		Maybe any examples?<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Dh"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">327.320495</span>,<span style="color: #000000;">1520.998168</span>,<span style="color: #000000;">75.356956</span>,<span style="color: #000000;">269.884490</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Dh1"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">2405.741210</span>,<span style="color: #000000;">-</span><span style="color: #000000;">597.035217</span>,<span style="color: #000000;">132.648437</span>,<span style="color: #000000;">124.921348</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Dh2"</span>,playerid,<span style="color: #000000;">1140.900512</span>,<span style="color: #000000;">-</span><span style="color: #000000;">2037.156738</span>,<span style="color: #000000;">69.007812</span>,<span style="color: #000000;">270.229034</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Dh3"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1131.218017</span>,<span style="color: #000000;">1757.883789</span>,<span style="color: #000000;">36.121795</span>,<span style="color: #000000;">203.641952</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Dh4"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1293.917724</span>,<span style="color: #000000;">2483.393554</span>,<span style="color: #000000;">87.118392</span>,<span style="color: #000000;">195.573883</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Dh5"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1767.002197</span>,<span style="color: #000000;">2706.623535</span>,<span style="color: #000000;">59.411277</span>,<span style="color: #000000;">215.679031</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Fh"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">837.789123</span>,<span style="color: #000000;">-</span><span style="color: #000000;">144.093368</span>,<span style="color: #000000;">63.201229</span>,<span style="color: #000000;">14.137146</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Fh1"</span>,playerid,<span style="color: #000000;">1143.936767</span>,<span style="color: #000000;">-</span><span style="color: #000000;">2106.581787</span>,<span style="color: #000000;">71.838699</span>,<span style="color: #000000;">201.984344</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Fh2"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">511.728973</span>,<span style="color: #000000;">-</span><span style="color: #000000;">99.498023</span>,<span style="color: #000000;">62.937313</span>,<span style="color: #000000;">356.884429</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Fh3"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">775.103210</span>,<span style="color: #000000;">-</span><span style="color: #000000;">1744.365844</span>,<span style="color: #000000;">95.359878</span>,<span style="color: #000000;">342.450897</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Fh4"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">880.449584</span>,<span style="color: #000000;">-</span><span style="color: #000000;">1110.174804</span>,<span style="color: #000000;">98.609375</span>,<span style="color: #000000;">347.686767</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/G"</span>,playerid,<span style="color: #000000;">2415.427246</span>,<span style="color: #000000;">2548.038818</span>,<span style="color: #000000;">21.875000</span>,<span style="color: #000000;">271.931976</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/G1"</span>,playerid,<span style="color: #000000;">2327.367187</span>,<span style="color: #000000;">1397.832519</span>,<span style="color: #000000;">42.820312</span>,<span style="color: #000000;">0.000000</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/G2"</span>,playerid,<span style="color: #000000;">2235.788818</span>,<span style="color: #000000;">1963.662597</span>,<span style="color: #000000;">31.779651</span>,<span style="color: #000000;">269.921844</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/G3"</span>,playerid,<span style="color: #000000;">2073.431640</span>,<span style="color: #000000;">2421.706298</span>,<span style="color: #000000;">49.523437</span>,<span style="color: #000000;">179.420196</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/G4"</span>,playerid,<span style="color: #000000;">1961.102539</span>,<span style="color: #000000;">1747.453491</span>,<span style="color: #000000;">18.933877</span>,<span style="color: #000000;">269.567535</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/S"</span>,playerid,<span style="color: #000000;">237.234512</span>,<span style="color: #000000;">2067.705322</span>,<span style="color: #000000;">17.640625</span>,<span style="color: #000000;">85.017997</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/S1"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1951.642700</span>,<span style="color: #000000;">691.634826</span>,<span style="color: #000000;">46.562500</span>,<span style="color: #000000;">179.164901</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/S2"</span>,playerid,<span style="color: #000000;">154.246292</span>,<span style="color: #000000;">-</span><span style="color: #000000;">1920.348022</span>,<span style="color: #000000;">3.769643</span>,<span style="color: #000000;">179.424255</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/S3"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">2706.224365</span>,<span style="color: #000000;">351.578308</span>,<span style="color: #000000;">4.414062</span>,<span style="color: #000000;">0.207479</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/S4"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">320.155517</span>,<span style="color: #000000;">1810.219970</span>,<span style="color: #000000;">42.359375</span>,<span style="color: #000000;">1.345811</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/S5"</span>,playerid,<span style="color: #000000;">2628.791748</span>,<span style="color: #000000;">2292.045898</span>,<span style="color: #000000;">10.868410</span>,<span style="color: #000000;">359.622589</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Ship"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">2472.192626</span>,<span style="color: #000000;">1548.226074</span>,<span style="color: #000000;">33.227333</span>,<span style="color: #000000;">271.613189</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Ship1"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1384.397583</span>,<span style="color: #000000;">1489.442016</span>,<span style="color: #000000;">16.320312</span>,<span style="color: #000000;">89.713684</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Ship2"</span>,playerid,<span style="color: #000000;">2003.575561</span>,<span style="color: #000000;">1544.355224</span>,<span style="color: #000000;">13.590750</span>,<span style="color: #000000;">269.613220</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Beach"</span>,playerid,<span style="color: #000000;">347.498352</span>,<span style="color: #000000;">-</span><span style="color: #000000;">1803.824707</span>,<span style="color: #000000;">4.684301</span>,<span style="color: #000000;">89.747276</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Beach1"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">2904.630371</span>,<span style="color: #000000;">472.650695</span>,<span style="color: #000000;">4.914062</span>,<span style="color: #000000;">269.799041</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Ls"</span>,playerid,<span style="color: #000000;">2492.581298</span>,<span style="color: #000000;">-</span><span style="color: #000000;">1668.886230</span>,<span style="color: #000000;">13.343750</span>,<span style="color: #000000;">92.678672</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Sf"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">2030.681884</span>,<span style="color: #000000;">135.759429</span>,<span style="color: #000000;">28.835937</span>,<span style="color: #000000;">270.905090</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Lv"</span>,playerid,<span style="color: #000000;">2150.180664</span>,<span style="color: #000000;">1008.745971</span>,<span style="color: #000000;">10.820312</span>,<span style="color: #000000;">180.137069</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Pier"</span>,playerid,<span style="color: #000000;">837.578247</span>,<span style="color: #000000;">-</span><span style="color: #000000;">2043.939575</span>,<span style="color: #000000;">12.867187</span>,<span style="color: #000000;">180.000015</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Army"</span>,playerid,<span style="color: #000000;">309.590606</span>,<span style="color: #000000;">2060.132324</span>,<span style="color: #000000;">17.640625</span>,<span style="color: #000000;">180.083938</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Desert"</span>,playerid,<span style="color: #000000;">427.605407</span>,<span style="color: #000000;">2530.687011</span>,<span style="color: #000000;">16.627475</span>,<span style="color: #000000;">180.402526</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Dam"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">914.227416</span>,<span style="color: #000000;">2011.254150</span>,<span style="color: #000000;">60.914062</span>,<span style="color: #000000;">217.863739</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Chilliad"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">2326.344482</span>,<span style="color: #000000;">-</span><span style="color: #000000;">1610.314575</span>,<span style="color: #000000;">483.738098</span>,<span style="color: #000000;">211.049011</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Skatepark"</span>,playerid,<span style="color: #000000;">1867.597778</span>,<span style="color: #000000;">-</span><span style="color: #000000;">1384.860229</span>,<span style="color: #000000;">13.507353</span>,<span style="color: #000000;">270.615051</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Farm"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">60.753696</span>,<span style="color: #000000;">-</span><span style="color: #000000;">0.093510</span>,<span style="color: #000000;">3.117187</span>,<span style="color: #000000;">334.523864</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Drag"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">2680.341064</span>,<span style="color: #000000;">1245.781005</span>,<span style="color: #000000;">55.675369</span>,<span style="color: #000000;">5.158790</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Quarry"</span>,playerid,<span style="color: #000000;">825.748474</span>,<span style="color: #000000;">849.544067</span>,<span style="color: #000000;">11.593124</span>,<span style="color: #000000;">292.248077</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Ranch"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">703.988403</span>,<span style="color: #000000;">953.468383</span>,<span style="color: #000000;">12.400305</span>,<span style="color: #000000;">90.897514</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Tanker"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1444.782714</span>,<span style="color: #000000;">501.430480</span>,<span style="color: #000000;">18.234375</span>,<span style="color: #000000;">268.910125</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Party"</span>,playerid,<span style="color: #000000;">488.207092</span>,<span style="color: #000000;">-</span><span style="color: #000000;">14.290634</span>,<span style="color: #000000;">1000.679687</span>,<span style="color: #000000;">89.300773</span>,<span style="color: #000000;">17</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Port"</span>,playerid,<span style="color: #000000;">2771.598144</span>,<span style="color: #000000;">-</span><span style="color: #000000;">2438.267333</span>,<span style="color: #000000;">13.637617</span>,<span style="color: #000000;">90.954261</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Golfclub"</span>,playerid,<span style="color: #000000;">1497.902587</span>,<span style="color: #000000;">2773.325439</span>,<span style="color: #000000;">10.820312</span>,<span style="color: #000000;">268.981964</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Swamp"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">838.095458</span>,<span style="color: #000000;">-</span><span style="color: #000000;">1964.895507</span>,<span style="color: #000000;">14.281082</span>,<span style="color: #000000;">275.513214</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Church"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">2487.145996</span>,<span style="color: #000000;">2403.571777</span>,<span style="color: #000000;">16.148639</span>,<span style="color: #000000;">119.927627</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Churchls"</span>,playerid,<span style="color: #000000;">2243.732666</span>,<span style="color: #000000;">-</span><span style="color: #000000;">1306.158447</span>,<span style="color: #000000;">23.976581</span>,<span style="color: #000000;">359.044067</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Churchsf"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1982.063232</span>,<span style="color: #000000;">1117.771850</span>,<span style="color: #000000;">53.123260</span>,<span style="color: #000000;">267.506317</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Churchlv"</span>,playerid,<span style="color: #000000;">2481.231689</span>,<span style="color: #000000;">918.538146</span>,<span style="color: #000000;">10.820312</span>,<span style="color: #000000;">90.202041</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Housingls"</span>,playerid,<span style="color: #000000;">2398.974609</span>,<span style="color: #000000;">-</span><span style="color: #000000;">1756.576904</span>,<span style="color: #000000;">13.546875</span>,<span style="color: #000000;">89.455421</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Housingls1"</span>,playerid,<span style="color: #000000;">2424.302734</span>,<span style="color: #000000;">-</span><span style="color: #000000;">2009.688598</span>,<span style="color: #000000;">13.430438</span>,<span style="color: #000000;">269.624664</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Housingls2"</span>,playerid,<span style="color: #000000;">2745.244384</span>,<span style="color: #000000;">-</span><span style="color: #000000;">1622.091430</span>,<span style="color: #000000;">13.020169</span>,<span style="color: #000000;">0.019782</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Housingls3"</span>,playerid,<span style="color: #000000;">2634.848876</span>,<span style="color: #000000;">-</span><span style="color: #000000;">1064.642333</span>,<span style="color: #000000;">69.625000</span>,<span style="color: #000000;">180.832290</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Housingsf"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">2887.573730</span>,<span style="color: #000000;">1178.113647</span>,<span style="color: #000000;">9.748540</span>,<span style="color: #000000;">173.112503</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Housingsf1"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">2573.404541</span>,<span style="color: #000000;">1144.469726</span>,<span style="color: #000000;">55.726562</span>,<span style="color: #000000;">254.764404</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Housinglv"</span>,playerid,<span style="color: #000000;">2074.228759</span>,<span style="color: #000000;">2651.726806</span>,<span style="color: #000000;">10.820312</span>,<span style="color: #000000;">89.624374</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Housinglv1"</span>,playerid,<span style="color: #000000;">2072.118896</span>,<span style="color: #000000;">2742.158447</span>,<span style="color: #000000;">10.671875</span>,<span style="color: #000000;">88.950592</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Housinglv2"</span>,playerid,<span style="color: #000000;">1766.415527</span>,<span style="color: #000000;">2729.006103</span>,<span style="color: #000000;">10.835937</span>,<span style="color: #000000;">0.000000</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Housinglv3"</span>,playerid,<span style="color: #000000;">1673.023559</span>,<span style="color: #000000;">2733.235595</span>,<span style="color: #000000;">10.671875</span>,<span style="color: #000000;">89.645515</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Housinglv4"</span>,playerid,<span style="color: #000000;">1673.459106</span>,<span style="color: #000000;">2821.730957</span>,<span style="color: #000000;">10.671875</span>,<span style="color: #000000;">89.645339</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Airportls"</span>,playerid,<span style="color: #000000;">1960.697875</span>,<span style="color: #000000;">-</span><span style="color: #000000;">2262.707031</span>,<span style="color: #000000;">13.546875</span>,<span style="color: #000000;">178.704559</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Airportsf"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1197.360473</span>,<span style="color: #000000;">33.170616</span>,<span style="color: #000000;">14.148437</span>,<span style="color: #000000;">134.547775</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Airportlv"</span>,playerid,<span style="color: #000000;">1671.845092</span>,<span style="color: #000000;">1634.828002</span>,<span style="color: #000000;">10.820312</span>,<span style="color: #000000;">179.202285</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Tuningls"</span>,playerid,<span style="color: #000000;">2649.441406</span>,<span style="color: #000000;">-</span><span style="color: #000000;">2003.965820</span>,<span style="color: #000000;">13.382812</span>,<span style="color: #000000;">269.963714</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Tuningls1"</span>,playerid,<span style="color: #000000;">1041.308227</span>,<span style="color: #000000;">-</span><span style="color: #000000;">1031.660522</span>,<span style="color: #000000;">32.055252</span>,<span style="color: #000000;">359.066864</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Tuningsf"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1925.743774</span>,<span style="color: #000000;">228.339279</span>,<span style="color: #000000;">34.350254</span>,<span style="color: #000000;">88.937034</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Tuningsf1"</span>,playerid,<span style="color: #000000;">-</span><span style="color: #000000;">2700.379882</span>,<span style="color: #000000;">217.784027</span>,<span style="color: #000000;">4.179687</span>,<span style="color: #000000;">91.669349</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>CreateTeleport<span style="color: #000000;">(</span>cmdtext,<span style="color: #000066;">"/Tuninglv"</span>,playerid,<span style="color: #000000;">2385.421142</span>,<span style="color: #000000;">1023.986450</span>,<span style="color: #000000;">10.820312</span>,<span style="color: #000000;">355.885437</span>,<span style="color: #000000;">0</span>,<span style="color: #000000;">0</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2430287">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-197084.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2436018"></a>
+<div class="post classic " style="" id="post_2436018">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0189/uid-189096.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0189/uid-189096.html">Fitri</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 124<br />
+	Threads: 29<br />
+	Joined: Dec 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0422/tid-422919.html#pid2436018" title="Re: Creating Teleports">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Fitri" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">19.03.2013, 14:25 <span class="post_edit" id="edited_by_2436018"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2436018">
+		tnx <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/> this help me <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2436018">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-189096.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0422/tid-422919.html">Next Oldest</a> | <a href="../../threads/0422/tid-422919.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="422919" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" selected="selected">-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: </span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

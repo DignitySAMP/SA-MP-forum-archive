@@ -1,0 +1,1347 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[FilterScript] DomAdmin System</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "f52d83b90e31c37af1db2714d3540d77";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="DomAdmin System Hi guyz this is my 3rd Filterscript .it take me to much time to make more than 4 weeks . I hope you Guyz Like it It Consist of 5 Admins LevelsModerator Training Admin Administrator Sen" />
+<link rel="canonical" href="../../threads/0471/tid-471390.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="f52d83b90e31c37af1db2714d3540d77" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0471/tid-471390.html#pid2751332">Threaded Mode</a></span>
+				</div>
+				
+					[FilterScript] DomAdmin System
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid2751332"></a>
+<div class="post classic " style="" id="post_2751332">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0204/uid-204311.html"><img src="../../assets/uploads/avatars/204311.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0204/uid-204311.html">MBilal</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 811<br />
+	Threads: 140<br />
+	Joined: May 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0471/tid-471390.html#pid2751332" title="DomAdmin System">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by MBilal" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">22.10.2013, 19:48 <span class="post_edit" id="edited_by_2751332"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by MBilal; 22.10.2013 at 20:28.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2751332">
+		<div align="center"><b><font size="6"><font color="Navy">DomAdmin System</font></font></b><br />
+<b>Hi guyz this is my 3rd Filterscript .it take me to much time to make more than 4 weeks . <br />
+I hope you Guyz Like it <br />
+</b><br />
+<br />
+<font size="2"><b>It Consist of 5 Admins Levels<ol style="list-style-type: decimal"><li>Moderator</li>
+<li>Training Admin</li>
+<li>Administrator</li>
+<li>Senior Admin [Server Co-Owner]</li>
+<li>Server Owner</li>
+</ol></b></font><br />
+Higher Admin can use Lower Admins Cmds.<br />
+<br />
+<div align="center"><img alt="" border="0" src="http://i40.tinypic.com/29zv90g.jpg"/></div><font size="4"><b>Commands</b></font><br />
+<br />
+<font size="2"><b>Level 1 [Moderator]</b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 50px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #007700">/</span><span style="color: #0000BB">slap </span><span style="color: #007700">,/</span><span style="color: #0000BB">disarm </span><span style="color: #007700">,/</span><span style="color: #0000BB">spawn</span><span style="color: #007700">,/</span><span style="color: #0000BB">clearchat</span><span style="color: #007700">,/</span><span style="color: #0000BB">warn</span><span style="color: #007700">,/</span><span style="color: #0000BB">ip</span><span style="color: #007700">,/</span><span style="color: #0000BB">burn</span><span style="color: #007700">,/goto,/</span><span style="color: #0000BB">abike</span><span style="color: #007700">,/</span><span style="color: #0000BB">nitro
+<br/></span><span style="color: #007700">/</span><span style="color: #0000BB">setmorning </span><span style="color: #007700">,/</span><span style="color: #0000BB">setafternoon </span><span style="color: #007700">,/</span><span style="color: #0000BB">setmidnight </span><span style="color: #007700">, /</span><span style="color: #0000BB">acuff </span><span style="color: #007700">,/</span><span style="color: #0000BB">auncuff</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann2</span><span style="color: #007700">,/</span><span style="color: #0000BB">aduty</span><span style="color: #007700">,/</span><span style="color: #0000BB">offduty 
+<br/></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+<font size="2"><b>Level 2 [Training Admin]</b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 114px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">  </span><span style="color: #007700">/</span><span style="color: #0000BB">slap </span><span style="color: #007700">,/</span><span style="color: #0000BB">armour </span><span style="color: #007700">,</span><span style="color: #0000BB">heal </span><span style="color: #007700">,/</span><span style="color: #0000BB">disarm </span><span style="color: #007700">,/</span><span style="color: #0000BB">spawn </span><span style="color: #007700">,/</span><span style="color: #0000BB">kick</span><span style="color: #007700">,/</span><span style="color: #0000BB">freeze</span><span style="color: #007700">,/</span><span style="color: #0000BB">unfreeze</span><span style="color: #007700">,/</span><span style="color: #0000BB">warn</span><span style="color: #007700">,/</span><span style="color: #0000BB">ip
+<br/>  </span><span style="color: #007700">/</span><span style="color: #0000BB">setmorning </span><span style="color: #007700">,/</span><span style="color: #0000BB">setafternoon </span><span style="color: #007700">,/</span><span style="color: #0000BB">setmidnight </span><span style="color: #007700">, /</span><span style="color: #0000BB">acuff </span><span style="color: #007700">,/</span><span style="color: #0000BB">auncuff </span><span style="color: #007700">,/</span><span style="color: #0000BB">clearchat </span><span style="color: #007700">/</span><span style="color: #0000BB">jail</span><span style="color: #007700">,/</span><span style="color: #0000BB">unjail
+<br/>  </span><span style="color: #007700">/</span><span style="color: #0000BB">stealthon</span><span style="color: #007700">,/</span><span style="color: #0000BB">stealthoff</span><span style="color: #007700">,/</span><span style="color: #0000BB">burn</span><span style="color: #007700">,/</span><span style="color: #0000BB">get</span><span style="color: #007700">,/goto,/</span><span style="color: #0000BB">abike</span><span style="color: #007700">,/</span><span style="color: #0000BB">acar</span><span style="color: #007700">,/</span><span style="color: #0000BB">aheli</span><span style="color: #007700">,/</span><span style="color: #0000BB">aduty</span><span style="color: #007700">,/</span><span style="color: #0000BB">offduty
+<br/>  </span><span style="color: #007700">/</span><span style="color: #0000BB">spec</span><span style="color: #007700">,/</span><span style="color: #0000BB">specoff</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann1</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann2</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann3</span><span style="color: #007700">,/</span><span style="color: #0000BB">nitro
+
+<br/>level 1</span><span style="color: #007700">+</span><span style="color: #0000BB">2 Cmds 
+<br/></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><font size="2"><b>Level 3 [Administrator]</b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 162px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">   </span><span style="color: #007700">/</span><span style="color: #0000BB">slap </span><span style="color: #007700">,/</span><span style="color: #0000BB">armour </span><span style="color: #007700">,</span><span style="color: #0000BB">heal </span><span style="color: #007700">,/</span><span style="color: #0000BB">disarm </span><span style="color: #007700">,/</span><span style="color: #0000BB">spawn </span><span style="color: #007700">,/</span><span style="color: #0000BB">kick</span><span style="color: #007700">,/</span><span style="color: #0000BB">freeze</span><span style="color: #007700">,/</span><span style="color: #0000BB">unfreeze</span><span style="color: #007700">,/</span><span style="color: #0000BB">ip
+<br/>   </span><span style="color: #007700">/</span><span style="color: #0000BB">setmorning </span><span style="color: #007700">,/</span><span style="color: #0000BB">setafternoon </span><span style="color: #007700">,/</span><span style="color: #0000BB">setmidnight </span><span style="color: #007700">, /</span><span style="color: #0000BB">acuff </span><span style="color: #007700">,/</span><span style="color: #0000BB">auncuff</span><span style="color: #007700">,/</span><span style="color: #0000BB">warn
+<br/>   </span><span style="color: #007700">/</span><span style="color: #0000BB">jail</span><span style="color: #007700">,/</span><span style="color: #0000BB">unjail</span><span style="color: #007700">,/</span><span style="color: #0000BB">stealthon</span><span style="color: #007700">,/</span><span style="color: #0000BB">stealthoff</span><span style="color: #007700">,/</span><span style="color: #0000BB">explode</span><span style="color: #007700">,/</span><span style="color: #0000BB">get</span><span style="color: #007700">,/goto,/</span><span style="color: #0000BB">burnall
+<br/>   </span><span style="color: #007700">/</span><span style="color: #0000BB">armourall </span><span style="color: #007700">,/</span><span style="color: #0000BB">healall </span><span style="color: #007700">,/</span><span style="color: #0000BB">freezeall</span><span style="color: #007700">, /</span><span style="color: #0000BB">unfreezeall </span><span style="color: #007700">,/</span><span style="color: #0000BB">akill </span><span style="color: #007700">,/</span><span style="color: #0000BB">clearchat
+<br/>   </span><span style="color: #007700">/</span><span style="color: #0000BB">god</span><span style="color: #007700">,/</span><span style="color: #0000BB">aduty</span><span style="color: #007700">,/</span><span style="color: #0000BB">offduty</span><span style="color: #007700">,/</span><span style="color: #0000BB">givecar</span><span style="color: #007700">,/</span><span style="color: #0000BB">giveboat</span><span style="color: #007700">,/</span><span style="color: #0000BB">giveheli</span><span style="color: #007700">,/</span><span style="color: #0000BB">abike</span><span style="color: #007700">,/</span><span style="color: #0000BB">acar</span><span style="color: #007700">,/</span><span style="color: #0000BB">aheli</span><span style="color: #007700">,/</span><span style="color: #0000BB">ban
+<br/>   </span><span style="color: #007700">/</span><span style="color: #0000BB">spec</span><span style="color: #007700">,/</span><span style="color: #0000BB">specoff</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann1</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann2</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann3</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann4</span><span style="color: #007700">,/</span><span style="color: #0000BB">nitro</span><span style="color: #007700">,/</span><span style="color: #0000BB">fixcar</span><span style="color: #007700">,/</span><span style="color: #0000BB">givenitro</span><span style="color: #007700">,/</span><span style="color: #0000BB">repair</span><span style="color: #007700">,/</span><span style="color: #0000BB">flip
+<br/>   </span><span style="color: #007700">/</span><span style="color: #0000BB">givem4</span><span style="color: #007700">,/</span><span style="color: #0000BB">givem5</span><span style="color: #007700">,/</span><span style="color: #0000BB">givesp</span><span style="color: #007700">,/</span><span style="color: #0000BB">givesniper</span><span style="color: #007700">,/</span><span style="color: #0000BB">giveuzi</span><span style="color: #007700">,/</span><span style="color: #0000BB">giverpg
+
+<br/>level 1</span><span style="color: #007700">+</span><span style="color: #0000BB">2</span><span style="color: #007700">+</span><span style="color: #0000BB">3 Cmds 
+<br/></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><font size="2"><b>Level 4 [Senior Administrator  ][Server Co-Owner]</b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 194px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">    </span><span style="color: #007700">/</span><span style="color: #0000BB">slap </span><span style="color: #007700">,/</span><span style="color: #0000BB">armour </span><span style="color: #007700">,</span><span style="color: #0000BB">heal </span><span style="color: #007700">,/</span><span style="color: #0000BB">disarm </span><span style="color: #007700">,/</span><span style="color: #0000BB">spawn </span><span style="color: #007700">,/</span><span style="color: #0000BB">kick</span><span style="color: #007700">,/</span><span style="color: #0000BB">freeze</span><span style="color: #007700">,/</span><span style="color: #0000BB">unfreeze</span><span style="color: #007700">,/</span><span style="color: #0000BB">ip
+<br/>    </span><span style="color: #007700">/</span><span style="color: #0000BB">setmorning </span><span style="color: #007700">,/</span><span style="color: #0000BB">setafternoon </span><span style="color: #007700">,/</span><span style="color: #0000BB">setmidnight </span><span style="color: #007700">, /</span><span style="color: #0000BB">acuff </span><span style="color: #007700">,/</span><span style="color: #0000BB">auncuff
+<br/>    </span><span style="color: #007700">/</span><span style="color: #0000BB">armourall </span><span style="color: #007700">,/</span><span style="color: #0000BB">healall </span><span style="color: #007700">,/</span><span style="color: #0000BB">freezeall</span><span style="color: #007700">, /</span><span style="color: #0000BB">unfreezeall </span><span style="color: #007700">/</span><span style="color: #0000BB">akill</span><span style="color: #007700">,/</span><span style="color: #0000BB">clearchat
+<br/>    </span><span style="color: #007700">/</span><span style="color: #0000BB">jail</span><span style="color: #007700">,/</span><span style="color: #0000BB">unjail</span><span style="color: #007700">,/</span><span style="color: #0000BB">stealthon</span><span style="color: #007700">,/</span><span style="color: #0000BB">stealthoff</span><span style="color: #007700">,/</span><span style="color: #0000BB">get</span><span style="color: #007700">,/goto,/</span><span style="color: #0000BB">burnall</span><span style="color: #007700">,/</span><span style="color: #0000BB">cars
+<br/>    </span><span style="color: #007700">/</span><span style="color: #0000BB">givem4</span><span style="color: #007700">,/</span><span style="color: #0000BB">givem5</span><span style="color: #007700">,/</span><span style="color: #0000BB">givesp</span><span style="color: #007700">,/</span><span style="color: #0000BB">givesniper</span><span style="color: #007700">,/</span><span style="color: #0000BB">giveuzi</span><span style="color: #007700">,/</span><span style="color: #0000BB">giverpg
+<br/>    </span><span style="color: #007700">/</span><span style="color: #0000BB">givecar</span><span style="color: #007700">,/</span><span style="color: #0000BB">giveboat</span><span style="color: #007700">,/</span><span style="color: #0000BB">giveheli</span><span style="color: #007700">,/</span><span style="color: #0000BB">abike</span><span style="color: #007700">,/</span><span style="color: #0000BB">acar</span><span style="color: #007700">,/</span><span style="color: #0000BB">aheli</span><span style="color: #007700">,/</span><span style="color: #0000BB">god</span><span style="color: #007700">,/</span><span style="color: #0000BB">aduty</span><span style="color: #007700">,/</span><span style="color: #0000BB">offduty
+<br/>    </span><span style="color: #007700">/</span><span style="color: #0000BB">setscore </span><span style="color: #007700">,/</span><span style="color: #0000BB">setcash</span><span style="color: #007700">,/</span><span style="color: #0000BB">dmenu</span><span style="color: #007700">,/</span><span style="color: #0000BB">warn</span><span style="color: #007700">,/</span><span style="color: #0000BB">explode</span><span style="color: #007700">,/</span><span style="color: #0000BB">kickall</span><span style="color: #007700">,/</span><span style="color: #0000BB">explodeall</span><span style="color: #007700">,/</span><span style="color: #0000BB">ban</span><span style="color: #007700">,/</span><span style="color: #0000BB">spawnall
+<br/>    </span><span style="color: #007700">/</span><span style="color: #0000BB">spec</span><span style="color: #007700">,/</span><span style="color: #0000BB">specoff</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann1</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann2</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann3</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann4</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann5</span><span style="color: #007700">,/</span><span style="color: #0000BB">spy</span><span style="color: #007700">,/</span><span style="color: #0000BB">offspy</span><span style="color: #007700">,/</span><span style="color: #0000BB">playlist</span><span style="color: #007700">,/</span><span style="color: #0000BB">nitro
+<br/>    </span><span style="color: #007700">/</span><span style="color: #0000BB">repair</span><span style="color: #007700">,/</span><span style="color: #0000BB">healme</span><span style="color: #007700">,/</span><span style="color: #0000BB">fixcar</span><span style="color: #007700">/</span><span style="color: #0000BB">givenitro</span><span style="color: #007700">,/</span><span style="color: #0000BB">flip</span><span style="color: #007700">,/</span><span style="color: #0000BB">flipcar
+
+<br/>level 1</span><span style="color: #007700">+</span><span style="color: #0000BB">2</span><span style="color: #007700">+</span><span style="color: #0000BB">3</span><span style="color: #007700">+</span><span style="color: #0000BB">4 Cmds 
+<br/></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><font size="2"><b>Level 5 [Server Owner]</b></font><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 226px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">     </span><span style="color: #007700">/</span><span style="color: #0000BB">slap </span><span style="color: #007700">,/</span><span style="color: #0000BB">armour </span><span style="color: #007700">,</span><span style="color: #0000BB">heal </span><span style="color: #007700">,/</span><span style="color: #0000BB">disarm </span><span style="color: #007700">,/</span><span style="color: #0000BB">spawn </span><span style="color: #007700">,/</span><span style="color: #0000BB">kick</span><span style="color: #007700">,/</span><span style="color: #0000BB">freeze</span><span style="color: #007700">,/</span><span style="color: #0000BB">unfreeze</span><span style="color: #007700">,/</span><span style="color: #0000BB">ip
+<br/>     </span><span style="color: #007700">/</span><span style="color: #0000BB">setmorning </span><span style="color: #007700">,/</span><span style="color: #0000BB">setafternoon </span><span style="color: #007700">,/</span><span style="color: #0000BB">setmidnight </span><span style="color: #007700">,/</span><span style="color: #0000BB">acuff </span><span style="color: #007700">,/</span><span style="color: #0000BB">auncuff
+<br/>     </span><span style="color: #007700">/</span><span style="color: #0000BB">armourall </span><span style="color: #007700">,/</span><span style="color: #0000BB">healall </span><span style="color: #007700">,/</span><span style="color: #0000BB">freezeall</span><span style="color: #007700">, /</span><span style="color: #0000BB">unfreezeall </span><span style="color: #007700">/</span><span style="color: #0000BB">akill</span><span style="color: #007700">,/</span><span style="color: #0000BB">clearchat
+<br/>     </span><span style="color: #007700">/</span><span style="color: #0000BB">jail</span><span style="color: #007700">,/</span><span style="color: #0000BB">unjail</span><span style="color: #007700">,/</span><span style="color: #0000BB">stealthon</span><span style="color: #007700">,/</span><span style="color: #0000BB">stealthoff</span><span style="color: #007700">,/</span><span style="color: #0000BB">get</span><span style="color: #007700">,/goto,/</span><span style="color: #0000BB">burnall</span><span style="color: #007700">,/</span><span style="color: #0000BB">cars
+<br/>     </span><span style="color: #007700">/</span><span style="color: #0000BB">setscore </span><span style="color: #007700">,/</span><span style="color: #0000BB">setcash</span><span style="color: #007700">,/</span><span style="color: #0000BB">dmenu</span><span style="color: #007700">,/</span><span style="color: #0000BB">warn</span><span style="color: #007700">,/</span><span style="color: #0000BB">explode</span><span style="color: #007700">,/</span><span style="color: #0000BB">kickall</span><span style="color: #007700">,/</span><span style="color: #0000BB">explodeall
+<br/>     </span><span style="color: #007700">/</span><span style="color: #0000BB">getall </span><span style="color: #007700">,/</span><span style="color: #0000BB">slapall</span><span style="color: #007700">,/</span><span style="color: #0000BB">setskin</span><span style="color: #007700">,/</span><span style="color: #0000BB">Restart</span><span style="color: #007700">,/</span><span style="color: #0000BB">cars</span><span style="color: #007700">,/</span><span style="color: #0000BB">god</span><span style="color: #007700">,/</span><span style="color: #0000BB">aduty</span><span style="color: #007700">,/</span><span style="color: #0000BB">offduty</span><span style="color: #007700">,/</span><span style="color: #0000BB">ban
+<br/>     </span><span style="color: #007700">/</span><span style="color: #0000BB">spec</span><span style="color: #007700">,/</span><span style="color: #0000BB">specoff</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann1</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann2</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann3</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann4</span><span style="color: #007700">,/</span><span style="color: #0000BB">ann5</span><span style="color: #007700">,/</span><span style="color: #0000BB">spy</span><span style="color: #007700">,/</span><span style="color: #0000BB">offspy</span><span style="color: #007700">,/</span><span style="color: #0000BB">playlist
+<br/>     </span><span style="color: #007700">/</span><span style="color: #0000BB">respawncars</span><span style="color: #007700">,/</span><span style="color: #0000BB">setlevel</span><span style="color: #007700">,/</span><span style="color: #0000BB">spawnall</span><span style="color: #007700">,/</span><span style="color: #0000BB">bearall</span><span style="color: #007700">,/</span><span style="color: #0000BB">wineall</span><span style="color: #007700">,/</span><span style="color: #0000BB">GD</span><span style="color: #007700">,/</span><span style="color: #0000BB">RLall
+<br/>     </span><span style="color: #007700">/</span><span style="color: #0000BB">danceall1</span><span style="color: #007700">,/</span><span style="color: #0000BB">danceall2</span><span style="color: #007700">,/</span><span style="color: #0000BB">danceall3</span><span style="color: #007700">,/</span><span style="color: #0000BB">hatall</span><span style="color: #007700">,/</span><span style="color: #0000BB">hatall1</span><span style="color: #007700">,/</span><span style="color: #0000BB">astop</span><span style="color: #007700">,/</span><span style="color: #0000BB">nitro
+<br/>     </span><span style="color: #007700">/</span><span style="color: #0000BB">repair</span><span style="color: #007700">,/</span><span style="color: #0000BB">healme</span><span style="color: #007700">,/</span><span style="color: #0000BB">fixcar</span><span style="color: #007700">/</span><span style="color: #0000BB">givenitro</span><span style="color: #007700">,/</span><span style="color: #0000BB">flipcar</span><span style="color: #007700">,/</span><span style="color: #0000BB">flip</span><span style="color: #007700">,/</span><span style="color: #0000BB">dweaps
+<br/>     </span><span style="color: #007700">/</span><span style="color: #0000BB">givem4</span><span style="color: #007700">,/</span><span style="color: #0000BB">givem5</span><span style="color: #007700">,/</span><span style="color: #0000BB">givesp</span><span style="color: #007700">,/</span><span style="color: #0000BB">givesniper</span><span style="color: #007700">,/</span><span style="color: #0000BB">giveuzi</span><span style="color: #007700">,/</span><span style="color: #0000BB">giverpg
+
+<br/>level 1</span><span style="color: #007700">+</span><span style="color: #0000BB">2</span><span style="color: #007700">+</span><span style="color: #0000BB">3</span><span style="color: #007700">+</span><span style="color: #0000BB">4</span><span style="color: #007700">+</span><span style="color: #0000BB">5 Cmds 
+<br/></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><font color="Red"><b>Player Cmds</b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #007700">/</span><span style="color: #0000BB">ask</span><span style="color: #007700">[</span><span style="color: #0000BB">Text</span><span style="color: #007700">],/</span><span style="color: #0000BB">saveskin</span><span style="color: #007700">,/</span><span style="color: #0000BB">useskin</span><span style="color: #007700">,/</span><span style="color: #0000BB">admins 
+<br/></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><b>How to use It?</b><br />
+Just Add Filterscript Files in your Filterscript file <br />
+and Put DomAdmin Foldier in your ScriptFiles <br />
+Then Add Filterscript name in your Server CFG<br />
+And Then Login In game With Rcon login pass<br />
+Then Do /setlevel Now you are Server Owner<br />
+For admin Menu use /dacmds<br />
+For Player menu use /pcmds<br />
+<br />
+<div align="center"><font color="Red"><font size="3">Download Links</font></font></div><a href="http://www.solidfiles.com/d/c59b35e73a/" target="_blank">http://www.solidfiles.com/d/c59b35e73a/</a><br />
+<a href="http://www.mediafire.com/download/kjrunwksncmukuj/DomAdmin.zip" target="_blank">http://www.mediafire.com/download/kj...j/DomAdmin.zip</a><br />
+<font size="2"><br />
+<font color="Purple">Credits And Special Thanks To</font></font><br />
+<br />
+****** thanks<br />
+zcmd thanks<br />
+Captainjohn For Tele System thanks<br />
+Kush thanks for Login and register system<br />
+also thanks to those guyz who test this with me<br />
+and Also me Dom <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>!!!<br />
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2751332">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-204311.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2751334"></a>
+<div class="post classic " style="" id="post_2751334">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0179/uid-179701.html"><img src="../../assets/uploads/avatars/179701.png" alt="" width="51" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0179/uid-179701.html">dakata994</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 331<br />
+	Threads: 46<br />
+	Joined: Sep 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0471/tid-471390.html#pid2751334" title="Re: DomAdmin System">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by dakata994" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">22.10.2013, 19:50 <span class="post_edit" id="edited_by_2751334"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by dakata994; 23.10.2013 at 16:01.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2751334">
+		...Man... i can say only one word... AMAZING! +REP <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/><br />
+<br />
+EDIT: I downloaded it <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2751334">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-179701.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2751339"></a>
+<div class="post classic " style="" id="post_2751339">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0204/uid-204311.html"><img src="../../assets/uploads/avatars/204311.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0204/uid-204311.html">MBilal</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 811<br />
+	Threads: 140<br />
+	Joined: May 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0471/tid-471390.html#pid2751339" title="Re: DomAdmin System">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by MBilal" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">22.10.2013, 19:54 <span class="post_edit" id="edited_by_2751339"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2751339">
+		Thankss Dude
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2751339">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-204311.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2751392"></a>
+<div class="post classic " style="" id="post_2751392">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0216/uid-216317.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0216/uid-216317.html">xmenTHEFAST</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1<br />
+	Threads: 0<br />
+	Joined: Oct 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0471/tid-471390.html#pid2751392" title="Re: DomAdmin System">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by xmenTHEFAST" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">22.10.2013, 20:49 <span class="post_edit" id="edited_by_2751392"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2751392">
+		DUde !!!! THis is amazing !!!! THis thing will help some nEw admins :P <br />
+it will be easy to work as an admin with this peace of art <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/wink.png" title="Wink"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2751392">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-216317.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2752139"></a>
+<div class="post classic " style="" id="post_2752139">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0204/uid-204311.html"><img src="../../assets/uploads/avatars/204311.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0204/uid-204311.html">MBilal</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 811<br />
+	Threads: 140<br />
+	Joined: May 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0471/tid-471390.html#pid2752139" title="Re: DomAdmin System">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by MBilal" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.10.2013, 13:52 <span class="post_edit" id="edited_by_2752139"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2752139">
+		thanks dude
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2752139">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-204311.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2752159"></a>
+<div class="post classic " style="" id="post_2752159">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0201/uid-201445.html"><img src="../../assets/uploads/avatars/201445.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0201/uid-201445.html">GGW</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 160<br />
+	Threads: 15<br />
+	Joined: Apr 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0471/tid-471390.html#pid2752159" title="Re: DomAdmin System">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by GGW" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.10.2013, 14:13 <span class="post_edit" id="edited_by_2752159"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2752159">
+		AWESOME FANTASTIC WORK NICE DUDE !
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2752159">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-201445.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2752315"></a>
+<div class="post classic " style="" id="post_2752315">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0179/uid-179701.html"><img src="../../assets/uploads/avatars/179701.png" alt="" width="51" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0179/uid-179701.html">dakata994</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 331<br />
+	Threads: 46<br />
+	Joined: Sep 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0471/tid-471390.html#pid2752315" title="Re: DomAdmin System">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by dakata994" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.10.2013, 16:10 <span class="post_edit" id="edited_by_2752315"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2752315">
+		How to see the admin CMDS without opening Interneto to open this FS or the pawno to open the .pwn file ?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2752315">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-179701.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2752324"></a>
+<div class="post classic " style="" id="post_2752324">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0204/uid-204311.html"><img src="../../assets/uploads/avatars/204311.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0204/uid-204311.html">MBilal</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 811<br />
+	Threads: 140<br />
+	Joined: May 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0471/tid-471390.html#pid2752324" title="Re: DomAdmin System">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by MBilal" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">23.10.2013, 16:14 <span class="post_edit" id="edited_by_2752324"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2752324">
+		open pawn do vCTRL+F type CMD: /dacmds and in game you need to do /dacmds
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2752324">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-204311.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2753426"></a>
+<div class="post classic " style="" id="post_2753426">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0213/uid-213513.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0213/uid-213513.html">Xdnnx</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 13<br />
+	Threads: 3<br />
+	Joined: Sep 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0471/tid-471390.html#pid2753426" title="Re: DomAdmin System">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Xdnnx" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">24.10.2013, 15:38 <span class="post_edit" id="edited_by_2753426"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2753426">
+		Nc +rep
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2753426">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-213513.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2753883"></a>
+<div class="post classic " style="" id="post_2753883">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0204/uid-204311.html"><img src="../../assets/uploads/avatars/204311.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0204/uid-204311.html">MBilal</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 811<br />
+	Threads: 140<br />
+	Joined: May 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0471/tid-471390.html#pid2753883" title="Re: DomAdmin System">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by MBilal" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">24.10.2013, 20:58 <span class="post_edit" id="edited_by_2753883"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2753883">
+		Thanks +
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2753883">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-204311.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0471/tid-471390.html">Next Oldest</a> | <a href="../../threads/0471/tid-471390.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="471390" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" selected="selected">-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

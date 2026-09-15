@@ -1,0 +1,2122 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Binary file I/O in PAWN</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "5d6a3a1bbbfb1c2777e0a81b711ab7a2";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Intro I haven't seen any sort of tutorial, which basicly describes how to read and write binary files. Before we handle with binary and binary operators, you should read this thread: https://sampforum" />
+<link rel="canonical" href="../../threads/0430/tid-430722.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="5d6a3a1bbbfb1c2777e0a81b711ab7a2" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0430/tid-430722.html#pid2481902">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Binary file I/O in PAWN
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid2481902"></a>
+<div class="post classic " style="" id="post_2481902">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0084/uid-84376.html"><img src="../../assets/uploads/avatars/84376.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0084/uid-84376.html"><s>BigETI</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,046<br />
+	Threads: 29<br />
+	Joined: Mar 2010
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2481902" title="Binary file I/O in PAWN">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by BigETI" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.04.2013, 22:50 <span class="post_edit" id="edited_by_2481902"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by BigETI; 25/07/2013 at 05:34 PM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2481902">
+		<b><font size="6"><u><font color="Sienna">Intro</font></u></font></b><br />
+<br />
+I haven't seen any sort of tutorial, which basicly describes how to read and write binary files.<br />
+Before we handle with binary and binary operators, you should read this thread: <a href="../../threads/0177/tid-177523.html" target="_blank">https://forum.sa-mp.com/showthread.php?tid=177523</a><br />
+<br />
+<br />
+<b><font size="6"><u><font color="Sienna">What is a "Binary file"?</font></u></font></b><br />
+<br />
+This article shows you useful information about binary files: <a href="http://en.wikipedia.org/wiki/Binary_file" target="_blank">http://en.wikipedia.org/wiki/Binary_file</a><br />
+Briefly binary files are used for computer storage, and for processing purpose. If you need from or store data to a plain text file, you have to convert it first to binary. Binary files usually don't need this step at all, which will save us storage capacity.<br />
+<br />
+<br />
+<b><font size="6"><u><font color="Sienna">Why should we use binary files systems for our SA:MP servers?</font></u></font></b><br />
+<br />
+People should start making systems, where accounts can be stored and loaded much more efficient by using binaries and having much better loading/saving storage than for examples INI systems do. Even though creating tools in game to load the data and manipulate them however you like, instead connecting to your root and edit some INI file. With this knowledge people can design PAWN side "some kind of" database systems, where data can be loaded and saved very efficient.<br />
+Even though, if you are going to make some kind of a map loading system in PAWN, this is one of the best solutions, since you can convert map files with selfmade tools into binary and store the map more efficient on your server directories.<br />
+This rule applies to plugin developers aswell, but this tutorial will ONLY show how to do this in PAWN and not in C/C++. If you are interested to learn about how to read and write binary files using C/C++, you'll find very good tutorials in the internet.<br />
+And believe me, it's much more effortless to do it in C/C++ than in PAWN.<br />
+Anyway...<br />
+<br />
+<br />
+<b><font size="6"><u><font color="Sienna">How to get started?</font></u></font></b><br />
+<br />
+First of all we need to know how to create and open files, to continue the further steps.<br />
+<br />
+fopen in PAWN gives you 4 different kind of modes we can use to create a file stream<ul><li> <b>io_read</b><ul><li> Read only mode</li>
+<li> Can't write into file</li>
+<li> The specified file have to exist</li>
+</ul></li>
+<li> <b>io_write</b><ul><li> Write only mode</li>
+<li> Can't read file</li>
+<li> Creates the file, if not exist, otherwise it will clear the file</li>
+</ul></li>
+<li> <b>io_readwrite</b><ul><li> Some kind of hybrid mode</li>
+<li> During the test it seemed act odd for me</li>
+<li> We'll not going to use this mode in this tutorial</li>
+</ul></li>
+<li> <b>io_append</b><ul><li> Write only mode</li>
+<li> Can't read file</li>
+<li> Creates a new file, if not exist, oherwise it will APPEND on the file, means there is no file clearing step</li>
+<li> Usually log files are used in append mode</li>
+<li> Not used in this tutorial</li>
+</ul></li>
+</ul>
+Now we need to know, how to use or create files in PAWN<br />
+<br />
+Read only file stream<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #222222;">fopen</span><span style="color: #000000;">(</span><span style="color: #000066;">"my_test_file.txt"</span>, io_read<span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+Write only file stream<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #222222;">fopen</span><span style="color: #000000;">(</span><span style="color: #000066;">"my_test_file.txt"</span>, io_write<span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+And then we have to check, if our file stream has been successfully created.<br />
+Note: ALWAYS use fclose after you have opened a file stream, it's like ying and yang, good and bad or forwards and backwards.<br />
+Hint: fopen returns zero, if the file stream has failed.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:343px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">// Works on all modes</span><br/><span style="color: #2222BB;">new</span> File my_file <span style="color: #000000;">=</span> <span style="color: #222222;">fopen</span><span style="color: #000000;">(</span><span style="color: #000066;">"my_test_file.txt"</span>, io_read<span style="color: #000000;">)</span>;<br/><br/><span style="color: #228822;">// If my_file doesn't return zero</span><br/><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #228822;">// Our file stream is ready to be processed</span><br/><br/>    <span style="color: #228822;">// Further process...</span><br/><br/>    <span style="color: #228822;">//DON'T FORGET fclose after fopen and the process after fopen</span><br/>    <span style="color: #222222;">fclose</span><span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span>;    <br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">// Else case</span><br/><span style="color: #2222BB;">else</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #228822;">// Our file stream has failed</span><br/>    <span style="color: #228822;">// No need for fclose here, because our file stream was not created at all.</span><br/>    <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"Can't open file"</span><span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Now we're almost done with the basics of fopen and fclose, to create and destroy our file stream<br />
+After that step I want to show you some useful macros for writing binary data.<br />
+<br />
+These macros are from my pastebin version of this tutorial: <a href="http://pastebin.com/LJYvzgiG" target="_blank">http://pastebin.com/LJYvzgiG</a><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:135px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">// Usage: fwritechar(File:file_handle, value);</span><br/><span style="color: #228822;">// Writes 1 byte data into a file</span><br/><span style="color: #2222AA;">#define fwritechar(%0)  fputchar(%0, false)</span><br/><br/><span style="color: #228822;">// Usage: freadchar(File:file_handle);</span><br/><span style="color: #228822;">// Reads 1 byte data from a file</span><br/><span style="color: #2222AA;">#define freadchar(%0)   fgetchar(%0, 0, false)</span></div></div></pre>
+</div>
+Safer version of fwritechar; It will basicly filter the value to prevent writing a value, which is higher than a 8 Bit number (8 Bit goes from 0 to 255, means 256 numbers; 2^8 )<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#define fwritechar(%0,%1)  fputchar(%0,(%1)&amp;0xFF, false)</span></div></div></pre>
+</div>
+The reasons why I use macros are, because to prevent enabling UTF-8 encoding and decoding ( <a href="http://en.wikipedia.org/wiki/UTF-8" target="_blank">http://en.wikipedia.org/wiki/UTF-8</a> ) and of course the implementation of fgetchar is odd ( The second argument in fgetchar is useless, so I keep it zero ).<br />
+<br />
+Now the question is what fwritechar and freadchar exactly do?<ul><li> <b>fwritechar(File:file_handle, value)</b><ul><li> This macro writes basicly 1 Byte (8 Bit) into a file stream.</li>
+</ul></li>
+<li> <b>freadchar(File:file_handle)</b><ul><li> This macro reads basicly 1 Byte (8 Bit) from a file stream.</li>
+</ul></li>
+</ul>
+Example:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">// Defines</span><br/><span style="color: #2222AA;">#define fwritechar(%0)  fputchar(%0, false)</span><br/><span style="color: #2222AA;">#define freadchar(%0)   fgetchar(%0, 0, false)</span><br/><br/><span style="color: #2222AA;">#define TEST_FILE   "test_file.bin"</span><br/><br/><span style="color: #228822;">//...</span><br/><span style="color: #2222BB;">public</span> OnGameModeInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #228822;">// Attempts to create our file stream to write into the file</span><br/>    <span style="color: #2222BB;">new</span> <span style="color: #000000;">File</span><span style="color: #000000;">:</span>my_file <span style="color: #000000;">=</span> <span style="color: #222222;">fopen</span><span style="color: #000000;">(</span>TEST_FILE, io_write<span style="color: #000000;">)</span>;<br/><br/>    <span style="color: #228822;">// If successful</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span> <br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">// Let us write the number 90</span><br/>        fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">90</span><span style="color: #000000;">)</span>;<br/><br/>        <span style="color: #228822;">// Closes our file stream</span><br/>        <span style="color: #222222;">fclose</span><span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span>;<br/><br/>        <span style="color: #228822;">// Resets our variable to zero</span><br/>        my_file <span style="color: #000000;">=</span> <span style="color: #000000;">File</span><span style="color: #000000;">:</span><span style="color: #000000;">0</span>;<br/><br/>        <span style="color: #228822;">// Attempts to create our file stream to read the file and checks, if it was successful</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">(</span>my_file <span style="color: #000000;">=</span> <span style="color: #222222;">fopen</span><span style="color: #000000;">(</span>TEST_FILE, io_read<span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">// Reads the file and returns the 90, we wrote before</span><br/>            <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Our stored number was: %d"</span>, freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/>            <span style="color: #228822;">// Closes our file stream</span><br/>            <span style="color: #222222;">fclose</span><span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/><br/>        <span style="color: #228822;">// If not successful</span><br/>        <span style="color: #2222BB;">else</span> <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Failed to load <span style="color: #000099; font-weight: bold;">\"</span>%s<span style="color: #000099; font-weight: bold;">\"</span>"</span>, TEST_FILE<span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #228822;">// If not successful</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Failed to load <span style="color: #000099; font-weight: bold;">\"</span>%s<span style="color: #000099; font-weight: bold;">\"</span>"</span>, TEST_FILE<span style="color: #000000;">)</span>;<br/>    <br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">//...</span></div></div></pre>
+</div>
+This example above writes the number 90 (1 Byte) into a file as binary and will be read from the file, which is seen in the console.<br />
+If you try to open this file with an ordinary text editor as plain text, in ASCII the number 90 is seen as the character "Z"<br />
+You can imagine that storing in binary can mostly take much less space than as plain text.<br />
+<br />
+Number 65 as plain text<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">65</pre>
+</div>Takes 2 Bytes space<br />
+<br />
+Number 65 as binary<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">A</pre>
+</div>Takes only 1 Byte space<br />
+<br />
+And even though, if you build up on a system which reads from a plain text file, you even have to convert this into binary aswell!<br />
+<br />
+Anyway mostly people do not work with numbers from 0 to 255. Instead they want to store whole integers (32 Bit) and even if posible read and write 16 and 24 Bit numbers.<br />
+The common way to do is to do something like this:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:167px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> my_number <span style="color: #000000;">=</span> <span style="color: #000000;">1000000</span>; <span style="color: #228822;">// Our one million in a variable</span><br/><br/><span style="color: #228822;">// Writes every each 8 Bit into the file stream (4 Byte)</span><br/>fwritechar<span style="color: #000000;">(</span>my_file, my_number<span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/>fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_number<span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/>fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_number<span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">16</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/>fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_number<span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">24</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/><span style="color: #228822;">// or</span><br/><span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> <span style="color: #000000;">4</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_number<span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">(</span>i<span style="color: #000000;">*</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span></div></div></pre>
+</div>What we do is basicly we use my_number BINARY AND 0xFF, which means that this number will only keep its first 8 Bits.<br />
+Then we start to BITSHIFT RIGHT LOGICAL ( &gt;&gt;&gt; ) 8 times my_number and later we use the method above to disable all bits going above 8 Bit, making this the second chunk of our number<br />
+Applies to other steps aswell, only we gain the 3rd and last chunk of our number.<br />
+<br />
+Now how should we read this number later? We just do something like this:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:263px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">// 32 Bit (int) - Read</span><br/>my_number |<span style="color: #000000;">=</span> freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span>;<br/>my_number |<span style="color: #000000;">=</span> <span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span>;<br/>my_number |<span style="color: #000000;">=</span> <span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">16</span><span style="color: #000000;">)</span>;<br/>my_number |<span style="color: #000000;">=</span> <span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">24</span><span style="color: #000000;">)</span>;<br/><span style="color: #228822;">// or</span><br/><span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> <span style="color: #000000;">4</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> my_number |<span style="color: #000000;">=</span> <span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">(</span>i<span style="color: #000000;">*</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/><span style="color: #228822;">// 32 Bit (int) - Write</span><br/>fwritechar<span style="color: #000000;">(</span>my_file, my_number<span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/>fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_number<span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/>fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_number<span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">16</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/>fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_number<span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">24</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/><span style="color: #228822;">// or</span><br/><span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> <span style="color: #000000;">4</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_number<span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">(</span>i<span style="color: #000000;">*</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+Magically this thing will return our desired number!<br />
+<br />
+Basicly to read and write 16 and 24 Bit numbers, we have to do something like this:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:199px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">// 16 Bit - Read</span><br/>my_number |<span style="color: #000000;">=</span> freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span>;<br/>my_number |<span style="color: #000000;">=</span> <span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span>;<br/><span style="color: #228822;">// or</span><br/><span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> <span style="color: #000000;">2</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> my_number |<span style="color: #000000;">=</span> <span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">(</span>i<span style="color: #000000;">*</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/><span style="color: #228822;">// 16 Bit - Write</span><br/>fwritechar<span style="color: #000000;">(</span>my_file, my_number<span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/>fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_number<span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/><span style="color: #228822;">// or</span><br/><span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> <span style="color: #000000;">2</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> freadchar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_number<span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">(</span>i<span style="color: #000000;">*</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;</div></div></pre>
+</div><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:231px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">// 24 Bit - Read</span><br/>my_number |<span style="color: #000000;">=</span> freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span>;<br/>my_number |<span style="color: #000000;">=</span> <span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span>;<br/>my_number |<span style="color: #000000;">=</span> <span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">16</span><span style="color: #000000;">)</span>;<br/><span style="color: #228822;">// or</span><br/><span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> <span style="color: #000000;">3</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> my_number |<span style="color: #000000;">=</span> <span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">(</span>i<span style="color: #000000;">*</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/><span style="color: #228822;">// 24 Bit - Write</span><br/>fwritechar<span style="color: #000000;">(</span>my_file, my_number<span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/>fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_number<span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/>fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_number<span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">16</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/><span style="color: #228822;">// or</span><br/><span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> <span style="color: #000000;">3</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_number<span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">(</span>i<span style="color: #000000;">*</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+If we try to read and write a value using a tag for example Float, we can simply do this step:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:263px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">// Float - Read</span><br/>my_floating_number |<span style="color: #000000;">=</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span><span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>my_floating_number |<span style="color: #000000;">=</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span><span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span>;<br/>my_floating_number |<span style="color: #000000;">=</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span><span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">16</span><span style="color: #000000;">)</span>;<br/>my_floating_number |<span style="color: #000000;">=</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span><span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">24</span><span style="color: #000000;">)</span>;<br/><span style="color: #228822;">// or</span><br/><span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> <span style="color: #000000;">4</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> my_floating_number |<span style="color: #000000;">=</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span><span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">(</span>i<span style="color: #000000;">*</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/><span style="color: #228822;">// Float - Write</span><br/>fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span><span style="color: #000000;">_</span><span style="color: #000000;">:</span>my_floating_number<span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/>fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span><span style="color: #000000;">(</span><span style="color: #000000;">_</span><span style="color: #000000;">:</span>my_floating_number<span style="color: #000000;">)</span><span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/>fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span><span style="color: #000000;">(</span><span style="color: #000000;">_</span><span style="color: #000000;">:</span>my_floating_number<span style="color: #000000;">)</span><span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">16</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/>fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span><span style="color: #000000;">(</span><span style="color: #000000;">_</span><span style="color: #000000;">:</span>my_floating_number<span style="color: #000000;">)</span><span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">24</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/><span style="color: #228822;">// or</span><br/><span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> <span style="color: #000000;">4</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_floating_number<span style="color: #000000;">&gt;&gt;&gt;</span><span style="color: #000000;">(</span>i<span style="color: #000000;">*</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+Summary:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">// Defines</span><br/><span style="color: #2222AA;">#define fwritechar(%0)  fputchar(%0, false)</span><br/><span style="color: #2222AA;">#define freadchar(%0)   fgetchar(%0, 0, false)</span><br/><br/><span style="color: #228822;">// Our test file name</span><br/><span style="color: #2222AA;">#define TEST_FILE   "test_file.bin"</span><br/><br/><span style="color: #228822;">// Our array, which will be saved and loaded afterwards from a binary file.</span><br/><span style="color: #2222BB;">new</span> <span style="color: #2222BB;">const</span> my_array<span style="color: #000000;">[</span><span style="color: #000000;">5</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">{</span><span style="color: #000000;">1234</span>, <span style="color: #000000;">1000</span>, <span style="color: #000000;">1337</span>, <span style="color: #000000;">2837645</span>, <span style="color: #000000;">-</span><span style="color: #000000;">1</span><span style="color: #000000;">}</span>;<br/><br/><span style="color: #228822;">// Some callback or function you want to use in, example OnGameModeInit</span><br/><span style="color: #2222BB;">public</span> OnGameModeInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #228822;">// Opens a file stream in write only mode</span><br/>    <span style="color: #2222BB;">new</span> <span style="color: #000000;">File</span><span style="color: #000000;">:</span>my_file <span style="color: #000000;">=</span> <span style="color: #222222;">fopen</span><span style="color: #000000;">(</span>TEST_FILE, io_write<span style="color: #000000;">)</span>;<br/><br/>    <span style="color: #228822;">// If successful</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">// Some variables</span><br/>        <span style="color: #2222BB;">new</span> i, j;<br/><br/>        <span style="color: #228822;">// Iterates through the whole array and writes all data into a file stream</span><br/>        <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> <span style="color: #2222BB;">sizeof</span> my_array; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>j <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; j <span style="color: #000000;">&lt;</span> <span style="color: #000000;">4</span>; j<span style="color: #000000;">++</span><span style="color: #000000;">)</span> fwritechar<span style="color: #000000;">(</span>my_file, <span style="color: #000000;">(</span>my_array<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">(</span>j<span style="color: #000000;">*</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">&amp;</span>0xFF<span style="color: #000000;">)</span>;<br/><br/>        <span style="color: #228822;">// Closes and saves the file</span><br/>        <span style="color: #222222;">fclose</span><span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span>;<br/><br/>        <span style="color: #228822;">// Sets our file handle variable to zero</span><br/>        my_file <span style="color: #000000;">=</span> <span style="color: #000000;">File</span><span style="color: #000000;">:</span><span style="color: #000000;">0</span>;<br/><br/>        <span style="color: #228822;">// Opens a file stream in read only mode and checks if successful</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">(</span>my_file <span style="color: #000000;">=</span> <span style="color: #222222;">fopen</span><span style="color: #000000;">(</span>TEST_FILE, io_read<span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">// A variable to store our temporary result</span><br/>            <span style="color: #2222BB;">new</span> buffer <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>;<br/><br/>            <span style="color: #228822;">// Iterates through the whole array</span><br/>            <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> <span style="color: #2222BB;">sizeof</span> my_array; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #228822;">// Reads the values from the file stream</span><br/>                <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span>j <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; j <span style="color: #000000;">&lt;</span> <span style="color: #000000;">4</span>; j<span style="color: #000000;">++</span><span style="color: #000000;">)</span> buffer |<span style="color: #000000;">=</span> <span style="color: #000000;">(</span>freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">&lt;&lt;</span><span style="color: #000000;">(</span>j<span style="color: #000000;">*</span><span style="color: #000000;">8</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/>                <span style="color: #228822;">// Prints the results for us</span><br/>                <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Returns %d"</span>, buffer<span style="color: #000000;">)</span>;<br/><br/>                <span style="color: #228822;">// Sets buffer back to zero</span><br/>                buffer <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>;<br/>            <span style="color: #000000;">}</span><br/><br/>            <span style="color: #228822;">// Closes the file</span><br/>            <span style="color: #222222;">fclose</span><span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/><br/>        <span style="color: #228822;">// If not successful</span><br/>        <span style="color: #2222BB;">else</span> <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Failed to open <span style="color: #000099; font-weight: bold;">\"</span>%s<span style="color: #000099; font-weight: bold;">\"</span>"</span>, TEST_FILE<span style="color: #000000;">)</span>;    <br/>    <span style="color: #000000;">}</span><br/><br/>    <span style="color: #228822;">// If not successful</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Failed to open or create <span style="color: #000099; font-weight: bold;">\"</span>%s<span style="color: #000099; font-weight: bold;">\"</span>"</span>, TEST_FILE<span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Prints<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 98px;
+		text-align: left;
+		overflow: auto">Returns 1234
+Returns 1000
+Returns 1337
+Returns 2837645
+Returns -1</pre>
+</div>But files don't have static sizes. What would happen, if we try to read a file like this above and we already are at its EOF (End Of File)?<br />
+The example below shows you how to build up an easy binary file reader, which I guaranty it will read every existing file you can have on your computer!<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#define fwritechar(%0)  fputchar(%0, false)</span><br/><span style="color: #2222AA;">#define freadchar(%0)   fgetchar(%0, 0, false)</span><br/><br/><span style="color: #228822;">// Let us make some kind of a stock, which will read every existing file you want</span><br/><span style="color: #2222BB;">stock</span> readFile_GodMode<span style="color: #000000;">(</span>file_name<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #228822;">// Opens a file stream in read only mode</span><br/>    <span style="color: #2222BB;">new</span> <span style="color: #000000;">File</span><span style="color: #000000;">:</span>my_file <span style="color: #000000;">=</span> <span style="color: #222222;">fopen</span><span style="color: #000000;">(</span>file_name, io_read<span style="color: #000000;">)</span>;<br/><br/>    <span style="color: #228822;">// If successful</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">// Some useful variables</span><br/>        <span style="color: #2222BB;">new</span> buffer <span style="color: #000000;">=</span> EOF, pos <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>;<br/><br/>        <span style="color: #228822;">// Iterates through a whole file</span><br/>        <span style="color: #2222BB;">while</span><span style="color: #000000;">(</span><span style="color: #000000;">(</span>buffer <span style="color: #000000;">=</span> freadchar<span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #000000;">!=</span> EOF<span style="color: #000000;">)</span> <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"%x<span style="color: #000099; font-weight: bold;">\t</span>%x"</span>, pos<span style="color: #000000;">++</span>, buffer<span style="color: #000000;">)</span>;<br/><br/>        <span style="color: #228822;">// Closes our file stream</span><br/>        <span style="color: #222222;">fclose</span><span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span>;<br/><br/>        <span style="color: #228822;">// Stock returns 1</span><br/>        <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/>    <span style="color: #000000;">}</span><br/><br/>    <span style="color: #228822;">// Only, if it was not successful at all</span><br/>    <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Failed to open <span style="color: #000099; font-weight: bold;">\"</span>%s<span style="color: #000099; font-weight: bold;">\"</span>"</span>, file_name<span style="color: #000000;">)</span>;<br/><br/>    <span style="color: #228822;">// Stock returns 0</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+In a case when we would like to read and write without creating 2 file streams, we can use the native ftemp.<br />
+This native allows you to create file streams without being load from a real existing file, instead it's useful for storing temporary data without using expensive process for example file check systems, database systems, runtime converter, etc.<br />
+Also most useful native to detect the current position inside a file stream and jump around data, the native fseek will do its job very good.<br />
+An example below shows, how to use ftemp and fseek to "mess around" file streams:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">// Defines</span><br/><span style="color: #2222AA;">#define fwritechar(%0)  fputchar(%0, false)</span><br/><span style="color: #2222AA;">#define freadchar(%0)   fgetchar(%0, 0, false)</span><br/><br/><span style="color: #2222AA;">#define TEST_FILE   "test_file.txt"</span><br/><br/><span style="color: #2222BB;">public</span> OnGameModeInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #228822;">// Creates a temporary file stream which supports reading and writing</span><br/>    <span style="color: #2222BB;">new</span> <span style="color: #000000;">File</span><span style="color: #000000;">:</span>my_temp_file <span style="color: #000000;">=</span> <span style="color: #222222;">ftemp</span><span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/><br/>    <span style="color: #228822;">// If successful</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>my_temp_file<span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">// Prints the current file stream position</span><br/>        <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"We are now at position %d"</span>, <span style="color: #222222;">fseek</span><span style="color: #000000;">(</span>my_temp_file, _, seek_current<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/>        <span style="color: #228822;">// Write some random data</span><br/>        <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> <span style="color: #000000;">100</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> fwritechar<span style="color: #000000;">(</span>my_temp_file, <span style="color: #222222;">random</span><span style="color: #000000;">(</span>0x100<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/>        <span style="color: #228822;">// Let us know where the last point of this file stream is, and jump to it</span><br/>        <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"The last point of this file stream is at %d"</span>, <span style="color: #222222;">fseek</span><span style="color: #000000;">(</span>my_temp_file, _, seek_end<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/>        <span style="color: #228822;">// Now let us jump to the 11th Byte of this file stream</span><br/>        <span style="color: #222222;">fseek</span><span style="color: #000000;">(</span>my_temp_file, <span style="color: #000000;">10</span><span style="color: #000000;">)</span>;<br/><br/>        <span style="color: #228822;">// And Print the value at the 11th Byte, with this step we get automaticly to the 12th Byte</span><br/>        <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Value 1: %d"</span>, freadchar<span style="color: #000000;">(</span>my_temp_file<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/>        <span style="color: #228822;">// Let us move from our current position (12th Byte) to the 2nd Byte of our file stream</span><br/>        <span style="color: #222222;">fseek</span><span style="color: #000000;">(</span>my_temp_file, <span style="color: #000000;">-</span><span style="color: #000000;">10</span>, seek_current<span style="color: #000000;">)</span>;<br/><br/>        <span style="color: #228822;">// And print its value</span><br/>        <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Value 2: %d"</span>, freadchar<span style="color: #000000;">(</span>my_temp_file<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/>        <span style="color: #228822;">// Let us export this temporary created file stream into our scriptfiles directory</span><br/>        <span style="color: #2222BB;">new</span> <span style="color: #000000;">File</span><span style="color: #000000;">:</span>my_file <span style="color: #000000;">=</span> <span style="color: #222222;">fopen</span><span style="color: #000000;">(</span>TEST_FILE, io_write<span style="color: #000000;">)</span>;<br/><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #228822;">// Some useful variable</span><br/>            <span style="color: #2222BB;">new</span> buffer <span style="color: #000000;">=</span> EOF;<br/><br/>            <span style="color: #228822;">// Goes to the 1st Byte of our first file stream</span><br/>            <span style="color: #222222;">fseek</span><span style="color: #000000;">(</span>my_temp_file<span style="color: #000000;">)</span>;<br/><br/>            <span style="color: #228822;">// Iterate through our first file stream</span><br/>            <span style="color: #2222BB;">while</span><span style="color: #000000;">(</span><span style="color: #000000;">(</span>buffer <span style="color: #000000;">=</span> freadchar<span style="color: #000000;">(</span>my_temp_file<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #000000;">!=</span> EOF<span style="color: #000000;">)</span><br/>            <span style="color: #000000;">{</span><br/>                <span style="color: #228822;">// Writes each byte into our final test file</span><br/>                fwritechar<span style="color: #000000;">(</span>my_file, buffer<span style="color: #000000;">)</span>;<br/>            <span style="color: #000000;">}</span><br/><br/>            <span style="color: #228822;">// Close all of our file streams</span><br/>            <span style="color: #222222;">fclose</span><span style="color: #000000;">(</span>my_temp_file<span style="color: #000000;">)</span>;<br/>            <span style="color: #222222;">fclose</span><span style="color: #000000;">(</span>my_file<span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/><br/>        <span style="color: #228822;">// If not successful</span><br/>        <span style="color: #2222BB;">else</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #222222;">printf</span><span style="color: #000000;">(</span><span style="color: #000066;">"Failed to open or create <span style="color: #000099; font-weight: bold;">\"</span>%s<span style="color: #000099; font-weight: bold;">\"</span>"</span>, TEST_FILE<span style="color: #000000;">)</span>;<br/><br/>            <span style="color: #228822;">// Destroys our temporary file stream</span><br/>            <span style="color: #222222;">fclose</span><span style="color: #000000;">(</span>my_temp_file<span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"Failed to create a temporary file stream."</span><span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+This step can work vice versa aswell!<br />
+<br />
+<b><font size="6"><u><font color="Sienna">MOTD</font></u></font></b><br />
+I hope this tutorial have helped you to give you some ideas on what we could develop for our SA:MP servers to improve its data storage.<br />
+<br />
+<br />
+Best Regards:<br />
+<br />
+<i> ~ BigETI</i>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2481902">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-84376.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2482568"></a>
+<div class="post classic " style="" id="post_2482568">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0189/uid-189789.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0189/uid-189789.html"><s>IPrototypeI</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 112<br />
+	Threads: 8<br />
+	Joined: Jan 2013
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2482568" title="AW: Binary file I/O in PAWN">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by IPrototypeI" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">15.04.2013, 12:27 <span class="post_edit" id="edited_by_2482568"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2482568">
+		Nice Tutorial BigETI i only had the information to save the data in 4 bytes via array<br />
+<br />
+example:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 402px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB"></span><span style="color: #007700">public </span><span style="color: #0000BB">OnGameModeInit</span><span style="color: #007700">()
+<br/>{
+<br/>    new </span><span style="color: #0000BB">File</span><span style="color: #007700">:</span><span style="color: #0000BB">ExFile</span><span style="color: #007700">= </span><span style="color: #0000BB">fopen</span><span style="color: #007700">(</span><span style="color: #DD0000">"test.txt"</span><span style="color: #007700">, </span><span style="color: #0000BB">io_read</span><span style="color: #007700">),
+<br/>        array[</span><span style="color: #0000BB">6</span><span style="color: #007700">];
+<br/>    if(!</span><span style="color: #0000BB">ExFile</span><span style="color: #007700">)return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>    </span><span style="color: #0000BB">fread</span><span style="color: #007700">(</span><span style="color: #0000BB">ExFile</span><span style="color: #007700">,array);
+<br/>    </span><span style="color: #0000BB">printf</span><span style="color: #007700">(</span><span style="color: #DD0000">"| %d | %d | %d | %d | %d"</span><span style="color: #007700">,array[</span><span style="color: #0000BB">0</span><span style="color: #007700">],array[</span><span style="color: #0000BB">1</span><span style="color: #007700">],array[</span><span style="color: #0000BB">2</span><span style="color: #007700">],array[</span><span style="color: #0000BB">3</span><span style="color: #007700">],array[</span><span style="color: #0000BB">4</span><span style="color: #007700">]);
+<br/>    </span><span style="color: #0000BB">fclose</span><span style="color: #007700">(</span><span style="color: #0000BB">ExFile</span><span style="color: #007700">);
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>}
+
+<br/>public </span><span style="color: #0000BB">OnGameModeExit</span><span style="color: #007700">()
+<br/>{
+<br/>    new </span><span style="color: #0000BB">File</span><span style="color: #007700">:</span><span style="color: #0000BB">ExFile</span><span style="color: #007700">= </span><span style="color: #0000BB">fopen</span><span style="color: #007700">(</span><span style="color: #DD0000">"test.txt"</span><span style="color: #007700">, </span><span style="color: #0000BB">io_write</span><span style="color: #007700">),
+<br/>        array[</span><span style="color: #0000BB">5</span><span style="color: #007700">];
+<br/>    array[</span><span style="color: #0000BB">0</span><span style="color: #007700">] = </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>    array[</span><span style="color: #0000BB">1</span><span style="color: #007700">] = </span><span style="color: #0000BB">2</span><span style="color: #007700">;
+<br/>    array[</span><span style="color: #0000BB">2</span><span style="color: #007700">] = </span><span style="color: #0000BB">3</span><span style="color: #007700">;
+<br/>    array[</span><span style="color: #0000BB">3</span><span style="color: #007700">] = </span><span style="color: #0000BB">4</span><span style="color: #007700">;
+<br/>    array[</span><span style="color: #0000BB">4</span><span style="color: #007700">] = </span><span style="color: #0000BB">5</span><span style="color: #007700">;
+<br/>    </span><span style="color: #0000BB">fwrite</span><span style="color: #007700">(</span><span style="color: #0000BB">ExFile</span><span style="color: #007700">,array);
+<br/>    </span><span style="color: #0000BB">fclose</span><span style="color: #007700">(</span><span style="color: #0000BB">ExFile</span><span style="color: #007700">);
+<br/>    return </span><span style="color: #0000BB">1</span><span style="color: #007700">;
+<br/>} 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2482568">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-189789.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2482591"></a>
+<div class="post classic " style="" id="post_2482591">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0013/uid-13347.html"><img src="../../assets/uploads/avatars/13347.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0013/uid-13347.html">Vince</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Spam Machine<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 10,066<br />
+	Threads: 38<br />
+	Joined: Sep 2007
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2482591" title="Re: Binary file I/O in PAWN">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Vince" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">15.04.2013, 12:50 <span class="post_edit" id="edited_by_2482591"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2482591">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>BigETI</strong><br />
+<a href="../../threads/0430/tid-430722.html#pid2481902" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Hint: fopen returns zero (NULL), if the file stream has failed.</div>
+</td>
+</tr>
+</table>
+</div>Zero is zero (0). Not null. Pawn doesn't recognize null. <br />
+Haven't read the rest yet. I'll do that when I get home from work. Looks promising, though.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2482591">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-13347.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2482695"></a>
+<div class="post classic " style="" id="post_2482695">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0084/uid-84376.html"><img src="../../assets/uploads/avatars/84376.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0084/uid-84376.html"><s>BigETI</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,046<br />
+	Threads: 29<br />
+	Joined: Mar 2010
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2482695" title="AW: Binary file I/O in PAWN">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by BigETI" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">15.04.2013, 14:00 <span class="post_edit" id="edited_by_2482695"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2482695">
+		The definition of null is basicly void or invalid, even in the german language people use to say "Null" to zero.<br />
+I just implemented this, because in another scripting and programming languages the definition NULL exists.<br />
+But I've removed it from this tutorial, if you're getting confused with it.<br />
+<br />
+And thanks.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2482695">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-84376.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2482858"></a>
+<div class="post classic " style="" id="post_2482858">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0148/uid-148466.html"><img src="../../assets/uploads/avatars/148466.png" alt="" width="55" height="40" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0148/uid-148466.html">thefatshizms</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,745<br />
+	Threads: 252<br />
+	Joined: Dec 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2482858" title="Re: Binary file I/O in PAWN">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by thefatshizms" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">15.04.2013, 15:32 <span class="post_edit" id="edited_by_2482858"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2482858">
+		This makes my brain hurt. Anyway, looks like a good tutorial even though I don't really understand it <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2482858">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-148466.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2482881"></a>
+<div class="post classic " style="" id="post_2482881">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0046/uid-46589.html"><img src="../../assets/uploads/avatars/46589.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0046/uid-46589.html">iggy1</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,421<br />
+	Threads: 52<br />
+	Joined: Mar 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2482881" title="Re: Binary file I/O in PAWN">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by iggy1" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">15.04.2013, 15:46 <span class="post_edit" id="edited_by_2482881"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by iggy1; 15/04/2013 at 04:06 PM.
+					
+					
+						Reason: Moar text</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2482881">
+		Very nice, i never even thought you could make binary files in PAWN.<br />
+<br />
+An <a href="http://www.sqlite.org/fileformat.html" target="_blank">SQLite database</a> is just a binary file, so that proves how fast you can get data from large binary files. I attempted creating my own db system with bin files and failed miserably. Only way i could get it to work is by using intermediary files for each user, which was kind of pointless as i wanted all data in one file. <br />
+<br />
+In C/C++ 'NULL' is equal to zero, if you mouse over 'NULL' in visual studio you will see it is simply:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">#define NULL 0</pre>
+</div>Not sure if it's the same for Linux. Obviously that's not very relevant to PAWN but thought i'd just put that out there.<br />
+<br />
+Will be interesting to see if someone releases a .bin userfile system and how it works.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2482881">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-46589.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2483321"></a>
+<div class="post classic " style="" id="post_2483321">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0084/uid-84376.html"><img src="../../assets/uploads/avatars/84376.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0084/uid-84376.html"><s>BigETI</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,046<br />
+	Threads: 29<br />
+	Joined: Mar 2010
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2483321" title="AW: Binary file I/O in PAWN">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by BigETI" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">15.04.2013, 19:38 <span class="post_edit" id="edited_by_2483321"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2483321">
+		Thank you all
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2483321">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-84376.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2488071"></a>
+<div class="post classic " style="" id="post_2488071">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0158/uid-158436.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0158/uid-158436.html">michaelcosyns</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 54<br />
+	Threads: 2<br />
+	Joined: Mar 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2488071" title="Re: Binary file I/O in PAWN">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by michaelcosyns" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.04.2013, 18:50 <span class="post_edit" id="edited_by_2488071"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2488071">
+		Nice tut.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2488071">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-158436.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2490860"></a>
+<div class="post classic " style="" id="post_2490860">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0148/uid-148466.html"><img src="../../assets/uploads/avatars/148466.png" alt="" width="55" height="40" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0148/uid-148466.html">thefatshizms</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,745<br />
+	Threads: 252<br />
+	Joined: Dec 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2490860" title="Re: Binary file I/O in PAWN">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by thefatshizms" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.04.2013, 13:04 <span class="post_edit" id="edited_by_2490860"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2490860">
+		I have a question, why do you need to read/write each 8 bit? Why not 5 etc?<br />
+<br />
+I'm trying to figure this out slowly.. it's kinda hard for me lol
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2490860">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-148466.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2491729"></a>
+<div class="post classic " style="" id="post_2491729">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0084/uid-84376.html"><img src="../../assets/uploads/avatars/84376.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0084/uid-84376.html"><s>BigETI</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,046<br />
+	Threads: 29<br />
+	Joined: Mar 2010
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2491729" title="AW: Binary file I/O in PAWN">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by BigETI" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.04.2013, 20:50 <span class="post_edit" id="edited_by_2491729"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2491729">
+		This is the way how your Harddrive/Memory reads/writes data from/to.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2491729">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-84376.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2491810"></a>
+<div class="post classic " style="" id="post_2491810">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0148/uid-148466.html"><img src="../../assets/uploads/avatars/148466.png" alt="" width="55" height="40" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0148/uid-148466.html">thefatshizms</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,745<br />
+	Threads: 252<br />
+	Joined: Dec 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2491810" title="Re: Binary file I/O in PAWN">#11</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 11 by thefatshizms" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.04.2013, 21:38 <span class="post_edit" id="edited_by_2491810"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2491810">
+		So it only reads it in 8 bits then?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2491810">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-148466.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2492078"></a>
+<div class="post classic " style="" id="post_2492078">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0141/uid-141761.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0141/uid-141761.html">ReneG</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,905<br />
+	Threads: 63<br />
+	Joined: Oct 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2492078" title="Re: Binary file I/O in PAWN">#12</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 12 by ReneG" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.04.2013, 00:59 <span class="post_edit" id="edited_by_2492078"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2492078">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>thefatshizms</strong><br />
+<a href="../../threads/0430/tid-430722.html#pid2491810" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">So it only reads it in 8 bits then?</div>
+</td>
+</tr>
+</table>
+</div>Us humans count in powers of 10 whereas computers count in powers of 2. Hence 2^3 = 8. I guess it's 8 bits, because that's all you really need for characters. An unsigned 8 bit number has a max value of 2^8 - 1 (255 because we have to include 0 as a number). The extended ascii chart conveniently has 256 characters! <br />
+<br />
+If I'm wrong , then it's just 2^7 - 1 so the cpu can process negative numbers as well.<br />
+<br />
+@OP - This tutorial was a great read.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2492078">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-141761.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2621731"></a>
+<div class="post classic " style="" id="post_2621731">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0193/uid-193962.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0193/uid-193962.html">xeeZ</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 320<br />
+	Threads: 8<br />
+	Joined: Feb 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2621731" title="Re: Binary file I/O in PAWN">#13</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 13 by xeeZ" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.07.2013, 17:36 <span class="post_edit" id="edited_by_2621731"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2621731">
+		What's that __@private@__ for? Why not static? or just local variables?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2621731">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-193962.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2622517"></a>
+<div class="post classic " style="" id="post_2622517">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0084/uid-84376.html"><img src="../../assets/uploads/avatars/84376.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0084/uid-84376.html"><s>BigETI</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,046<br />
+	Threads: 29<br />
+	Joined: Mar 2010
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2622517" title="AW: Binary file I/O in PAWN">#14</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 14 by BigETI" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.07.2013, 04:37 <span class="post_edit" id="edited_by_2622517"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2622517">
+		I've written a not released yet include to handle with enums, also there is a not yet released plugin made by me, which is faster with reading and writing arrays than fblockread() and fblockwrite(). Also I wrote a working account system using binary type of files.<br />
+<br />
+Ini systems usually have to search, read, and format to store the value. You can loose accurate data, if you store floating values as text. As binary you can store and get a real copy of a floating value.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2622517">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-84376.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2623065"></a>
+<div class="post classic " style="" id="post_2623065">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0084/uid-84376.html"><img src="../../assets/uploads/avatars/84376.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0084/uid-84376.html"><s>BigETI</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,046<br />
+	Threads: 29<br />
+	Joined: Mar 2010
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2623065" title="AW: Re: AW: Binary file I/O in PAWN">#15</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 15 by BigETI" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.07.2013, 14:34 <span class="post_edit" id="edited_by_2623065"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2623065">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Y_Less</strong><br />
+<a href="../../unavailable.html" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">There are already released versions of what you just said!</div>
+</td>
+</tr>
+</table>
+</div>I've mentioned like 3 things, which of them for example has been released so far?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2623065">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-84376.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2623264"></a>
+<div class="post classic " style="" id="post_2623264">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0084/uid-84376.html"><img src="../../assets/uploads/avatars/84376.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0084/uid-84376.html"><s>BigETI</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,046<br />
+	Threads: 29<br />
+	Joined: Mar 2010
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2623264" title="AW: Binary file I/O in PAWN">#16</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 16 by BigETI" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.07.2013, 16:29 <span class="post_edit" id="edited_by_2623264"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2623264">
+		I have to say, that the plugin I've made and compared with the natives known from file.inc some time ago, and you saw it on IRC, hasn't been released yet here on these forums. The lastest SC is still on pastebin.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2623264">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-84376.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2882822"></a>
+<div class="post classic " style="" id="post_2882822">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0092/uid-92206.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0092/uid-92206.html">Hitman-97-</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 132<br />
+	Threads: 41<br />
+	Joined: May 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2882822" title="Re: Binary file I/O in PAWN">#17</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 17 by Hitman-97-" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.01.2014, 11:37 <span class="post_edit" id="edited_by_2882822"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2882822">
+		Can we bind the binary with MySQL?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2882822">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-92206.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2882933"></a>
+<div class="post classic " style="" id="post_2882933">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0009/uid-9765.html"><img src="../../assets/uploads/avatars/9765.png" alt="" width="55" height="49" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0009/uid-9765.html">Nero_3D</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,856<br />
+	Threads: 6<br />
+	Joined: Jun 2007
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2882933" title="AW: Binary file I/O in PAWN">#18</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 18 by Nero_3D" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.01.2014, 12:49 <span class="post_edit" id="edited_by_2882933"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2882933">
+		Isn't that what fblockwrite and fblockread do ?, just that there won't be any null characters ?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2882933">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-9765.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2884742"></a>
+<div class="post classic " style="" id="post_2884742">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0084/uid-84376.html"><img src="../../assets/uploads/avatars/84376.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0084/uid-84376.html"><s>BigETI</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,046<br />
+	Threads: 29<br />
+	Joined: Mar 2010
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid2884742" title="AW: Binary file I/O in PAWN">#19</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 19 by BigETI" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.01.2014, 14:09 <span class="post_edit" id="edited_by_2884742"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2884742">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Hitman-97-</strong><br />
+<a href="../../threads/0430/tid-430722.html#pid2882822" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Can we bind the binary with MySQL?</div>
+</td>
+</tr>
+</table>
+</div>You can convert each byte easily into 2 readable characters, so the raw data can be stored as a string into columns.<br />
+<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Nero_3D</strong><br />
+<a href="../../threads/0430/tid-430722.html#pid2882933" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Isn't that what fblockwrite and fblockread do ?, just that there won't be any null characters ?</div>
+</td>
+</tr>
+</table>
+</div>fblockread() and fblockwrite() only handle 4 bytes at once, hence they won't allow bytewise operations for file streams.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2884742">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-84376.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid4057363"></a>
+<div class="post classic " style="" id="post_4057363">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0322/uid-322762.html"><img src="../../assets/uploads/avatars/322762.png" alt="" width="40" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0322/uid-322762.html">Bombaci</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 24<br />
+	Threads: 2<br />
+	Joined: Oct 2018
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0430/tid-430722.html#pid4057363" title="Re: Binary file I/O in PAWN">#20</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 20 by Bombaci" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">09.10.2018, 13:40 <span class="post_edit" id="edited_by_4057363"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_4057363">
+		Thanks.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_4057363">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-322762.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0430/tid-430722.html">Next Oldest</a> | <a href="../../threads/0430/tid-430722.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="430722" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

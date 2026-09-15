@@ -1,0 +1,2374 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Include] actor_plus » Useful functions/callbacks for actors</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "f2c8635285f5e612b85c39170392fb97";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="actor_plus v5.0.2 Hey. This is a simple include which give you some functions to manipulate actors and interact with them more easily. This include differentiates dynamic actors from static actors. Yo" />
+<link rel="canonical" href="../../threads/0648/tid-648604.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="f2c8635285f5e612b85c39170392fb97" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/83.html">Includes</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (2):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0648/tid-648604-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0648/tid-648604-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0648/tid-648604.html#pid3984076">Threaded Mode</a></span>
+				</div>
+				
+					[Include] actor_plus » Useful functions/callbacks for actors
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid3984076"></a>
+<div class="post classic " style="" id="post_3984076">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0273/uid-273034.html"><img src="../../assets/uploads/avatars/273034.png" alt="" width="55" height="31" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0273/uid-273034.html">Dayrion</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,915<br />
+	Threads: 64<br />
+	Joined: Jan 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3984076" title="actor_plus » Useful functions/callbacks for actors">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by Dayrion" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.01.2018, 14:19 <span class="post_edit" id="edited_by_3984076"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Dayrion; 30.08.2018 at 21:48.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3984076">
+		<font face="Trebuchet MS"><div align="center"><font size="5"><font color="#db4f56">actor_plus </font></font><font color="#db4f56"><br />
+<font size="1">v5.0.2</font></font></div>
+<br />
+Hey.<br />
+This is a simple include which give you some functions to manipulate actors and interact with them more easily. This include differentiates dynamic actors from static actors. You must specify this when using the functions below. By the way, if you don't have streamer ; you doesn't have to specify if the actor is dynamic or not.<br />
+<i><b>I recommed to have YSI (from ******) library for better performance (the include use y_iterate and y_timers when they are included before). Also using streamer and dynamic actors can improve performance too.</b></i><br />
+<br />
+I'll copy/paste the «documentation» which already on GitHub. <b>I recommend to read it, the presentation is more clear.</b><br />
+<a href="https://github.com/Dayrion/actor_plus/blob/master/README.md" target="_blank">https://github.com/Dayrion/actor_plu...ster/README.md</a><br />
+<br />
+<b><font size="3">Description</font></b><br />
+An include with a bunch of useful functions and callback for actors. Functions returning 1 on success, 2 for specific success, 0 on failure or cellmin for specific failure. Please, check the wiki for more specific informations.<br />
+<br />
+<b><font size="5"><font color="#258787">Documentation</font></font><br />
+<br />
+<font size="4"><font color="#ad356f"><u>Constant</u></font></font><br />
+Can not be redefined</b><ul><li><font face="Lucida Console"><font color="Blue">MULTIPLE_TARGET_FOUND</font></font>: Returned by GetNearestActorForPlayer or GetNearestActorByCoord when multiple actors are found and when return_multiple_target is set to true</li>
+<li><font face="Lucida Console"><font color="blue">DEFAULT_ACTOR_VALUE</font></font>: Using this one instead of any other value result taking the value from the actor.</li>
+<li><font face="Lucida Console"><font color="blue">DEFAULT_CHECKING_TIME</font></font>: Used to detect OnPlayerTargetActor.</li>
+<li><font face="Lucida Console"><font color="blue">ALL_VALUES_INCLUDED</font></font>: If ALL_VALUES_INCLUDED is returned by a function, it means it will appear at every stage (like interior or virtual world).</li>
+<li><font face="Lucida Console"><font color="blue">DEFAULT_ACTOR_REPLACEMENT</font></font>: Time before an actor is being re-placed at his old position.</li>
+<li><font face="Lucida Console"><font color="blue">AP_DEBUG_ENABLED</font></font>: If some debugs printed messages are needed</li>
+<li><font face="Lucida Console"><font color="blue">MAX_ANIMATION_LIBRARY_LENGTH</font></font>: Maximum animation library length name</li>
+<li><font face="Lucida Console"><font color="blue">MAX_ANIMATION_NAME_LENGTH</font></font>: Maximum animation length name</li>
+<li><font face="Lucida Console"><font color="blue">DEFAULT_IS_DYNAMIC_PARAMETER</font></font>: Set to true if streamer is included otherwise, it set to false</li>
+</ul>
+<b>Can be redefined</b><ul><li><font face="Lucida Console"><font color="Blue">DEFAULT_ACTOR_DRAW_DISTANCE</font></font>: Distance that label is displayed | (type: float)</li>
+<li><font face="Lucida Console"><font color="Blue">MAX_ACTOR_LABEL_LENGTH</font></font>: Max length for a text in a label | (type: integer)</li>
+<li><font face="Lucida Console"><font color="Blue">DEFAULT_ACTOR_COLOR</font></font>: Default actor color text | (type: hexadecimal)</li>
+<li><font face="Lucida Console"><font color="Blue">DEFAULT_ACTOR_COLOR_NAME</font></font>: Default actor color name | (type: hexadecimal)</li>
+<li><font face="Lucida Console"><font color="Blue">DONT_DETECT_OPTA</font></font>: You can define it before the include to deactivated OnPlayerTargetActor detection (which using timer) | (type: N/A)</li>
+<li><font face="Lucida Console"><font color="Blue">DEFAULT_TEXT_RANGE_DETECTION</font></font>: This allows you to change the distance at which the actor (for OnPlayerTextNearActor only) is detected | (type: float)</li>
+</ul>
+<br />
+<font size="4"><b><font color="#1e6446"><u>General functions</u></font></b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 338px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">native RespawnActor</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native SetActorSkin</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">skinid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native IsActorDead</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native GetActorSkin</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native ActorPlaySound</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">soundid</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">x</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">y</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">z</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">max_range</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+
+<br/></span><span style="color: #0000BB">native SetActorName</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, const </span><span style="color: #0000BB">actor_name</span><span style="color: #007700">[], </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">display</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">contain_id </span><span style="color: #007700">= </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native GetActorName</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">actor_name</span><span style="color: #007700">[], </span><span style="color: #0000BB">length </span><span style="color: #007700">= </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">actor_name</span><span style="color: #007700">), </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native ToggleActorName</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">toggle</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+
+<br/></span><span style="color: #0000BB">native GetActorTextLabel</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">text</span><span style="color: #007700">[], </span><span style="color: #0000BB">length </span><span style="color: #007700">= </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">text</span><span style="color: #007700">), </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native GetActorLabelColor</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">ToRGB </span><span style="color: #007700">= </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">); </span><span style="color: #FF8000">// output -&gt; RGBA
+<br/></span><span style="color: #0000BB">native GetActorNameColor</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">ToRGB </span><span style="color: #007700">= </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">); </span><span style="color: #FF8000">// output -&gt; RGBA
+<br/></span><span style="color: #0000BB">native SetActorLabelColor</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">color</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native SetActorNameColor</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">color</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native ActorHasAttachedLabel</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">name_displayed </span><span style="color: #007700">= </span><span style="color: #0000BB">false</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">text_displayed </span><span style="color: #007700">= </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native UpdateAttachedActor3DTextLabel</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, const </span><span style="color: #0000BB">text</span><span style="color: #007700">[], </span><span style="color: #0000BB">color</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native DestroyActor3DTextLabel</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+
+<br/></span><span style="color: #0000BB">native SetActorChatBubble</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">text</span><span style="color: #007700">[], </span><span style="color: #0000BB">color</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">drawdistance</span><span style="color: #007700">, </span><span style="color: #0000BB">expiretime</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">); 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+<font size="3"><b><font color="#872525">Functions - Streamer dependency</font></b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 290px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">native Attach3DTextLabelToActor</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, const </span><span style="color: #0000BB">text</span><span style="color: #007700">[], </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic</span><span style="color: #007700">, </span><span style="color: #0000BB">color</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">OffsetX</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">OffsetY</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">OffsetZ</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">drawdistance</span><span style="color: #007700">, </span><span style="color: #0000BB">testlos </span><span style="color: #007700">= </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">worldid </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_ACTOR_VALUE</span><span style="color: #007700">, </span><span style="color: #0000BB">interiorid </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_ACTOR_VALUE</span><span style="color: #007700">, </span><span style="color: #0000BB">playerid </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_ACTOR_VALUE</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">streamdistance </span><span style="color: #007700">= </span><span style="color: #0000BB">STREAMER_3D_TEXT_LABEL_SD</span><span style="color: #007700">, </span><span style="color: #0000BB">areaid </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_ACTOR_VALUE</span><span style="color: #007700">, </span><span style="color: #0000BB">priority </span><span style="color: #007700">= </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">store_string </span><span style="color: #007700">= </span><span style="color: #0000BB">true</span><span style="color: #007700">);
+
+<br/></span><span style="color: #FF8000">// Used to get the real internal actor id used by SA-MP
+<br/></span><span style="color: #0000BB">native GetInternalActorIDForPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">forplayerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">);
+
+<br/></span><span style="color: #FF8000">// In addition to the streamer
+<br/></span><span style="color: #0000BB">native GetDynamicActorInterior</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native SetDynamicActorInterior</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">interiorid</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native DestroyAllDynamicActors</span><span style="color: #007700">(</span><span style="color: #0000BB">serverwide</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native CountDynamicActors</span><span style="color: #007700">(</span><span style="color: #0000BB">serverwide</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native UpdateDynamicActorForPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native CountStreamedActorForPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">serverwide</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native STREAMER_TAG_AREA GetDynamicActorArea</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native SetDynamicActorArea</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">STREAMER_TAG_AREA areaid</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native GetDynamicActorPriority</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native SetDynamicActorPriority</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">priority</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native GetInternalActorIdForPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">forplayerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">); 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+<font size="3"><b><font color="#e6ac00">Functions - Non-Streamer dependency</font></b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 98px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">native Attach3DTextLabelToActor</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">text</span><span style="color: #007700">[], </span><span style="color: #0000BB">color</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">OffsetX</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">OffsetY</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">OffsetZ</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">drawdistance</span><span style="color: #007700">, </span><span style="color: #0000BB">virtualworld </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_ACTOR_VALUE</span><span style="color: #007700">, </span><span style="color: #0000BB">testlos </span><span style="color: #007700">= </span><span style="color: #0000BB">0</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">store_string </span><span style="color: #007700">= </span><span style="color: #0000BB">true</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native SetActorInvulnerable</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">invulnerable </span><span style="color: #007700">= </span><span style="color: #0000BB">true</span><span style="color: #007700">); </span><span style="color: #FF8000">// Force actor re-stream
+<br/></span><span style="color: #0000BB">native SetActorVirtualWorld</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">vworld</span><span style="color: #007700">); </span><span style="color: #FF8000">// Force actor re-stream
+<br/></span><span style="color: #0000BB">native SetActorFacingAngle</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">ang</span><span style="color: #007700">); </span><span style="color: #FF8000">// Force actor re-stream
+<br/></span><span style="color: #0000BB">native CountStaticActors</span><span style="color: #007700">(); 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+<font size="3"><b><font color="#4604b0">Useful functions (none include needed)</font></b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 242px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">native GetNearestActorForPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">type </span><span style="color: #007700">= </span><span style="color: #0000BB">SEARCH_TYPE_ALL</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">return_multiple_target </span><span style="color: #007700">= </span><span style="color: #0000BB">false</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native GetNearestActorByCoord</span><span style="color: #007700">(</span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">x</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">y</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">z</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">type </span><span style="color: #007700">= </span><span style="color: #0000BB">SEARCH_TYPE_ALL</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">return_multiple_target </span><span style="color: #007700">= </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">max_range </span><span style="color: #007700">= </span><span style="color: #0000BB">INVALID_RANGE_ID</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native Float</span><span style="color: #007700">:</span><span style="color: #0000BB">GetActorDistanceFromPoint</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">x</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">y</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">z</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native IsPlayerInRangeOfActor</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">range </span><span style="color: #007700">= </span><span style="color: #0000BB">2.0</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native IsPlayerAimingActor</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native IsActorInPlayerFacingAngle</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">max_angle </span><span style="color: #007700">= </span><span style="color: #0000BB">90.0</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+
+<br/></span><span style="color: #0000BB">native GetActorSpawnInfo</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">skinid</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">fX</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">fY</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">fZ</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">fAngle</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native GetActorAnimationName</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">animlib</span><span style="color: #007700">[], </span><span style="color: #0000BB">size_animlib </span><span style="color: #007700">= </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">animlib</span><span style="color: #007700">), </span><span style="color: #0000BB">animname</span><span style="color: #007700">[], </span><span style="color: #0000BB">size_animname </span><span style="color: #007700">= </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">animname</span><span style="color: #007700">)); </span><span style="color: #FF8000">// Static actors only
+<br/></span><span style="color: #0000BB">native GetActorAnimation</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">animlib</span><span style="color: #007700">[], </span><span style="color: #0000BB">size_animlib </span><span style="color: #007700">= </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">animlib</span><span style="color: #007700">), </span><span style="color: #0000BB">animname</span><span style="color: #007700">[], </span><span style="color: #0000BB">size_animname </span><span style="color: #007700">= </span><span style="color: #0000BB">sizeof</span><span style="color: #007700">(</span><span style="color: #0000BB">animname</span><span style="color: #007700">), &amp;</span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">fDelta</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">loop</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">lockx</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">locky</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">freeze</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">time</span><span style="color: #007700">); </span><span style="color: #FF8000">// Static actors only
+<br/></span><span style="color: #0000BB">native ToggleActorAnimationLoop</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">toggle</span><span style="color: #007700">); </span><span style="color: #FF8000">// Static actors only
+<br/></span><span style="color: #0000BB">native bool</span><span style="color: #007700">:</span><span style="color: #0000BB">IsActorPlayingAnimation</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+
+<br/></span><span style="color: #0000BB">native CountAllActors</span><span style="color: #007700">(); 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><b>Type of research:</b><ul><li><font face="Lucida Console">SEARCH_TYPE_DYNAMIC</font>: Search only for dynamics actors</li>
+<li><font face="Lucida Console">SEARCH_TYPE_STATIC</font>: Search only for statics actors</li>
+<li><font face="Lucida Console">SEARCH_TYPE_ALL</font>: Search for dynamics and statics actors</li>
+</ul>
+<br />
+<font size="4"><b><font color="#85168c"><u>Per-players functions (Pawn RakNet dependency)</u></font></b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 178px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">native HideActorForPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">forplayerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">hide_type</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native BringBackActorForPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">forplayerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native SetActorHideTypeForPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">forplayerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">hide_type</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native RemoveAllHiddenActorForPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">);
+
+<br/></span><span style="color: #0000BB">native ApplyActorAnimationForPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">forplayerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">repeated_animation</span><span style="color: #007700">, </span><span style="color: #0000BB">animlib</span><span style="color: #007700">[], </span><span style="color: #0000BB">animname</span><span style="color: #007700">[], </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">fDelta</span><span style="color: #007700">, </span><span style="color: #0000BB">loop</span><span style="color: #007700">, </span><span style="color: #0000BB">lockx</span><span style="color: #007700">, </span><span style="color: #0000BB">locky</span><span style="color: #007700">, </span><span style="color: #0000BB">freeze</span><span style="color: #007700">, </span><span style="color: #0000BB">time</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native ClearActorAnimationsForPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">forplayerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+
+<br/></span><span style="color: #0000BB">native SetActorPosForPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">forplayerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">fake_position_type</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">x</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">y</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">z</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">angle</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native BringBackActorPosForPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">forplayerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">DEFAULT_IS_DYNAMIC_PARAMETER</span><span style="color: #007700">); 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+<b><font size="3"><font color="#1db814">Player Flags</font></font></b><br />
+<b>Hide type</b><ul><li><font face="Lucida Console">HIDE_TYPE_NONE</font>: Default value</li>
+<li><font face="Lucida Console">HIDE_TYPE_ONE_TIME</font>: The actor will be hidden one time and reappear when it be streamed</li>
+<li><font face="Lucida Console">HIDE_TYPE_PERMANENT</font>: The actor will be hidden until the script make it come back even if the player re-stream the actor</li>
+</ul>
+<br />
+<b>Repeated animation type</b><ul><li><font face="Lucida Console">ANIMATION_PLAY_NONE</font>: Default value</li>
+<li><font face="Lucida Console">ANIMATION_PLAY_ONE_TIME</font>: The actor will play an animation one time and stop it when it be streamed even if the animation is looped</li>
+<li><font face="Lucida Console">ANIMATION_PLAY_PERMANENT</font>: The actor will permently play the same animation. Restream the actor doesn't stop the process</li>
+</ul>
+<br />
+<b>Per players positions type</b><ul><li><font face="Lucida Console">FAKE_POSITION_NONE</font>: Default value</li>
+<li><font face="Lucida Console">FAKE_POSITION_ONE_TIME</font>: The actor will be placed, one time, at the specified coordinates. Re-stream the actor will place him at server sided coordinates</li>
+<li><font face="Lucida Console">FAKE_POSITION_PERMANENT</font>: The actor will be placed at specified coordinates. Re-stream it won't change anything the coordinates.</li>
+</ul>
+<br />
+<font size="4"><b><font color="#8D9AA8"><b><u>Callbacks</u></b></font></b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 178px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">forward OnPlayerShotActor</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">weaponid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">IsDynamicActor</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">forward OnPlayerTargetActor</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">weaponid</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">forward OnPlayerStopTargetActor</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">weaponid</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">forward OnPlayerMakeDamageToActor</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">damaged_actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">amount</span><span style="color: #007700">, </span><span style="color: #0000BB">weaponid</span><span style="color: #007700">, </span><span style="color: #0000BB">bodypart</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">death</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">IsDynamicActor</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">forward OnActorDeath</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">killerid</span><span style="color: #007700">, </span><span style="color: #0000BB">reason</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">IsDynamicActor</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">forward OnActorSpawn</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">IsDynamicActor</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">forward OnPlayerStreamForActor</span><span style="color: #007700">(</span><span style="color: #0000BB">forplayerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">actor_flags</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">IsDynamicActor</span><span style="color: #007700">); </span><span style="color: #FF8000">// Pawn RakNet dependency
+<br/></span><span style="color: #0000BB">forward OnActorVirtualWorldChange</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">oldvw</span><span style="color: #007700">, </span><span style="color: #0000BB">newvw</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">IsDynamicActor</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">forward OnPlayerTextNearActor</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, </span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">text</span><span style="color: #007700">[], </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">IsDynamicActor</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">forward OnDynamicActorInteriorChange</span><span style="color: #007700">(</span><span style="color: #0000BB">actorid</span><span style="color: #007700">, </span><span style="color: #0000BB">oldinterior</span><span style="color: #007700">, </span><span style="color: #0000BB">newinteriorid</span><span style="color: #007700">); 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div><b><font size="3"><font color="Red">Explanations</font></font></b><ul><li><font face="Lucida Console"><font color="Blue">OnPlayerShotActor</font></font>: Called when a player shot an actor even if the actor is invulnerable</li>
+<li><font face="Lucida Console"><font color="Blue">OnPlayerTargetActor</font></font>: Called when a player stop aiming an actor.</li>
+<li><font face="Lucida Console"><font color="Blue">OnPlayerStopTargetActor</font></font>: Called when a player aim an actor.</li>
+<li><font face="Lucida Console"><font color="Blue">OnPlayerMakeDamageToActor</font></font>: Called when a player damage an actor with a firearm. bool:death is set to true when the actor will die after processing damage. <br />
+<b>Returning 0 to this call prevent applying damage to the actor.</b></li>
+<li><font face="Lucida Console"><font color="Blue">OnActorDeath</font></font>: Called when a actor die. Set actor's HP to 0 trigger this callback too.</li>
+<li><font face="Lucida Console"><font color="Blue">OnActorSpawn</font></font>: Called when a player spawn (is created).</li>
+<li><font face="Lucida Console"><font color="Blue">OnPlayerStreamForActor</font></font>: Called when a player stream IN an actor even if the actor is hidden for the player. <br />
+<b><u>Important</u></b>: actor_flags should be used with different flags type defined below</li>
+<li><font face="Lucida Console"><font color="Blue">OnActorVirtualWorldChange</font></font>:  Called when a virtualworld is set to an actor.</li>
+<li><font face="Lucida Console"><font color="Blue">OnPlayerTextNearActor</font></font>: Called when a player chat near an actor</li>
+<li><font face="Lucida Console"><font color="Blue">OnDynamicActorInteriorChange</font></font>:  Called when an interior is set to a dynamic actor.</li>
+</ul>
+<font size="4"><b><font color="#66C880"><u>Download</u>:</font></b></font> <a href="https://github.com/Dayrion/actor_plus/blob/master/actor_plus.inc" target="_blank">https://github.com/Dayrion/actor_plu...actor_plus.inc</a><br />
+<font color="Red">You need to use the latest version of Zeex's compiler because of implicit 4D arrays. You can find the download here: <a href="https://github.com/pawn-lang/compiler/releases" target="_blank">https://github.com/pawn-lang/compiler/releases</a><br />
+Zeex's compiler is an improved version of the actual compiler with a lot of bugfixs and new features (like 4D arrays).</font><br />
+<br />
+<br />
+<font size="1">My english is a mess, I apologize for that. Any tips, comments, whatever can make me go further will be appreciated.</font></font>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3984076">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-273034.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3984078"></a>
+<div class="post classic " style="" id="post_3984078">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0308/uid-308616.html"><img src="../../assets/uploads/avatars/308616.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0308/uid-308616.html"><s>rfr</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 240<br />
+	Threads: 5<br />
+	Joined: Nov 2017
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3984078" title="Re: actor_plus » Useful functions/callbacks for actors">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by rfr" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.01.2018, 14:22 <span class="post_edit" id="edited_by_3984078"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3984078">
+		it's github not githud
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3984078">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-308616.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3984084"></a>
+<div class="post classic " style="" id="post_3984084">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0273/uid-273034.html"><img src="../../assets/uploads/avatars/273034.png" alt="" width="55" height="31" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0273/uid-273034.html">Dayrion</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,915<br />
+	Threads: 64<br />
+	Joined: Jan 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3984084" title="Re: actor_plus » Useful functions/callbacks for actors">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Dayrion" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.01.2018, 14:26 <span class="post_edit" id="edited_by_3984084"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3984084">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>rfr</strong><br />
+<a href="../../threads/0648/tid-648604.html#pid3984078" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">it's github not githud</div>
+</td>
+</tr>
+</table>
+</div>Every freaking time I do this mistake. -.-
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3984084">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-273034.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3984133"></a>
+<div class="post classic " style="" id="post_3984133">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0111/uid-111348.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0111/uid-111348.html">GuyYahood1</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 173<br />
+	Threads: 39<br />
+	Joined: Dec 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3984133" title="Re: actor_plus » Useful functions/callbacks for actors">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by GuyYahood1" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.01.2018, 16:41 <span class="post_edit" id="edited_by_3984133"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3984133">
+		Awesome!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3984133">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-111348.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3984236"></a>
+<div class="post classic " style="" id="post_3984236">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0051/uid-51573.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0051/uid-51573.html">chneubeul</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 47<br />
+	Threads: 4<br />
+	Joined: May 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3984236" title="Re: actor_plus » Useful functions/callbacks for actors">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by chneubeul" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.01.2018, 20:05 <span class="post_edit" id="edited_by_3984236"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3984236">
+		Great job, but why you didn't stream the name ?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3984236">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-51573.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3984270"></a>
+<div class="post classic " style="" id="post_3984270">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0273/uid-273034.html"><img src="../../assets/uploads/avatars/273034.png" alt="" width="55" height="31" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0273/uid-273034.html">Dayrion</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,915<br />
+	Threads: 64<br />
+	Joined: Jan 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3984270" title="Re: actor_plus » Useful functions/callbacks for actors">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by Dayrion" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.01.2018, 22:10 <span class="post_edit" id="edited_by_3984270"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3984270">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>GuyYahood1</strong><br />
+<a href="../../threads/0648/tid-648604.html#pid3984133" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Awesome!</div>
+</td>
+</tr>
+</table>
+</div>Thanks!<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>chneubeul</strong><br />
+<a href="../../threads/0648/tid-648604.html#pid3984236" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Great job, but why you didn't stream the name ?</div>
+</td>
+</tr>
+</table>
+</div>Thanks you. What do you mean? Labels (text/name) are streamed if you use streamer.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3984270">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-273034.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3984623"></a>
+<div class="post classic " style="" id="post_3984623">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0164/uid-164082.html"><img src="../../assets/uploads/avatars/164082.png" alt="" width="55" height="35" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0164/uid-164082.html">ThePhenix</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 801<br />
+	Threads: 29<br />
+	Joined: May 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3984623" title="Re: actor_plus » Useful functions/callbacks for actors">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by ThePhenix" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.01.2018, 16:13 <span class="post_edit" id="edited_by_3984623"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3984623">
+		I like the fact that you're using bit flags.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3984623">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-164082.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3984737"></a>
+<div class="post classic " style="" id="post_3984737">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0273/uid-273034.html"><img src="../../assets/uploads/avatars/273034.png" alt="" width="55" height="31" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0273/uid-273034.html">Dayrion</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,915<br />
+	Threads: 64<br />
+	Joined: Jan 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3984737" title="Re: actor_plus » Useful functions/callbacks for actors">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by Dayrion" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.01.2018, 22:00 <span class="post_edit" id="edited_by_3984737"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3984737">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>ThePhenix</strong><br />
+<a href="../../threads/0648/tid-648604.html#pid3984623" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">I like the fact that you're using bit flags.</div>
+</td>
+</tr>
+</table>
+</div>Eheh, thanks! <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3984737">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-273034.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3984750"></a>
+<div class="post classic " style="" id="post_3984750">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0260/uid-260190.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0260/uid-260190.html">Spmn</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 513<br />
+	Threads: 4<br />
+	Joined: Jun 2015
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3984750" title="Re: actor_plus » Useful functions/callbacks for actors">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Spmn" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.01.2018, 22:29 <span class="post_edit" id="edited_by_3984750"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3984750">
+		<a href="https://github.com/Dayrion/actor_plus/blob/master/actor_plus.inc#L24" target="_blank">https://github.com/Dayrion/actor_plu...r_plus.inc#L24</a><br />
+this will trigger an error while compiling with default pawncc since #warning is a zeex compiler directive
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3984750">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-260190.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3984773"></a>
+<div class="post classic " style="" id="post_3984773">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0169/uid-169807.html"><img src="../../assets/uploads/avatars/169807.png" alt="" width="55" height="53" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0169/uid-169807.html">Pottus</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 4,885<br />
+	Threads: 57<br />
+	Joined: Jun 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3984773" title="Re: actor_plus » Useful functions/callbacks for actors">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by Pottus" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.01.2018, 23:58 <span class="post_edit" id="edited_by_3984773"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3984773">
+		I didn't realize you could do this.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 114px;
+		text-align: left;
+		overflow: auto">enum _:E_TYPE_SEARCH(&lt;&lt;= 1)
+{
+	SEARCH_TYPE_DYNAMIC = 1,
+	SEARCH_TYPE_STATIC,
+	<b>SEARCH_TYPE_ALL = SEARCH_TYPE_DYNAMIC | SEARCH_TYPE_STATIC</b>
+}</pre>
+</div><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 226px;
+		text-align: left;
+		overflow: auto">I was looking at a few things here and this doesn't make sense to me.
+
+			if(type &amp; SEARCH_TYPE_STATIC)
+			{
+				foreach(new i : Static_Actors)
+				{
+					if(!IsPlayerInRangeOfPoint(playerid, range, Static_Actors[i][eapPosX], Static_Actors[i][eapPosY], Static_Actors[i][eapPosZ]))
+						continue;
+					if(actorid != INVALID_ACTOR_ID)
+						<b>return MULTIPLE_TARGET_FOUND;</b>
+					actorid = i;
+				}
+			}</pre>
+</div>Why would you do that? That pretty much makes this function useless if there is two or more actors. It should at least have an optional parameter to do what you are doing otherwise update your code to find the closest actor and return it.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3984773">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-169807.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3985300"></a>
+<div class="post classic " style="" id="post_3985300">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0273/uid-273034.html"><img src="../../assets/uploads/avatars/273034.png" alt="" width="55" height="31" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0273/uid-273034.html">Dayrion</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,915<br />
+	Threads: 64<br />
+	Joined: Jan 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3985300" title="Re: actor_plus » Useful functions/callbacks for actors">#11</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 11 by Dayrion" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">28.01.2018, 12:16 <span class="post_edit" id="edited_by_3985300"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3985300">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Pottus</strong><br />
+<a href="../../threads/0648/tid-648604.html#pid3984773" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">I didn't realize you could do this.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 114px;
+		text-align: left;
+		overflow: auto">enum _:E_TYPE_SEARCH(&lt;&lt;= 1)
+{
+	SEARCH_TYPE_DYNAMIC = 1,
+	SEARCH_TYPE_STATIC,
+	<b>SEARCH_TYPE_ALL = SEARCH_TYPE_DYNAMIC | SEARCH_TYPE_STATIC</b>
+}</pre>
+</div><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 226px;
+		text-align: left;
+		overflow: auto">I was looking at a few things here and this doesn't make sense to me.
+
+			if(type &amp; SEARCH_TYPE_STATIC)
+			{
+				foreach(new i : Static_Actors)
+				{
+					if(!IsPlayerInRangeOfPoint(playerid, range, Static_Actors[i][eapPosX], Static_Actors[i][eapPosY], Static_Actors[i][eapPosZ]))
+						continue;
+					if(actorid != INVALID_ACTOR_ID)
+						<b>return MULTIPLE_TARGET_FOUND;</b>
+					actorid = i;
+				}
+			}</pre>
+</div>Why would you do that? That pretty much makes this function useless if there is two or more actors. It should at least have an optional parameter to do what you are doing otherwise update your code to find the closest actor and return it.</div>
+</td>
+</tr>
+</table>
+</div>- What's the problem with SEARCH_TYPE_ALL ?<br />
+- That's right. I added a parameter which allow the player to return MULTIPLE_TARGET_FOUND or the first actor in range.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3985300">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-273034.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3986736"></a>
+<div class="post classic " style="" id="post_3986736">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0273/uid-273034.html"><img src="../../assets/uploads/avatars/273034.png" alt="" width="55" height="31" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0273/uid-273034.html">Dayrion</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,915<br />
+	Threads: 64<br />
+	Joined: Jan 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3986736" title="Re: actor_plus » Useful functions/callbacks for actors">#12</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 12 by Dayrion" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">31.01.2018, 12:40 <span class="post_edit" id="edited_by_3986736"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3986736">
+		<font face="Trebuchet MS"><div align="center"><b><font size="3"><font color="#ff1a1a">Update!</font></font> <font color="#db4f56">actor_plus</font> - <i>beta v1.2.0</i> to <i>beta v3.0.1</i></b></div><ul><li>Major code restructurations [removing/adding code in v2.0.0 and v3.0.0]</li>
+<li>Added per-players functions (Pawn RakNet dependency)</li>
+<li>Added callbacks</li>
+<li>A lot of bug fix</li>
+<li>Updated documentation</li>
+</ul>Please, check the documentation (<a href="https://github.com/Dayrion/actor_plus/blob/master/README.md" target="_blank">README.md</a>) if you have any doubt or you want to know what was updated. Every propositions are welcome.<br />
+<i><div align="right">Thanks to @Jelly23 and @****** for the provided help! 😄</div></i></font>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3986736">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-273034.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3986999"></a>
+<div class="post classic " style="" id="post_3986999">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0169/uid-169807.html"><img src="../../assets/uploads/avatars/169807.png" alt="" width="55" height="53" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0169/uid-169807.html">Pottus</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 4,885<br />
+	Threads: 57<br />
+	Joined: Jun 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3986999" title="Re: actor_plus » Useful functions/callbacks for actors">#13</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 13 by Pottus" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">31.01.2018, 21:51 <span class="post_edit" id="edited_by_3986999"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3986999">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Dayrion</strong><br />
+<a href="../../threads/0648/tid-648604.html#pid3985300" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">- What's the problem with SEARCH_TYPE_ALL ?<br />
+- That's right. I added a parameter which allow the player to return MULTIPLE_TARGET_FOUND or the first actor in range.</div>
+</td>
+</tr>
+</table>
+</div>It just seems to me you are trying to return too many possibilities in one function. That kind of information would be better with checking if any actors are actually in range. There is no need for MULTIPLE_TARGET_FOUND it doesn't make sense when the truth is you are simply lacking a fundamental function.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">GetActorCountForPlayer();</pre>
+</div>The first actor is not always the closest actor which breaks the naming of your function.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3986999">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-169807.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3987381"></a>
+<div class="post classic " style="" id="post_3987381">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0273/uid-273034.html"><img src="../../assets/uploads/avatars/273034.png" alt="" width="55" height="31" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0273/uid-273034.html">Dayrion</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,915<br />
+	Threads: 64<br />
+	Joined: Jan 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3987381" title="Re: actor_plus » Useful functions/callbacks for actors">#14</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 14 by Dayrion" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">01.02.2018, 21:07 <span class="post_edit" id="edited_by_3987381"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3987381">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Pottus</strong><br />
+<a href="../../threads/0648/tid-648604.html#pid3986999" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">It just seems to me you are trying to return too many possibilities in one function. That kind of information would be better with checking if any actors are actually in range. There is no need for MULTIPLE_TARGET_FOUND it doesn't make sense when the truth is you are simply lacking a fundamental function.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">GetActorCountForPlayer();</pre>
+</div>The first actor is not always the closest actor which breaks the naming of your function.</div>
+</td>
+</tr>
+</table>
+</div>Well, that's why parameters are optional. I changed both functions by removing the range and changing its operation (the point where you was right ; my function has nothing to do with range). What do you think about it?<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">PHP Code:</div>
+<div class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 50px;
+		text-align: left;
+		overflow: auto">
+<code style="white-space:nowrap">
+<!-- php buffer start --><code><span style="color: #000000">
+<span style="color: #0000BB">native GetNearestActorForPlayer</span><span style="color: #007700">(</span><span style="color: #0000BB">playerid</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">type </span><span style="color: #007700">= </span><span style="color: #0000BB">SEARCH_TYPE_ALL</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">return_multiple_target </span><span style="color: #007700">= </span><span style="color: #0000BB">false</span><span style="color: #007700">);
+<br/></span><span style="color: #0000BB">native GetNearestActorByCoord</span><span style="color: #007700">(</span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">x</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">y</span><span style="color: #007700">, </span><span style="color: #0000BB">Float</span><span style="color: #007700">:</span><span style="color: #0000BB">z</span><span style="color: #007700">, &amp;</span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">isdynamic </span><span style="color: #007700">= </span><span style="color: #0000BB">false</span><span style="color: #007700">, </span><span style="color: #0000BB">type </span><span style="color: #007700">= </span><span style="color: #0000BB">SEARCH_TYPE_ALL</span><span style="color: #007700">, </span><span style="color: #0000BB">bool</span><span style="color: #007700">:</span><span style="color: #0000BB">return_multiple_target </span><span style="color: #007700">= </span><span style="color: #0000BB">false</span><span style="color: #007700">); 
+<br/></span><span style="color: #0000BB"></span>
+</span>
+</code><!-- php buffer end -->
+</code>
+</div>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3987381">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-273034.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3987434"></a>
+<div class="post classic " style="" id="post_3987434">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0169/uid-169807.html"><img src="../../assets/uploads/avatars/169807.png" alt="" width="55" height="53" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0169/uid-169807.html">Pottus</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 4,885<br />
+	Threads: 57<br />
+	Joined: Jun 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3987434" title="Re: actor_plus » Useful functions/callbacks for actors">#15</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 15 by Pottus" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">02.02.2018, 00:24 <span class="post_edit" id="edited_by_3987434"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3987434">
+		Looks more sensible now.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3987434">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-169807.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3987436"></a>
+<div class="post classic " style="" id="post_3987436">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0273/uid-273034.html"><img src="../../assets/uploads/avatars/273034.png" alt="" width="55" height="31" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0273/uid-273034.html">Dayrion</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,915<br />
+	Threads: 64<br />
+	Joined: Jan 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3987436" title="Re: actor_plus » Useful functions/callbacks for actors">#16</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 16 by Dayrion" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">02.02.2018, 00:33 <span class="post_edit" id="edited_by_3987436"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Dayrion; 02.02.2018 at 18:19.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3987436">
+		<font size="4"><font color="#66cc99"><b>Updating to 3.1.0</b></font></font><br />
+<br />
++ Added callbacks (OnPlayerTextNearActor - OnActorVirtualWorldChange - OnDynamicActorInteriorChange)<br />
++ Major structuration code change<br />
++ GetNearestActorForPlayer &amp; GetNearestActorByCoord modifications<br />
+- Removing codes/comments<br />
+<br />
+<b>Include available here:</b> <a href="https://github.com/Dayrion/actor_plus/blob/master/actor_plus.inc" target="_blank">https://github.com/Dayrion/actor_plu...actor_plus.inc</a>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3987436">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-273034.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3987438"></a>
+<div class="post classic " style="" id="post_3987438">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0169/uid-169807.html"><img src="../../assets/uploads/avatars/169807.png" alt="" width="55" height="53" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0169/uid-169807.html">Pottus</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 4,885<br />
+	Threads: 57<br />
+	Joined: Jun 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3987438" title="Re: actor_plus » Useful functions/callbacks for actors">#17</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 17 by Pottus" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">02.02.2018, 00:47 <span class="post_edit" id="edited_by_3987438"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Pottus; 02.02.2018 at 01:20.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3987438">
+		OnActorVirtualWorldChange - OnDynamicActorInteriorChange<br />
+<br />
+These callbacks seem a bit redundant because it is known when these functions are actually are used it would be silly to need to use a callback. What you should do is use CallRemoteFunction() instead so that other scripts are aware of the change.<br />
+<br />
+Over all this is a 100 percent solid system.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3987438">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-169807.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3987666"></a>
+<div class="post classic " style="" id="post_3987666">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0273/uid-273034.html"><img src="../../assets/uploads/avatars/273034.png" alt="" width="55" height="31" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0273/uid-273034.html">Dayrion</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,915<br />
+	Threads: 64<br />
+	Joined: Jan 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3987666" title="Re: actor_plus » Useful functions/callbacks for actors">#18</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 18 by Dayrion" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">02.02.2018, 18:17 <span class="post_edit" id="edited_by_3987666"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3987666">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Pottus</strong><br />
+<a href="../../threads/0648/tid-648604.html#pid3987438" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">OnActorVirtualWorldChange - OnDynamicActorInteriorChange<br />
+<br />
+These callbacks seem a bit redundant because it is known when these functions are actually are used it would be silly to need to use a callback. What you should do is use CallRemoteFunction() instead so that other scripts are aware of the change.<br />
+<br />
+Over all this is a 100 percent solid system.</div>
+</td>
+</tr>
+</table>
+</div>I knew it is redundant but who knows, someone can have a good idea ad make a good usage of this. Anyway, the CallRemoteFunction is a better idea which make this usefull. <br />
+<br />
+Thanks you for your precious contribitious!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3987666">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-273034.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3989345"></a>
+<div class="post classic " style="" id="post_3989345">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0273/uid-273034.html"><img src="../../assets/uploads/avatars/273034.png" alt="" width="55" height="31" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0273/uid-273034.html">Dayrion</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,915<br />
+	Threads: 64<br />
+	Joined: Jan 2016
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3989345" title="Re: actor_plus » Useful functions/callbacks for actors">#19</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 19 by Dayrion" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">06.02.2018, 15:35 <span class="post_edit" id="edited_by_3989345"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3989345">
+		<i><b>Version 3.3.0 realesed.</b></i> This is the first stable version. Any useful comments are still appreciated. <br />
+- <a href="https://github.com/Dayrion/actor_plus/blob/master/actor_plus.inc" target="_blank">https://github.com/Dayrion/actor_plu...actor_plus.inc</a><br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Spmn</strong><br />
+<a href="../../threads/0648/tid-648604.html#pid3984750" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic"><a href="https://github.com/Dayrion/actor_plus/blob/master/actor_plus.inc#L24" target="_blank">https://github.com/Dayrion/actor_plu...r_plus.inc#L24</a><br />
+this will trigger an error while compiling with default pawncc since #warning is a zeex compiler directive</div>
+</td>
+</tr>
+</table>
+</div>The basic compiler is supported in this version. Thanks for your bug report.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3989345">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-273034.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3989467"></a>
+<div class="post classic " style="" id="post_3989467">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0169/uid-169807.html"><img src="../../assets/uploads/avatars/169807.png" alt="" width="55" height="53" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0169/uid-169807.html">Pottus</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 4,885<br />
+	Threads: 57<br />
+	Joined: Jun 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0648/tid-648604.html#pid3989467" title="Re: actor_plus » Useful functions/callbacks for actors">#20</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 20 by Pottus" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">06.02.2018, 22:58 <span class="post_edit" id="edited_by_3989467"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3989467">
+		I have an excellent suggestion. Now that you have created this system you should create an actor builder filterscript using your own include as a base. This will lead to further development of not only a complementary filterscript but I am sure you will find new functions to aid in the development of a tool.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3989467">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-169807.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0648/tid-648604.html">Next Oldest</a> | <a href="../../threads/0648/tid-648604.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="648604" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (2):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0648/tid-648604-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0648/tid-648604-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" selected="selected">---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/83.html">Includes</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

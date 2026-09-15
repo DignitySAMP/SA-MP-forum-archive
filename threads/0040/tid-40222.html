@@ -1,0 +1,2271 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Setting up a simple server in SAMP</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "df2f36aa793674224707843fa3521e4b";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Initial Setup Firstly you will need to download the appropriate server package. This will depend on your OS (Operating System). The downloads page can be found here. You will now be presented with a s" />
+<link rel="canonical" href="../../threads/0040/tid-40222.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="df2f36aa793674224707843fa3521e4b" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/6.html">SA-MP Server</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/19.html">Server Support</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (2):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0040/tid-40222-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0040/tid-40222-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0040/tid-40222.html#pid100335">Threaded Mode</a></span>
+				</div>
+				
+					Setting up a simple server in SAMP
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid100335"></a>
+<div class="post classic " style="" id="post_100335">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0030/uid-30139.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0030/uid-30139.html">user345</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 5<br />
+	Threads: 1<br />
+	Joined: Jun 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid100335" title="Setting up a simple server in SAMP">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by user345" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.06.2008, 09:44 <span class="post_edit" id="edited_by_100335"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_100335">
+		<b><u>Initial Setup</u></b><br />
+<br />
+Firstly you will need to download the appropriate server package. This will depend on your OS (Operating System). The downloads page can be found <a href="http://www.sa-mp.com/download.php" target="_blank">here</a>. You will now be presented with a screen with downloads for the Client and Server.<br />
+Scroll down until you see the following screen.<br />
+<br />
+<img alt="" border="0" src="http://i286.photobucket.com/albums/ll96/xClumx/serverdownload.jpg"/><br />
+<a href="http://i286.photobucket.com/albums/ll96/xClumx/serverdownload.jpg" target="_blank">http://i286.photobucket.com/albums/l...erdownload.jpg</a><br />
+<br />
+From here choose your server package and download it by clicking on the coloured text under the package name.<br />
+<br />
+**Note** Before you download the server package be sure you read the <a href="http://www.sa-mp.com/service_agreement.txt" target="_blank">SA-MP Services Agreement</a>. This will define your rights as a SAMP server owner and the rules you must abide by to use the SAMP software.<br />
+<br />
+Once you have downloaded the Server package that your require and you have read the Service Agreement locate your download. <br />
+<br />
+<img alt="" border="0" src="http://i286.photobucket.com/albums/ll96/xClumx/sampserver.jpg"/><br />
+<a href="http://i286.photobucket.com/albums/ll96/xClumx/sampserver.jpg" target="_blank">http://i286.photobucket.com/albums/l...sampserver.jpg</a><br />
+<br />
+You will now need to extract it, right click on the Zip archive and click extract//extract all//extract here. (Make sure you extract the files to a folder to keep things nice and tidy)<br />
+<br />
+<img alt="" border="0" src="http://i286.photobucket.com/albums/ll96/xClumx/extract.jpg"/><br />
+<a href="http://i286.photobucket.com/albums/ll96/xClumx/extract.jpg" target="_blank">http://i286.photobucket.com/albums/l...mx/extract.jpg</a><br />
+<br />
+For windows users, you may use a program such as <a href="http://www.rarlab.com" target="_blank">WinRAR</a>. <br />
+<br />
+**Note** The above screenshot is taken from a computer with WinRAR installed, you may not have the exact same screen, but you should still have an Extract option somewhere if you run XP//Vista.<br />
+<br />
+After extracting you should now have a new folder somewhere // list of files of the SAMP Server, if so, you have extracted correctly. Now when you open the folder you will see something like this. <br />
+<br />
+<img alt="" border="0" src="http://i286.photobucket.com/albums/ll96/xClumx/sampserver2.jpg"/><br />
+<a href="http://i286.photobucket.com/albums/ll96/xClumx/sampserver2.jpg" target="_blank">http://i286.photobucket.com/albums/l...ampserver2.jpg</a><br />
+<br />
+(Windows users only, Linux owners will have a slightly different screen)<br />
+<br />
+Now that this has been done successfully the next stage is to decide on hosting. If you plan on hosting your server from home then follow the next stage of the tutorial. if you plan on buying a server from one of the <a href="http://forum.sa-mp.com/index.php?topic=46697.0" target="_blank">SAMP Server Hosts</a> Then you may skip to <u><b>Configuring The Server</b></u><br />
+<br />
+Some notes about Home Hosting vs Buying a Server Host<br />
+<br />
+Home hosting will usually cause laggy gameplay as the server is usually hosted on a low-speed internet connection with multiple users accessing it.<br />
+Home hosting servers will only be online when the computer it's being hosted on is online<br />
+<br />
+Server Hosts are usually hosted on high quality/high speed internet connections (100Mb//1Gb) depending on host.<br />
+Sever Hosts are 24/7 and can provide help if you encounter problems with your server.<br />
+__________________________________________________  ________________________________________<br />
+<br />
+<b><u>Hosting on a Home Computer</u></b><br />
+<br />
+If you do decide to host off your home computer then there are a few things you must do.<br />
+<br />
+Port Forward - A tutorial can be found <a href="http://forum.sa-mp.com/index.php?topic=48953.0" target="_blank">here</a> made by me, so if you have any questions feel free to ask me. (I have requested a tutorial for SAMP today on <a href="http://www.Portforward.com" target="_blank">www.Portforward.com</a> and will see what happens.)<br />
+<br />
+Allow Gta_Sa.exe // announce.exe // Samp_Server.exe through any firewalls/anti-virus you may have on your computer.<br />
+<br />
+**Note** Users of Kapersky antivirus please visit <a href="http://forum.sa-mp.com/index.php?topic=48334.0" target="_blank">here</a>.<br />
+<br />
+__________________________________________________  _________________________________________<br />
+<br />
+<b><u>Configuring The Server</u></b><br />
+<br />
+Once you have completed all of the above it is now time to set up your server.<br />
+<br />
+<b>Scripts</b><br />
+<br />
+Since this guide is aimed at people who are new to scripting then i will assume you have little-to-no scripting knowledge. <br />
+<br />
+<u>Brief overview of PAWN.</u><br />
+<br />
+Unlike other internet games, SAMP's gamemodes are scripted in PAWN, this means more effort is required into setting up a SAMP server. In other words, you can't go to a nice screen which says "Please Select Gametype, Max players, etc" There is more work involved. <br />
+<br />
+<u>Some PAWN references</u><br />
+<br />
+The SAMP Wikipedia is a great place to find information about basic scripting. However, since the official Wikipedia page is down, you can use an alternative link. <a href="http://discoverthelife.eu/wiki/wiki.sa-mp.com/wiki/Main_Page.html" target="_blank">Discoverthelife Back-Up Wikipedia</a>. The Search Function on this Wikipedia seems to be broken, so if you would like to browse all the pages then click <a href="http://discoverthelife.eu/wiki/wiki.sa-mp.com/wiki/" target="_blank">here</a>.<br />
+<br />
+For general PAWN related documentation click <a href="http://compuphase.com/pawn/pawn.htm#DOWNLOAD_DOCS" target="_blank">here</a> (Taken from f3llah1n's thread found <a href="http://forum.sa-mp.com/index.php?topic=2750.0" target="_blank">here</a>.<br />
+<br />
+<a href="http://forum.sa-mp.com/index.php?topic=61893.0" target="_blank">Andre9977's Indentation Tutorial</a><br />
+<br />
+<a href="http://pawn.pastebin.com" target="_blank">Pastebin for script debugging</a><br />
+<br />
+<a href="http://forum.sa-mp.com/index.php?topic=139.0" target="_blank">Mike's PAWN references</a> (Be aware the wiki.samp.com links are not functioning at this time.<br />
+<br />
+<u>PAWN Scripts</u><br />
+<br />
+If you feel you aren't quite ready for making your own script then that's perfectly fine. If you are new to scripting then it's best to modify an existing script to your needs. You will learn eventually to make your own scripts.<br />
+<br />
+Pre-made scripts can be found under the <a href="http://forum.sa-mp.com/index.php?board=30.0" target="_blank">Script Showroom</a> section of the forums.<br />
+<br />
+<u>Different Types of Scripts</u><br />
+<br />
+Gamemodes [Denoted with [GM]//[Gamemode]]<br />
+Filterscripts [Denoted with [FS]]<br />
+Includes [Denoted with [INC]]<br />
+Applications [Denoted with [APP]]<br />
+Maps [Denoted with [MAP]]<br />
+<br />
+Gamemodes are the main scripts and are the main gameplay in the server.<br />
+Filterscripts are add-on scripts which add something special to the server, like an object streamer//admin house//objects, etc.<br />
+Includes give extra functions to a PAWN script.<br />
+Applications are used to enhance the server in some way, such as an RCON Addon.<br />
+Maps are groups of objects put together to form an extra area on the Original San Andreas Map (Such as a Fifth Airport // Stuntzone // Dm Area, etc)<br />
+<br />
+<u>Different Gamemodes</u><br />
+<br />
+The main types of gamemodes are as follows.<br />
+<br />
+DM or Deathmatch - Killing other players to win<br />
+Stunt - Maps filled with lots of jumps/loops/etc<br />
+Cops and Robbers - Cops chasing criminals, how much simpler can it be?<br />
+RPG - Role Playing Game - Take on the role of a taxi driver and go round doing your job, meeting people and acting as you would do in real life<br />
+Race - Where you can race against other people to win<br />
+All-In-One - Where you get a mixture of all of the above<br />
+<br />
+There are more variations on these gamemodes but thee are the main ones.<br />
+<br />
+The most popular gamemode around is undoubtedly:<br />
+<br />
+<a href="http://forum.sa-mp.com/index.php?topic=24634.0" target="_blank">The Godfather</a> - Popular RPG gamemode<br />
+<br />
+<u>Installing the Script</u><br />
+<br />
+When you have found a script you like, download it somewhere easy to find. Locate the script. If the script is a .PWN file then do the next step. If it is a .AMX file or if the script contains both a .PWN and .AMX file then skip the next step.<br />
+<br />
+<u>Compiling .PWN Files</u><br />
+<br />
+Open up your SAMP server folder which you extracted earlier on in the tutorial. Look for a folder called "Pawno" and open it.<br />
+<br />
+You should now see a screen that looks like this.<br />
+<br />
+<img alt="" border="0" src="http://i286.photobucket.com/albums/ll96/xClumx/pawnofolder.jpg"/><br />
+<a href="http://i286.photobucket.com/albums/ll96/xClumx/pawnofolder.jpg" target="_blank">http://i286.photobucket.com/albums/l...awnofolder.jpg</a><br />
+<br />
+Now double click on the Pawno icon. <img alt="" border="0" src="http://i286.photobucket.com/albums/ll96/xClumx/pawnoicon.jpg"/> <a href="http://i286.photobucket.com/albums/ll96/xClumx/pawnoicon.jpg" target="_blank">http://i286.photobucket.com/albums/l.../pawnoicon.jpg</a><br />
+<br />
+This will bring up a screen that looks like this.<br />
+<br />
+<img alt="" border="0" src="http://i286.photobucket.com/albums/ll96/xClumx/pawno.jpg"/><br />
+<a href="http://i286.photobucket.com/albums/ll96/xClumx/pawno.jpg" target="_blank">http://i286.photobucket.com/albums/l...lumx/pawno.jpg</a><br />
+<br />
+Click on File<br />
+Click Open<br />
+Browse to your .PWN file and click open.<br />
+<br />
+Your script will now appear on the screen. At the top of the screen click on "Build" then click on "Compile". At this point your computer may slow down, compiling the script takes up a fair amount of memory and time so don't panic!<br />
+<br />
+You should now see a screen like this.<br />
+<br />
+<img alt="" border="0" src="http://i286.photobucket.com/albums/ll96/xClumx/compiling.jpg"/><br />
+<a href="http://i286.photobucket.com/albums/ll96/xClumx/compiling.jpg" target="_blank">http://i286.photobucket.com/albums/l.../compiling.jpg</a><br />
+<br />
+Is you see errors in the box and you aren't sure why they are occuring then post in the <a href="http://forum.sa-mp.com/index.php?board=10.0" target="_blank">Scripting Section</a>. Post the code you are having problems with in Pastebin (If it's a large piece of code you are having problems with, but DONT post the WHOLE script!), and link to the pastebin code. <br />
+<br />
+Or use the Insert Code button if the code is small. <img alt="" border="0" src="http://i286.photobucket.com/albums/ll96/xClumx/insertcode.jpg"/><br />
+<br />
+However, if the compilation is successful you will see a screen similar to the above. Now close down PAWN and look for the .PWN file you compiled. You should now see a .AMX file with the same name as the .PWN file.<br />
+<br />
+<u>Adding the Gamemode to the Server</u><br />
+<br />
+Now, once you have got your .AMX and .PWN file move them to the "Gamemodes" Folder within your Server Folder.<br />
+<br />
+If you have any Filterscripts or Includes you also wish to incllude then move them to the Appropriate Folders. The filterscripts folder can be found in the same Directory as the Gamemodes folder. The Includes folder can be found in the Pawno Folder.<br />
+<br />
+<u>Editing the Server Config File</u><br />
+<br />
+Open up your server folder and you should see a "Server.cfg" file. Right click the file and click Open With. Choose either Wordpad or Notepad from the list and Select Ok.<br />
+<br />
+You will now be presented with a screen like this.<br />
+<br />
+<img alt="" border="0" src="http://i286.photobucket.com/albums/ll96/xClumx/serverconfig.jpg"/><br />
+<a href="http://i286.photobucket.com/albums/ll96/xClumx/serverconfig.jpg" target="_blank">http://i286.photobucket.com/albums/l...rverconfig.jpg</a><br />
+<br />
+<u>Brief explanation of the Server.cfg File</u><br />
+<br />
+Lanmode defines whether or not the server can be accessed from the internet. 0 being Yes, 1 being No<br />
+Rcon_password defines the password which Administrators will use to admin the server using the Rcon screen<br />
+Maxplayers defines the Maximum amount of players that can join your server (200 being the maximum amount)<br />
+Port defines the port number which clients will connect to your server with. (MUST be the same as the forwarded port)<br />
+Hostname defines the name of the server as seen from the Internet List//Favourites List<br />
+Gamemode(number) defines the Gamemodes which will appear on the server.<br />
+Filterscripts defines the Filterscripts which will be used on the server<br />
+Announce defines whether or not the server will show up on the Internet list (1 for yes, 0 for no)<br />
+Query this can be deleted from the .cfg file (Not needed)<br />
+Weburl defines the website which will be displayed on the servers mini-information section<br />
+Anti-cheat should be 0 (Ant-cheat was removed from SAMP)<br />
+<br />
+The Server_Readme file also contains these explanations:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto">SA:MP 0.2.2 Server Setup
+----------------------
+
+Once the configuration is complete, run samp-server.exe to
+launch the server process.
+
+CONFIGURATION:
+
+Example server.cfg:
+	echo Executing Server Config...
+	lanmode 0
+	maxplayers 32
+	port 7777
+	hostname Unnamed Server
+	announce 0
+	gamemode0 lvdm 1
+	gamemode1 rivershell 1
+	gamemode2 sniper 1
+	gamemode3 barron 1
+	gamemode4 sftdm 1
+	weburl <a href="http://www.sa-mp.com" target="_blank">www.sa-mp.com</a>
+	rcon_password changeme
+
+To configure the server, you must edit the values in server.cfg. They are explained below:
+
+hostname
+--------
+	Parameters:
+		string
+	
+	Description:
+		Specifies the hostname shown in the server browser
+		
+port
+----
+	Parameters:
+		int
+	
+	Description:
+		Specifies the port to listen on.
+		This port is used for game connections, rcon connections, and for querying.
+	
+maxplayers
+----------
+	Parameters:
+		int
+	
+	Description:
+		Specifies the maximum amount of players.
+		
+lanmode
+-------
+	Parameters:
+		int (0 or 1)
+		
+	Description:
+		Turns lanmode on (1) or off (0). Lanmode (as the name suggests) is for use on LAN games, where bandwidth is not a problem. Lanmode sends data at a higher rate, for a smoother game.
+		
+
+announce
+-------
+	Parameters:
+		int (0 or 1)
+		
+	Description:
+		Announces your server to the 'Internet' server list in the SA:MP browser. On (1) or Off (0).
+
+weburl
+------
+	Parameters:
+		string
+	
+	Description:
+		Specifies the URL shown in the server browser, which is associated to the server.
+		
+rcon_password
+-------------
+	Parameters:
+		string
+		
+	Description:
+		Specifies the password needed to connect to rcon, or login to rcon ingame.
+		
+gamemode0 - gamemode15
+----------------------
+	Parameters:
+		string
+		int
+		
+	Description:
+		Specifies the rotation settings. The first parameter sets the game mode name. The second is the number of times it will repeat.
+		You can use gamemode0 to specify the first gamemode, gamemode1 to specify the second, etc.</pre>
+</div>When you have set the .cfg file to your needs. Save it.<br />
+<br />
+Now click on the samp_Server.exe file and you should get a black DOS screen like this.<br />
+<br />
+<img alt="" border="0" src="http://i286.photobucket.com/albums/ll96/xClumx/dosscreen.jpg"/><br />
+<a href="http://i286.photobucket.com/albums/ll96/xClumx/dosscreen.jpg" target="_blank">http://i286.photobucket.com/albums/l.../dosscreen.jpg</a><br />
+<br />
+Of course, this is running a default gamemode.<br />
+<br />
+If when you try to open the Samp_Server.exe file, the screen immediately closes consult the Server_log file.<br />
+<br />
+The most common problems are things such as.<br />
+<br />
+Error: Your password must be changed from the default password, please change it.<br />
+<br />
+Change your Rcon Password!<br />
+<br />
+[12:33] I couldn't load any gamemode scripts. Please verify your server.cfg<br />
+[12:33] It needs a gamemode0 line at the very least.<br />
+<br />
+Add a 0 to the gamemode statement<br />
+<br />
+**Note** The Announce.exe file does NOT need to be opened too, if you try to do so, the screen will immediately close. Announce.exe will be opened automatically when Announce 1 is set in the Server.cfg file.<br />
+<br />
+<u><b>Testing the Server</b></u><br />
+<br />
+Now to see if the server works!<br />
+<br />
+If this server is running from your computer and you want to join then add the IP 127.0.01 into your favourites list.<br />
+<br />
+For your friends to join, you need to obtain your External IP from <a href="http://www.whatsmyip.org" target="_blank">here</a>.<br />
+<br />
+Then give them the IP and Port number. (IP:Port Number) E.g 123.123.123.345:7777<br />
+<br />
+If you or your friends can't join the server, then you will need to check the Port-Forwarding//Firewalls section again.<br />
+<br />
+However, if the server is from a paid host, then they should supply you with an IP address. Add that to your favourites list and join.<br />
+<br />
+If you need help, remember to contact your host!<br />
+<br />
+I'm pretty sure there's a few things missing from this, so if you find anything missing tell me and i'll add it to the tut, with credit to you.<br />
+<br />
+**Windows Owners* be sure to read <a href="http://forum.sa-mp.com/index.php?topic=47456.0" target="_blank">this!</a><br />
+<br />
+IRC: Scripting Channel is also set up for problems with Scripting, it is located at:<br />
+<br />
+irc.gamesurge.net #sa-mp.scripting
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_100335">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-30139.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid100341"></a>
+<div class="post classic " style="" id="post_100341">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0010/uid-10023.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0010/uid-10023.html">Azteca</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 6<br />
+	Threads: 0<br />
+	Joined: Jun 2007
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid100341" title="Re: Setting up a simple server in SAMP">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by Azteca" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.06.2008, 10:08 <span class="post_edit" id="edited_by_100341"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_100341">
+		Very nice tutorial. You've put a lot of work in to this and it's really paid off. Now I know where to refer my friends when they ask me such questions. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/> <br />
+<br />
+Thanks mate.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_100341">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-10023.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid100342"></a>
+<div class="post classic " style="" id="post_100342">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0013/uid-13319.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0013/uid-13319.html">Snickers</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 371<br />
+	Threads: 9<br />
+	Joined: Sep 2007
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid100342" title="Re: Setting up a simple server in SAMP">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Snickers" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.06.2008, 10:09 <span class="post_edit" id="edited_by_100342"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_100342">
+		Really nice tutorial, should be stikied in my eyes, but too bad that the pictures don't work <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/sad.gif" title="Sad"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_100342">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-13319.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid100343"></a>
+<div class="post classic " style="" id="post_100343">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0030/uid-30139.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0030/uid-30139.html">user345</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 5<br />
+	Threads: 1<br />
+	Joined: Jun 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid100343" title="Re: Setting up a simple server in SAMP">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by user345" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.06.2008, 10:11 <span class="post_edit" id="edited_by_100343"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_100343">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Azteca </strong><br />
+</div>
+<div style="font-style:italic">Very nice tutorial. You've put a lot of work in to this and it's really paid off. Now I know where to refer my friends when they ask me such questions. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/> <br />
+<br />
+Thanks mate.</div>
+</td>
+</tr>
+</table>
+</div>Thanks!<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Snickers </strong><br />
+</div>
+<div style="font-style:italic">Really nice tutorial, should be stikied in my eyes, but too bad that the pictures don't work <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/sad.gif" title="Sad"/></div>
+</td>
+</tr>
+</table>
+</div>They work here, you blocked photobucket?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_100343">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-30139.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid100344"></a>
+<div class="post classic " style="" id="post_100344">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0013/uid-13319.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0013/uid-13319.html">Snickers</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 371<br />
+	Threads: 9<br />
+	Joined: Sep 2007
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid100344" title="Re: Setting up a simple server in SAMP">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by Snickers" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.06.2008, 10:13 <span class="post_edit" id="edited_by_100344"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_100344">
+		Nope <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/neutral.gif" title="undecided"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_100344">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-13319.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid100345"></a>
+<div class="post classic " style="" id="post_100345">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0030/uid-30139.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0030/uid-30139.html">user345</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 5<br />
+	Threads: 1<br />
+	Joined: Jun 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid100345" title="Re: Setting up a simple server in SAMP">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by user345" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">18.06.2008, 10:13 <span class="post_edit" id="edited_by_100345"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_100345">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Snickers </strong><br />
+</div>
+<div style="font-style:italic">Nope <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/neutral.gif" title="undecided"/></div>
+</td>
+</tr>
+</table>
+</div>Ok =/ I'll add the links under the pics.<br />
+<br />
+Edit: If anyone can add anything to the tutorial about the Linux side of things i would be grateful.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_100345">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-30139.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid117552"></a>
+<div class="post classic " style="" id="post_117552">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0032/uid-32915.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0032/uid-32915.html">KayY</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2<br />
+	Threads: 0<br />
+	Joined: Jul 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid117552" title="Re: Setting up a simple server in SAMP">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by KayY" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.07.2008, 10:33 <span class="post_edit" id="edited_by_117552"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_117552">
+		Nice, but I got a newbie question..  <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/redface.gif" title="Embarrassed"/><br />
+<br />
+I don't have a router, and I want to run a server.<br />
+<br />
+I already put in a mod, it's already running, I can already play in it. But only me. <br />
+Got my own IP adress, When I try to get the IP adress from <a href="http://www.whatismyip.com/" target="_blank">http://www.whatismyip.com/</a> I get (Retrieving info...) IP <br />
+I added the IP adress from whatismyip.com and port:7777 but it still doesnt show up.<br />
+<br />
+I'm not using a router. Can anyone help plz =)<br />
+<br />
+Sorry for my newbyness xD<br />
+<br />
+I run in windows
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_117552">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-32915.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid117554"></a>
+<div class="post classic " style="" id="post_117554">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0022/uid-22671.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0022/uid-22671.html">Stratos</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 11<br />
+	Threads: 0<br />
+	Joined: Feb 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid117554" title="Re: Setting up a simple server in SAMP">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by Stratos" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">20.07.2008, 10:38 <span class="post_edit" id="edited_by_117554"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_117554">
+		Thereґs nothing different in Linux. Only the start command.<br />
+<br />
+Very nice Tutorial!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_117554">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-22671.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid118023"></a>
+<div class="post classic " style="" id="post_118023">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0011/uid-11983.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0011/uid-11983.html">Jaymzanator</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 82<br />
+	Threads: 8<br />
+	Joined: Aug 2007
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid118023" title="Re: Setting up a simple server in SAMP">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Jaymzanator" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">21.07.2008, 11:53 <span class="post_edit" id="edited_by_118023"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_118023">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>KayY </strong><br />
+</div>
+<div style="font-style:italic">Nice, but I got a newbie question.. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/redface.gif" title="Embarrassed"/><br />
+<br />
+I don't have a router, and I want to run a server.<br />
+<br />
+I already put in a mod, it's already running, I can already play in it. But only me. <br />
+Got my own IP adress, When I try to get the IP adress from <a href="http://www.whatismyip.com/" target="_blank">http://www.whatismyip.com/</a> I get (Retrieving info...) IP <br />
+I added the IP adress from whatismyip.com and port:7777 but it still doesnt show up.<br />
+<br />
+I'm not using a router. Can anyone help plz =)<br />
+<br />
+Sorry for my newbyness xD<br />
+<br />
+I run in windows</div>
+</td>
+</tr>
+</table>
+</div>make sure you are running on port 7777.<br />
+<br />
+try joining 127.0.0.1:7777<br />
+<br />
+this is your local loopback IP address. it will always point to your computer. <br />
+<br />
+this is different from your external IP address. your ISP may share your IP with a number of people. <br />
+<br />
+make sure your firewall allows port 7777 from external zones.<br />
+<br />
+if this is a server for testing, i recommend not taking any action.<br />
+<br />
+if you are going to host a game for people i recommend paying for a server. (unless you have 10mbit+ broadband and a server that will be up 24/7)
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_118023">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-11983.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid120342"></a>
+<div class="post classic " style="" id="post_120342">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0008/uid-8672.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0008/uid-8672.html">hunterman007</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 47<br />
+	Threads: 0<br />
+	Joined: May 2007
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid120342" title="Re: Setting up a simple server in SAMP">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by hunterman007" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.07.2008, 11:10 <span class="post_edit" id="edited_by_120342"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_120342">
+		jpe linux is just go to map with console putty or somthing and then ./samp022svr en ./announce
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_120342">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-8672.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid121392"></a>
+<div class="post classic " style="" id="post_121392">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0031/uid-31306.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0031/uid-31306.html"><s>CAMERON_BANFIELD</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 145<br />
+	Threads: 35<br />
+	Joined: Jun 2008
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid121392" title="Re: Setting up a simple server in SAMP">#11</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 11 by CAMERON_BANFIELD" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">27.07.2008, 05:40 <span class="post_edit" id="edited_by_121392"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_121392">
+		My server is ran on windows xp sp3 and when i start up samp and wait for it to load it says server restarting<br />
+<br />
+please help
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_121392">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-31306.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid121467"></a>
+<div class="post classic " style="" id="post_121467">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0025/uid-25380.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0025/uid-25380.html">GTASAIV</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 4<br />
+	Threads: 0<br />
+	Joined: Mar 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid121467" title="Re: Setting up a simple server in SAMP">#12</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 12 by GTASAIV" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">27.07.2008, 09:05 <span class="post_edit" id="edited_by_121467"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_121467">
+		Good tutorial this is if it wants to be shown<br />
+<br />
+<a href="http://www.youtube.com/watch?v=3eqeygIwBKA" target="_blank">http://www.youtube.com/watch?v=3eqeygIwBKA</a>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_121467">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-25380.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid122898"></a>
+<div class="post classic " style="" id="post_122898">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0033/uid-33782.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0033/uid-33782.html">mabokeur</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1<br />
+	Threads: 0<br />
+	Joined: Jul 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid122898" title="Re: Setting up a simple server in SAMP">#13</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 13 by mabokeur" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.07.2008, 21:42 <span class="post_edit" id="edited_by_122898"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_122898">
+		thx very very much <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_122898">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-33782.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid124671"></a>
+<div class="post classic " style="" id="post_124671">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0034/uid-34071.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0034/uid-34071.html">dolarcek</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1<br />
+	Threads: 0<br />
+	Joined: Aug 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid124671" title="Re: Setting up a simple server in SAMP">#14</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 14 by dolarcek" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">02.08.2008, 10:57 <span class="post_edit" id="edited_by_124671"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_124671">
+		I have a question.... what can i do....when i open that server_log f <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/redface.gif" title="Embarrassed"/> <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/redface.gif" title="Embarrassed"/>ile its just Error: Your password must be changed from the default password, please change it. What can i do?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_124671">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-34071.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid126147"></a>
+<div class="post classic " style="" id="post_126147">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0034/uid-34287.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0034/uid-34287.html">Ice_Cube</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1<br />
+	Threads: 0<br />
+	Joined: Aug 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid126147" title="Re: Setting up a simple server in SAMP">#15</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 15 by Ice_Cube" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">04.08.2008, 18:52 <span class="post_edit" id="edited_by_126147"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_126147">
+		20% it done i've tested the server......now how can i make it public? <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/mrgreen.gif" title="afro"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_126147">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-34287.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid126288"></a>
+<div class="post classic " style="" id="post_126288">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0024/uid-24460.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0024/uid-24460.html">TargetZone</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 4<br />
+	Threads: 0<br />
+	Joined: Mar 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid126288" title="Re: Setting up a simple server in SAMP">#16</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 16 by TargetZone" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">05.08.2008, 01:25 <span class="post_edit" id="edited_by_126288"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_126288">
+		Help! I got a script and everything works. But. When I got to whatsmyip.org, and I give someone it with the 7777 on it, they say nothing is there. Why is this? Btw I'm not paying for any host
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_126288">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-24460.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid126429"></a>
+<div class="post classic " style="" id="post_126429">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0034/uid-34165.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0034/uid-34165.html">bilakispa</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 30<br />
+	Threads: 1<br />
+	Joined: Aug 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid126429" title="Re: Setting up a simple server in SAMP">#17</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 17 by bilakispa" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">05.08.2008, 11:08 <span class="post_edit" id="edited_by_126429"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_126429">
+		Nice tutorials, well done <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/cool.gif" title="Cool"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_126429">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-34165.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid126486"></a>
+<div class="post classic " style="" id="post_126486">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0024/uid-24460.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0024/uid-24460.html">TargetZone</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 4<br />
+	Threads: 0<br />
+	Joined: Mar 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid126486" title="Re: Setting up a simple server in SAMP">#18</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 18 by TargetZone" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">05.08.2008, 13:20 <span class="post_edit" id="edited_by_126486"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_126486">
+		Can anyone please help with the problem above
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_126486">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-24460.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid126966"></a>
+<div class="post classic " style="" id="post_126966">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0032/uid-32717.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0032/uid-32717.html">Agent_Smith</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 30<br />
+	Threads: 4<br />
+	Joined: Jul 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid126966" title="Re: Setting up a simple server in SAMP">#19</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 19 by Agent_Smith" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">06.08.2008, 11:23 <span class="post_edit" id="edited_by_126966"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_126966">
+		Nice tutorial...<br />
+very usefull thanks for making it<br />
+youre the best!!! <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_126966">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-32717.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid127244"></a>
+<div class="post classic " style="" id="post_127244">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0034/uid-34466.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0034/uid-34466.html">maxgrv</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1<br />
+	Threads: 0<br />
+	Joined: Aug 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0040/tid-40222.html#pid127244" title="Re: Setting up a simple server in SAMP">#20</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 20 by maxgrv" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">06.08.2008, 18:59 <span class="post_edit" id="edited_by_127244"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_127244">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>dolarcek </strong><br />
+</div>
+<div style="font-style:italic">I have a question.... what can i do....when i open that server_log f <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/redface.gif" title="Embarrassed"/> <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/redface.gif" title="Embarrassed"/>ile its just Error: Your password must be changed from the default password, please change it. What can i do?</div>
+</td>
+</tr>
+</table>
+</div>Just that, change the rcom password from changeme to something else
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_127244">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-34466.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0040/tid-40222.html">Next Oldest</a> | <a href="../../threads/0040/tid-40222.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="40222" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (2):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0040/tid-40222-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0040/tid-40222-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" selected="selected">-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/6.html">SA-MP Server</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/19.html">Server Support</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

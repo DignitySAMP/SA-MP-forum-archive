@@ -1,0 +1,1520 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Usando MySQL + Cache + ORM</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "db27ea3b65658e6fa3bc2ee199b9aa6b";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Como muitos sabem, para usar MySQL no SA-MP, й necessбrio o Plugin MySQL. Hб vбrias versхes atualizadas do MySQL Plugin. Iremos usar, uma das versхes mais atuais do MySQL, e esse tutorial serб" />
+<link rel="canonical" href="../../threads/0499/tid-499336.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="db27ea3b65658e6fa3bc2ee199b9aa6b" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/9.html">Non-English</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/33.html">Languages</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/34.html">Português/Portuguese</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/56.html">Lançamentos/Releases</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0499/tid-499336.html#pid2944203">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Usando MySQL + Cache + ORM
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid2944203"></a>
+<div class="post classic " style="" id="post_2944203">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0171/uid-171517.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0171/uid-171517.html">Locky_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,605<br />
+	Threads: 61<br />
+	Joined: Jul 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0499/tid-499336.html#pid2944203" title="Usando MySQL + Cache + ORM">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by Locky_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">07.03.2014, 19:04 <span class="post_edit" id="edited_by_2944203"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Locky_; 21.03.2015 at 13:41.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2944203">
+		<div align="center">Como muitos sabem, para usar MySQL no SA-MP, й necessбrio o Plugin MySQL.<br />
+Hб vбrias versхes atualizadas do MySQL Plugin. Iremos usar, uma das versхes mais atuais do MySQL, e esse tutorial serб funcional em versхes R33 ou superiores.<br />
+<br />
+Versхes R33 ou Superiores, hб sistema de cache e orm.<br />
+Bбsicamente, com o sistema de cache, vocк pode efetuar Querys, e armazena-las em variaveis. Assim, podendo ser chamadas/deletadas de acordo com sua necessidade.<br />
+<br />
+Os "ORM"s sгo uma forma mais fбcil de usar o MySQL, evitando variaveis para efetuar Querys. Assim, funcionando de forma atй mais simples e prбtica. Caso queira saber mais sobre ORMs, <a href="http://en.wikipedia.org/wiki/Object-relational_mapping" target="_blank">acesse esse link.</a><br />
+<br />
+<a href="../../threads/0056/tid-56564.html" target="_blank">Tуpico do Plugin MySQL by BlueG</a><br />
+Atualmente, estб na versгo R39-2. Vocк pode efetuar o download ou saber versхes em desenvolvimento <a href="https://github.com/pBlueG/SA-MP-MySQL/releases" target="_blank">neste link</a>.<br />
+<br />
+<b><font size="5">MYSQL</font></b><br />
+As funзхes do Plugin:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:359px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">native</span> mysql_log<span style="color: #000000;">(</span><span style="color: #000000;">E_LOGLEVEL</span><span style="color: #000000;">:</span>loglevel <span style="color: #000000;">=</span> LOG_ERROR | LOG_WARNING, <span style="color: #000000;">E_LOGTYPE</span><span style="color: #000000;">:</span>logtype <span style="color: #000000;">=</span> LOG_TYPE_TEXT<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> mysql_connect<span style="color: #000000;">(</span><span style="color: #2222BB;">const</span> host<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, <span style="color: #2222BB;">const</span> user<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, <span style="color: #2222BB;">const</span> database<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, <span style="color: #2222BB;">const</span> password<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, port <span style="color: #000000;">=</span> <span style="color: #000000;">3306</span>, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>autoreconnect <span style="color: #000000;">=</span> true, pool_size <span style="color: #000000;">=</span> <span style="color: #000000;">2</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> mysql_close<span style="color: #000000;">(</span>connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> mysql_reconnect<span style="color: #000000;">(</span>connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><br/><span style="color: #2222BB;">native</span> mysql_unprocessed_queries<span style="color: #000000;">(</span>connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> mysql_current_handle<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> mysql_option<span style="color: #000000;">(</span><span style="color: #000000;">E_MYSQL_OPTION</span><span style="color: #000000;">:</span>type, value<span style="color: #000000;">)</span>;<br/><br/><span style="color: #2222BB;">native</span> mysql_errno<span style="color: #000000;">(</span>connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> mysql_escape_string<span style="color: #000000;">(</span><span style="color: #2222BB;">const</span> source<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, destination<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>, max_len <span style="color: #000000;">=</span> <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>destination<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> mysql_format<span style="color: #000000;">(</span>connectionHandle, output<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, len, <span style="color: #222222;">format</span><span style="color: #000000;">[</span><span style="color: #000000;">]</span>, <span style="color: #000000;">{</span>Float,_<span style="color: #000000;">}</span><span style="color: #000000;">:</span>...<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> mysql_pquery<span style="color: #000000;">(</span>connectionHandle, query<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, callback<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">""</span>, <span style="color: #222222;">format</span><span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">""</span>, <span style="color: #000000;">{</span>Float,_<span style="color: #000000;">}</span><span style="color: #000000;">:</span>...<span style="color: #000000;">)</span>;<br/><br/><span style="color: #2222BB;">native</span> mysql_tquery<span style="color: #000000;">(</span>connectionHandle, query<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, callback<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">""</span>, <span style="color: #222222;">format</span><span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">""</span>, <span style="color: #000000;">{</span>Float,_<span style="color: #000000;">}</span><span style="color: #000000;">:</span>...<span style="color: #000000;">)</span>;<br/><br/><span style="color: #2222BB;">native</span> <span style="color: #000000;">Cache</span><span style="color: #000000;">:</span>mysql_query<span style="color: #000000;">(</span>conhandle, query<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>use_cache <span style="color: #000000;">=</span> true<span style="color: #000000;">)</span>;<br/><br/><span style="color: #2222BB;">native</span> mysql_stat<span style="color: #000000;">(</span>destination<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>, max_len <span style="color: #000000;">=</span> <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>destination<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> mysql_get_charset<span style="color: #000000;">(</span>destination<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>, max_len <span style="color: #000000;">=</span> <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>destination<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> mysql_set_charset<span style="color: #000000;">(</span>charset<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+<i>Callback</i>:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">forward</span> OnQueryError<span style="color: #000000;">(</span>errorid, error<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, callback<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, query<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, connectionHandle<span style="color: #000000;">)</span>;</div></div></pre>
+</div>As nativas principais do Plugin! Sem elas, vocк nгo pode usar nenhuma das citadas abaixo.<br />
+Primeiramente, conectar ao banco de dados.<br />
+<br />
+<font size="3"><b>mysql_connect</b></font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> mysql <span style="color: #000000;">=</span> mysql_connect<span style="color: #000000;">(</span><span style="color: #000066;">"host"</span>, <span style="color: #000066;">"usuario"</span>, <span style="color: #000066;">"database"</span>, <span style="color: #000066;">"senha"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Obrigado Schocc</span></div></div></pre>
+</div>O valor mysql serб o id da conexгo. Vocк tambйm pode conectar em mais de um hosting, porйm vocк deve separar os ids das conexхes '-'<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:135px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> mysql<span style="color: #000000;">[</span><span style="color: #000000;">3</span><span style="color: #000000;">]</span>;<br/><span style="color: #2222BB;">public</span> OnGameModeInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    mysql<span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> mysql_connect<span style="color: #000000;">(</span><span style="color: #000066;">"localhost"</span>, <span style="color: #000066;">"root"</span>, <span style="color: #000066;">"forum_samp"</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>;<br/>    mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> mysql_connect<span style="color: #000000;">(</span><span style="color: #000066;">"localhost"</span>, <span style="color: #000066;">"root"</span>, <span style="color: #000066;">"servidor"</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>;<br/>    mysql<span style="color: #000000;">[</span><span style="color: #000000;">2</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> mysql_connect<span style="color: #000000;">(</span><span style="color: #000066;">"www.meuserver.com"</span>, <span style="color: #000066;">"NicK"</span>, <span style="color: #000066;">"servidor"</span>, <span style="color: #000066;">"uimeututorial"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div><font color="Red">Em uso de funзхes, deve especificar qual conexгo, ou sempre irб ser a primeira.</font><br />
+<br />
+<font size="3"><b>mysql_close</b></font><br />
+No caso, isso й para fechar uma conexгo do MySQL. Й mais ъtil usar quando o servidor for desligado/reniciado.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:119px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnGameModeExit<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i; i <span style="color: #000000;">&lt;</span> <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>mysql<span style="color: #000000;">)</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><br/>        mysql_close<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// Fechando as conexхes do exemplo anterior</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<font size="3"><b>mysql_escape_string</b></font><br />
+Isso servirб para retornar um string, sem problemas.<br />
+Isso por que, um string onde pode receber quaisquer caractere pode ser prejudicial ao prуprio mysql, ocorrendo o chamado sql-injection. Entгo, usando o mysql_escape_string ele irб corrigir os caracteres que podem atrapalhar uma query.<br />
+<br />
+Exemplo de uso:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">mysql_escape_string<span style="color: #000000;">(</span>inputtext, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Senha<span style="color: #000000;">]</span>,mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div><i>inputtext </i>&gt; Valor que serб convertido.<br />
+<i>APlayerData[playerid][Senha] </i>&gt; O valor jб convertido.<br />
+<i>mysql[1] </i>&gt; Seria no caso a conexгo do MySQL, dos exemplos acima.<br />
+<br />
+<font size="3"><b>mysql_format</b></font><br />
+mysql_format basicamente seria o format padrгo do SA-MP, sу que com funзгo extra.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:135px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">%</span>e   <span style="color: #000000;">&gt;</span> escapa um string, nгo necessitando <span style="color: #2222BB;">do</span> mysql_escape_string<br/><span style="color: #000000;">%</span>s   <span style="color: #000000;">&gt;</span> insere um string<br/><span style="color: #000000;">%</span>d <span style="color: #000000;">/</span> <span style="color: #000000;">%</span>i  <span style="color: #000000;">&gt;</span> insere um valor inteiro<br/><span style="color: #000000;">%</span>f   <span style="color: #000000;">&gt;</span> insere um valor <span style="color: #222222;">float</span><br/><span style="color: #000000;">%</span>X   <span style="color: #000000;">&gt;</span> insere um valor hexadecimal em maiъsculo.<br/><span style="color: #000000;">%</span>x   <span style="color: #000000;">&gt;</span> insere um valor hexadecimal em <span style="color: #222222;">min</span>ъsculo.<br/><span style="color: #000000;">%</span>b   <span style="color: #000000;">&gt;</span> insere um nъmero binбrio.</div></div></pre>
+</div>Entгo, posso formatar uma query com mysql_format, sem necessitar usar o mysql_escape_string.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">mysql_format<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"UPDATE usuarios SET Senha='%e' WHERE ID=%i"</span>, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Senha<span style="color: #000000;">]</span>, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>MySQL_ID<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Demostraзгo</span></div></div></pre>
+</div>
+<br />
+<font size="3"><b>mysql_query || mysql_tquery || mysql_pquery</b></font><br />
+Aparentemente, mysql_tquery e mysql_pquery sгo semelhantes o uso.<br />
+Mas, BlueG diz:<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+			<br />
+				A diferenзa entre este nativo e mysql_tquery () й que este tipo de consulta usa multi-threading, portanto, й mais rбpido, dependendo de quantas conexхes sгo usadas. O nъmero de conexхes podem ser especificados no mysql_connect () atravйs do parвmetro POOL_SIZE. Cada conexгo se assemelha a um fio.<br />
+<br />
+Esse tipo de consulta nгo suporta transaзхes.<br />
+			<br />
+		</td>
+</tr>
+</table>
+</div>Deu pra entender um pouco o que ele quis dizer.. <i><font size="1">(****** Tradutor)</font></i><br />
+<br />
+<font size="2"><b>mysql_query</b></font><br />
+Esta funзгo, pode servir para adicionar, atualizar ou selecionar dados!<br />
+(Para selecionar dados, deve se usar cache)<br />
+Por padrгo o cache й ativo, mas vocк pode desativa-lo, conforme o desejado.<br />
+Exemplo 1 (Usando Cache para exibir dados, veja mais a baixo):<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:247px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>primeiroregistrado<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> <span style="color: #000000;">Cache</span><span style="color: #000000;">:</span>Temp <span style="color: #000000;">=</span> mysql_query<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, <span style="color: #000066;">"SELECT Nome FROM usuarios ORDER BY ID DESC WHERE LIMIT 1"</span>,   true<span style="color: #000000;">)</span>; <span style="color: #228822;">//Cache local</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>cache_get_row_count<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">&gt;</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Se houver um resultado</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">new</span> Nome<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>, Msg<span style="color: #000000;">[</span><span style="color: #000000;">144</span><span style="color: #000000;">]</span>;<br/>        cache_get_field_content<span style="color: #000000;">(</span><span style="color: #000000;">0</span>, <span style="color: #000066;">"Nome"</span>, Nome, mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Msg, <span style="color: #000000;">144</span>, <span style="color: #000066;">"{ffff00}O jogador %s й o primeiro registrado do servidor!"</span>, Nome<span style="color: #000000;">)</span>;<br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, Msg<span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">else</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"{ff0000}Nгo foi possнvel pegar o primeiro registrado!"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Coisa que seria meio dificil nй '-'</span><br/>    cache_delete<span style="color: #000000;">(</span>Temp, mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Deletar o cache</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>Exemplo 2 (Atualizando dados): <div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:151px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>mudarsenha<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>params<span style="color: #000000;">)</span> <span style="color: #000000;">&lt;</span> <span style="color: #000000;">3</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"{ff0000}Sua senha estб pequena!"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">new</span> Query<span style="color: #000000;">[</span><span style="color: #000000;">150</span><span style="color: #000000;">]</span>, Nome<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>;<br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, Nome, <span style="color: #000000;">24</span><span style="color: #000000;">)</span>;<br/>    mysql_format<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, Query, <span style="color: #000000;">150</span>, <span style="color: #000066;">"UPDATE usuarios SET Senha='%e' WHERE Nome='%s'"</span>, params, Nome<span style="color: #000000;">)</span>;<br/>    mysql_query<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, Query, false<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>Exemplo 3: (Inserindo dados):<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:183px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>registrarplayer<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> Nome<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>, Senha<span style="color: #000000;">[</span><span style="color: #000000;">128</span><span style="color: #000000;">]</span>; <span style="color: #228822;">//Vou usar a sscanf aqui</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>sscanf<span style="color: #000000;">(</span>params, <span style="color: #000066;">"s[24]s[128]"</span>, Nome,Senha<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"{ff0000}Use: /registrarplayer [nome do jogador] [senha do jogdor]"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">new</span> Query<span style="color: #000000;">[</span><span style="color: #000000;">190</span><span style="color: #000000;">]</span>, Msg<span style="color: #000000;">[</span><span style="color: #000000;">144</span><span style="color: #000000;">]</span>;<br/>    mysql_format<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"INSERT INTO usuarios (Nome,Senha) VALUES ('%e','%e')"</span>, Nome, Senha<span style="color: #000000;">)</span>;<br/>    mysql_query<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, Query, false<span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Msg, <span style="color: #000000;">144</span>, <span style="color: #000066;">"{ffff00}Vocк inseriu uma nova conta! Usuбrio: %s, Senha: %s"</span>, Nome, Senha<span style="color: #000000;">)</span>;<br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, Msg<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<font size="2"><b>mysql_tquery &amp; mysql_pquery</b></font><br />
+Estas funзхes necessitam de uma callback de resultado.<br />
+Elas nгo usam cache, como a callback mysql_query.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:231px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerConnect<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> Nome<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>, Query<span style="color: #000000;">[</span><span style="color: #000000;">128</span><span style="color: #000000;">]</span>;<br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, Nome, <span style="color: #000000;">24</span><span style="color: #000000;">)</span>;<br/>    mysql_format<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, Query, <span style="color: #000000;">128</span>, <span style="color: #000066;">"SELECT * FROM usuarios WHERE Nome='%s'"</span>, Nome<span style="color: #000000;">)</span>;<br/>    mysql_tquery<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, Query, <span style="color: #000066;">"OnPlayerLogin"</span>, <span style="color: #000066;">"d"</span>, playerid<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">forward</span> OnPlayerLogin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> OnPlayerLogin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>cache_get_row_count<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Nгo registrado</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #228822;">// Registrado</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:231px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerConnect<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> Nome<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>, Query<span style="color: #000000;">[</span><span style="color: #000000;">128</span><span style="color: #000000;">]</span>;<br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, Nome, <span style="color: #000000;">24</span><span style="color: #000000;">)</span>;<br/>    mysql_format<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, Query, <span style="color: #000000;">128</span>, <span style="color: #000066;">"SELECT * FROM usuarios WHERE Nome='%s'"</span>, Nome<span style="color: #000000;">)</span>;<br/>    mysql_pquery<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>, Query, <span style="color: #000066;">"OnPlayerLogin"</span>, <span style="color: #000066;">"d"</span>, playerid<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">forward</span> OnPlayerLogin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> OnPlayerLogin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>cache_get_row_count<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Nгo registrado</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #228822;">// Registrado</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<font color="Red"><br />
+Alguma query que ocorrer erro, serб retornado em <b>OnQueryError</b>.</font><br />
+<br />
+<font size="5"><b>ORM</b></font><br />
+Acima expliquei basicamente o que й o ORM no MySQL Plugin.<br />
+Funзхes:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:375px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">native</span> <span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>orm_create<span style="color: #000000;">(</span><span style="color: #2222BB;">const</span> table<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Cria um orm em uma tabela, e sua conexгo do MySQL</span><br/><span style="color: #2222BB;">native</span> orm_destroy<span style="color: #000000;">(</span><span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>id<span style="color: #000000;">)</span>; <span style="color: #228822;">//Destroi um ORM criado pelo ID</span><br/><br/><span style="color: #2222BB;">native</span> <span style="color: #000000;">ORM_Error</span><span style="color: #000000;">:</span>orm_errno<span style="color: #000000;">(</span><span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>id<span style="color: #000000;">)</span>; <span style="color: #228822;">// Retorna o erro de um orm pelo id</span><br/><br/><span style="color: #2222BB;">native</span> orm_apply_cache<span style="color: #000000;">(</span><span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>id, row<span style="color: #000000;">)</span>; <span style="color: #228822;">//Aplica cache em um orm </span><br/><span style="color: #2222BB;">native</span> orm_select<span style="color: #000000;">(</span><span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>id, callback<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">""</span>, <span style="color: #222222;">format</span><span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">""</span>, <span style="color: #000000;">{</span>Float, _<span style="color: #000000;">}</span><span style="color: #000000;">:</span>...<span style="color: #000000;">)</span>; <span style="color: #228822;">//Seleciona e Retorna dados de um ORM</span><br/><br/><span style="color: #2222BB;">native</span> orm_update<span style="color: #000000;">(</span><span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>id<span style="color: #000000;">)</span>; <span style="color: #228822;">//Atualiza os dados do ORM</span><br/><span style="color: #2222BB;">native</span> orm_insert<span style="color: #000000;">(</span><span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>id, callback<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">""</span>, <span style="color: #222222;">format</span><span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">""</span>, <span style="color: #000000;">{</span>Float, _<span style="color: #000000;">}</span><span style="color: #000000;">:</span>...<span style="color: #000000;">)</span>; <span style="color: #228822;">//Insere dados de um ORM</span><br/><br/><span style="color: #2222BB;">native</span> orm_delete<span style="color: #000000;">(</span><span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>id, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>clearvars<span style="color: #000000;">=</span>true<span style="color: #000000;">)</span>; <span style="color: #228822;">//Deleta um ORM, opcional zerar variaveis usadas</span><br/><br/><span style="color: #2222BB;">native</span> orm_load<span style="color: #000000;">(</span><span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>id, callback<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">""</span>, <span style="color: #222222;">format</span><span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">""</span>, <span style="color: #000000;">{</span>Float, _<span style="color: #000000;">}</span><span style="color: #000000;">:</span>...<span style="color: #000000;">)</span> <span style="color: #000000;">=</span> orm_select; <span style="color: #228822;">//Ler um ORM</span><br/><span style="color: #2222BB;">native</span> orm_save<span style="color: #000000;">(</span><span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>id, callback<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">""</span>, <span style="color: #222222;">format</span><span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">""</span>, <span style="color: #000000;">{</span>Float, _<span style="color: #000000;">}</span><span style="color: #000000;">:</span>...<span style="color: #000000;">)</span>; <span style="color: #228822;">//Salva um ORM</span><br/><br/><span style="color: #2222BB;">native</span> orm_addvar_int<span style="color: #000000;">(</span><span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>id, <span style="color: #000000;">&amp;</span>var, varname<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Adiciona uma variavel a um ORM</span><br/><span style="color: #2222BB;">native</span> orm_addvar_float<span style="color: #000000;">(</span><span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>id, <span style="color: #000000;">&amp;</span><span style="color: #000000;">Float</span><span style="color: #000000;">:</span>var, varname<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Adiciona uma variavel float a um ORM</span><br/><span style="color: #2222BB;">native</span> orm_addvar_string<span style="color: #000000;">(</span><span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>id, var<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, var_maxlen, varname<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Adiciona uma variavel string a um ORM</span><br/><br/><span style="color: #2222BB;">native</span> orm_delvar<span style="color: #000000;">(</span><span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>id, varname<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Deleta uma variavel de um ORM</span><br/><span style="color: #2222BB;">native</span> orm_setkey<span style="color: #000000;">(</span><span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>id, varname<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Seta a condiзгo de atualizaзгo/selecionar em ORMs</span></div></div></pre>
+</div>
+<font size="3"><b>orm_create</b></font><b><font color="Red">*</font></b><br />
+Cria um novo orm, e irб retornar no id do orm.<br />
+Necessбrio especificar a tabela, e a conexгo usada.<br />
+<br />
+<font size="3"><b>orm_destroy</b></font><b><font color="Red">*</font></b><br />
+Destroy um orm criado, atravйs do seu ID.<br />
+<br />
+<font size="3"><b>orm_errno</b></font><b><font color="Red">*</font></b><br />
+Retorna um resultado/erro.<br />
+<br />
+<font size="3"><b>orm_addvar_int</b></font><b><font color="Red">*</font></b><br />
+Aqui adiciona uma variavel (int), e sua respectiva coluna tabela.<br />
+<font color="Red">Necessбrio adicionar uma variavel global, em casos de adicionar variavel local, deve ocorrer warnings/erros.</font><br />
+<br />
+<font size="3"><b>orm_addvar_float</b></font><b><font color="Red">*</font></b><br />
+Adiciona uma variavel (float) e sua respectiva coluna na tabela.<br />
+<font color="Red">Necessбrio adicionar uma variavel global, em casos de adicionar variavel local, deve ocorrer warnings/erros.</font><br />
+<br />
+<font size="3"><b>orm_addvar_string</b></font><b><font color="Red">*</font></b><br />
+Adiciona uma variavel (string) e sua respectiva coluna na tabela.<br />
+<font color="Red">Necessбrio adicionar uma variavel global, em casos de adicionar variavel local, deve ocorrer warnings/erros.</font><br />
+<br />
+<font size="3"><b>orm_setkey</b></font><b><font color="Red">*</font></b><br />
+Seta a condiзгo para atualizaзгo/inserзгo/selecionar dados. (Como se funcionasse "WHERE Nome='meunome'")<br />
+<br />
+<font size="3"><b>orm_update</b></font><b><font color="Red">*</font></b><br />
+Atualiza os dados de um orm criado. Todas as variaveis especificadas, serгo atualizadas na tabela.<br />
+<br />
+<font size="3"><b>orm_select</b></font><b><font color="Red">*</font></b><br />
+Seleciona os dados da tabela, resultando os valores sem suas respectivas variaveis.<br />
+Assim, irб resultar se foi com sucesso ou nгo em uma callback, que serб necessбrio especifica-la. (exemplos abaixo)<br />
+<br />
+<font size="3"><b>orm_insert</b></font><b><font color="Red">*</font></b><br />
+Insere os dados na tabela. Nгo й tгo necessбrio especificar a callback onde serб retornado, apenas irб retornar se foi com sucesso ou nгo.<br />
+<br />
+<b><font color="Red">*</font></b> Hб exemplos.<br />
+<br />
+<br />
+<font size="3"><b><font color="Green">Exemplos</font></b></font><br />
+Necessбrio entender, que usando por exemplo.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:231px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">//Exemplo</span><br/>    orm_addvar_string<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Name<span style="color: #000000;">]</span>, <span style="color: #000000;">24</span>, <span style="color: #000066;">"Nome"</span><span style="color: #000000;">)</span>;<br/>    orm_addvar_string<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Senha<span style="color: #000000;">]</span>, <span style="color: #000000;">128</span>, <span style="color: #000066;">"Senha"</span><span style="color: #000000;">)</span>;<br/>    orm_addvar_string<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Email<span style="color: #000000;">]</span>, <span style="color: #000000;">128</span>, <span style="color: #000066;">"Email"</span><span style="color: #000000;">)</span>;<br/>    orm_addvar_int<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Dinheiro<span style="color: #000000;">]</span>, <span style="color: #000066;">"Dinheiro"</span><span style="color: #000000;">)</span>;<br/>    orm_addvar_int<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Scores<span style="color: #000000;">]</span>, <span style="color: #000066;">"Scores"</span><span style="color: #000000;">)</span>;<br/>    orm_addvar_int<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Mortes<span style="color: #000000;">]</span>, <span style="color: #000066;">"Mortes"</span><span style="color: #000000;">)</span>;<br/>    orm_addvar_int<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Matou<span style="color: #000000;">]</span>, <span style="color: #000066;">"Matou"</span><span style="color: #000000;">)</span>;<br/>    orm_addvar_string<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pIP<span style="color: #000000;">]</span>, <span style="color: #000000;">16</span>, <span style="color: #000066;">"IP"</span><span style="color: #000000;">)</span>;<br/>    orm_addvar_string<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>DataRegistro<span style="color: #000000;">]</span>, <span style="color: #000000;">50</span>, <span style="color: #000066;">"DataRegistro"</span><span style="color: #000000;">)</span>;<br/>    orm_addvar_int<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>ID<span style="color: #000000;">]</span>, <span style="color: #000066;">"ID"</span><span style="color: #000000;">)</span>;<br/>    <br/>    orm_setkey<span style="color: #000000;">(</span>ormdid, <span style="color: #000066;">"Nome"</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div>Seria o mesmo, se usasse<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:135px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> Query<span style="color: #000000;">[</span><span style="color: #000000;">800</span><span style="color: #000000;">]</span>;<br/><span style="color: #228822;">// Selecionar Dados</span><br/><span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"SELECT Nome,Senha,Email,Dinheiro,Scores,Mortes,Matou,IP,DataRegistro,ID FROM usuarios WHERE Nome='%s'"</span>,  APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Name<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #228822;">//Ou atualizar dados</span><br/><span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"UPDATE contas SET Nome='%s',Senha='%s',Email='%s',Dinheiro=%i,Scores=%i,Mortes=%i,Matou=%i,IP='%s',DataRegistro='%s',ID=%i WHERE Nome='%s'"</span>, ....<span style="color: #000000;">)</span>;<br/><span style="color: #228822;">//Ou inserir dados</span><br/><span style="color: #222222;">format</span><span style="color: #000000;">(</span>Query, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Query<span style="color: #000000;">)</span>, <span style="color: #000066;">"INSERT INTO usuarios (Nome,Senha,Email,Dinheiro,Scores,Mortes,Matou,IP,DataRegistro,ID) VALUES ('%s','%s','%s',%i,%i,%i,%i,'%s','%s',%i)"</span>, ...<span style="color: #000000;">)</span>;</div></div></pre>
+</div>Sу que vocк, usando ORM, vocк decide o que fazer, usando as nativas<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:71px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">orm_select<br/>orm_update<br/>orm_insert</div></div></pre>
+</div>
+<font size="4"><font color="Green">Usando ORM</font></font><br />
+Usando os ORM's, й possнvel fazer sistemas de registro/login por exemplo!<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#define DialogLogin 1</span><br/><span style="color: #2222AA;">#define DialogRegistro 2</span><br/><span style="color: #2222BB;">new</span> mysql;<br/><span style="color: #2222BB;">enum</span> pInfo <span style="color: #228822;">//Variaveis do Player</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>Logado,<br/>    Name<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>,<br/>    Senha<span style="color: #000000;">[</span><span style="color: #000000;">128</span><span style="color: #000000;">]</span>,<br/>    Email<span style="color: #000000;">[</span><span style="color: #000000;">128</span><span style="color: #000000;">]</span>,<br/>    pIP<span style="color: #000000;">[</span><span style="color: #000000;">16</span><span style="color: #000000;">]</span>,<br/>    DataRegistro<span style="color: #000000;">[</span><span style="color: #000000;">50</span><span style="color: #000000;">]</span>,<br/>    Scores,<br/>    Dinheiro,<br/>    Matou,<br/>    Mortes,<br/>    ID, <span style="color: #228822;">// ID do MySQL</span><br/>    <span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>OrmID <span style="color: #228822;">// Teste</span><br/><span style="color: #000000;">}</span>;<br/><span style="color: #2222BB;">new</span> APlayerData<span style="color: #000000;">[</span>MAX_PLAYERS<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pInfo<span style="color: #000000;">]</span>; <span style="color: #228822;">//Variavel do Player</span><br/><span style="color: #2222BB;">public</span> OnGameModeInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Ao ligar o gamemode</span><br/><span style="color: #000000;">{</span><br/>    mysql <span style="color: #000000;">=</span> mysql_connect<span style="color: #000000;">(</span><span style="color: #000066;">"localhost"</span>, <span style="color: #000066;">"root"</span>, <span style="color: #000066;">"test"</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Conexгo do MySQL, isso й necessбrio</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">public</span> OnGameModeExit<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #228822;">// gamemode desligar</span><br/><span style="color: #000000;">{</span><br/>    mysql_close<span style="color: #000000;">(</span>mysql<span style="color: #000000;">)</span>; <span style="color: #228822;">//Fechar conexгo do  MySQL, й necessбrio, em caso de nгo fechar conexгo do MySQL, em um GMX o servidor pode crashar.</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">public</span> OnPlayerConnect<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span> <span style="color: #228822;">//Ao jogador se conectar</span><br/><span style="color: #000000;">{</span><br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Name<span style="color: #000000;">]</span>, <span style="color: #000000;">24</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Pegar o nome do player..</span><br/>    <span style="color: #2222BB;">new</span> <span style="color: #000000;">ORM</span><span style="color: #000000;">:</span>ormdid <span style="color: #000000;">=</span> APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>OrmID<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> orm_create<span style="color: #000000;">(</span><span style="color: #000066;">"usuarios"</span>, mysql<span style="color: #000000;">)</span>; <span style="color: #228822;">//Crio um novo ORM, na tabela "Usuarios" e na conexгo "mysql"</span><br/>    orm_addvar_string<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Name<span style="color: #000000;">]</span>, <span style="color: #000000;">24</span>, <span style="color: #000066;">"Nome"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Adiciono o string 'Nome' juntamente a variavel Name</span><br/>    orm_addvar_string<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Senha<span style="color: #000000;">]</span>, <span style="color: #000000;">128</span>, <span style="color: #000066;">"Senha"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Adiciono o string 'Senha' juntamente a variavel Senha..</span><br/>    orm_addvar_string<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Email<span style="color: #000000;">]</span>, <span style="color: #000000;">128</span>, <span style="color: #000066;">"Email"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//merma coisa</span><br/>    orm_addvar_int<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Dinheiro<span style="color: #000000;">]</span>, <span style="color: #000066;">"Dinheiro"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Adiciono o inteiro 'Dinheiro' a variavel Dinheiro '-'</span><br/>    orm_addvar_int<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Scores<span style="color: #000000;">]</span>, <span style="color: #000066;">"Scores"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//merma coisa</span><br/>    orm_addvar_int<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Mortes<span style="color: #000000;">]</span>, <span style="color: #000066;">"Mortes"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//merma coisa</span><br/>    orm_addvar_int<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Matou<span style="color: #000000;">]</span>, <span style="color: #000066;">"Matou"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//merma coisa</span><br/>    orm_addvar_string<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pIP<span style="color: #000000;">]</span>, <span style="color: #000000;">16</span>, <span style="color: #000066;">"IP"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//merma coisa '-'</span><br/>    orm_addvar_string<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>DataRegistro<span style="color: #000000;">]</span>, <span style="color: #000000;">50</span>, <span style="color: #000066;">"DataRegistro"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//й a mesma</span><br/>    orm_addvar_int<span style="color: #000000;">(</span>ormdid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>ID<span style="color: #000000;">]</span>, <span style="color: #000066;">"ID"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Isso iremos usar mais a frente</span><br/>    <br/>    orm_setkey<span style="color: #000000;">(</span>ormdid, <span style="color: #000066;">"Nome"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Seto a condiзгo, como se usasse "WHERE Nome='nomedocara'"</span><br/>    orm_select<span style="color: #000000;">(</span>ormdid, <span style="color: #000066;">"OnPlayerLogin"</span>, <span style="color: #000066;">"d"</span>, playerid<span style="color: #000000;">)</span>; <span style="color: #228822;">//Seleciona os dados e diz o resultado na callback OnPlayerLogin</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">forward</span> OnPlayerLogin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> OnPlayerLogin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>orm_errno<span style="color: #000000;">(</span>APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>OrmID<span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">==</span> ERROR_OK<span style="color: #000000;">)</span> <span style="color: #228822;">//Se houver dados, sinal que o jogador estб registrado</span><br/>        ShowPlayerDialog<span style="color: #000000;">(</span>playerid, DialogLogin, DIALOG_STYLE_PASSWORD, <span style="color: #000066;">"{ff0000} # {ffffff}Login"</span>, <span style="color: #000066;">"Digite sua senha para logar!"</span>, <span style="color: #000066;">"Login"</span>, <span style="color: #000066;">"Cancelar"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">else</span> <span style="color: #228822;">//Se nгo estiver dados, o jogador nгo estб registrado!</span><br/>        ShowPlayerDialog<span style="color: #000000;">(</span>playerid, DialogRegistro, DIALOG_STYLE_INPUT, <span style="color: #000066;">"{00ff00} # {ffffff}Seja bem vindo novato!"</span>, <span style="color: #000066;">"Digite uma senha para se registrar"</span>, <span style="color: #000066;">"Registrar"</span>, <span style="color: #000066;">"Cancelar"</span><span style="color: #000000;">)</span>;<br/>    orm_setkey<span style="color: #000000;">(</span>APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>OrmID<span style="color: #000000;">]</span>, <span style="color: #000066;">"ID"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Seta a condiзгo, mesmo nгo havendo registro, ele irб inserir, e o ID serб automaticamente dado ;)</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerDisconnect<span style="color: #000000;">(</span>playerid, reason<span style="color: #000000;">)</span> <span style="color: #228822;">//Ao sair</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Logado<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> true<span style="color: #000000;">)</span> <span style="color: #000000;">{</span> <span style="color: #228822;">//Caso esteja logado</span><br/>        orm_update<span style="color: #000000;">(</span>APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>OrmID<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Atualizar informaзхes</span><br/>    <span style="color: #000000;">}</span><br/>    orm_destroy<span style="color: #000000;">(</span>APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>OrmID<span style="color: #000000;">]</span><span style="color: #000000;">)</span>;  <span style="color: #228822;">//Destruir ORM, e isso nгo irб zerar as informaзхes</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> <span style="color: #000000;">pInfo</span><span style="color: #000000;">:</span>i; i <span style="color: #000000;">&lt;</span> pInfo; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span><br/>        APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>i<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; <span style="color: #228822;">//dados zerados.</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">public</span> OnDialogResponse<span style="color: #000000;">(</span>playerid, dialogid, response, listitem, inputtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Dialogs</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">switch</span><span style="color: #000000;">(</span>dialogid<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">case</span> DialogLogin<span style="color: #000000;">:</span> <span style="color: #000000;">{</span> <span style="color: #228822;">//Para efetuar login</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>response || <span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span> <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> Kick<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span>APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Senha<span style="color: #000000;">]</span>, inputtext, false<span style="color: #000000;">)</span> <span style="color: #000000;">!=</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> Kick<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/>            APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Logado<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> true; <span style="color: #228822;">//Efetuar Login</span><br/>            GetPlayerIp<span style="color: #000000;">(</span>playerid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pIP<span style="color: #000000;">]</span>, <span style="color: #000000;">16</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Novo IP</span><br/>            orm_update<span style="color: #000000;">(</span>APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>OrmID<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Atualizar informaзхes, e incluindo o novo Ip que acabou de se conectar.</span><br/>            <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"{ffff00}Conectado com sucesso ao gamemode de estudos!"</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/>        <span style="color: #2222BB;">case</span> DialogRegistro<span style="color: #000000;">:</span> <span style="color: #000000;">{</span> <span style="color: #228822;">//Para efetuar registro</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>response || <span style="color: #222222;">strlen</span><span style="color: #000000;">(</span>inputtext<span style="color: #000000;">)</span> <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> Kick<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/>            <span style="color: #222222;">format</span><span style="color: #000000;">(</span>APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Senha<span style="color: #000000;">]</span>, <span style="color: #000000;">128</span>, inputtext<span style="color: #000000;">)</span>; <span style="color: #228822;">//Senha inserida</span><br/>            APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Logado<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> true; <span style="color: #228822;">//Logado</span><br/>            <span style="color: #2222BB;">new</span> d, m, a;<br/>            GetPlayerIp<span style="color: #000000;">(</span>playerid, APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>pIP<span style="color: #000000;">]</span>, <span style="color: #000000;">16</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//novo ip</span><br/>            <span style="color: #222222;">getdate</span><span style="color: #000000;">(</span>a, m, d<span style="color: #000000;">)</span>;<br/>            <span style="color: #222222;">format</span><span style="color: #000000;">(</span>APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>DataRegistro<span style="color: #000000;">]</span>, <span style="color: #000000;">50</span>, <span style="color: #000066;">"%02d/%02d/%d"</span>, d, m, a<span style="color: #000000;">)</span>; <span style="color: #228822;">//Data de registro</span><br/>            orm_insert<span style="color: #000000;">(</span>APlayerData<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">[</span>OrmID<span style="color: #000000;">]</span>, <span style="color: #000066;">""</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Insere as informaзхes, nгo usei nenhuma callback para inserir, mas poderia atй ter colocado, porйm nгo й tгo necessбrio.</span><br/>            <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"{ffff00}Registrado com sucesso ao gamemode de estudos!"</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div><font size="4"><font color="DarkOrange">Entendendo</font></font><br />
+Vamos entender agora de forma mais explicada, pois acima sгo apenas cуdigos.<br />
+Em <b>OnPlayerConnect</b>, crio um novo <i>ORM</i>. Assim, esse <i>ORM </i>й <b>respectivo com os dados do jogador que acabou de se conectar</b>.<br />
+Ponho as variaveis que sempre receberгo e terгo dados a atualizar.<br />
+Seto a condiзгo, que irб pegar a conta que tem o nome do player que conectou. (como se fosse <b>WHERE Nome='%s'</b>)<br />
+E vai dizer se estб registrado ou nгo, com o tal nome, em <b>OnPlayerLogin</b>.<br />
+<br />
+Em <b>OnPlayerLogin</b>, irб serar a condiзгo, que antes era o Nome, para ID. Assim, o jogador pode atй alterar seu nome, que os dados ainda receberгo atualizaзхes normalmente. <br />
+OBS: ERROR_OK = Hб algo. | ERROR_NO_DATA = Nгo hб resultado.<br />
+<br />
+Em <b>OnPlayerDisconnect</b>, irб checar se estб logado ou nгo, e aн, irб atualizar os dados. E nisso, irб deletar o ORM do player, e zerando os dados de todas as variбveis. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/wink.png" title="Wink"/><br />
+<br />
+<font size="5"><b>CACHE</b></font><br />
+Usando cache, como o explicado de forma resumida acima, vocк necessita primeiro do uso de funзхes do MySQL mesmo. <b>ORM's nгo sгo necessбrios cache.</b><br />
+Funзхes:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:407px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">native</span> cache_get_data<span style="color: #000000;">(</span><span style="color: #000000;">&amp;</span>num_rows, <span style="color: #000000;">&amp;</span>num_fields, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> cache_get_row_count<span style="color: #000000;">(</span>connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> cache_get_field_count<span style="color: #000000;">(</span>connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> cache_get_field_name<span style="color: #000000;">(</span>field_index, destination<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>, max_len <span style="color: #000000;">=</span> <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>destination<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><br/><span style="color: #2222BB;">native</span> cache_get_row<span style="color: #000000;">(</span>row, field_idx, destination<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>, max_len <span style="color: #000000;">=</span> <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>destination<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> cache_get_row_int<span style="color: #000000;">(</span>row, field_idx, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>cache_get_row_float<span style="color: #000000;">(</span>row, field_idx, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><br/><span style="color: #2222BB;">native</span> cache_get_field_content<span style="color: #000000;">(</span>row, <span style="color: #2222BB;">const</span> field_name<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, destination<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>, max_len <span style="color: #000000;">=</span> <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>destination<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> cache_get_field_content_int<span style="color: #000000;">(</span>row, <span style="color: #2222BB;">const</span> field_name<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>cache_get_field_content_float<span style="color: #000000;">(</span>row, <span style="color: #2222BB;">const</span> field_name<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><br/><span style="color: #2222BB;">native</span> <span style="color: #000000;">Cache</span><span style="color: #000000;">:</span>cache_save<span style="color: #000000;">(</span>connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> cache_delete<span style="color: #000000;">(</span><span style="color: #000000;">Cache</span><span style="color: #000000;">:</span>cache_id, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> cache_set_active<span style="color: #000000;">(</span><span style="color: #000000;">Cache</span><span style="color: #000000;">:</span>cache_id, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> cache_is_valid<span style="color: #000000;">(</span><span style="color: #000000;">Cache</span><span style="color: #000000;">:</span>cache_id, connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><br/><span style="color: #2222BB;">native</span> cache_affected_rows<span style="color: #000000;">(</span>connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> cache_insert_id<span style="color: #000000;">(</span>connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> cache_warning_count<span style="color: #000000;">(</span>connectionHandle <span style="color: #000000;">=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span>;<br/><br/><span style="color: #2222BB;">native</span> cache_get_query_exec_time<span style="color: #000000;">(</span><span style="color: #000000;">E_EXECTIME_UNIT</span><span style="color: #000000;">:</span>unit <span style="color: #000000;">=</span> UNIT_MICROSECONDS<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> cache_get_query_string<span style="color: #000000;">(</span>destination<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, max_len <span style="color: #000000;">=</span> <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>destination<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div>Vendo essas nativas, parece que tudo й difнcil. Porйm, tudo й bem fбcil.<br />
+<br />
+<font size="3"><b>cache_get_data</b></font><br />
+Retorna o nъmero de resultados, e colunas, da conexгo feita (no caso, de uma query).<br />
+<br />
+<font size="3"><b>cache_get_row_count</b></font><b><font color="RoyalBlue">*</font></b><br />
+Retorna apenas o nъmero de resultados de uma query, da conexгo indicada.<br />
+<br />
+<font size="3"><b>cache_save</b></font><br />
+Salva uma query em cache.<br />
+<br />
+<font size="3"><b>cache_delete</b></font><b><font color="RoyalBlue">*</font></b><br />
+Deleta um cache salvo.<br />
+<br />
+<font size="3"><b>cache_is_valid</b></font><br />
+Detecta ver se o cache й vбlido.<br />
+<br />
+<font size="3"><b>cache_set_active</b></font><font color="RoyalBlue"><b>*</b></font><br />
+Deixa um cache em modo ativo.<br />
+Pode ser usado, para pegar resultados nгo necessбrios em tais momentos.<br />
+Por exemplo, para dados que sгo atualizados de tempos em tempos.<br />
+<br />
+<font size="3"><b>cache_get_field_content</b></font><font color="RoyalBlue"><b>*</b></font><br />
+Pega o resultado de uma query, assim vocк especifica o id do resultado (inicial do 0) atй o valor mбximo (que nгo pode ser igual a rows).<br />
+Se uma query, retorna 10 rows (10 resultados) as informaзхes dos resultados serгo de 0 atй 9. 10 serб NULL. <br />
+<br />
+<font size="3"><b>cache_get_field_content_int</b></font><br />
+Semelhante ao <b>cache_get_field_content</b> porйm, o valor serб logo retornado.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> Scores <span style="color: #000000;">=</span> cache_get_field_content_int<span style="color: #000000;">(</span><span style="color: #000000;">0</span>, <span style="color: #000066;">"Scores"</span>, mysql<span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+<font size="3"><b>cache_get_field_content_float</b></font><br />
+Semelhante ao <b>cache_get_field_content </b>porйm o valor serб logo retornado.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:87px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>pPos<span style="color: #000000;">[</span><span style="color: #000000;">3</span><span style="color: #000000;">]</span>;<br/>pPos<span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> cache_get_field_content_float<span style="color: #000000;">(</span><span style="color: #000000;">0</span>, <span style="color: #000066;">"PosX"</span>, mysql<span style="color: #000000;">)</span>;<br/>pPos<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> cache_get_field_content_float<span style="color: #000000;">(</span><span style="color: #000000;">0</span>, <span style="color: #000066;">"PosY"</span>, mysql<span style="color: #000000;">)</span>;<br/>pPos<span style="color: #000000;">[</span><span style="color: #000000;">2</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> cache_get_field_content_float<span style="color: #000000;">(</span><span style="color: #000000;">0</span>, <span style="color: #000066;">"PosZ"</span>, mysql<span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+<font color="RoyalBlue"><b>*</b></font> Hб exemplos<br />
+<br />
+<font size="4"><font color="Green"><b>Exemplos</b></font></font><br />
+Vamos supor, que eu quero que pegue o log de banidos de 15 em 15 minutos, uma query serб feita e o resultado serб sempre exibido se eu usar /banidos.<br />
+<br />
+Bбsicamente, eu teria que usar um cache, e um settimer.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:423px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> mysql, <span style="color: #000000;">Cache</span><span style="color: #000000;">:</span>Banidos; <span style="color: #228822;">//Variavel da conexгo, e do Cache</span><br/><span style="color: #2222BB;">public</span> OnGameModeInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    mysql <span style="color: #000000;">=</span> mysql_connect<span style="color: #000000;">(</span><span style="color: #000066;">"localhost"</span>, <span style="color: #000066;">"root"</span>, <span style="color: #000066;">"test"</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Conexгo do MySQL</span><br/>    SetTimer<span style="color: #000000;">(</span><span style="color: #000066;">"AtualizarListaBanidos"</span>, <span style="color: #000000;">1000</span> <span style="color: #000000;">*</span> <span style="color: #000000;">60</span> <span style="color: #000000;">*</span> <span style="color: #000000;">15</span>, true<span style="color: #000000;">)</span>; <span style="color: #228822;">// 15 minutos</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">forward</span> AtualizarListaBanidos<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <br/><span style="color: #2222BB;">public</span> AtualziarListaBanidos<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    Banidos <span style="color: #000000;">=</span> mysql_query<span style="color: #000000;">(</span>mysql, <span style="color: #000066;">"SELECT * FROM banidos ORDER BY ID DESC LIMIT 30"</span>, true<span style="color: #000000;">)</span>; <span style="color: #228822;">//Resultados armazenados em "Banidos"</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>banidos<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    cache_set_active<span style="color: #000000;">(</span>Banidos, mysql<span style="color: #000000;">)</span>; <span style="color: #228822;">//Seta o cache como ativo.</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>cache_get_row_count<span style="color: #000000;">(</span>mysql<span style="color: #000000;">)</span> <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"{ff0000}Nгo hб pessoas banidas!"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">//Caso nгo tenha resultados</span><br/>    <span style="color: #2222BB;">new</span> Lista<span style="color: #000000;">[</span><span style="color: #000000;">1000</span><span style="color: #000000;">]</span>;<br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i; i <span style="color: #000000;">&lt;</span> cache_get_row_count<span style="color: #000000;">(</span>mysql<span style="color: #000000;">)</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span> <span style="color: #228822;">// Um loop, atй chegar o mбximo de resultados.</span><br/>        <span style="color: #2222BB;">new</span> Nome<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>, BanPor<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>; <span style="color: #228822;">//Variaveis</span><br/>        cache_get_field_content<span style="color: #000000;">(</span>i, <span style="color: #000066;">"Nome"</span>, Nome, mysql<span style="color: #000000;">)</span>; <span style="color: #228822;">//Pega o valor que estava no banco de dados na tabela 'Nome' e pхe na variavel Nome</span><br/>        cache_get_field_content<span style="color: #000000;">(</span>i, <span style="color: #000066;">"BanAdmin"</span>, BanPor, mysql<span style="color: #000000;">)</span>; <span style="color: #228822;">//Pega o valor que estava tambйm no banco de dados  na tabela 'BanAdmin' e pхe na variavel BanPor</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Lista, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Lista<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%s banido por %s<span style="color: #000099; font-weight: bold;">\n</span>"</span>, Nome, BanPor<span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Lista, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Lista<span style="color: #000000;">)</span>, <span style="color: #000066;">"Mostrando %i banidos<span style="color: #000099; font-weight: bold;">\n</span><span style="color: #000099; font-weight: bold;">\n</span>%s"</span>, cache_get_row_count<span style="color: #000000;">(</span>mysql<span style="color: #000000;">)</span>, Lista<span style="color: #000000;">)</span>; <span style="color: #228822;">//"Mostrando 30 banidos, e logo abaixo todos os resultados</span><br/>    ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">25000</span>, DIALOG_STYLE_MSGBOX, <span style="color: #000066;">"{ff0000}# {ffffff}Banidos"</span>, Lista, <span style="color: #000066;">"Fechar"</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>Cуdigo de exemplo acima. Que tal agora, um sistema de ranking, que seja atualizado de 10 em 10 minutos?<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:471px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> mysql, <span style="color: #000000;">Cache</span><span style="color: #000000;">:</span>RankDemo;<br/><span style="color: #2222BB;">public</span> OnGameModeInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    mysql <span style="color: #000000;">=</span> mysql_connect<span style="color: #000000;">(</span><span style="color: #000066;">"localhost"</span>, <span style="color: #000066;">"root"</span>, <span style="color: #000066;">"test"</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>;<br/>    SetTimer<span style="color: #000000;">(</span><span style="color: #000066;">"AtualizarRanking"</span>, <span style="color: #000000;">1000</span> <span style="color: #000000;">*</span> <span style="color: #000000;">60</span> <span style="color: #000000;">*</span> <span style="color: #000000;">10</span>, true<span style="color: #000000;">)</span>; <span style="color: #228822;">//10 minutos</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">forward</span> AtualizarRanking<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> AtualizarRanking<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    RankDemo <span style="color: #000000;">=</span> mysql_query<span style="color: #000000;">(</span>mysql, <span style="color: #000066;">"SELECT Nome,Scores FROM usuarios ORDER BY Scores DESC LIMIT 10"</span>, true<span style="color: #000000;">)</span>; <br/>    <span style="color: #228822;">/*<br/>    Irб ordenar o resultado dos que tem mais scores para os que tem menos. <br/>    Irб limitar o resultado em 10, ou seja, os 10 que tem maior quantidade de scores.<br/>    */</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>rank<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    cache_set_active<span style="color: #000000;">(</span>RankDemo, mysql<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>cache_get_row_count<span style="color: #000000;">(</span>mysql<span style="color: #000000;">)</span> <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"{ff0000}Nada encontrado!"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">new</span> Lista<span style="color: #000000;">[</span><span style="color: #000000;">800</span><span style="color: #000000;">]</span>;<br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i; i <span style="color: #000000;">&lt;</span> cache_get_row_count<span style="color: #000000;">(</span>mysql<span style="color: #000000;">)</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">new</span> Nome<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>, Score;<br/>        cache_get_field_content<span style="color: #000000;">(</span>i, <span style="color: #000066;">"Nome"</span>, Nome, mysql<span style="color: #000000;">)</span>;<br/>        Score <span style="color: #000000;">=</span> cache_get_field_content_int<span style="color: #000000;">(</span>i, <span style="color: #000066;">"Scores"</span>, mysql<span style="color: #000000;">)</span>;<br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Lista, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Lista<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s%iє - %s - Scores: %i"</span>, i<span style="color: #000000;">+</span><span style="color: #000000;">1</span>, Nome, Score<span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    ShowPlayerDialog<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">25000</span>, DIALOG_STYLE_MSGBOX, <span style="color: #000066;">"{ff0000}# {ffffff}Exibindo ranking!"</span>, Lista, <span style="color: #000066;">"Ok"</span>, <span style="color: #000066;">""</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<b><font color="Red">Lembrando que o plugin pode receber atualizaзхes, e algumas callbacks podem ser sim removidas ou alteradas. Sempre dк uma olhada nas nativas.</font></b><br />
+Caso nгo tenha entendido algo do tуpico, por favor, diga e eu tentarei tirar sua dъvida.<br />
+<br />
+<b>Muitas callbacks nгo foram utilizadas neste tutorial, por nгo serem necessбrias atй certo ponto.<br />
+A Wiki explica basicamente o funcionamento de cada nativa do Plugin. <font color="DarkGreen">(<a href="https://wiki.sa-mp.com/wiki/MySQL/R33" target="_blank">Link</a>)</font></b><br />
+<br />
+Espero que tenha entendido, e lhe ajudado!<br />
+<br />
+<b><font size="3">Tutoriais semelhantes ao uso do MySQL:</font></b><br />
+<a href="../../threads/0299/tid-299675.html" target="_blank">[<font color="Purple">Tutorial</font>] <font color="Black">Criando um sistema em MySQL</font></a><br />
+<a href="../../threads/0342/tid-342706.html" target="_blank">[<font color="Purple">Tutorial</font>] <font color="Black">Usando MySQL</font></a><br />
+<br />
+<font size="3"><b>Vocк deve entender como й o MySQL!</b></font><br />
+Tenha um conhecimento em SQL, pesquise, estude! <i>Este tutorial destaca funзхes do MySQL Plugin (para versхes R33 e superiores)</i>.<br />
+<br />
+<b><font color="RoyalBlue">*</font></b> Caso tenha dъvidas, comente no tуpico que tentarei lhe explicar..<br />
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2944203">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-171517.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2944207"></a>
+<div class="post classic " style="" id="post_2944207">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0227/uid-227670.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0227/uid-227670.html"><s>WooPz</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 177<br />
+	Threads: 7<br />
+	Joined: Feb 2014
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0499/tid-499336.html#pid2944207" title="Re: Usando MySQL + Cache + ORM">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by WooPz" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">07.03.2014, 19:09 <span class="post_edit" id="edited_by_2944207"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2944207">
+		o mysql foi um dos motivos para eu entrar para o sa-mp pois vi como um modo de treinar para minhas aplicaзхes<br />
+<br />
+achei o tutorial super informatico so tem 1 coisa que me incomoda... nessa comunidade vi que vcs tem a mania de usar "getar" e "setar" verbos que nao existem a impressгo e q vcs tentam abrasileirar o verbo "get" e "set" do ingles. ao meu ver isso fica bem estranho e sem nexo para o portugues. poderia trocar isso para "pegar", "capturar", "informar", "colocar" ou algo do genero <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/><br />
+<br />
+<br />
+#edit<br />
+ponha tbm as video aulas do joaopedro como topicos aconselhaveis. foi o primeiro tutorial q vi de mysql pra sa-mp e consegui perfeitamente aplicar <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2944207">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-227670.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2944211"></a>
+<div class="post classic " style="" id="post_2944211">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0171/uid-171517.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0171/uid-171517.html">Locky_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,605<br />
+	Threads: 61<br />
+	Joined: Jul 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0499/tid-499336.html#pid2944211" title="Re: Usando MySQL + Cache + ORM">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Locky_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">07.03.2014, 19:10 <span class="post_edit" id="edited_by_2944211"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2944211">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>WooPz</strong><br />
+<a href="../../threads/0499/tid-499336.html#pid2944207" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">o mysql foi um dos motivos para eu entrar para o sa-mp pois vi como um modo de treinar para minhas aplicaзхes<br />
+<br />
+achei o tutorial super informatico so tem 1 coisa que me incomoda... nessa comunidade vi que vcs tem a mania de usar "getar" e "setar" verbos que nao existem a impressгo e q vcs tentam abrasileirar o verbo "get" e "set" do ingles. ao meu ver isso fica bem estranho e sem nexo para o portugues. poderia trocar isso para "pegar", "capturar", "informar", "colocar" ou algo do genero <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/></div>
+</td>
+</tr>
+</table>
+</div>Questгo de costume mesmo.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2944211">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-171517.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2944214"></a>
+<div class="post classic " style="" id="post_2944214">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0201/uid-201930.html"><img src="../../assets/uploads/avatars/201930.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0201/uid-201930.html">ProKillerpa</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,202<br />
+	Threads: 41<br />
+	Joined: May 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0499/tid-499336.html#pid2944214" title="Re: Usando MySQL + Cache + ORM">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by ProKillerpa" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">07.03.2014, 19:11 <span class="post_edit" id="edited_by_2944214"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2944214">
+		Parabйns, уtimo tutorial.<br />
+<br />
++Rep
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2944214">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-201930.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2944215"></a>
+<div class="post classic " style="" id="post_2944215">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0153/uid-153218.html"><img src="../../assets/uploads/avatars/153218.png" alt="" width="55" height="11" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0153/uid-153218.html">Caio_Freeze</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 806<br />
+	Threads: 92<br />
+	Joined: Jan 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0499/tid-499336.html#pid2944215" title="Re: Usando MySQL + Cache + ORM">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by Caio_Freeze" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">07.03.2014, 19:11 <span class="post_edit" id="edited_by_2944215"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2944215">
+		parabens belo tutorial!! <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2944215">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-153218.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2944223"></a>
+<div class="post classic " style="" id="post_2944223">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0171/uid-171517.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0171/uid-171517.html">Locky_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,605<br />
+	Threads: 61<br />
+	Joined: Jul 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0499/tid-499336.html#pid2944223" title="Re: Usando MySQL + Cache + ORM">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by Locky_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">07.03.2014, 19:18 <span class="post_edit" id="edited_by_2944223"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2944223">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>ProKillerpa</strong><br />
+<a href="../../threads/0499/tid-499336.html#pid2944214" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Parabйns, уtimo tutorial.<br />
+<br />
++Rep</div>
+</td>
+</tr>
+</table>
+</div><div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Caio_Freeze</strong><br />
+<a href="../../threads/0499/tid-499336.html#pid2944215" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">parabens belo tutorial!! <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/></div>
+</td>
+</tr>
+</table>
+</div>Opa, obrigado <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2944223">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-171517.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2944254"></a>
+<div class="post classic " style="" id="post_2944254">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0184/uid-184410.html"><img src="../../assets/uploads/avatars/184410.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0184/uid-184410.html">PT</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Godfather<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 7,185<br />
+	Threads: 5<br />
+	Joined: Nov 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0499/tid-499336.html#pid2944254" title="Re: Usando MySQL + Cache + ORM">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by PT" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">07.03.2014, 19:45 <span class="post_edit" id="edited_by_2944254"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2944254">
+		Sem duvida o ORM veio facilitar e melhorar muito as coisas.<br />
+<br />
+esta muito bem explicado.<br />
+<br />
+Parabens, +rep.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2944254">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-184410.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2944259"></a>
+<div class="post classic " style="" id="post_2944259">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0171/uid-171517.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0171/uid-171517.html">Locky_</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,605<br />
+	Threads: 61<br />
+	Joined: Jul 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0499/tid-499336.html#pid2944259" title="Re: Usando MySQL + Cache + ORM">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by Locky_" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">07.03.2014, 19:48 <span class="post_edit" id="edited_by_2944259"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2944259">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>PT</strong><br />
+<a href="../../threads/0499/tid-499336.html#pid2944254" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Sem duvida o ORM veio facilitar e melhorar muito as coisas.<br />
+<br />
+esta muito bem explicado.<br />
+<br />
+Parabens, +rep.</div>
+</td>
+</tr>
+</table>
+</div>Valeu PT. *-*<br />
+<br />
+#Off<br />
+e.e teu REP vale quanto? 6? OMG<br />
+que delнcia cara! <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.gif" title="Grin"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2944259">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-171517.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2944272"></a>
+<div class="post classic " style="" id="post_2944272">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0119/uid-119081.html"><img src="../../assets/uploads/avatars/119081.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0119/uid-119081.html">Adejair</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 146<br />
+	Threads: 20<br />
+	Joined: Feb 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0499/tid-499336.html#pid2944272" title="Re: Usando MySQL + Cache + ORM">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Adejair" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">07.03.2014, 19:55 <span class="post_edit" id="edited_by_2944272"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2944272">
+		<b>Nossaaaaaaaa Foda *.* #Rep</b><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>cache_get_row_count<span style="color: #000000;">(</span>mysql<span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #228822;">//Nгo registrado</span></div></div></pre>
+</div>
+<b>Poderia Retornar Rows mysql_num_rows Para Poder Ver se o Sujeito Tem ou Nгo Conta Banco de Dados?</b><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:167px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> TopicoDelicia <span style="color: #000000;">=</span> mysql_num_rows<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <br/><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>TopicoDelicia<span style="color: #000000;">)</span> <br/><span style="color: #000000;">{</span> <br/>SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">" Voce nгo tem uma Conta vlh "</span><span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>TopicoDelicia<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">" Voce tem Uma Conta logae parзaa "</span><span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>Tipo Isso?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2944272">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-119081.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2944574"></a>
+<div class="post classic " style="" id="post_2944574">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0175/uid-175818.html"><img src="../../assets/uploads/avatars/175818.png" alt="" width="42" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0175/uid-175818.html">Sky™</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,782<br />
+	Threads: 17<br />
+	Joined: Aug 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0499/tid-499336.html#pid2944574" title="Re: Usando MySQL + Cache + ORM">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by Sky™" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">08.03.2014, 00:37 <span class="post_edit" id="edited_by_2944574"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2944574">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>WooPz</strong><br />
+<a href="../../threads/0499/tid-499336.html#pid2944207" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">o mysql .. aplicar <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/></div>
+</td>
+</tr>
+</table>
+</div>vc me lembra uma pessoa ^^<br />
+espero que seja apenas impressгo !<br />
+<br />
+<br />
+@уtimo tutorial ...
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2944574">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-175818.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0499/tid-499336.html">Next Oldest</a> | <a href="../../threads/0499/tid-499336.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="499336" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" selected="selected">------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/9.html">Non-English</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/33.html">Languages</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/34.html">Português/Portuguese</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/56.html">Lançamentos/Releases</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

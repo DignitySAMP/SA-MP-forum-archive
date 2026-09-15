@@ -1,0 +1,821 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>3D Pathfinding Theories</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "0fd4a5a368d8f9c3ed6e54caf871f767";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Ok, we need an efficient pathfinding system. I have a few ideas I'd like to jot down and I'd like to see what ideas you all have. My current method theory: This would use ColAndreas. This would requir" />
+<link rel="canonical" href="../../threads/0604/tid-604060.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="0fd4a5a368d8f9c3ed6e54caf871f767" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/7.html">Other</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/23.html">Everything and Nothing</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0604/tid-604060.html#pid3679046">Threaded Mode</a></span>
+				</div>
+				
+					3D Pathfinding Theories
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid3679046"></a>
+<div class="post classic " style="" id="post_3679046">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0214/uid-214776.html"><img src="../../assets/uploads/avatars/214776.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0214/uid-214776.html"><s>Crayder</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,324<br />
+	Threads: 96<br />
+	Joined: Sep 2013
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0604/tid-604060.html#pid3679046" title="3D Pathfinding Theories">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by Crayder" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">31.03.2016, 04:32 <span class="post_edit" id="edited_by_3679046"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Crayder; 31/03/2016 at 06:28 AM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3679046">
+		Ok, we need an efficient pathfinding system. I have a few ideas I'd like to jot down and I'd like to see what ideas you all have.<br />
+<br />
+<br />
+<br />
+My current method theory:<br />
+<br />
+This would use ColAndreas. This would require some dense, extensive ray casting. It would need to generate a super efficient node database that can be used in a plugin. Note that this method would work for custom maps.<br />
+<br />
+The area is 12000x12000, each half unit in SA.<br />
+<br />
+Each of these points will be tested using CA_RayCastLineNormal.<br />
+Many of these points have multiple levels (bridges, certain buildings, etc), so we will have to do multiple rays.<br />
+The first ray will be from just above Chiliad (around 700) to just below the bottom of the quarry (note sure, so let's just say -100). If this ray collides something other than water we've found a plausible node.<br />
+Now we use the normal's Z to determine if the slope of this point is below 63.5 degrees (the SA walkable slope limit) (to do so use acos on it), and if it is we will consider this a potential node for now.<br />
+Now we need to continue casting downward, but everything below this node will be a bit more complicated. Each point below this must be at least ~2.1 units below the one before it. Some of these points may not be the outside of an object so this is where the surface normal comes in again. As long as the normal's Z is positive we have potential, so we will use CA_RayCastLine from the surface to 2.1 units above it to see if a player would fit there, if so consider this a potential node for now.<br />
+Once we scanned each of these points all the way down to -100, we can start trying to connect these potential nodes.<br />
+We start with the normal of the corner node (since the normal is a normalized value it will always be 1 unit away from the ground point there. Cast a ray with CA_RayCastLine from this normal (added to the ground point obviously) to the normal of the points around it (no matter the level, just within say a 1.42 radius sphere and not on the same point). If this ray collides anything, these nodes can't be connected. Otherwise, connect them (not the normals, the nodes on the surface). Allow only a certain number of connections, at least 8. Note that the angle between the nodes doesn't really matter since we already know the surface slope of each node is below 63.5.<br />
+<br />
+Now we need a database format a plugin can read. Each node will be defined as it's found index (the number of nodes found before it, the first node will be 0) and it's surface point. Then all of their connections will be defined as the found index of point A to the found index of point B. Note this should include the vice versa of each connection since each was scanned, that's fine. The plugin would be similar to Gamer_Z's RouteConnector (hell, we could probably use that plugin as a base for this one but instead of settings nodes in pawn we will directly read the database).<br />
+<br />
+<br />
+<br />
+There would probably be more factors to determining the potential nodes, this is just what came to my head and I had to write down before I forgot. There is a bit more to the thought but this is the base.<br />
+<br />
+<br />
+<br />
+Now please, what are your opinions on this method? What would you add to it or remove from it? What would be YOUR method?<br />
+<br />
+EDIT: I'm going to develop a test for my method in the meantime...<br />
+EDIT: This would obviously take years in PAWN, perhaps a temporary version of the ColAndreas plugin itself will do since I need access to it's functions.<br />
+EDIT: Hell this would take years in almost any language...
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3679046">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-214776.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3679246"></a>
+<div class="post classic " style="" id="post_3679246">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0266/uid-266365.html"><img src="../../assets/uploads/avatars/266365.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0266/uid-266365.html">BurnZ</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 372<br />
+	Threads: 23<br />
+	Joined: Sep 2015
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0604/tid-604060.html#pid3679246" title="Re: 3D Pathfinding Theories">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by BurnZ" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">31.03.2016, 13:31 <span class="post_edit" id="edited_by_3679246"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3679246">
+		This seems... complicated.<br />
+<br />
+But I like how these things work though.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3679246">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-266365.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3679284"></a>
+<div class="post classic " style="" id="post_3679284">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0214/uid-214776.html"><img src="../../assets/uploads/avatars/214776.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0214/uid-214776.html"><s>Crayder</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,324<br />
+	Threads: 96<br />
+	Joined: Sep 2013
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0604/tid-604060.html#pid3679284" title="Re: 3D Pathfinding Theories">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Crayder" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">31.03.2016, 15:00 <span class="post_edit" id="edited_by_3679284"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Crayder; 31/03/2016 at 05:59 PM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3679284">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Gamer_Z</strong><br />
+<a href="../../unavailable.html" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Just create a navigation mesh of SA, It probably already exists somewhere in the game but it would be visualised like this:<br />
+<img alt="" border="0" src="https://docs.unrealengine.com/latest/images/Resources/ContentExamples/NavMesh/NavMesh_Header.png"/><br />
+<br />
+You can look in the <a href="https://github.com/EpicGames/Signup" target="_blank">unreal engine source</a> how that nav mesh is made and how navigating through it is done.<br />
+<br />
+Your method could work for creating those meshes, probably the only way to do it without access to the SA engine. <br />
+Also, how would you navigate only roads? <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/wink.png" title="Wink"/></div>
+</td>
+</tr>
+</table>
+</div>Yeah this generated mesh would be more for walking around. Your GPS data would still be best for vehicles. For walking on sidewalks though, we could use an algorithm that supports weighted nodes and weight the nodes that are near the pedestrian nodes defined in gta3.img. With that, the generated paths would tend to walk mostly on sidewalks, but if the destination was somewhere else the path would go off the sidewalk. Like say the target was across the street, the path would go along the sidewalk until crossing the street was optimal then it would cross the street.<br />
+<br />
+EDIT: So anyways, I've been running my method in PAWN on my already shitty computer. And damn is it slow... It has been running for hours on just a 62.5x62.5 area (so 125x125 points, each with at least one node and a lot with multiple level nodes). The getting the nodes (on all levels) part is quick (2 seconds everytime), scanning for connections is what is slowing it down so much. Obviously it'd be a lot quicker in a plugin and on a better PC (seriously, this needs more than just a 1.55ghz single core CPU, burning 100% constantly at the moment).
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3679284">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-214776.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3681587"></a>
+<div class="post classic " style="" id="post_3681587">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0214/uid-214776.html"><img src="../../assets/uploads/avatars/214776.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0214/uid-214776.html"><s>Crayder</s></a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Banned<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,324<br />
+	Threads: 96<br />
+	Joined: Sep 2013
+	<br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0604/tid-604060.html#pid3681587" title="Re: 3D Pathfinding Theories">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by Crayder" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">04.04.2016, 16:58 <span class="post_edit" id="edited_by_3681587"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Crayder; 04/04/2016 at 09:19 PM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3681587">
+		Anyways, I've applied this in PAWN and it took 5 and a half hours to run on a 	125x125 unit area.<br />
+<br />
+The things to note about this timing are - 1, I'm using the shittiest computer I've touched in the past decade... and 2, it's in PAWN, which as we all know, is pretty damn limited. The script was taking ALL of my 1.55 GHZ single core CPU the entire time it was running, so it could've obviously went a lot faster with an upgraded PC.<br />
+<br />
+Interesting facts:<br />
+- Running at this speed, the entire SA map would take 576 days to complete.<br />
+- Exporting in my test database format, the entire SA map would occupy well over 9 gigabytes.<br />
+<br />
+If you guys want to see the map I used to test this, here it is:<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19552</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">50.00000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">51.50000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">55.00000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">-</span><span style="color: #000000;">9.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">51.50000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">-</span><span style="color: #000000;">4.25000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">54.25000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">4.75000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">56.75000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">11.25000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">3.00000</span>, <span style="color: #000000;">56.75000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">11.25000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">12.75000</span>, <span style="color: #000000;">56.75000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">11.25000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">21.75000</span>, <span style="color: #000000;">54.25000</span>,   <span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">11.25000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">25.75000</span>, <span style="color: #000000;">52.00000</span>,   <span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">9.75000</span>, <span style="color: #000000;">55.00000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">9.75000</span>, <span style="color: #000000;">51.50000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19383</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">16.25000</span>, <span style="color: #000000;">51.50000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19383</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">19.50000</span>, <span style="color: #000000;">51.50000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19383</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">16.25000</span>, <span style="color: #000000;">55.00000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">1.75000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">19.50000</span>, <span style="color: #000000;">53.25000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">-</span><span style="color: #000000;">4.25000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">16.25000</span>, <span style="color: #000000;">50.75000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">1.75000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">26.25000</span>, <span style="color: #000000;">49.00000</span>,   <span style="color: #000000;">65.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">1.75000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">12.25000</span>, <span style="color: #000000;">49.25000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">60.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19744</span>, <span style="color: #000000;">-</span><span style="color: #000000;">3.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">38.00000</span>, <span style="color: #000000;">51.72330</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">171.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">2.25000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">34.00000</span>, <span style="color: #000000;">52.50000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19901</span>, <span style="color: #000000;">32.12160</span>, <span style="color: #000000;">-</span><span style="color: #000000;">10.67660</span>, <span style="color: #000000;">47.21160</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19901</span>, <span style="color: #000000;">47.26840</span>, <span style="color: #000000;">-</span><span style="color: #000000;">10.35530</span>, <span style="color: #000000;">49.21160</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">8947</span>, <span style="color: #000000;">-</span><span style="color: #000000;">20.98240</span>, <span style="color: #000000;">23.64280</span>, <span style="color: #000000;">52.97740</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">-</span><span style="color: #000000;">25.00000</span>, <span style="color: #000000;">7.25000</span>, <span style="color: #000000;">53.50000</span>,   <span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">-</span><span style="color: #000000;">25.00000</span>, <span style="color: #000000;">4.75000</span>, <span style="color: #000000;">52.00000</span>,   <span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19790</span>, <span style="color: #000000;">-</span><span style="color: #000000;">20.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">20.00000</span>, <span style="color: #000000;">50.00000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19790</span>, <span style="color: #000000;">-</span><span style="color: #000000;">20.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">13.00000</span>, <span style="color: #000000;">50.00000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19790</span>, <span style="color: #000000;">-</span><span style="color: #000000;">27.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">16.50000</span>, <span style="color: #000000;">50.00000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19426</span>, <span style="color: #000000;">-</span><span style="color: #000000;">20.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">16.50000</span>, <span style="color: #000000;">54.75000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">-</span><span style="color: #000000;">20.03196</span>, <span style="color: #000000;">-</span><span style="color: #000000;">26.55408</span>, <span style="color: #000000;">52.50000</span>,   <span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div>And for the code that represents the test (which btw was thrown together in less than half an hour since I had shit to do in the day ahead):<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include a_samp</span><br/><span style="color: #2222AA;">#include colandreas</span><br/><span style="color: #2222AA;">#include RouteConnector</span><br/><br/><span style="color: #2222BB;">enum</span> node_info <span style="color: #000000;">{</span><br/>    id,<br/><br/>    <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>isNode,<br/><br/>    <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>X, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>Y, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>Z,<br/>    <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>NX, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>NY, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>NZ,<br/>    Connection<span style="color: #000000;">[</span><span style="color: #000000;">5</span><span style="color: #000000;">]</span><br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">new</span> Nodes<span style="color: #000000;">[</span><span style="color: #000000;">100000</span><span style="color: #000000;">]</span><span style="color: #000000;">[</span>node_info<span style="color: #000000;">]</span>;<br/><br/><span style="color: #2222BB;">new</span> count, connectcount, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>tmp;<br/><br/>main<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19552</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">50.00000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">51.50000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">55.00000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">-</span><span style="color: #000000;">9.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">51.50000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">-</span><span style="color: #000000;">4.25000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">54.25000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">4.75000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">56.75000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">11.25000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">3.00000</span>, <span style="color: #000000;">56.75000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">11.25000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">12.75000</span>, <span style="color: #000000;">56.75000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">11.25000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">21.75000</span>, <span style="color: #000000;">54.25000</span>,   <span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">11.25000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">25.75000</span>, <span style="color: #000000;">52.00000</span>,   <span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">9.75000</span>, <span style="color: #000000;">55.00000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">9.75000</span>, <span style="color: #000000;">51.50000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19383</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">16.25000</span>, <span style="color: #000000;">51.50000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19383</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">19.50000</span>, <span style="color: #000000;">51.50000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19383</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">16.25000</span>, <span style="color: #000000;">55.00000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">1.75000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">19.50000</span>, <span style="color: #000000;">53.25000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">-</span><span style="color: #000000;">4.25000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">16.25000</span>, <span style="color: #000000;">50.75000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">1.75000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">26.25000</span>, <span style="color: #000000;">49.00000</span>,   <span style="color: #000000;">65.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">1.75000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">12.25000</span>, <span style="color: #000000;">49.25000</span>,   <span style="color: #000000;">-</span><span style="color: #000000;">60.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19744</span>, <span style="color: #000000;">-</span><span style="color: #000000;">3.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">38.00000</span>, <span style="color: #000000;">51.72330</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">171.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">2.25000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">34.00000</span>, <span style="color: #000000;">52.50000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19901</span>, <span style="color: #000000;">32.12160</span>, <span style="color: #000000;">-</span><span style="color: #000000;">10.67660</span>, <span style="color: #000000;">47.21160</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19901</span>, <span style="color: #000000;">47.26840</span>, <span style="color: #000000;">-</span><span style="color: #000000;">10.35530</span>, <span style="color: #000000;">49.21160</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">8947</span>, <span style="color: #000000;">-</span><span style="color: #000000;">20.98240</span>, <span style="color: #000000;">23.64280</span>, <span style="color: #000000;">52.97740</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">-</span><span style="color: #000000;">25.00000</span>, <span style="color: #000000;">7.25000</span>, <span style="color: #000000;">53.50000</span>,   <span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">-</span><span style="color: #000000;">25.00000</span>, <span style="color: #000000;">4.75000</span>, <span style="color: #000000;">52.00000</span>,   <span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19790</span>, <span style="color: #000000;">-</span><span style="color: #000000;">20.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">20.00000</span>, <span style="color: #000000;">50.00000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19790</span>, <span style="color: #000000;">-</span><span style="color: #000000;">20.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">13.00000</span>, <span style="color: #000000;">50.00000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19790</span>, <span style="color: #000000;">-</span><span style="color: #000000;">27.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">16.50000</span>, <span style="color: #000000;">50.00000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19426</span>, <span style="color: #000000;">-</span><span style="color: #000000;">20.00000</span>, <span style="color: #000000;">-</span><span style="color: #000000;">16.50000</span>, <span style="color: #000000;">54.75000</span>,   <span style="color: #000000;">0.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">90.00000</span><span style="color: #000000;">)</span>;<br/>    CA_CreateObject<span style="color: #000000;">(</span><span style="color: #000000;">19445</span>, <span style="color: #000000;">-</span><span style="color: #000000;">20.03196</span>, <span style="color: #000000;">-</span><span style="color: #000000;">26.55408</span>, <span style="color: #000000;">52.50000</span>,   <span style="color: #000000;">30.00000</span>, <span style="color: #000000;">90.00000</span>, <span style="color: #000000;">0.00000</span><span style="color: #000000;">)</span>;<br/><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i; i <span style="color: #000000;">&lt;</span> <span style="color: #000000;">100000</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        Nodes<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>isNode<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> false;<br/>        <br/>        <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> c; c <span style="color: #000000;">&lt;</span> <span style="color: #000000;">5</span>; c<span style="color: #000000;">++</span><span style="color: #000000;">)</span><br/>            Nodes<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Connection<span style="color: #000000;">]</span><span style="color: #000000;">[</span>c<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">-</span><span style="color: #000000;">1</span>;<br/>    <span style="color: #000000;">}</span><br/>    <br/>    <span style="color: #228822;">/*new time = gettime();<br/>    ScanArea();<br/>    printf("Nodes: %i, Time taken to scan: %i", count, gettime() - time);<br/>    <br/>    time = gettime();<br/>    ScanConnections();<br/>    printf("connections: %i, Time taken to connect: %i", connectcount, gettime() - time);<br/>    <br/>    time = gettime();<br/>    PrintNodes("nodes.dat");<br/>    printf("Time taken to save: %i", gettime() - time);*/</span><br/><span style="color: #000000;">}</span><br/><br/>ScanArea<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>x <span style="color: #000000;">=</span> <span style="color: #000000;">-</span><span style="color: #000000;">62.5</span>; x <span style="color: #000000;">&lt;</span> <span style="color: #000000;">62.5</span>; x <span style="color: #000000;">+=</span> <span style="color: #000000;">0.5</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>y <span style="color: #000000;">=</span> <span style="color: #000000;">-</span><span style="color: #000000;">62.5</span>; y <span style="color: #000000;">&lt;</span> <span style="color: #000000;">62.5</span>; y <span style="color: #000000;">+=</span> <span style="color: #000000;">0.5</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>            ScanPoint<span style="color: #000000;">(</span>x, y<span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/><span style="color: #000000;">}</span><br/><br/>ScanPoint<span style="color: #000000;">(</span><span style="color: #000000;">Float</span><span style="color: #000000;">:</span>x, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>y<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>cX, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>nX,<br/>        <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>cY, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>nY,<br/>        <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>cZ, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>nZ;<br/>    <br/>    <span style="color: #2222BB;">new</span> <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>cH <span style="color: #000000;">=</span> <span style="color: #000000;">80.0</span>;<br/>    <br/>    <span style="color: #2222BB;">while</span><span style="color: #000000;">(</span>CA_RayCastLineNormal<span style="color: #000000;">(</span>x, y, cH, x, y, <span style="color: #000000;">40.0</span>, cX, cY, cZ, nX, nY, nZ<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #222222;">acos</span><span style="color: #000000;">(</span>nZ<span style="color: #000000;">)</span> <span style="color: #000000;">&lt;=</span> <span style="color: #000000;">63.5</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>cH <span style="color: #000000;">==</span> <span style="color: #000000;">80.0</span> || <span style="color: #000000;">!</span>CA_RayCastLine<span style="color: #000000;">(</span>cX, cY, cZ <span style="color: #000000;">+</span> <span style="color: #000000;">0.01</span>, cX, cY, cZ <span style="color: #000000;">+</span> <span style="color: #000000;">2.25</span>, tmp, tmp, tmp<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>                Nodes<span style="color: #000000;">[</span>count<span style="color: #000000;">]</span><span style="color: #000000;">[</span>X<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> cX;<br/>                Nodes<span style="color: #000000;">[</span>count<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Y<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> cY;<br/>                Nodes<span style="color: #000000;">[</span>count<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Z<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> cZ;<br/>                <br/>                Nodes<span style="color: #000000;">[</span>count<span style="color: #000000;">]</span><span style="color: #000000;">[</span>NX<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> nX;<br/>                Nodes<span style="color: #000000;">[</span>count<span style="color: #000000;">]</span><span style="color: #000000;">[</span>NY<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> nY;<br/>                Nodes<span style="color: #000000;">[</span>count<span style="color: #000000;">]</span><span style="color: #000000;">[</span>NZ<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> nZ;<br/>                <br/>                count<span style="color: #000000;">++</span>;<br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>        <br/>        cH <span style="color: #000000;">=</span> cZ <span style="color: #000000;">-</span> <span style="color: #000000;">0.01</span>;<br/>    <span style="color: #000000;">}</span><br/><span style="color: #000000;">}</span><br/><br/>ScanConnections<span style="color: #000000;">(</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> node; node <span style="color: #000000;">&lt;</span> count; node<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        Nodes<span style="color: #000000;">[</span>node<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Connection<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> GetNodeConnections<span style="color: #000000;">(</span>node<span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222AA;">#define Distance(%0,%1) \</span><br/>    VectorSize<span style="color: #000000;">(</span>Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>0<span style="color: #000000;">]</span><span style="color: #000000;">[</span>X<span style="color: #000000;">]</span> <span style="color: #000000;">-</span> Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>1<span style="color: #000000;">]</span><span style="color: #000000;">[</span>X<span style="color: #000000;">]</span>, Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>0<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Y<span style="color: #000000;">]</span> <span style="color: #000000;">-</span> Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>1<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Y<span style="color: #000000;">]</span>, Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>0<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Z<span style="color: #000000;">]</span> <span style="color: #000000;">-</span> Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>1<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Z<span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><br/><span style="color: #2222AA;">#define ClearPath(%0,%1) \</span><br/>    <span style="color: #000000;">!</span>CA_RayCastLine <span style="color: #000000;">(</span><span style="color: #000000;">(</span>Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>0<span style="color: #000000;">]</span><span style="color: #000000;">[</span>X<span style="color: #000000;">]</span> <span style="color: #000000;">+</span> Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>0<span style="color: #000000;">]</span><span style="color: #000000;">[</span>NX<span style="color: #000000;">]</span><span style="color: #000000;">)</span>, <span style="color: #000000;">(</span>Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>0<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Y<span style="color: #000000;">]</span> <span style="color: #000000;">+</span> Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>0<span style="color: #000000;">]</span><span style="color: #000000;">[</span>NY<span style="color: #000000;">]</span><span style="color: #000000;">)</span>, <span style="color: #000000;">(</span>Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>0<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Z<span style="color: #000000;">]</span> <span style="color: #000000;">+</span> Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>0<span style="color: #000000;">]</span><span style="color: #000000;">[</span>NZ<span style="color: #000000;">]</span><span style="color: #000000;">)</span>,\<br/>        <span style="color: #000000;">(</span>Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>1<span style="color: #000000;">]</span><span style="color: #000000;">[</span>X<span style="color: #000000;">]</span> <span style="color: #000000;">+</span> Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>1<span style="color: #000000;">]</span><span style="color: #000000;">[</span>NX<span style="color: #000000;">]</span><span style="color: #000000;">)</span>, <span style="color: #000000;">(</span>Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>1<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Y<span style="color: #000000;">]</span> <span style="color: #000000;">+</span> Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>1<span style="color: #000000;">]</span><span style="color: #000000;">[</span>NY<span style="color: #000000;">]</span><span style="color: #000000;">)</span>, <span style="color: #000000;">(</span>Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>1<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Z<span style="color: #000000;">]</span> <span style="color: #000000;">+</span> Nodes<span style="color: #000000;">[</span><span style="color: #000000;">%</span>1<span style="color: #000000;">]</span><span style="color: #000000;">[</span>NZ<span style="color: #000000;">]</span><span style="color: #000000;">)</span>, tmp, tmp, tmp<span style="color: #000000;">)</span><br/><br/>GetNodeConnections<span style="color: #000000;">(</span>node1<span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> ccount, connects<span style="color: #000000;">[</span><span style="color: #000000;">5</span><span style="color: #000000;">]</span>;<br/>    <br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> node2; node2 <span style="color: #000000;">&lt;</span> count; node2<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">new</span> <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>alreadyConnected <span style="color: #000000;">=</span> false;<br/>    <br/>        <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i; i <span style="color: #000000;">&lt;</span> <span style="color: #000000;">5</span>; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Nodes<span style="color: #000000;">[</span>node1<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Connection<span style="color: #000000;">]</span><span style="color: #000000;">[</span>i<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> node2 || Nodes<span style="color: #000000;">[</span>node2<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Connection<span style="color: #000000;">]</span><span style="color: #000000;">[</span>i<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> node1<span style="color: #000000;">)</span><br/>                alreadyConnected <span style="color: #000000;">=</span> true;<br/>        <span style="color: #000000;">}</span><br/>        <br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>alreadyConnected<span style="color: #000000;">)</span><br/>            <span style="color: #2222BB;">continue</span>;<br/>        <br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Distance<span style="color: #000000;">(</span>node1, node2<span style="color: #000000;">)</span> <span style="color: #000000;">&lt;</span> <span style="color: #000000;">1.42</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span> <span style="color: #228822;">// 1.74</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>ClearPath<span style="color: #000000;">(</span>node1, node2<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>                Nodes<span style="color: #000000;">[</span>node1<span style="color: #000000;">]</span><span style="color: #000000;">[</span>isNode<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> true;<br/>                Nodes<span style="color: #000000;">[</span>node2<span style="color: #000000;">]</span><span style="color: #000000;">[</span>isNode<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> true;<br/>            <br/>                connects<span style="color: #000000;">[</span>ccount<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> node2;<br/>                ccount<span style="color: #000000;">++</span>;<br/>                <br/>                <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>ccount <span style="color: #000000;">==</span> <span style="color: #000000;">5</span><span style="color: #000000;">)</span><br/>                    <span style="color: #2222BB;">break</span>;<br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <br/>    connectcount <span style="color: #000000;">+=</span> ccount;<br/>    <br/>    <span style="color: #2222BB;">return</span> connects;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222AA;">#include strlib</span><br/><br/>PrintNodes<span style="color: #000000;">(</span>fname<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> <span style="color: #000000;">File</span><span style="color: #000000;">:</span>file <span style="color: #000000;">=</span> <span style="color: #222222;">fopen</span><span style="color: #000000;">(</span>fname, io_append<span style="color: #000000;">)</span>;<br/>    <br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> node; node <span style="color: #000000;">&lt;</span> count; node<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Nodes<span style="color: #000000;">[</span>node<span style="color: #000000;">]</span><span style="color: #000000;">[</span>isNode<span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>            <span style="color: #222222;">fwrite</span><span style="color: #000000;">(</span>file,<br/>                sprintf<span style="color: #000000;">(</span><br/>                    <span style="color: #000066;">"%i | %.2f %.2f %.2f | %i %i %i %i %i<span style="color: #000099; font-weight: bold;">\n</span>"</span>,<br/>                    node,<br/>                    Nodes<span style="color: #000000;">[</span>node<span style="color: #000000;">]</span><span style="color: #000000;">[</span>X<span style="color: #000000;">]</span>, Nodes<span style="color: #000000;">[</span>node<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Y<span style="color: #000000;">]</span>, Nodes<span style="color: #000000;">[</span>node<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Z<span style="color: #000000;">]</span>,<br/>                    Nodes<span style="color: #000000;">[</span>node<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Connection<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">0</span><span style="color: #000000;">]</span>,<br/>                    Nodes<span style="color: #000000;">[</span>node<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Connection<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">1</span><span style="color: #000000;">]</span>,<br/>                    Nodes<span style="color: #000000;">[</span>node<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Connection<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">2</span><span style="color: #000000;">]</span>,<br/>                    Nodes<span style="color: #000000;">[</span>node<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Connection<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">3</span><span style="color: #000000;">]</span>,<br/>                    Nodes<span style="color: #000000;">[</span>node<span style="color: #000000;">]</span><span style="color: #000000;">[</span>Connection<span style="color: #000000;">]</span><span style="color: #000000;">[</span><span style="color: #000000;">4</span><span style="color: #000000;">]</span><br/>                <span style="color: #000000;">)</span><br/>            <span style="color: #000000;">)</span>;<br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <br/>    <span style="color: #222222;">fclose</span><span style="color: #000000;">(</span>file<span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+This is obviously going to need to be simplified a lot.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3681587">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-214776.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0604/tid-604060.html">Next Oldest</a> | <a href="../../threads/0604/tid-604060.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="604060" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" selected="selected">-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: </span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/7.html">Other</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/23.html">Everything and Nothing</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

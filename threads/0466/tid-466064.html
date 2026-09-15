@@ -1,0 +1,1315 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Making a mute system</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "8cff2aa32fd7889692ab384b6b7aab6e";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Introduction: This is a mute system, where RCON logged in admins can use these commands, but you can simply change the commands to whatever you want. Downloads: sscanf2 ZCMD Tutorial: The top of your" />
+<link rel="canonical" href="../../threads/0466/tid-466064.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="8cff2aa32fd7889692ab384b6b7aab6e" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0466/tid-466064.html#pid2711263">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Making a mute system
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid2711263"></a>
+<div class="post classic " style="" id="post_2711263">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0138/uid-138844.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0138/uid-138844.html">DanishHaq</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,351<br />
+	Threads: 35<br />
+	Joined: Sep 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0466/tid-466064.html#pid2711263" title="Making a mute system">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by DanishHaq" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.09.2013, 19:23 <span class="post_edit" id="edited_by_2711263"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2711263">
+		<b><font face="Trebuchet MS"><div align="center"><font size="4"><font color="Purple">Introduction:</font></font><br />
+<br />
+This is a mute system, where RCON logged in admins can use these commands, but you can simply change the commands to whatever you want.<br />
+<br />
+<font size="4"><font color="Purple">Downloads:</font></font><br />
+<br />
+<a href="../../unavailable.html" target="_blank">sscanf2</a><br />
+<a href="../../threads/0091/tid-91354.html" target="_blank">ZCMD</a><br />
+<br />
+<font size="4"><font color="Purple">Tutorial: The top of your script:</font></font><br />
+<br />
+At the top of your script, under #include &lt;a_samp&gt; you need to add the following:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:119px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include &lt;sscanf2&gt; // include the sscanf file</span><br/><span style="color: #2222AA;">#include &lt;zcmd&gt; // include the zcmd file</span><br/><br/><span style="color: #2222BB;">new</span> Mute<span style="color: #000000;">[</span>MAX_PLAYERS<span style="color: #000000;">]</span>; <span style="color: #228822;">// global variable to check if a player is muted</span><br/><br/><span style="color: #2222BB;">forward</span> SecondTimer<span style="color: #000000;">(</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// timer that we will be using that will tick second-by-second</span></div></div></pre>
+</div>
+<font size="4"><font color="Purple">Tutorial: OnGameModeInit:</font></font><br />
+<br />
+Here, you will need to start the timer that will tick every 1 second at a repeating fashion.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:103px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnGameModeInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    SetTimer<span style="color: #000000;">(</span><span style="color: #000066;">"SecondTimer"</span>, <span style="color: #000000;">1000</span>, true<span style="color: #000000;">)</span>; <span style="color: #228822;">// this will initiate the timer</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>; <span style="color: #228822;">// don't put this line if you've already got return 1 at the bottom of your OnGameModeInit</span><br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<font size="4"><font color="Purple">Tutorial: Our custom callback:</font></font><br />
+<br />
+Now, we forwarded our SecondTimer, so now it's time to make a callback out of it, as follows:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:247px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> SecondTimer<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> MAX_PLAYERS; i <span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #228822;">// loops all the players</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerConnected<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #228822;">// will check if the player is connected</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Mute<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span> <span style="color: #000000;">&gt;=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #228822;">// will check if their mute time is equal or above to 1</span><br/>            <span style="color: #000000;">{</span><br/>                Mute<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span> <span style="color: #000000;">--</span>; <span style="color: #228822;">// if it is, then it will minus the mute time by 1 second</span><br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Ok, so that's our callback done that will tick automatically every second.<br />
+<br />
+<font size="4"><font color="Purple">Tutorial: OnPlayerDisconnect:</font></font><br />
+<br />
+If a player disconnects whilst having a mute, then it will do the following:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:311px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerDisconnect<span style="color: #000000;">(</span>playerid, reason<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Mute<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">&gt;=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #228822;">// will check if the player was muted</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">new</span> mutename<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>, string<span style="color: #000000;">[</span><span style="color: #000000;">100</span><span style="color: #000000;">]</span>; <span style="color: #228822;">// creates a few new public variables</span><br/>        GetPlayerName<span style="color: #000000;">(</span>playerid, mutename, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>mutename<span style="color: #000000;">)</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// retrieve the player name</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>string<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s just left the game with a remaining mute time of %d seconds"</span>, mutename, Mute<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// will set the string that we'll use</span><br/>        <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;=</span> MAX_PLAYERS; i <span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #228822;">// again, loops all the players</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerConnected<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span> <span style="color: #000000;">&amp;&amp;</span> IsPlayerAdmin<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #228822;">// check if the player is connected and if they're an RCON admin</span><br/>            <span style="color: #000000;">{</span><br/>                SendClientMessage<span style="color: #000000;">(</span>i, 0xAFAFAFFF, string<span style="color: #000000;">)</span>; <span style="color: #228822;">// send the message to the player</span><br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    Mute<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; <span style="color: #228822;">// this will reset the mute time, so the next person that logs in with the same ID won't suffer a mute</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>; <span style="color: #228822;">// don't add this line if you've already got it at the bottom of your OnPlayerDisconnect</span><br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+So, now, that will send a message to all the RCON admins online telling them the name of the person and that they quit whilst they had an outstanding mute time of more than 0 seconds.<br />
+<br />
+<font size="4"><font color="Purple">Tutorial: OnPlayerText:</font></font><br />
+<br />
+For this part of the tutorial, we need to get the player to stop talking if he's muted already, so this is what we'll do:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:199px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">OnPlayerText<span style="color: #000000;">(</span>playerid, text<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Mute<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">&gt;=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #228822;">// check if the player is muted</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">new</span> string<span style="color: #000000;">[</span><span style="color: #000000;">50</span><span style="color: #000000;">]</span>; <span style="color: #228822;">// creates a new variable</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>string<span style="color: #000000;">)</span>, <span style="color: #000066;">"You're muted for another %d seconds."</span>, Mute<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// sets the string</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, string<span style="color: #000000;">)</span>; <span style="color: #228822;">// sends the message</span><br/>        <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>; <span style="color: #228822;">// this is crucial, by returning 0 here it will stop the player from being able to talk</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>; <span style="color: #228822;">// don't put this here if you've already got it at the bottom of your OnPlayerText.</span><br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+So, here, if the player tries to talk, it will stop the player from talking and send them a message stating that they can't talk because they're muted and how much longer they're muted for.<br />
+<br />
+<font size="4"><font color="Purple">Tutorial: Command /mute:</font></font><br />
+<br />
+Let's start creating the commands, these will be available to RCON admins, but you can change them to your own variables:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:263px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>mute<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>IsPlayerAdmin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>; <span style="color: #228822;">// returns "SERVER: Unknown command." if the player is not an RCON admin</span><br/>    <span style="color: #2222BB;">new</span> giveplayerid, reason<span style="color: #000000;">[</span><span style="color: #000000;">50</span><span style="color: #000000;">]</span>, string<span style="color: #000000;">[</span><span style="color: #000000;">120</span><span style="color: #000000;">]</span>, minutes, pname1<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>, pname2<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>; <span style="color: #228822;">// declares a few new variables</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>sscanf<span style="color: #000000;">(</span>params, <span style="color: #000066;">"uds[50]"</span>, giveplayerid, minutes, reason<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"Correct usage: /mute [playerid/name] [time in minutes] [reason]"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// returns this message if the player typed an incorrect syntax</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>giveplayerid <span style="color: #000000;">==</span> INVALID_PLAYER_ID<span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"Player not connected."</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// returns this message if the receiver player is not connected</span><br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, pname1, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pname1<span style="color: #000000;">)</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// get the sender name</span><br/>    GetPlayerName<span style="color: #000000;">(</span>giveplayerid, pname2, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pname2<span style="color: #000000;">)</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// get the receiver name</span><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>string<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s (%d) was muted for %d minutes by admin %s (%d), reason: %s"</span>, pname2, giveplayerid, minutes, pname1, playerid, reason<span style="color: #000000;">)</span>; <span style="color: #228822;">// sets the string</span><br/>    SendClientMessageToAll<span style="color: #000000;">(</span>0xFFFFFFFF, string<span style="color: #000000;">)</span>; <span style="color: #228822;">// sends a global message</span><br/>    <span style="color: #2222BB;">new</span> calc <span style="color: #000000;">=</span> minutes<span style="color: #000000;">*</span><span style="color: #000000;">60</span>; <span style="color: #228822;">// calculates the seconds</span><br/>    Mute<span style="color: #000000;">[</span>giveplayerid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> calc; <span style="color: #228822;">// sets the mute time to the calculated value</span><br/>    GameTextForPlayer<span style="color: #000000;">(</span>giveplayerid, <span style="color: #000066;">"~r~muted~n~~w~check the chat"</span>, <span style="color: #000000;">5000</span>, <span style="color: #000000;">6</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// 5 second game text for the receiver that got the mute informing him to check the chat for information about the mute</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+So, now, we have the /mute command.<br />
+<br />
+<font size="4"><font color="Purple">Tutorial: Command /unmute:</font></font><br />
+<br />
+Let's make an unmute command, just incase you might need it:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:279px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>unmute<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>IsPlayerAdmin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/>    <span style="color: #2222BB;">new</span> giveplayerid, reason<span style="color: #000000;">[</span><span style="color: #000000;">50</span><span style="color: #000000;">]</span>, string<span style="color: #000000;">[</span><span style="color: #000000;">120</span><span style="color: #000000;">]</span>; <span style="color: #228822;">// variables</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>sscanf<span style="color: #000000;">(</span>params, <span style="color: #000066;">"us[50]"</span>, giveplayerid, reason<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"{FFFF00}Syntax: /unmute [playerid/name] [reason]"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// syntax check</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>giveplayerid <span style="color: #000000;">==</span> INVALID_PLAYER_ID<span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"{FFFF00}Player not connected."</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// player not connected</span><br/>    <span style="color: #2222BB;">new</span> pname1<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>, pname2<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>; <span style="color: #228822;">// more variables</span><br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, pname1, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pname1<span style="color: #000000;">)</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// gets the senders name</span><br/>    GetPlayerName<span style="color: #000000;">(</span>giveplayerid, pname2, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>pname2<span style="color: #000000;">)</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// gets the receivers name</span><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>string<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s (%d) was unmuted by %s (%d), reason: %s"</span>, pname2, giveplayerid, pname1, playerid, reason<span style="color: #000000;">)</span>; <span style="color: #228822;">// sets the string</span><br/>    SendClientMessageToAll<span style="color: #000000;">(</span>0xFFFFFFFF, string<span style="color: #000000;">)</span>; <span style="color: #228822;">// sends everyone the message that was string'd</span><br/>    Mute<span style="color: #000000;">[</span>giveplayerid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; <span style="color: #228822;">// sets the mute of the other player to 0</span><br/>    GameTextForPlayer<span style="color: #000000;">(</span>giveplayerid, <span style="color: #000066;">"~g~unmuted~n~~w~check the chat"</span>, <span style="color: #000000;">5000</span>, <span style="color: #000000;">6</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// game text for the other player informing them that his mute has been taken off him</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+That was the unmute command for you.<br />
+<br />
+<font size="4"><font color="Purple">Tutorial: Command /mymute:</font></font><br />
+<br />
+This is just gonna be a simple command telling the player how much time he has to wait until their auto-unmute:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:167px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>mymute<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Mute<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">&lt;=</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"{FFFF00}You're not muted at the moment."</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// checks if the player is muted, if not, it will return that message</span><br/>    <span style="color: #2222BB;">new</span> string<span style="color: #000000;">[</span><span style="color: #000000;">50</span><span style="color: #000000;">]</span>; <span style="color: #228822;">// new variable</span><br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"|__________ My Mute __________|"</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// sends a base message</span><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>string<span style="color: #000000;">)</span>, <span style="color: #000066;">"%d seconds remain from your mute."</span>, Mute<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// sets the string</span><br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, string<span style="color: #000000;">)</span>; <span style="color: #228822;">// sends the string'd message</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+That was just an addition if you needed it, or wanted it for any reason.<br />
+<br />
+<font size="4"><font color="Purple">Tutorial: Command /mutelist:</font></font><br />
+<br />
+This command would show all the players online who are muted, you can do this as follows:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:423px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>mutelist<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> iname<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>, string<span style="color: #000000;">[</span><span style="color: #000000;">120</span><span style="color: #000000;">]</span>, count; <span style="color: #228822;">// new variables</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> MAX_PLAYERS; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #228822;">// loops all the players</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerConnected<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #228822;">// checks if the player is connected</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Mute<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span> <span style="color: #000000;">&gt;=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #228822;">// checks if the looped player is muted at the moment</span><br/>            <span style="color: #000000;">{</span><br/>                GetPlayerName<span style="color: #000000;">(</span>i, iname, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>iname<span style="color: #000000;">)</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// if they are, this retrieves the name</span><br/>                <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>string<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s (%d) - %d seconds remaining"</span>, iname, i, Mute<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// sets the string</span><br/>                SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, string<span style="color: #000000;">)</span>; <span style="color: #228822;">// sends the message</span><br/>                count<span style="color: #000000;">++</span>; <span style="color: #228822;">// puts the count to a ++ value, you'll see why further down</span><br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>count <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"There are no muted players online."</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// if there are no muted players online, it'll return this message</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>count <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"There is 1 player who is muted online."</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// if there's just 1 muted player online, it'll returns this message</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>count <span style="color: #000000;">&gt;=</span> <span style="color: #000000;">2</span><span style="color: #000000;">)</span> <span style="color: #228822;">// if there are more than 1 muted players online, the following will occur</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>string<span style="color: #000000;">)</span>, <span style="color: #000066;">"There are %d amount of players who are online and muted."</span>, count<span style="color: #000000;">)</span>; <span style="color: #228822;">// sets the string</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, string<span style="color: #000000;">)</span>; <span style="color: #228822;">// sends the message</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+That was another optional command that you might want to add to your server too.<br />
+<br />
+<font size="4"><font color="Purple">Tutorial: Command /unmuteall:</font></font><br />
+<br />
+Sometimes, it's a pain unmuting everyone if you ever wanted to, so let's use this method instead of making a command as follows:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:359px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>unmuteall<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>IsPlayerAdmin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"{FFFF00}Only admins can use this command."</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// checks if the sender is an RCON logged in admin</span><br/>    <span style="color: #2222BB;">new</span> count, string<span style="color: #000000;">[</span><span style="color: #000000;">120</span><span style="color: #000000;">]</span>; <span style="color: #228822;">// new variables</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> MAX_PLAYERS; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #228822;">// loops all the players one-by-one</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerConnected<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #228822;">// checks if the player is connected</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Mute<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span> <span style="color: #000000;">&gt;=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #228822;">// if the looped player has a mute time more than 0</span><br/>            <span style="color: #000000;">{</span><br/>                count<span style="color: #000000;">++</span>; <span style="color: #228822;">// the count will go up</span><br/>                Mute<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; <span style="color: #228822;">// and the mute time will be set to 0</span><br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">new</span> uname<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>; <span style="color: #228822;">// this is the name of the sender</span><br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, uname, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>uname<span style="color: #000000;">)</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// this will get the playerid (sender)'s name</span><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>string<span style="color: #000000;">)</span>, <span style="color: #000066;">"%d players have been admin-unmuted by %s (%d)"</span>, count, uname, playerid<span style="color: #000000;">)</span>; <span style="color: #228822;">// sets the string to say how many players were unmuted and by who</span><br/>    SendClientMessageToAll<span style="color: #000000;">(</span>0xFFFFFFFF, string<span style="color: #000000;">)</span>; <span style="color: #228822;">// sends this global message</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+That's about it, you might want to just add the following too.<br />
+<br />
+<font size="4"><font color="Purple">Tutorial: Command /mutecmds:</font></font><br />
+<br />
+This will be a simple command showing the commands available to the player:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:167px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>mutecmds<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"/mute - Mute a player"</span><span style="color: #000000;">)</span>;<br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"/unmute - Unmute a player"</span><span style="color: #000000;">)</span>;<br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"/mymute - View your own mute time"</span><span style="color: #000000;">)</span>;<br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"/mutelist - View a global list of all the online players who are muted"</span><span style="color: #000000;">)</span>;<br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"/unmuteall - Unmute all the players on the server at once"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+This command will basically send messages to the player stating the commands that are available regarding all the mute stuff, of course, you could just integrate this into your own /help command or whatever.</div></font></b>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2711263">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-138844.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2711532"></a>
+<div class="post classic " style="" id="post_2711532">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0207/uid-207994.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0207/uid-207994.html">BoU3A</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 213<br />
+	Threads: 77<br />
+	Joined: Jul 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0466/tid-466064.html#pid2711532" title="Re: Making a mute system">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by BoU3A" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.09.2013, 23:06 <span class="post_edit" id="edited_by_2711532"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2711532">
+		Good job thank you <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2711532">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-207994.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2711540"></a>
+<div class="post classic " style="" id="post_2711540">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0135/uid-135587.html"><img src="../../assets/uploads/avatars/135587.png" alt="" width="44" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0135/uid-135587.html">WLSF</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 3,540<br />
+	Threads: 40<br />
+	Joined: Aug 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0466/tid-466064.html#pid2711540" title="Re: Making a mute system">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by WLSF" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.09.2013, 23:13 <span class="post_edit" id="edited_by_2711540"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by WLSF; 26/09/2013 at 12:36 AM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2711540">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>DanishHaq</strong><br />
+<a href="../../threads/0466/tid-466064.html#pid2711263" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic"><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:423px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>mutelist<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> iname<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>, string<span style="color: #000000;">[</span><span style="color: #000000;">120</span><span style="color: #000000;">]</span>, count; <span style="color: #228822;">// new variables</span><br/>    <span style="color: #2222BB;">for</span><span style="color: #000000;">(</span><span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">&lt;</span> MAX_PLAYERS; i<span style="color: #000000;">++</span><span style="color: #000000;">)</span> <span style="color: #228822;">// loops all the players</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerConnected<span style="color: #000000;">(</span>i<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #228822;">// checks if the player is connected</span><br/>        <span style="color: #000000;">{</span><br/>            <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>Mute<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span> <span style="color: #000000;">&gt;=</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #228822;">// checks if the looped player is muted at the moment</span><br/>            <span style="color: #000000;">{</span><br/>                GetPlayerName<span style="color: #000000;">(</span>i, iname, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>iname<span style="color: #000000;">)</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// if they are, this retrieves the name</span><br/>                <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>string<span style="color: #000000;">)</span>, <span style="color: #000066;">"%s (%d) - %d seconds remaining"</span>, iname, i, Mute<span style="color: #000000;">[</span>i<span style="color: #000000;">]</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// sets the string</span><br/>                SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, string<span style="color: #000000;">)</span>; <span style="color: #228822;">// sends the message</span><br/>                count<span style="color: #000000;">++</span>; <span style="color: #228822;">// puts the count to a ++ value, you'll see why further down</span><br/>            <span style="color: #000000;">}</span><br/>        <span style="color: #000000;">}</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>count <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"There are no muted players online."</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// if there are no muted players online, it'll return this message</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>count <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"There is 1 player who is muted online."</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// if there's just 1 muted player online, it'll returns this message</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>count <span style="color: #000000;">&gt;=</span> <span style="color: #000000;">2</span><span style="color: #000000;">)</span> <span style="color: #228822;">// if there are more than 1 muted players online, the following will occur</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>string<span style="color: #000000;">)</span>, <span style="color: #000066;">"There are %d amount of players who are online and muted."</span>, count<span style="color: #000000;">)</span>; <span style="color: #228822;">// sets the string</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, string<span style="color: #000000;">)</span>; <span style="color: #228822;">// sends the message</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div></div>
+</td>
+</tr>
+</table>
+</div> You can use switch for this...<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:327px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">switch</span><span style="color: #000000;">(</span>count<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">case</span> <span style="color: #000000;">0</span><span style="color: #000000;">:</span><br/>    <span style="color: #000000;">{</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"There are no muted players online."</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// if there are no muted players online, it'll return this message</span><br/>        <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">case</span> <span style="color: #000000;">1</span><span style="color: #000000;">:</span><br/>    <span style="color: #000000;">{</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"There is 1 player who is muted online."</span><span style="color: #000000;">)</span>; <span style="color: #228822;">// if there's just 1 muted player online, it'll returns this message</span><br/>        <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">default</span><span style="color: #000000;">:</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>string<span style="color: #000000;">)</span>, <span style="color: #000066;">"There are %d amount of players who are online and muted."</span>, count<span style="color: #000000;">)</span>; <span style="color: #228822;">// sets the string</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, string<span style="color: #000000;">)</span>; <span style="color: #228822;">// sends the message</span><br/>        <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/>    <span style="color: #000000;">}</span><br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+Good job, +rep.<br />
+<br />
+<b>edit:</b><i> You have given out too much Reputation in the last 24 hours, try again later.</i><br />
+<br />
+errm...
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2711540">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-135587.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2711818"></a>
+<div class="post classic " style="" id="post_2711818">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0215/uid-215129.html"><img src="../../assets/uploads/avatars/215129.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0215/uid-215129.html">Voxel</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 578<br />
+	Threads: 56<br />
+	Joined: Sep 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0466/tid-466064.html#pid2711818" title="Re: Making a mute system">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by Voxel" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.09.2013, 07:06 <span class="post_edit" id="edited_by_2711818"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2711818">
+		Good job man! <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/wink.png" title="Wink"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2711818">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-215129.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2711822"></a>
+<div class="post classic " style="" id="post_2711822">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0138/uid-138844.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0138/uid-138844.html">DanishHaq</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,351<br />
+	Threads: 35<br />
+	Joined: Sep 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0466/tid-466064.html#pid2711822" title="Re: Making a mute system">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by DanishHaq" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.09.2013, 07:14 <span class="post_edit" id="edited_by_2711822"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2711822">
+		Thanks for the feedback <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2711822">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-138844.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2711852"></a>
+<div class="post classic " style="" id="post_2711852">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0096/uid-96708.html"><img src="../../assets/uploads/avatars/96708.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0096/uid-96708.html">iZN</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,368<br />
+	Threads: 27<br />
+	Joined: Jun 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0466/tid-466064.html#pid2711852" title="Re: Making a mute system">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by iZN" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.09.2013, 08:52 <span class="post_edit" id="edited_by_2711852"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2711852">
+		Great tutorial, will help many beginners.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2711852">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-96708.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2711853"></a>
+<div class="post classic " style="" id="post_2711853">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0054/uid-54706.html"><img src="../../assets/uploads/avatars/54706.png" alt="" width="55" height="33" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0054/uid-54706.html">x96664</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 591<br />
+	Threads: 70<br />
+	Joined: Jun 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0466/tid-466064.html#pid2711853" title="Re: Making a mute system">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by x96664" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.09.2013, 08:54 <span class="post_edit" id="edited_by_2711853"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2711853">
+		Nice tutorial, it's good explained.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2711853">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-54706.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2712673"></a>
+<div class="post classic " style="" id="post_2712673">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0138/uid-138844.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0138/uid-138844.html">DanishHaq</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,351<br />
+	Threads: 35<br />
+	Joined: Sep 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0466/tid-466064.html#pid2712673" title="Re: Making a mute system">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by DanishHaq" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.09.2013, 22:14 <span class="post_edit" id="edited_by_2712673"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2712673">
+		Thanks, I'll be doing more tutorials soon too &lt;3.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2712673">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-138844.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2712872"></a>
+<div class="post classic " style="" id="post_2712872">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0209/uid-209136.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0209/uid-209136.html">Matnix</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Big Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 198<br />
+	Threads: 17<br />
+	Joined: Jul 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0466/tid-466064.html#pid2712872" title="Re : Making a mute system">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Matnix" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">27.09.2013, 01:32 <span class="post_edit" id="edited_by_2712872"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2712872">
+		Hello Danish,<br />
+so for me I'll just suggest you something like if he disconect to the servers when he was muted, when he will come back he will be automatically muted back. (<i>it's possible</i>). <br />
+<br />
+Anyways nicely explained.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2712872">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-209136.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2713094"></a>
+<div class="post classic " style="" id="post_2713094">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0138/uid-138844.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0138/uid-138844.html">DanishHaq</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,351<br />
+	Threads: 35<br />
+	Joined: Sep 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0466/tid-466064.html#pid2713094" title="Re: Re : Making a mute system">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by DanishHaq" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">27.09.2013, 06:37 <span class="post_edit" id="edited_by_2713094"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2713094">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Matnix</strong><br />
+<a href="../../threads/0466/tid-466064.html#pid2712872" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Hello Danish,<br />
+so for me I'll just suggest you something like if he disconect to the servers when he was muted, when he will come back he will be automatically muted back. (<i>it's possible</i>). <br />
+<br />
+Anyways nicely explained.</div>
+</td>
+</tr>
+</table>
+</div>Yea I know it's possible by creating files for the mute system, but I couldn't really be bothered then <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>. It's easy to do that anyway, people using this can just merge this with their savable variables too.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2713094">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-138844.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0466/tid-466064.html">Next Oldest</a> | <a href="../../threads/0466/tid-466064.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="466064" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

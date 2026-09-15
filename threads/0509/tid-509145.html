@@ -1,0 +1,1281 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] how to make simple Admin commands</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "bd47ce0c9515c35253d90efa95cdc9ed";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="What do you need? Zcmd:https://forum.sa-mp.com/showthread.php?tid=91354 sscanf:https://forum.sa-mp.com/showthread.php?tid=120356 ok now let's start : first open your game mode: Command 1:ban now" />
+<link rel="canonical" href="../../threads/0509/tid-509145.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="bd47ce0c9515c35253d90efa95cdc9ed" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0509/tid-509145.html#pid3008733">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] how to make simple Admin commands
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid3008733"></a>
+<div class="post classic " style="" id="post_3008733">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0213/uid-213625.html"><img src="../../assets/uploads/avatars/213625.png" alt="" width="49" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0213/uid-213625.html">Eth</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 791<br />
+	Threads: 20<br />
+	Joined: Sep 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0509/tid-509145.html#pid3008733" title="how to make simple Admin commands">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by Eth" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.04.2014, 18:10 <span class="post_edit" id="edited_by_3008733"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Eth; 26/04/2014 at 12:32 PM.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3008733">
+		<b>What do you need?</b><br />
+Zcmd:<a href="../../threads/0091/tid-91354.html" target="_blank">https://forum.sa-mp.com/showthread.php?tid=91354</a><br />
+sscanf:<a href="../../unavailable.html" target="_blank">https://forum.sa-mp.com/showthread.php?tid=120356</a><br />
+<br />
+<font size="6">ok now let's start : first open your game mode:</font><br />
+<br />
+<font size="7">Command 1:ban</font><br />
+now if you want to ban a hacker or any player who causes a threat you need to have a ban command:<br />
+first of all we time the command name like that using ZCMD:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:471px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>Ban<span style="color: #000000;">(</span>playerid,params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><span style="color: #228822;">//this is the command</span><br/><span style="color: #000000;">{</span><br/><span style="color: #228822;">//down there is the reason of the ban , so other players will know about it </span><br/><span style="color: #2222BB;">new</span> reason<span style="color: #000000;">[</span><span style="color: #000000;">150</span><span style="color: #000000;">]</span>;<span style="color: #228822;">//the reason of the ban</span><br/><span style="color: #228822;">// and this one is the playerid of the player who you want to ban.</span><br/><span style="color: #2222BB;">new</span> id;<span style="color: #228822;">// the id of the player</span><br/>        <span style="color: #228822;">//here if the admin didn't write the ban command correctly</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>sscanf<span style="color: #000000;">(</span>params, <span style="color: #000066;">"rs[100]"</span>, id, reason<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>    <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFF0000, <span style="color: #000066;">"{FF0000}Error:{FFFFFF}/Ban [playerid] [reason]"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if the player didn't write The command correctly like /ban without the id or the reason</span><br/>    <span style="color: #228822;">//this one will check if the player is connected or not</span><br/><span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span><span style="color: #000000;">!</span>IsPlayerConnected<span style="color: #000000;">(</span>id<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>    <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFF0000AA, <span style="color: #000066;">"Player not found"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if the player is invalid</span><br/><span style="color: #228822;">//to prevent abuse this command will check if you are an admin or not</span><br/><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>IsPlayerAdmin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFFFF0000,<span style="color: #000066;">"{FF0000}Error:{FFFFFF}You Are not allowed to use this command"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if the player is not an admin</span><br/>    <br/>        <span style="color: #228822;">//this is the admin name                             //this is the message to player</span><br/>        <span style="color: #2222BB;">new</span> admin<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span><span style="color: #228822;">//adminname, msgtoall1[150]//first message, msgtoall2[150];//second one</span><br/>        <span style="color: #228822;">//this will get the name of the admin to post it</span><br/>GetPlayerName<span style="color: #000000;">(</span>playerid, admin, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>admin<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//get the name of the admin</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>msgtoall1, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>msgtoall1<span style="color: #000000;">)</span>, <span style="color: #000066;">"{FFFFFF}Player {FF0000}%s{FFFFFF} was banned from the server by {FF0000}%s"</span>, GetName<span style="color: #000000;">(</span>id<span style="color: #000000;">)</span>, admin<span style="color: #000000;">)</span>;<span style="color: #228822;">//message to all players</span><br/>        SendClientMessageToAll<span style="color: #000000;">(</span>0xFFFF00AA, msgtoall1<span style="color: #000000;">)</span>;<span style="color: #228822;">//same thing</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>msgtoall2, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>msgtoall2<span style="color: #000000;">)</span>, <span style="color: #000066;">"Reason : %s"</span>, reason<span style="color: #000000;">)</span>;<span style="color: #228822;">//reason of the ban </span><br/>        SendClientMessage<span style="color: #000000;">(</span>id, 0xFFFF00AA, msgtoall2<span style="color: #000000;">)</span>;<span style="color: #228822;">//the message</span><br/>        <br/>        Ban<span style="color: #000000;">(</span>id<span style="color: #000000;">)</span>;<span style="color: #228822;">//ban the player</span><br/>        <br/>    <span style="color: #2222BB;">return</span> Kick<span style="color: #000000;">(</span>id<span style="color: #000000;">)</span>;<span style="color: #228822;">//then kick him</span><br/><span style="color: #000000;">}</span></div></div></pre>
+</div><font size="7">command 2:Kick</font><br />
+if a player insulted spammed or anything and you want to kick him, you have to get kick command:<br />
+first of all you write kick command in zcmd like that:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>kick<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>        <span style="color: #228822;">//the reason of the ban , and the id is the playerid of the one you want to kick</span><br/>    <span style="color: #2222BB;">new</span> reason<span style="color: #000000;">[</span><span style="color: #000000;">150</span><span style="color: #000000;">]</span>, id;<br/>       <span style="color: #228822;">//an error message if you didn't write the kick command correctly</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>sscanf<span style="color: #000000;">(</span>params, <span style="color: #000066;">"rs[100]"</span>, id, reason<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>    <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFF0000, <span style="color: #000066;">"{FF0000}Error:{FFFFFF}/Kick [player name/part of name] [reason]"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if the player didn't mention the id or the reason</span><br/><span style="color: #228822;">//if the player is invalid or not connected</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span><span style="color: #000000;">!</span>IsPlayerConnected<span style="color: #000000;">(</span>id<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>    <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFF0000AA, <span style="color: #000066;">"Player not found"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if the player is not connected</span><br/><span style="color: #228822;">//this one will check if the player is an admin to prevent bug abuses</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>IsPlayerAdmin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #228822;">//if this player is an admin</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">//the name of the admin, msg to player, and message to all</span><br/>        <span style="color: #2222BB;">new</span> admin<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>, msg1<span style="color: #000000;">[</span><span style="color: #000000;">150</span><span style="color: #000000;">]</span>, msgtoall1<span style="color: #000000;">[</span><span style="color: #000000;">150</span><span style="color: #000000;">]</span>;<br/><span style="color: #228822;">// this will get the name of the admin </span><br/>        GetPlayerName<span style="color: #000000;">(</span>playerid, admin, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>admin<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>                <span style="color: #228822;">//message to the kicked player</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>msg1, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>msg1<span style="color: #000000;">)</span>, <span style="color: #000066;">"You were kicked from the server by %s |Reason : %s|"</span>, admin,reason<span style="color: #000000;">)</span>;<br/>        SendClientMessage<span style="color: #000000;">(</span>id, 0xFFFF00AA, msg1<span style="color: #000000;">)</span>;<span style="color: #228822;">//message from the kicked player</span><br/><br/>                <span style="color: #228822;">//message to all the players</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span>msgtoall1, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>msgtoall1<span style="color: #000000;">)</span>, <span style="color: #000066;">"Player %s was kicked from the server by %s | Reason : %s|"</span>, GetName<span style="color: #000000;">(</span>id<span style="color: #000000;">)</span>, admin,reason<span style="color: #000000;">)</span>;<br/>        SendClientMessageToAll<span style="color: #000000;">(</span>0xFFFF00AA, msgtoall1<span style="color: #000000;">)</span>;<span style="color: #228822;">//message to everyone</span><br/>        Kick<span style="color: #000000;">(</span>id<span style="color: #000000;">)</span>;<span style="color: #228822;">//kick the player</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">else</span><br/>    <span style="color: #000000;">{</span><br/><span style="color: #228822;">// if the player is not an admin , this message wil prevent him from typing this command</span><br/>    SendClientMessage<span style="color: #000000;">(</span>playerid,<span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"You Are not an admin "</span> <span style="color: #000000;">)</span>;<span style="color: #228822;">//if the player is not an admin it will show this message</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><br/><span style="color: #000000;">}</span></div></div></pre>
+</div><font size="7">Command 3: slap</font><br />
+now , if you want to slap a player to check if he got a hack or something, you need to get slap command,<br />
+first of all type slap command in zcmd like that:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:215px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>slap<span style="color: #000000;">(</span>playerid,params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #228822;">//the name of the slapped player,msgtoplayer,name of the admin, message to the slapped player, the floot x , y and z</span><br/>    <span style="color: #2222BB;">new</span> OtherPlayer, Msg<span style="color: #000000;">[</span><span style="color: #000000;">170</span><span style="color: #000000;">]</span>, Name4<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>, Message<span style="color: #000000;">[</span><span style="color: #000000;">150</span><span style="color: #000000;">]</span>, OtherPlayerName<span style="color: #000000;">[</span><span style="color: #000000;">24</span><span style="color: #000000;">]</span>, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>x, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>y, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>z;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>IsPlayerAdmin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, 0xFFFFFFFF, <span style="color: #000066;">"[ERROR]: you are not an admin!"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if the player is not admin</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>sscanf<span style="color: #000000;">(</span>params, <span style="color: #000066;">"rs[170]"</span>, OtherPlayer, Message<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,COLOR_RED, <span style="color: #000066;">"{FF0000}Error:{FFFFFF}/slap [playerid] [reason]"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">// if the player didn't write the command correctly</span><br/>    GetPlayerName<span style="color: #000000;">(</span>playerid, Name4, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Name4<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//get the name of the admin</span><br/>    GetPlayerName<span style="color: #000000;">(</span>OtherPlayer, OtherPlayerName, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>OtherPlayerName<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//get the name of player</span><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>Msg, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>Msg<span style="color: #000000;">)</span>, <span style="color: #000066;">"AdmCmd:{FF6600}%s {FFFFFF}slaps {FF6600}%s {FFFFFF}reason: {FF6600}%s"</span>, Name4, OtherPlayerName, Message<span style="color: #000000;">)</span>;<span style="color: #228822;">//the message</span><br/>    SendClientMessageToAll<span style="color: #000000;">(</span>0xFFFFFFFF, Msg<span style="color: #000000;">)</span>;<span style="color: #228822;">//send the above message to all</span><br/>    GetPlayerPos<span style="color: #000000;">(</span>OtherPlayer, x, y, z<span style="color: #000000;">)</span>;<span style="color: #228822;">//get the pos of the player</span><br/>    SetPlayerPos<span style="color: #000000;">(</span>OtherPlayer, x, y, z<span style="color: #000000;">+</span><span style="color: #000000;">5</span><span style="color: #000000;">)</span>;<span style="color: #228822;">// then set his pos to a higher place</span></div></div></pre>
+</div><font size="7">command 4:mute</font><br />
+at the top of the script:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> muted<span style="color: #000000;">[</span>MAX_PLAYERS<span style="color: #000000;">]</span>;</div></div></pre>
+</div><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>mute<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span><br/>        cmdid,<br/>        reason<span style="color: #000000;">[</span><span style="color: #000000;">80</span><span style="color: #000000;">]</span>,<br/>        minutes,<br/>        string<span style="color: #000000;">[</span><span style="color: #000000;">128</span><span style="color: #000000;">]</span>;<br/><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>IsPlayerAdmin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<span style="color: #228822;">//if this player is not connected</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>sscanf<span style="color: #000000;">(</span>params, <span style="color: #000066;">"uis[80]"</span>, cmdid, minutes,reason<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFFFF0000,<span style="color: #000066;">"Usage: /mute [id/name] [minutes] [reason]"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if the player didn't write the command correctly</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>IsPlayerConnected<span style="color: #000000;">(</span>cmdid<span style="color: #000000;">)</span> || cmdid <span style="color: #000000;">==</span> INVALID_PLAYER_ID<span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFFFF0000,<span style="color: #000066;">"Player not found!"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if the player is not connected it will show an error</span><br/>    <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> oname<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>;<span style="color: #228822;">//the name of the player </span><br/>    GetPlayerName<span style="color: #000000;">(</span>cmdid, oname, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>oname<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>string<span style="color: #000000;">)</span>, <span style="color: #000066;">"AdmCmd:~ %s has been muted for %i minutes. Reason: '%s' by %s "</span>, oname, minutes,reason,GetName<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//The message to players that this player is muted</span><br/>    SetTimerEx<span style="color: #000000;">(</span><span style="color: #000066;">"unmuteTimer"</span>, <span style="color: #000000;">60</span><span style="color: #000000;">*</span><span style="color: #000000;">1000</span><span style="color: #000000;">*</span>minutes, false, <span style="color: #000066;">"i"</span>, cmdid<span style="color: #000000;">)</span>;<span style="color: #228822;">//set timer for the player</span><br/>   muted<span style="color: #000000;">[</span>cmdid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">1</span>;<span style="color: #228822;">//mute the player</span><br/>    <span style="color: #000000;">}</span><br/>    SendClientMessageToAll<span style="color: #000000;">(</span>0xFFFF0000, string<span style="color: #000000;">)</span>;<span style="color: #228822;">//send message to everyone </span><br/>   <br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">forward</span> unmuteTimer<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">public</span> unmuteTimer<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    muted<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span><span style="color: #000000;">=</span> <span style="color: #000000;">0</span>;<span style="color: #228822;">//unmute the player</span><br/>    <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0x00FF0000,<span style="color: #000066;">"You're no longer muted!"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//notify the player</span><br/><span style="color: #000000;">}</span></div></div></pre>
+</div>onplayertext:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:167px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerText<span style="color: #000000;">(</span>playerid,text<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>muted<span style="color: #000000;">[</span>playerid<span style="color: #000000;">]</span> <span style="color: #000000;">==</span> <span style="color: #000000;">1</span><span style="color: #000000;">)</span><span style="color: #228822;">//if the player is muted</span><br/><span style="color: #000000;">{</span><br/>SendClientMessage<span style="color: #000000;">(</span>playerid,COLOR_BLUE,<span style="color: #000066;">"You are muted! you can't talk"</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<span style="color: #228822;">//prevent him from talking</span><br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div><font size="7">Command 5: unmute</font><br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:343px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">CMD</span><span style="color: #000000;">:</span>unmute<span style="color: #000000;">(</span>playerid,params<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span><br/>        cmdid,<br/>        string<span style="color: #000000;">[</span><span style="color: #000000;">128</span><span style="color: #000000;">]</span>;<br/>        <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>IsPlayerAdmin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<span style="color: #228822;">//if the player is not an admin</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>sscanf<span style="color: #000000;">(</span>params, <span style="color: #000066;">"uis[80]"</span>, cmdid<span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,0xFFFF0000,<span style="color: #000066;">"Usage: /unmute [playerid]"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if the player didn't type this command</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>IsPlayerConnected<span style="color: #000000;">(</span>cmdid<span style="color: #000000;">)</span> || cmdid <span style="color: #000000;">==</span> INVALID_PLAYER_ID<span style="color: #000000;">)</span><br/>        <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid,COLOR_RED,<span style="color: #000066;">"Player not found!"</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//if the player is invalid</span><br/>    <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> oname<span style="color: #000000;">[</span>MAX_PLAYER_NAME<span style="color: #000000;">]</span>;<span style="color: #228822;">//player name</span><br/>    GetPlayerName<span style="color: #000000;">(</span>cmdid, oname, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>oname<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//get the player name by getting his id</span><br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span>string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>string<span style="color: #000000;">)</span>, <span style="color: #000066;">"AdmCmd:~ %s has been un muted by %s"</span>, oname,GetName<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><span style="color: #000000;">)</span>;<span style="color: #228822;">//message</span><br/>    muted<span style="color: #000000;">[</span>cmdid<span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>;<span style="color: #228822;">//unmute the player</span><br/>    <span style="color: #000000;">}</span><br/>   SendClientMessageToAll<span style="color: #000000;">(</span>0xFFFF0000, string<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3008733">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-213625.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3008756"></a>
+<div class="post classic " style="" id="post_3008756">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0201/uid-201642.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0201/uid-201642.html">PrinceKumar</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 432<br />
+	Threads: 34<br />
+	Joined: Apr 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0509/tid-509145.html#pid3008756" title="Re: how to make simple Admin commands">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by PrinceKumar" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.04.2014, 18:33 <span class="post_edit" id="edited_by_3008756"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3008756">
+		Good tutorial but expecting more info , u need to give full explaination .
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3008756">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-201642.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3008792"></a>
+<div class="post classic " style="" id="post_3008792">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0211/uid-211253.html"><img src="../../assets/uploads/avatars/211253.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0211/uid-211253.html">JeaSon</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 562<br />
+	Threads: 41<br />
+	Joined: Aug 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0509/tid-509145.html#pid3008792" title="Re: how to make simple Admin commands">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by JeaSon" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">25.04.2014, 18:56 <span class="post_edit" id="edited_by_3008792"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3008792">
+		need more explaination
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3008792">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-211253.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3009796"></a>
+<div class="post classic " style="" id="post_3009796">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0213/uid-213625.html"><img src="../../assets/uploads/avatars/213625.png" alt="" width="49" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0213/uid-213625.html">Eth</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 791<br />
+	Threads: 20<br />
+	Joined: Sep 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0509/tid-509145.html#pid3009796" title="Re: how to make simple Admin commands">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by Eth" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.04.2014, 12:25 <span class="post_edit" id="edited_by_3009796"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3009796">
+		ty for checking my post, i am going to edit it with more explanation
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3009796">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-213625.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3009906"></a>
+<div class="post classic " style="" id="post_3009906">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0173/uid-173053.html"><img src="../../assets/uploads/avatars/173053.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0173/uid-173053.html">Bingo</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,690<br />
+	Threads: 18<br />
+	Joined: Jul 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0509/tid-509145.html#pid3009906" title="Re: how to make simple Admin commands">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by Bingo" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.04.2014, 13:37 <span class="post_edit" id="edited_by_3009906"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3009906">
+		So you are going to give RCON password to everyone those who are willing to join administrator team?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3009906">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-173053.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3009940"></a>
+<div class="post classic " style="" id="post_3009940">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0224/uid-224040.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0224/uid-224040.html">iFarbod</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 610<br />
+	Threads: 18<br />
+	Joined: Jan 2014
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0509/tid-509145.html#pid3009940" title="Re: how to make simple Admin commands">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by iFarbod" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.04.2014, 13:53 <span class="post_edit" id="edited_by_3009940"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3009940">
+		This is good for Slap CMD use <b>CreateExplosionForPlayer()</b>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3009940">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-224040.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3009944"></a>
+<div class="post classic " style="" id="post_3009944">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0213/uid-213625.html"><img src="../../assets/uploads/avatars/213625.png" alt="" width="49" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0213/uid-213625.html">Eth</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 791<br />
+	Threads: 20<br />
+	Joined: Sep 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0509/tid-509145.html#pid3009944" title="Re: how to make simple Admin commands">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by Eth" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.04.2014, 13:57 <span class="post_edit" id="edited_by_3009944"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3009944">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Bingo</strong><br />
+<a href="../../threads/0509/tid-509145.html#pid3009906" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">So you are going to give RCON password to everyone those who are willing to join administrator team?</div>
+</td>
+</tr>
+</table>
+</div>It is a SIMPLE commands to help you to protect your server that's all.<br />
+and ty mrviolince <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.gif" title="Grin"/> check me out again i am going to make new commands
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3009944">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-213625.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3010987"></a>
+<div class="post classic " style="" id="post_3010987">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0201/uid-201642.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0201/uid-201642.html">PrinceKumar</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 432<br />
+	Threads: 34<br />
+	Joined: Apr 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0509/tid-509145.html#pid3010987" title="Re: how to make simple Admin commands">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by PrinceKumar" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">27.04.2014, 03:55 <span class="post_edit" id="edited_by_3010987"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3010987">
+		Now ur tutorial looks good for those who are learning pawno or beginners, it will help them , and now ur tutorial is well explained.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3010987">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-201642.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3062829"></a>
+<div class="post classic " style="" id="post_3062829">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0213/uid-213625.html"><img src="../../assets/uploads/avatars/213625.png" alt="" width="49" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0213/uid-213625.html">Eth</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 791<br />
+	Threads: 20<br />
+	Joined: Sep 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0509/tid-509145.html#pid3062829" title="Re: how to make simple Admin commands">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Eth" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">03.06.2014, 13:20 <span class="post_edit" id="edited_by_3062829"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3062829">
+		ty @princekumar <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3062829">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-213625.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3062846"></a>
+<div class="post classic " style="" id="post_3062846">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0202/uid-202420.html"><img src="../../assets/uploads/avatars/202420.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0202/uid-202420.html">Dignity</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,661<br />
+	Threads: 47<br />
+	Joined: May 2013
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0509/tid-509145.html#pid3062846" title="Re: how to make simple Admin commands">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by Dignity" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">03.06.2014, 13:28 <span class="post_edit" id="edited_by_3062846"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3062846">
+		Great tutorial but you're missing some things. Please refer to this: <a href="https://wiki.sa-mp.com/wiki/Kick" target="_blank">https://wiki.sa-mp.com/wiki/Kick</a><br />
+<br />
+The people you are banning/kicking actually don't see the reason, you need to add a timer that delays the kick in order for them to see it.<br />
+<br />
+Great job nevertheless!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3062846">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-202420.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid3062868"></a>
+<div class="post classic " style="" id="post_3062868">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0230/uid-230789.html"><img src="../../assets/uploads/avatars/230789.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0230/uid-230789.html">rockhopper</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 605<br />
+	Threads: 83<br />
+	Joined: Apr 2014
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0509/tid-509145.html#pid3062868" title="Re: how to make simple Admin commands">#11</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 11 by rockhopper" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">03.06.2014, 13:43 <span class="post_edit" id="edited_by_3062868"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_3062868">
+		Its nice but you can explain a bit More Or Instead Of Rcon admin cmds U can make a admin System sort of thing
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_3062868">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-230789.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0509/tid-509145.html">Next Oldest</a> | <a href="../../threads/0509/tid-509145.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="509145" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

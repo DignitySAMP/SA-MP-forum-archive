@@ -1,0 +1,1647 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Tutorial] Creating commands with y_commands and sscanf</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "b5191eacff48338e716b5d23f38c1252";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Introduction This is my first tutorial, I will show you how you can create commands with y_commands and sscanf. y_commands &amp; sscanf y_commands - Most flexible and fastest command processor by ****** s" />
+<link rel="canonical" href="../../threads/0290/tid-290132.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="b5191eacff48338e716b5d23f38c1252" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0290/tid-290132.html#pid1460039">Threaded Mode</a></span>
+				</div>
+				
+					[Tutorial] Creating commands with y_commands and sscanf
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid1460039"></a>
+<div class="post classic " style="" id="post_1460039">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0141/uid-141822.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0141/uid-141822.html">SmiT</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 352<br />
+	Threads: 5<br />
+	Joined: Oct 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290132.html#pid1460039" title="Creating commands with y_commands and sscanf">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by SmiT" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.10.2011, 13:44 <span class="post_edit" id="edited_by_1460039"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by SmiT; 20.10.2011 at 14:12.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1460039">
+		<font size="5"><font color="#FF6A00"><b><u><font color="green">Introduction</font></u></b></font></font><br />
+<ul><li>This is my first tutorial, I will show you how you can create commands with <font color="#FF6A00"><b>y_commands</b></font> and <font color="#FF6A00"><b>sscanf</b></font>.</li>
+</ul>
+<font size="5"><font color="#FF6A00"><b><u><font color="green">y_commands &amp; sscanf</font></u></b></font></font><br />
+<ul><li><font color="#FF6A00"><a href="../../unavailable.html" target="_blank">y_commands</a></font> - Most flexible and fastest command processor by <a href="http://forum.sa-mp.com/member.php?u=29176" target="_blank">******</a></li>
+<li><font color="#FF6A00"><a href="../../unavailable.html" target="_blank">sscanf</a></font> - String splitting routine, easy to use to unformat strings by <a href="http://forum.sa-mp.com/member.php?u=29176" target="_blank">******</a> </li>
+</ul>
+<font size="5"><font color="#FF6A00"><b><u><font color="green">Downloading</font></u></b></font></font><br />
+<ul><li>Download <a href="../../unavailable.html" target="_blank">YSI Server Includes</a>.</li>
+<li>Download <a href="../../unavailable.html" target="_blank">sscanf</a>.</li>
+<li>Copy/Cut the <b>"YSI"</b> folder into your <b>"..pawno/include"</b> folder.</li>
+<li>Copy/Cut the <b>"sscanf2.inc"</b> file into your <b>"..pawno/include"</b> folder.</li>
+</ul>
+<font size="3"><font color="red"><b><u><font color="green">Windows</font></u></b></font></font><br />
+<ul><li>Copy the <b>"sscanf.dll"</b> file in your <b>"plugins"</b> folder. If you don't have one, create it.</li>
+<li>Open <b>"server.cfg"</b> and add <b>"sscanf"</b> in the line <b>"plugins"</b>.</li>
+</ul><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">plugins sscanf</pre>
+</div><font size="3"><font color="red"><b><u><font color="green">Linux</font></u></b></font></font><br />
+<ul><li>Copy the <b>"sscanf.so"</b> file in your <b>"plugins"</b> folder. If you don't have one, create it.</li>
+<li>Open <b>"server.cfg"</b> and add <b>"sscanf.so"</b> in the line <b>"plugins"</b>.</li>
+</ul><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">plugins sscanf.so</pre>
+</div><font size="5"><font color="#FF6A00"><b><u><font color="green">Including</font></u></b></font></font><br />
+<br />
+We need to load <font color="#FF6A00"><b>sscanf</b></font> and <font color="#FF6A00"><b>y_commands</b></font> features. At the top of our script we have to <a href="https://wiki.sa-mp.com/wiki/Scripting_Basics#Include" target="_blank">include</a> them.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:55px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include &lt;YSI\y_commands&gt;</span><br/><span style="color: #2222AA;">#include &lt;sscanf2&gt;</span></div></div></pre>
+</div>
+This will load the codes from <b>"..pawno/include/YSI/y_commands.inc"</b> and <b>"..pawno/include/sscanf2.inc"</b> into your script.<br />
+<br />
+<font size="5"><font color="#FF6A00"><b><u><font color="green">Important Note</font></u></b></font></font><br />
+<ul><li>Our commands should <b><font size="2"><font color="red">NOT</font></font></b> be inside any <a href="https://wiki.sa-mp.com/wiki/PAWN_tutorial#Introduction_to_functions_and_callbacks" target="_blank">Callback</a>.</li>
+</ul>
+<font size="5"><font color="#FF6A00"><b><u><font color="green">Callbacks</font></u></b></font></font><br />
+<ul><li>Callbacks are the chunks of code already in your script, that look something like this:</li>
+</ul><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:87px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerConnect<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div><ul><li>Placing our commands in these callbacks, it will occur errors, so for a clean script we can scroll all the way down to the last line, where we can start creating commands.</li>
+</ul>
+<font size="5"><font color="#FF6A00"><b><u><font color="green">Adding a command</font></u></b></font></font><br />
+<ul><li>To add a command, you just have to make a public function using the following formulas.</li>
+</ul>
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:87px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>my_command<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div><ul><li><font face="Courier New New">params</font> is the parameters string, <font face="Courier New">playerid</font> is an ID of the player who execute this command.</li>
+<li><b>y_commands</b> has inbuilt support for a help system.</li>
+<li><font color="red"> <b><font size="2">NOTE</font></b>:</font> Instead of <font face="Courier New">"params"</font> we could also use <font face="Courier New">"o"</font>.</li>
+</ul>
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:87px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>my_command<span style="color: #000000;">(</span>playerid, o<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<font size="5"><font color="#FF6A00"><b><u><font color="green">y_commands help system</font></u></b></font></font><br />
+<ul><li>If you want to use this feature, simply do:</li>
+</ul>
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:183px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>help<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>help<span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Displays help about commands"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">// If help system occured, "/help help" the player will get the message above.</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>isnull<span style="color: #000000;">(</span>params<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Syntax Error: /help [Command]"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">// If the parameters are null "/help" the player will get the syntax message above ( COLOR = -1 wich is some sort of black )</span><br/>    Command_ReProcess<span style="color: #000000;">(</span>playerid, params, true<span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">// Call to put text through the command processor, with the help functions enabled or disabled.</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<font size="5"><font color="#FF6A00"><b><u><font color="green">Creating commands without sscanf</font></u></b></font></font><br />
+<ul><li>Let's start by creating a simple <b>"/information</b>" command without using <b>sscanf</b>.</li>
+</ul>
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:103px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>information<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Tutorial by SmiT !"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div><ul><li>This command will send the player a simple message, <b>"Tutorial by SmiT !"</b></li>
+<li>If you hit compile, you will get some warnings:</li>
+</ul>
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 50px;
+		text-align: left;
+		overflow: auto">warning 203: symbol is never used "params"
+warning 203: symbol is never used "help"</pre>
+</div><ul><li>This tell you that you didn't use the <font face="Courier New">"params"</font> and the <font face="Courier New">"help"</font> parameter in your command.</li>
+<li>There are two ways to fix that:</li>
+</ul>
+<b>1.</b>We can tell our script that <font face="Courier New">"params"</font> and <font face="Courier New">"help"</font> are unused with the <font face="Courier New">"<font color="blue">#pragma unused symbol</font>"</font> <a href="https://wiki.sa-mp.com/wiki/Keywords:Directives" target="_blank">directive</a>:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:119px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>information<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222AA;">#pragma unused params, help</span><br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Tutorial by SmiT !"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<b>2.</b>We use the <font face="Courier New">"help"</font> parameter and make a <b>check</b> if the parameters of the command are <b>null</b>:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:199px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>information<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"This command displays some information"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #228822;">// if parameter HELP occured, (player types "/help information") it will return the message above.</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> isnull<span style="color: #000000;">(</span> params <span style="color: #000000;">)</span> <span style="color: #000000;">)</span> <span style="color: #228822;">// We check if the parameters are NULL. So it won't work something like "/information word".</span><br/>    <span style="color: #000000;">{</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Tutorial by SmiT !"</span><span style="color: #000000;">)</span>;<br/>        <span style="color: #228822;">// So, if the  parameters are null the player will get the message above.</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<font size="3"><font color="#FF6AA00"><b><u><font color="green">Another example</font></u></b></font></font><br />
+<ul><li>Let's create a simple <b>OOC chat</b> command.</li>
+</ul>
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:199px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>ooc<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> string<span style="color: #000000;">[</span> <span style="color: #000000;">128</span> <span style="color: #000000;">]</span>;<br/>    <span style="color: #2222BB;">new</span> PlayerName<span style="color: #000000;">[</span> MAX_PLAYER_NAME <span style="color: #000000;">]</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"With this command you can talk in OOC chat!"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> isnull<span style="color: #000000;">(</span> params <span style="color: #000000;">)</span> <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Syntax Error: /ooc [Your Text]"</span><span style="color: #000000;">)</span>;<br/>    GetPlayerName<span style="color: #000000;">(</span> playerid, PlayerName, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span> PlayerName <span style="color: #000000;">)</span> <span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span> string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span> string <span style="color: #000000;">)</span>,<span style="color: #000066;">"(OOC CHAT) %s: %s"</span>, PlayerName, params<span style="color: #000000;">)</span>;<br/>    SendClientMessageToAll<span style="color: #000000;">(</span><span style="color: #000000;">-</span><span style="color: #000000;">1</span>, string<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<br />
+<font size="2"><font color="red"><b><u><font color="green">String</font></u></b></font></font><ul><li><font face="Courier New"> <font color="blue">new</font> string[ 128 ]; </font> Declares the variable <b>"string"</b> with enough space for <b>127</b> characters.</li>
+</ul><font size="2"><font color="red"><b><u><font color="green">PlayerName</font></u></b></font></font><ul><li><font face="Courier New"> <font color="blue">new</font> PlayerName[ MAX_PLAYER_NAME ]; </font> Declares the variable <font face="Courier New">"PlayerName"</font> wich will hold the name of a player. The variable has an array "<font color="red"><font face="Courier New">MAX_PLAYER_NAME</font></font>" wich means <b>24</b>, wich also is the maximum name lenght in SA:MP.</li>
+</ul><font size="2"><font color="red"><b><u><font color="green">Note</font></u></b></font></font><ul><li>Instead: <div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:55px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> string<span style="color: #000000;">[</span> <span style="color: #000000;">128</span> <span style="color: #000000;">]</span>;<br/><span style="color: #2222BB;">new</span> PlayerName<span style="color: #000000;">[</span> MAX_PLAYER_NAME <span style="color: #000000;">]</span>;</div></div></pre>
+</div></li>
+<li>You can do: <div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> string<span style="color: #000000;">[</span> <span style="color: #000000;">128</span> <span style="color: #000000;">]</span>, PlayerName<span style="color: #000000;">[</span> MAX_PLAYER_NAME <span style="color: #000000;">]</span>;</div></div></pre>
+</div></li>
+</ul><font size="2"><font color="red"><b><u><font color="green">Help system</font></u></b></font></font><ul><li> <div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"With this command you can talk in OOC chat!"</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div> If parameter <font face="Courier New">"help"</font> occured, (player types "/help ooc") it will <font color="blue">return</font> the message above.</li>
+</ul><font size="2"><font color="red"><b><u><font color="green">Isnull</font></u></b></font></font><ul><li> <div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> isnull<span style="color: #000000;">(</span> params <span style="color: #000000;">)</span> <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Syntax Error: /ooc [Your Text]"</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div> If the parameters are <b>null</b> (player types only "/ooc") it will <font color="blue">return</font> the message above.</li>
+</ul><font size="2"><font color="red"><b><u><font color="green">Arrays</font></u></b></font></font><ul><li>An <a href="https://wiki.sa-mp.com/wiki/Scripting_Basics#Arrays" target="_blank">array</a> is a <a href="https://wiki.sa-mp.com/wiki/Scripting_Basics#Variables" target="_blank">variable</a> in which you can store multiple pieces of data at once and access them dynamically, example:<br />
+<font face="Courier New"><font color="red">MAX_PLAYER_NAME</font></font></li>
+</ul><font size="2"><font color="red"><b><u><font color="green">Getting the player name</font></u></b></font></font><ul><li><font face="Courier New">GetPlayerName( playerid, PlayerName, <font color="blue">sizeof</font>( PlayerName ) ); </font> The script will get the player's name that executes the command, the "<font face="Courier New"><font color="blue">sizeof</font>( PlayerName )</font>" it gets the size of the <b>array</b> in the <b>variable</b> called <font face="Courier New">"PlayerName"</font> which in this case is <font face="Courier New"><font color="red">MAX_PLAYER_NAME</font></font>.</li>
+</ul><font size="2"><font color="red"><b><u><font color="green">Format</font></u></b></font></font><ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #222222;">format</span><span style="color: #000000;">(</span> string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span> string <span style="color: #000000;">)</span>,<span style="color: #000066;">"(OOC CHAT) %s: %s"</span>, PlayerName, params<span style="color: #000000;">)</span>;</div></div></pre>
+</div> We <a href="https://wiki.sa-mp.com/wiki/Format" target="_blank">format</a> our message, this will store the message in the variable <font face="Courier New">"string"</font>, <font face="Courier New">"<font color="blue">sizeof</font>( string )"</font> will get the size of the <font face="Courier New">string</font>, in this case we declared it <b>128</b>.</li>
+</ul><font size="2"><font color="red"><b><u><font color="green">Placeholders</font></u></b></font></font><ul><li><font face="Courier New">"%s"</font> inserts a <a href="https://wiki.sa-mp.com/wiki/Scripting_Basics#Strings" target="_blank">string</a> . First <font face="Courier New">"%s"</font> is a <b>placeholder</b> for the player's name and the second <font face="Courier New">"%s"</font> is a placeholder for the player text. (/ooc [Player Text]) in the end of our formatted string, we added <font face="Courier New">PlayerName</font>, this is the <b>variable</b> containing the player's name and <font face="Courier New">"params"</font> for the player text.</li>
+</ul><font size="2"><font color="red"><b><u><font color="green">SendClientMessageToAll</font></u></b></font></font><ul><li><font face="Courier New"> SendClientMessageToAll(-1, string); </font> This will send the string containing our <b>message</b> to all the players on the server.</li>
+</ul>
+<font size="2"><font color="#FF6AA00"><b><u><font color="green">Example result</font></u></b></font></font><br />
+<ul><li> <b>SmiT</b> types <b>"/ooc Hello"</b>.</li>
+</ul>
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">(OOC CHAT) SmiT: Hello</pre>
+</div><font size="5"><font color="#FF6A00"><b><u><font color="green">Placeholders</font></u></b></font></font><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 146px;
+		text-align: left;
+		overflow: auto">%b Inserts a number at this position in binary radix.
+%c Inserts a single character.
+%d Inserts an integer (whole) number
+%f Inserts a floating point number.
+%i Inserts an integer.
+%s <font color="red">Inserts a string.</font> ( We used this )
+%x Inserts a number in hexadecimal notation.
+%% Inserts the literal '%'</pre>
+</div><font size="5"><font color="#FF6A00"><b><u><font color="green">Adding an alternate spelling</font></u></b></font></font><br />
+<br />
+<font size="2"><font color="#FF6A00"><b><u><font color="green">Gamemode</font></u></b></font></font><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:103px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnGameModeInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    Command_AddAltNamed<span style="color: #000000;">(</span><span style="color: #000066;">"information"</span>, <span style="color: #000066;">"info"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div><ul><li>This function will add <b>"/info"</b> as an alternate name for <b>"/information"</b>.</li>
+</ul>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">Filterscript</font></u></b></font></font><br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:103px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnFilterScriptInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    Command_AddAltNamed<span style="color: #000000;">(</span><span style="color: #000066;">"information"</span>, <span style="color: #000066;">"info"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<font size="5"><font color="#FF6A00"><b><u><font color="green">Creating commands with sscanf</font></u></b></font></font><br />
+<ul><li>Let's start by creating a basic <b>"/heal"</b> command.</li>
+</ul>
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:167px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>heal<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> PlayerID;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"With this command you can heal a player!"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> sscanf<span style="color: #000000;">(</span> params, <span style="color: #000066;">"u"</span>, PlayerID <span style="color: #000000;">)</span> <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Syntax Error: /heal [PlayerName / ID]"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> PlayerID <span style="color: #000000;">==</span> INVALID_PLAYER_ID <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"[ERROR] This player is OFFLINE"</span><span style="color: #000000;">)</span>;<br/>    SetPlayerHealth<span style="color: #000000;">(</span>PlayerID, <span style="color: #000000;">100</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">Declaring</font></u></b></font></font><br />
+<ul><li><font face="Courier New"><font color="blue">new</font> PlayerID;</font> This declares the variable <font face="Courier New">"PlayerID"</font> for the player wich we will heal.</li>
+</ul>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">Help system</font></u></b></font></font><br />
+<ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"With this command you can heal a player!"</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div> If parameter <font face="Courier New">"help"</font> occured, (player types "/help heal") it will return this message.</li>
+</ul>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">Sscanf part</font></u></b></font></font><br />
+<ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> sscanf<span style="color: #000000;">(</span> params, <span style="color: #000066;">"u"</span>, PlayerID <span style="color: #000000;">)</span> <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Syntax Error: /heal [PlayerName / ID]"</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div> We need to split the parameters, <b>"u"</b> is the specifier that stands for Player Name/ID, sscanf will check if the player enteres the <font color="red">incorrect</font> parameters of the command, example: (player types only "/heal"), if so it will <font color="blue">return</font> the syntax message.</li>
+</ul>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">INVALID_PLAYER_ID</font></u></b></font></font><br />
+<ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> PlayerID <span style="color: #000000;">==</span> INVALID_PLAYER_ID <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"[ERROR] This player is OFFLINE"</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div> This checks if the one on wich we try to execute our heal command <b>(PlayerID)</b> is connected to your server, if he <b>isn't</b> connected, it will <font color="blue">return</font> the message above. <a href="https://wiki.sa-mp.com/wiki/Control_Structures#Operators" target="_blank">Operator</a> <b>"=="</b> means <b>"Left is equal to Right"</b>.</li>
+</ul>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">SetPlayerHealth</font></u></b></font></font><br />
+<ul><li><font face="Courier New">SetPlayerHealth(PlayerID, 100);</font> This is the action itself, it will heal the targeted player to 100.</li>
+</ul>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">Sscanf formula in a command</font></u></b></font></font><br />
+<ul><li>Sscanf formula in a command should look something like this:</li>
+</ul><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:87px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> <span style="color: #000000;">!</span>sscanf<span style="color: #000000;">(</span> params, <span style="color: #000066;">"specifiers_here"</span>, your_variables <span style="color: #000000;">)</span> <span style="color: #000000;">)</span>  <span style="color: #228822;">// If the player entered the CORRECT parameters ( NOTE the "!" )</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #228822;">// Do your code</span><br/><span style="color: #000000;">}</span></div></div></pre>
+</div><ul><li>Or:</li>
+</ul>
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:87px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> sscanf <span style="color: #000000;">(</span> params, <span style="color: #000066;">"specifiers_here"</span>, your_variables <span style="color: #000000;">)</span> <span style="color: #000000;">)</span> <span style="color: #228822;">// If the player entered the WRONG parameters</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #228822;">// Do your code</span><br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">Specifiers</font></u></b></font></font><br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>******</strong><br />
+<a href="../../unavailable.html" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic"><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 498px;
+		text-align: left;
+		overflow: auto"><u><b>Format</b></u>					<u><b>Use</b></u>
+L(true/false)				Optional logical truthity
+l					Logical truthity
+B(binary)				Optional binary number
+b					Binary number
+N(any format number)			Optional number
+n					Number
+C(character)				Optional character
+c					Character
+I(integer)				Optional integer
+i					Integer
+D(integer)				Optional integer
+d					Integer
+H(hex value)				Optional hex number
+h					Hex number
+O(octal value)				Optional octal value
+o					Octal value
+F(float)				Optional floating point number
+f					Floating point number
+G(float/INFINITY/-INFINITY/NAN/NAN_E)	Optional float with IEEE definitions
+g					Float with IEEE definitions
+{					Open quiet section
+}					Close quiet section
+P&lt;delimiter&gt;				Invalid delimiter change
+p&lt;delimiter&gt;				Delimiter change
+Z(string)[length]			Invalid optional string
+z(string)[length]			Deprecated optional string
+S(string)[length]			Optional string
+s[length]				String
+U(name/id)				Optional user (bot/player)
+u					User (bot/player)
+Q(name/id)				Optional bot (bot)
+q					Bot (bot)
+R(name/id)				Optional player (player)
+r					Player (player)
+A&lt;type&gt;(default)[length]		Optional array of given type
+a&lt;type&gt;[length]				Array of given type
+E&lt;specification&gt;(default)		Optional enumeration of given layout
+e&lt;specification&gt;			Enumeration of given layout
+'string'				Search string
+%					Deprecated optional specifier prefix</pre>
+</div></div>
+</td>
+</tr>
+</table>
+</div><font size="2"><font color="#FF6A00"><b><u><font color="green">A simple setskin command</font></u></b></font></font><br />
+<ul><li>We start with the <b>y_commands</b> formula.</li>
+</ul><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:87px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>setskin<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div><ul><li>It will be a little more complex here, we will use 2 parameters, one for the Player Name / ID and one for the Skin ID.</li>
+</ul>
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:279px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>setskin<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> PlayerID, SkinID, PlayerName<span style="color: #000000;">[</span> MAX_PLAYER_NAME <span style="color: #000000;">]</span>, TargetName<span style="color: #000000;">[</span> MAX_PLAYER_NAME <span style="color: #000000;">]</span>, string<span style="color: #000000;">[</span> <span style="color: #000000;">128</span> <span style="color: #000000;">]</span>; <br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"With this command you can change a player skin!"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> sscanf<span style="color: #000000;">(</span> params, <span style="color: #000066;">"ui"</span>, PlayerID, SkinID<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Syntax Error: /setskin [PlayerName / ID] [SkinID]"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> PlayerID <span style="color: #000000;">==</span> INVALID_PLAYER_ID <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"[ERROR] This player is OFFLINE"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> SkinID <span style="color: #000000;">&gt;</span> <span style="color: #000000;">299</span> || SkinID <span style="color: #000000;">&lt;</span> <span style="color: #000000;">1</span> <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Available SA:MP Skins: 1-299"</span><span style="color: #000000;">)</span>;<br/>    GetPlayerName<span style="color: #000000;">(</span> playerid, PlayerName, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span> PlayerName <span style="color: #000000;">)</span> <span style="color: #000000;">)</span>;<br/>    GetPlayerName<span style="color: #000000;">(</span> PlayerID, TargetName, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span> TargetName <span style="color: #000000;">)</span> <span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span> string, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span> string <span style="color: #000000;">)</span>, <span style="color: #000066;">"Your Skin has been set to ID: %d by %s"</span>, SkinID, PlayerName<span style="color: #000000;">)</span>;<br/>    SendClientMessage<span style="color: #000000;">(</span>PlayerID, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, string<span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span> string, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span> string <span style="color: #000000;">)</span>, <span style="color: #000066;">"You have changed %s Skin to ID: %s"</span>, TargetName, SkinID<span style="color: #000000;">)</span>;<br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, string<span style="color: #000000;">)</span>;<br/>    SetPlayerSkin<span style="color: #000000;">(</span>PlayerID, SkinID<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">Declaring</font></u></b></font></font><br />
+<ul><li><font face="Courier New"><font color="blue">new</font> PlayerID,</font> We declare the variable <font face="Courier New">"PlayerID"</font> for the player on wich the command will be executed.</li>
+<li><font face="Courier New">SkinID,</font> We declare the variable <font face="Courier New">"SkinID"</font> for the skin id we will set to the player.</li>
+<li><font face="Courier New">PlayerName[ MAX_PLAYER_NAME ],</font> We declare the variable <font face="Courier New">"PlayerName"</font> for the player name who will execute this command.</li>
+<li><font face="Courier New">TargetName[ MAX_PLAYER_NAME ],</font> We declare the variable <font face="Courier New">"TargetName"</font> for the player name on wich the command will be executed.</li>
+<li><font face="Courier New">string[ 128 ];</font> We declare a 128 array string.</li>
+</ul>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">Help system</font></u></b></font></font><br />
+<ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"With this command you can change a player skin!"</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div> If parameter <b>"help"</b> occurs, (player types "/help setskin") it will <font color="blue">return</font> the message above.</li>
+</ul>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">Sscanf part</font></u></b></font></font><br />
+<ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> sscanf<span style="color: #000000;">(</span> params, <span style="color: #000066;">"ui"</span>, PlayerID, SkinID<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Syntax Error: /setskin [PlayerName / ID] [SkinID]"</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div> <b>"u"</b> stands for the PlayerName / ID, and if we look to the <b>specifiers</b> above we see that <b>"i"</b> stands for integer. Sscanf will check if the player uses the <font color="red">incorrect</font> parameters of the command, (example "/setskin 55"), if so it will <font color="blue">return</font> the message above.</li>
+</ul>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">INVALID_PLAYER_ID</font></u></b></font></font><br />
+<ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> PlayerID <span style="color: #000000;">==</span> INVALID_PLAYER_ID <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"[ERROR] This player is OFFLINE"</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div> This checks if the one on wich we try to execute <b>(PlayerID)</b> our command is <font color="green"><b>connected</b></font> to the server, as I said above.</li>
+</ul>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">SkinID</font></u></b></font></font><br />
+<ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> SkinID <span style="color: #000000;">&gt;</span> <span style="color: #000000;">299</span> || SkinID <span style="color: #000000;">&lt;</span> <span style="color: #000000;">1</span> <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Available SA:MP Skins: 1-299"</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div> The available skin ID's in SA:MP are from <b>1</b> to <b>299</b>. So, we check <b>( if the SkinID is higher than 299 OR the SkinID is lower than 1 <font color="blue">return</font> the message )</b>. <a href="https://wiki.sa-mp.com/wiki/Control_Structures#Operators" target="_blank">Operator</a> " || " means OR.  <font face="Courier New"><font color="blue">if</font> ( Left || Right )</font>.</li>
+</ul>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">PlayerName</font></u></b></font></font><br />
+<ul><li><font face="Courier New">GetPlayerName( playerid, PlayerName, <font color="blue">sizeof</font> ( PlayerName ) );</font> It will get the player name who exectues this command as explained above <b>(playerid)</b></li>
+</ul>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">TargetName</font></u></b></font></font><br />
+<ul><li><font face="Courier New">GetPlayerName( PlayerID, TargetName, <font color="blue">sizeof</font> ( TargetName ) );</font> It will get the player name on wich the command will be executed <b>(PlayerID)</b>.</li>
+</ul>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">Format</font></u></b></font></font><ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #222222;">format</span><span style="color: #000000;">(</span> string, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span> string <span style="color: #000000;">)</span>, <span style="color: #000066;">"Your Skin has been set to ID: %d by %s"</span>, SkinID, PlayerName<span style="color: #000000;">)</span>;</div></div></pre>
+</div> We format our message, as explained above. If you look to the <b>"placeholders"</b> list I gave you, you will see that <font face="Courier New">"%d"</font> inserts a integer (a whole number), since the SkinID is an integer, this will be a placeholder for the skin ID we set to the player. <font face="Courier New">"%s"</font> inserts a string, it will be a placeholder for the player name as explained above.</li>
+</ul><font size="2"><font color="#FF6A00"><b><u><font color="green">SendClientMessage</font></u></b></font></font><ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">SendClientMessage<span style="color: #000000;">(</span>PlayerID, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, string<span style="color: #000000;">)</span>;</div></div></pre>
+</div> Note, the message we have formated it will be send to the <b>"PlayerID"</b>, the one on wich the command will be executed.</li>
+</ul><font size="2"><font color="#FF6A00"><b><u><font color="green">Format</font></u></b></font></font><ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #222222;">format</span><span style="color: #000000;">(</span> string, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span> string <span style="color: #000000;">)</span>, <span style="color: #000066;">"You have changed %s Skin to ID: %d"</span>, TargetName, SkinID<span style="color: #000000;">)</span>;</div></div></pre>
+</div> We format our 2nd message, and note that now the <font face="Courier New">"%s"</font> will be a placeholder for the player name on wich the command will be executed <b>"TargetName"</b>.</li>
+</ul><font size="2"><font color="#FF6A00"><b><u><font color="green">SendClientMessage</font></u></b></font></font><ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;">SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, string<span style="color: #000000;">)</span>;</div></div></pre>
+</div> Note, the 2nd message will be send to the one who <b>executes</b> this command <b>"playerid"</b>.</li>
+</ul><font size="2"><font color="#FF6A00"><b><u><font color="green">SetPlayerSkin</font></u></b></font></font><ul><li><font face="Courier New">SetPlayerSkin(PlayerID, SkinID);</font> This is the action itself, this function will set the <b>PlayerID</b> skin to the <b>SkinID</b> we want to.</li>
+</ul>
+<font size="3"><font color="#FF6A00"><b><u><font color="green">A simple /eat command</font></u></b></font></font><br />
+<ul><li>Let's create a simple <b>"/eat"</b> command with 2 options.</li>
+<li>Option 1: <b>"/eat Cookie"</b></li>
+<li>Option 2: <b>"/eat Cake"</b></li>
+</ul>
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:311px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>eat<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> option<span style="color: #000000;">[</span> <span style="color: #000000;">20</span> <span style="color: #000000;">]</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"With this command you can eat a Cookie or a Cake"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> sscanf<span style="color: #000000;">(</span> params ,<span style="color: #000066;">"s[20]"</span>, option<span style="color: #000000;">)</span> <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"Syntax Error: /eat [Cookie,Cake]"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> <span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span> option,<span style="color: #000066;">"Cookie"</span><span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"You have ate a cookie! You have been healed to 100."</span><span style="color: #000000;">)</span>;<br/>        SetPlayerHealth<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">100</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> <span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span> option,<span style="color: #000066;">"Cake"</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"You have ate a cake! You have been healed to 100."</span><span style="color: #000000;">)</span>;<br/>        SetPlayerHealth<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">100</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"[ERROR] The option can only be Cookie or Cake."</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<font size="2"><font color="#FF6A00"><b><u><font color="green">Declaring</font></u></b></font></font><ul><li><font face="Courier New"><font color="blue">new</font> option[ 20 ];</font> We declare the variable <font face="Courier New">option</font> with enough space for <b>19</b> characters.</li>
+</ul><font size="2"><font color="#FF6A00"><b><u><font color="green">Help system</font></u></b></font></font><ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"With this command you can eat a Cookie or a Cake"</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div> If <font face="Courier New">"help"</font> parameter occured, (player types /help eat) it will <font color="blue"> return</font> the message above.</li>
+</ul><font size="2"><font color="#FF6A00"><b><u><font color="green">Sscanf part</font></u></b></font></font><ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> sscanf<span style="color: #000000;">(</span> params ,<span style="color: #000066;">"s[20]"</span>, option<span style="color: #000000;">)</span> <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"Syntax Error: /eat [Cookie,Cake]"</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div> <b>"s"</b> stands for <b>string</b>.That's what we need so we can choose between <b>"Cookie"</b> and <b>"Cake"</b>.We need also to put the <b>"20"</b> array of the variable <b>"option"</b> after the specifier. Sscanf will check if the player uses the <font color="red">incorrect</font> parameters of the command, (example "/eat"), if so it will <font color="blue">return</font> the message above.</li>
+</ul><font size="2"><font color="#FF6A00"><b><u><font color="green">Strcmp Cookie</font></u></b></font></font><ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> <span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span> option,<span style="color: #000066;">"Cookie"</span><span style="color: #000000;">)</span> <span style="color: #000000;">)</span></div></div></pre>
+</div> <a href="https://wiki.sa-mp.com/wiki/Strcmp" target="_blank">Strcmp</a> compares two strings to see if they are the same, we compare the two strings ( option and "Cake" ), so if the <b>"option"</b> ( /eat [option] ) it's <b>"Cookie"</b>, send him a message that he has been healed and heal him.</li>
+</ul><font size="2"><font color="#FF6A00"><b><u><font color="green">Strcmp Cake</font></u></b></font></font><ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> <span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span> option,<span style="color: #000066;">"Cake"</span><span style="color: #000000;">)</span> <span style="color: #000000;">)</span></div></div></pre>
+</div> Else if the <b>"option"</b> ( /eat [option] ) it's <b>"Cake"</b>, send him a message that he has been healed and heal him..</li>
+</ul><font size="2"><font color="#FF6A00"><b><u><font color="green">Else</font></u></b></font></font><ul><li><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">else</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"[ERROR] The option can only be Cookie or Cake."</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div> Else if the option is <b>NOT</b> "Cake" or "Cookie" it will <font color="blue">return</font> the message above.</li>
+</ul>
+<font size="5"><font color="#FF6A00"><b><u><font color="green">Permissions</font></u></b></font></font><ul><li>Let's set some permissions, we will disable <b>"/setskin"</b> for players, enabling it only for <b>RCON Administrators</b>. (based on an imaginary login system)</li>
+</ul><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:199px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerLogin<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>IsPlayerAdmin <span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #228822;">// If the player is logged into RCON</span><br/>    <span style="color: #000000;">{</span><br/>        Command_SetPlayerNamed<span style="color: #000000;">(</span><span style="color: #000066;">"setskin"</span>, playerid, true<span style="color: #000000;">)</span>; <span style="color: #228822;">// Enable the command for him</span><br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #228822;">// If the player is NOT logged into rcon</span><br/>    <span style="color: #000000;">{</span><br/>        Command_SetPlayerNamed<span style="color: #000000;">(</span><span style="color: #000066;">"help"</span>, playerid, false<span style="color: #000000;">)</span>; <span style="color: #228822;">// Disable  the command for him</span><br/>    <span style="color: #000000;">}</span><br/><span style="color: #000000;">}</span></div></div></pre>
+</div><ul><li>This will configure the command, so only <b>RCON administrators</b> can use the <b>"/setskin"</b> command.</li>
+</ul>
+<font size="5"><font color="#FF6A00"><b><u><font color="green">Commands</font></u></b></font></font><br />
+<ul><li><b>y_commands</b> has a special system, it knows every command you have, so you don't have to update your <b>"/commands"</b> list.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:151px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>commands<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Lists all the commands a player can use."</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">new</span> <br/>        count <span style="color: #000000;">=</span> Command_GetPlayerCommandCount<span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">!=</span> count; <span style="color: #000000;">++</span>i<span style="color: #000000;">)</span> SendClientMessage<span style="color: #000000;">(</span> playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, Command_GetNext <span style="color: #000000;">(</span> i, playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div></li>
+</ul>
+<font size="5"><font color="#FF6A00"><b><u><font color="green">UNKNOWN COMMAND</font></u></b></font></font><br />
+<ul><li>Replace the codes from <b>"y_commands.inc"</b> with this version: <div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>******</strong><br />
+<a href="../../unavailable.html" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">
+<a href="http://pastebin.com/L95eNJPW" target="_blank">http://pastebin.com/L95eNJPW</a><br/></div>
+</td>
+</tr>
+</table>
+</div></li>
+<li>When a player types a wrong command, to <font color="blue">return</font> the message: <font face="Courier New">"SERVER: Unknown Command."</font> simply add the <b>OnPlayerCommandPerformed</b> callback:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:103px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerCommandPerformed<span style="color: #000000;">(</span>playerid, cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, success<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> <span style="color: #000000;">!</span>success <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> false;<br/>    <span style="color: #2222BB;">return</span> true;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div></li>
+</ul>
+<font size="3"><font color="#FF6A00"><b><u><font color="green">Custom message</font></u></b></font></font><br />
+<ul><li>To <font color="blue">return</font> your own message instead of the <font face="Courier New">"SERVER: Unknown Command."</font> simply do:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:167px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">public</span> OnPlayerCommandPerformed<span style="color: #000000;">(</span>playerid, cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, success<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> <span style="color: #000000;">!</span>success <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #222222;">format</span><span style="color: #000000;">(</span> cmdtext, <span style="color: #000000;">128</span>, <span style="color: #000066;">" ERROR: This command doesn't exists. Type /commands for a list of all available commands "</span> <span style="color: #000000;">)</span>;<br/>        SendClientMessage<span style="color: #000000;">(</span> playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, cmdtext <span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> true;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div></li>
+</ul>
+<font size="5"><font color="#FF6A00"><b><u><font color="green">References</font></u></b></font></font><br />
+<ul><li><a href="https://wiki.sa-mp.com/" target="_blank">SA:MP Wiki</a></li>
+</ul>
+<font size="5"><font color="#FF6A00"><b><u><font color="green">Result</font></u></b></font></font><br />
+<ul><li>Example result:</li>
+</ul><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:503px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #228822;">// This is a comment</span><br/><span style="color: #228822;">// uncomment the line below if you want to write a filterscript</span><br/><span style="color: #228822;">//#define FILTERSCRIPT</span><br/><br/><span style="color: #2222AA;">#include &lt;a_samp&gt;</span><br/><span style="color: #2222AA;">#include &lt;YSI\y_commands&gt;</span><br/><span style="color: #2222AA;">#include &lt;sscanf2&gt;</span><br/><br/><span style="color: #2222AA;">#if defined FILTERSCRIPT</span><br/><br/><span style="color: #2222BB;">public</span> OnFilterScriptInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"<span style="color: #000099; font-weight: bold;">\n</span>--------------------------------------"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">" Blank Filterscript by your name here"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"--------------------------------------<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnFilterScriptExit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222AA;">#else</span><br/><br/>main<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"<span style="color: #000099; font-weight: bold;">\n</span>----------------------------------"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">" Blank Gamemode by your name here"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">print</span><span style="color: #000000;">(</span><span style="color: #000066;">"----------------------------------<span style="color: #000099; font-weight: bold;">\n</span>"</span><span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222AA;">#endif</span><br/><br/><span style="color: #2222BB;">public</span> OnGameModeInit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #228822;">// Don't use these lines if it's a filterscript</span><br/>    SetGameModeText<span style="color: #000000;">(</span><span style="color: #000066;">"Blank Script"</span><span style="color: #000000;">)</span>;<br/>    AddPlayerClass<span style="color: #000000;">(</span><span style="color: #000000;">0</span>, <span style="color: #000000;">1958.3783</span>, <span style="color: #000000;">1343.1572</span>, <span style="color: #000000;">15.3746</span>, <span style="color: #000000;">269.1425</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">0</span>, <span style="color: #000000;">0</span><span style="color: #000000;">)</span>;<br/>    Command_AddAltNamed<span style="color: #000000;">(</span><span style="color: #000066;">"information"</span>, <span style="color: #000066;">"info"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnGameModeExit<span style="color: #000000;">(</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerRequestClass<span style="color: #000000;">(</span>playerid, classid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    SetPlayerPos<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">1958.3783</span>, <span style="color: #000000;">1343.1572</span>, <span style="color: #000000;">15.3746</span><span style="color: #000000;">)</span>;<br/>    SetPlayerCameraPos<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">1958.3783</span>, <span style="color: #000000;">1343.1572</span>, <span style="color: #000000;">15.3746</span><span style="color: #000000;">)</span>;<br/>    SetPlayerCameraLookAt<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">1958.3783</span>, <span style="color: #000000;">1343.1572</span>, <span style="color: #000000;">15.3746</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerConnect<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerDisconnect<span style="color: #000000;">(</span>playerid, reason<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerSpawn<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerDeath<span style="color: #000000;">(</span>playerid, killerid, reason<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnVehicleSpawn<span style="color: #000000;">(</span>vehicleid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnVehicleDeath<span style="color: #000000;">(</span>vehicleid, killerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerText<span style="color: #000000;">(</span>playerid, text<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerCommandText<span style="color: #000000;">(</span>playerid, cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span><span style="color: #000066;">"/mycommand"</span>, cmdtext, true, <span style="color: #000000;">10</span><span style="color: #000000;">)</span> <span style="color: #000000;">==</span> <span style="color: #000000;">0</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        <span style="color: #228822;">// Do something here</span><br/>        <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerEnterVehicle<span style="color: #000000;">(</span>playerid, vehicleid, ispassenger<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerExitVehicle<span style="color: #000000;">(</span>playerid, vehicleid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerStateChange<span style="color: #000000;">(</span>playerid, newstate, oldstate<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerEnterCheckpoint<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerLeaveCheckpoint<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerEnterRaceCheckpoint<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerLeaveRaceCheckpoint<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnRconCommand<span style="color: #000000;">(</span>cmd<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerRequestSpawn<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnObjectMoved<span style="color: #000000;">(</span>objectid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerObjectMoved<span style="color: #000000;">(</span>playerid, objectid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerPickUpPickup<span style="color: #000000;">(</span>playerid, pickupid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnVehicleMod<span style="color: #000000;">(</span>playerid, vehicleid, componentid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnVehiclePaintjob<span style="color: #000000;">(</span>playerid, vehicleid, paintjobid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnVehicleRespray<span style="color: #000000;">(</span>playerid, vehicleid, color1, color2<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerSelectedMenuRow<span style="color: #000000;">(</span>playerid, row<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerExitedMenu<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerInteriorChange<span style="color: #000000;">(</span>playerid, newinteriorid, oldinteriorid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerKeyStateChange<span style="color: #000000;">(</span>playerid, newkeys, oldkeys<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnRconLoginAttempt<span style="color: #000000;">(</span>ip<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, password<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, success<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerUpdate<span style="color: #000000;">(</span>playerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerStreamIn<span style="color: #000000;">(</span>playerid, forplayerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerStreamOut<span style="color: #000000;">(</span>playerid, forplayerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnVehicleStreamIn<span style="color: #000000;">(</span>vehicleid, forplayerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnVehicleStreamOut<span style="color: #000000;">(</span>vehicleid, forplayerid<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnDialogResponse<span style="color: #000000;">(</span>playerid, dialogid, response, listitem, inputtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><br/><span style="color: #2222BB;">public</span> OnPlayerClickPlayer<span style="color: #000000;">(</span>playerid, clickedplayerid, source<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #2222BB;">public</span> OnPlayerCommandPerformed<span style="color: #000000;">(</span>playerid, cmdtext<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, success<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> <span style="color: #000000;">!</span>success <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> false;<br/>    <span style="color: #2222BB;">return</span> true;<br/><span style="color: #000000;">}</span><br/><span style="color: #228822;">/*                                          COMMANDS                                            */</span><br/><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>help<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>help<span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Displays help about commands"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span>isnull<span style="color: #000000;">(</span>params<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Syntax Error: /help [Command]"</span><span style="color: #000000;">)</span>;<br/>    Command_ReProcess<span style="color: #000000;">(</span>playerid, params, true<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>commands<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span> <span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Lists all the commands a player can use."</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">new</span> <br/>        count <span style="color: #000000;">=</span> Command_GetPlayerCommandCount<span style="color: #000000;">(</span> playerid <span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">for</span> <span style="color: #000000;">(</span> <span style="color: #2222BB;">new</span> i <span style="color: #000000;">=</span> <span style="color: #000000;">0</span>; i <span style="color: #000000;">!=</span> count; <span style="color: #000000;">++</span>i<span style="color: #000000;">)</span> SendClientMessage<span style="color: #000000;">(</span> playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, Command_GetNext <span style="color: #000000;">(</span> i, playerid <span style="color: #000000;">)</span> <span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>information<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"This command displays some information"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> isnull<span style="color: #000000;">(</span> params <span style="color: #000000;">)</span> <span style="color: #000000;">)</span> <br/>    <span style="color: #000000;">{</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Tutorial by SmiT !"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>ooc<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> string<span style="color: #000000;">[</span> <span style="color: #000000;">128</span> <span style="color: #000000;">]</span>;<br/>    <span style="color: #2222BB;">new</span> PlayerName<span style="color: #000000;">[</span> MAX_PLAYER_NAME <span style="color: #000000;">]</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"With this command you can talk in OOC chat!"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> isnull<span style="color: #000000;">(</span> params <span style="color: #000000;">)</span> <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Syntax Error: /ooc [Your Text]"</span><span style="color: #000000;">)</span>;<br/>    GetPlayerName<span style="color: #000000;">(</span> playerid, PlayerName, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span> PlayerName <span style="color: #000000;">)</span> <span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span> string, <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span> string <span style="color: #000000;">)</span>,<span style="color: #000066;">"(OOC CHAT) %s: %s"</span>, PlayerName, params<span style="color: #000000;">)</span>;<br/>    SendClientMessageToAll<span style="color: #000000;">(</span><span style="color: #000000;">-</span><span style="color: #000000;">1</span>, string<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>heal<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> PlayerID;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"With this command you can heal a player!"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> sscanf<span style="color: #000000;">(</span> params, <span style="color: #000066;">"u"</span>, PlayerID <span style="color: #000000;">)</span> <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Syntax Error: /heal [PlayerName / ID]"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> PlayerID <span style="color: #000000;">==</span> INVALID_PLAYER_ID <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"[ERROR] This player is OFFLINE"</span><span style="color: #000000;">)</span>;<br/>    SetPlayerHealth<span style="color: #000000;">(</span>PlayerID, <span style="color: #000000;">100</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>setskin<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> PlayerID, SkinID, PlayerName<span style="color: #000000;">[</span> MAX_PLAYER_NAME <span style="color: #000000;">]</span>, TargetName<span style="color: #000000;">[</span> MAX_PLAYER_NAME <span style="color: #000000;">]</span>, string<span style="color: #000000;">[</span> <span style="color: #000000;">128</span> <span style="color: #000000;">]</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"With this command you can change a player skin!"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> sscanf<span style="color: #000000;">(</span> params, <span style="color: #000066;">"ui"</span>, PlayerID, SkinID<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Syntax Error: /setskin [PlayerName / ID] [SkinID]"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> PlayerID <span style="color: #000000;">==</span> INVALID_PLAYER_ID <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"[ERROR] This player is OFFLINE"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> SkinID <span style="color: #000000;">&gt;</span> <span style="color: #000000;">299</span> || SkinID <span style="color: #000000;">&lt;</span> <span style="color: #000000;">1</span> <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"Available SA:MP Skins: 1-299"</span><span style="color: #000000;">)</span>;<br/>    GetPlayerName<span style="color: #000000;">(</span> playerid, PlayerName, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span> PlayerName <span style="color: #000000;">)</span> <span style="color: #000000;">)</span>;<br/>    GetPlayerName<span style="color: #000000;">(</span> PlayerID, TargetName, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span> TargetName <span style="color: #000000;">)</span> <span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span> string, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span> string <span style="color: #000000;">)</span>, <span style="color: #000066;">"Your Skin has been set to ID: %d by %s"</span>, SkinID, PlayerName<span style="color: #000000;">)</span>;<br/>    SendClientMessage<span style="color: #000000;">(</span>PlayerID, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, string<span style="color: #000000;">)</span>;<br/>    <span style="color: #222222;">format</span><span style="color: #000000;">(</span> string, <span style="color: #2222BB;">sizeof</span> <span style="color: #000000;">(</span> string <span style="color: #000000;">)</span>, <span style="color: #000066;">"You have changed %s Skin to ID: %s"</span>, TargetName, SkinID<span style="color: #000000;">)</span>;<br/>    SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, string<span style="color: #000000;">)</span>;<br/>    SetPlayerSkin<span style="color: #000000;">(</span>PlayerID, SkinID<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span><br/><span style="color: #000000;">YCMD</span><span style="color: #000000;">:</span>eat<span style="color: #000000;">(</span>playerid, params<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, help<span style="color: #000000;">)</span><br/><span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">new</span> option<span style="color: #000000;">[</span> <span style="color: #000000;">20</span> <span style="color: #000000;">]</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> help <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"With this command you can eat a Cookie or a Cake"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> sscanf<span style="color: #000000;">(</span> params ,<span style="color: #000066;">"s[20]"</span>, option<span style="color: #000000;">)</span> <span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"Syntax Error: /eat [Cookie,Cake]"</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> <span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span> option,<span style="color: #000066;">"Cookie"</span><span style="color: #000000;">)</span> <span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"You have ate a cookie! You have been healed to 100."</span><span style="color: #000000;">)</span>;<br/>        SetPlayerHealth<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">100</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span> <span style="color: #000000;">!</span><span style="color: #222222;">strcmp</span><span style="color: #000000;">(</span> option,<span style="color: #000066;">"Cookie"</span><span style="color: #000000;">)</span><span style="color: #000000;">)</span><br/>    <span style="color: #000000;">{</span><br/>        SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>, <span style="color: #000066;">"You have ate a cake! You have been healed to 100."</span><span style="color: #000000;">)</span>;<br/>        SetPlayerHealth<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">100</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #000000;">}</span><br/>    <span style="color: #2222BB;">else</span> <span style="color: #2222BB;">return</span> SendClientMessage<span style="color: #000000;">(</span>playerid, <span style="color: #000000;">-</span><span style="color: #000000;">1</span>,<span style="color: #000066;">"[ERROR] The option can only be Cookie or Cake."</span><span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div><ul><li>If I missed anything or you didn't understand something, please reply. I tried my best.</li>
+</ul>
+<font size="5"><font color="red"><b><u><font color="green">Special thanks to:</font></u></b></font></font><br />
+<ul><li><a href="http://forum.sa-mp.com/member.php?u=29176" target="_blank">******</a></li>
+</ul>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1460039">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-141822.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1460094"></a>
+<div class="post classic " style="" id="post_1460094">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0122/uid-122073.html"><img src="../../assets/uploads/avatars/122073.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0122/uid-122073.html">TheBluec0de</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 569<br />
+	Threads: 105<br />
+	Joined: Mar 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290132.html#pid1460094" title="Re: Creating commands with y_commands and sscanf">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by TheBluec0de" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.10.2011, 14:16 <span class="post_edit" id="edited_by_1460094"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1460094">
+		Nice <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1460094">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-122073.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1460169"></a>
+<div class="post classic " style="" id="post_1460169">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0055/uid-55485.html"><img src="../../assets/uploads/avatars/55485.png" alt="" width="42" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0055/uid-55485.html">Yamoo</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 369<br />
+	Threads: 31<br />
+	Joined: Jun 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290132.html#pid1460169" title="Re: Creating commands with y_commands and sscanf">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Yamoo" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.10.2011, 15:11 <span class="post_edit" id="edited_by_1460169"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1460169">
+		Nice tutorial man, keep it up.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1460169">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-55485.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1460356"></a>
+<div class="post classic " style="" id="post_1460356">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0123/uid-123340.html"><img src="../../assets/uploads/avatars/123340.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0123/uid-123340.html">Mr_Scripter</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 370<br />
+	Threads: 27<br />
+	Joined: Mar 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290132.html#pid1460356" title="Re: Creating commands with y_commands and sscanf">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by Mr_Scripter" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.10.2011, 16:36 <span class="post_edit" id="edited_by_1460356"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1460356">
+		Good Work, Nicely Explained Thanks
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1460356">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-123340.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1460360"></a>
+<div class="post classic " style="" id="post_1460360">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0024/uid-24072.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0024/uid-24072.html">Zh3r0</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 4,510<br />
+	Threads: 163<br />
+	Joined: Mar 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290132.html#pid1460360" title="Re: Creating commands with y_commands and sscanf">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by Zh3r0" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.10.2011, 16:37 <span class="post_edit" id="edited_by_1460360"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1460360">
+		I hate the fact that you copied ******'s way of making threads! His are unique!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1460360">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-24072.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1460391"></a>
+<div class="post classic " style="" id="post_1460391">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0055/uid-55485.html"><img src="../../assets/uploads/avatars/55485.png" alt="" width="42" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0055/uid-55485.html">Yamoo</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 369<br />
+	Threads: 31<br />
+	Joined: Jun 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290132.html#pid1460391" title="Re: Creating commands with y_commands and sscanf">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by Yamoo" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.10.2011, 16:53 <span class="post_edit" id="edited_by_1460391"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1460391">
+		Zh3ro I so want to give youz rep but I can't due to yourself taking so many from me, anyhow I noticed that but it's detailed well.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1460391">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-55485.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1460453"></a>
+<div class="post classic " style="" id="post_1460453">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0126/uid-126726.html"><img src="../../assets/uploads/avatars/126726.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0126/uid-126726.html">System64</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 933<br />
+	Threads: 62<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290132.html#pid1460453" title="Re: Creating commands with y_commands and sscanf">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by System64" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.10.2011, 17:18 <span class="post_edit" id="edited_by_1460453"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1460453">
+		Good tutorial, good explained.... rep+
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1460453">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-126726.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1460491"></a>
+<div class="post classic " style="" id="post_1460491">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0080/uid-80270.html"><img src="../../assets/uploads/avatars/80270.png" alt="" width="55" height="42" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0080/uid-80270.html">alpha500delta</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 1,152<br />
+	Threads: 11<br />
+	Joined: Feb 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290132.html#pid1460491" title="Re: Creating commands with y_commands and sscanf">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by alpha500delta" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.10.2011, 17:38 <span class="post_edit" id="edited_by_1460491"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1460491">
+		Nice, but perhaps you should remove the "example result", because some noobs will just copy, paste and compile it without even looking at the tutorial itsself &gt;.&lt;
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1460491">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-80270.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1460839"></a>
+<div class="post classic " style="" id="post_1460839">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0128/uid-128387.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0128/uid-128387.html">Kush</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 781<br />
+	Threads: 12<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290132.html#pid1460839" title="Re: Creating commands with y_commands and sscanf">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Kush" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">14.10.2011, 21:07 <span class="post_edit" id="edited_by_1460839"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1460839">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Yamoo</strong><br />
+<a href="../../threads/0290/tid-290132.html#pid1460391" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Zh3ro I so want to give youz rep but I can't due to yourself taking so many from me, anyhow I noticed that but it's detailed well.</div>
+</td>
+</tr>
+</table>
+</div>Sucking up?<br />
+<br />
+OT: Lengthy tutorial, horrifically explained.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1460839">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-128387.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid1461082"></a>
+<div class="post classic " style="" id="post_1461082">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0055/uid-55485.html"><img src="../../assets/uploads/avatars/55485.png" alt="" width="42" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0055/uid-55485.html">Yamoo</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 369<br />
+	Threads: 31<br />
+	Joined: Jun 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0290/tid-290132.html#pid1461082" title="Re: Creating commands with y_commands and sscanf">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by Yamoo" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">15.10.2011, 00:24 <span class="post_edit" id="edited_by_1461082"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_1461082">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Siin</strong><br />
+<a href="../../threads/0290/tid-290132.html#pid1460839" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Sucking up?<br />
+<br />
+OT: Lengthy tutorial, horrifically explained.</div>
+</td>
+</tr>
+</table>
+</div>Hell no, I lick up no one's arse.. He just told the truth, and I reply with the truth.<br />
+<br />
+I would give a reputation for any point which is giving to be fair and if most people who recieved a rep point from me will see it's mostly because of posts.<br />
+<br />
+Also lengthy tutorial? You expect a tutorial with one bloody line? Pathetic. Also it ain't really long.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_1461082">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-55485.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0290/tid-290132.html">Next Oldest</a> | <a href="../../threads/0290/tid-290132.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="290132" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" selected="selected">---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" >---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/12.html">Scripting Help</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/70.html">Tutorials</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->

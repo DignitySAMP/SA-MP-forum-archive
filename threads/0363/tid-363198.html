@@ -1,0 +1,2486 @@
+<!DOCTYPE html><!-- start: showthread -->
+<html xml:lang="en" lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>[Include] mFiles - File Writer/Reader System</title>
+<!-- start: headerinclude -->
+<link rel="alternate" type="application/rss+xml" title="Latest Threads (RSS 2.0)" href="../../unavailable.html" />
+<link rel="alternate" type="application/atom+xml" title="Latest Threads (Atom 1.0)" href="../../unavailable.html" />
+<link rel="shortcut icon" href="../../assets/favicon.ico" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<script type="text/javascript" src="../../assets/jscripts/jquery.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/jquery.plugins.min.js"></script>
+<script type="text/javascript" src="../../assets/jscripts/general.js"></script>
+<script type="text/javascript" src="../../assets/images/bootbb/js/tooltip.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+<link href='https://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css' />
+<!-- link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" / -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/global.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/css3.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/responsive.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/star_ratings.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/showthread.css" />
+<link type="text/css" rel="stylesheet" href="../../assets/cache/themes/theme3/grey.css" />
+
+
+
+
+<script type="text/javascript">
+jQuery(document).on('click', '.panel-heading span.clickable', function(e){
+    var jQuerythis = jQuery(this);
+	if(!jQuerythis.hasClass('panel-collapsed')) {
+		jQuerythis.parents('.panel').find('.panel-body').slideUp();
+		jQuerythis.addClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+	} else {
+		jQuerythis.parents('.panel').find('.panel-body').slideDown();
+		jQuerythis.removeClass('panel-collapsed');
+		jQuerythis.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+	}
+})
+</script>
+
+
+
+
+<script type="text/javascript">
+	lang.unknown_error = "An unknown error has occurred.";
+	lang.confirm_title = "Please Confirm";
+	lang.expcol_collapse = "[-]";
+	lang.expcol_expand = "[+]";
+	lang.select2_match = "One result is available, press enter to select it.";
+	lang.select2_matches = "{1} results are available, use up and down arrow keys to navigate.";
+	lang.select2_nomatches = "No matches found";
+	lang.select2_inputtooshort_single = "Please enter one or more character";
+	lang.select2_inputtooshort_plural = "Please enter {1} or more characters";
+	lang.select2_inputtoolong_single = "Please delete one character";
+	lang.select2_inputtoolong_plural = "Please delete {1} characters";
+	lang.select2_selectiontoobig_single = "You can only select one item";
+	lang.select2_selectiontoobig_plural = "You can only select {1} items";
+	lang.select2_loadmore = "Loading more results&hellip;";
+	lang.select2_searching = "Searching&hellip;";
+	
+	var templates = {
+		modal: '<div class=\"modal\">\
+	<div style=\"overflow-y: auto; max-height: 400px;\">\
+		<table border=\"0\" cellspacing=\"0\" cellpadding=\"5\" class=\"tborder\">\
+			<tr>\
+				<td class=\"thead\"><strong>__title__</strong></td>\
+			</tr>\
+			<tr>\
+				<td class=\"trow1\">__message__</td>\
+			</tr>\
+			<tr>\
+				<td class=\"tfoot\">\
+					<div style=\"text-align: center\" class=\"modal_buttons\">__buttons__</div>\
+				</td>\
+			</tr>\
+		</table>\
+	</div>\
+</div>',
+		modal_button: '<input type=\"submit\" class=\"button\" value=\"__title__\"/>&nbsp;'
+	};
+	
+	var cookieSecureFlag = "0";
+	var cookieDomain = "";
+	var cookiePath = "/";
+	var cookiePrefix = "";
+	var deleteevent_confirm = "Are you sure you want to delete this event?";
+	var removeattach_confirm = "Are you sure you want to remove the selected attachment from this post?";
+	var loading_text = 'Loading. <br />Please Wait&hellip;';
+	var saving_changes = 'Saving changes&hellip;';
+	var use_xmlhttprequest = "1";
+	var my_post_key = "a6fcea724c8b0f45f93d401d7984a373";
+	var rootpath = "../..";
+	var imagepath = "../../assets/images/bootbb";
+  	var yes_confirm = "Yes";
+	var no_confirm = "No";
+	var MyBBEditor = null;
+	var spinner_image = "../../assets/images/spinner.gif";
+	var spinner = "<img src='" + spinner_image +"' alt='' />";
+	var modal_zindex = 9999;
+</script>
+
+<!-- Make videos responsive - https://github.com/davatron5000/FitVids.js (additional video sites added for MyBB) -->
+<script type="text/javascript" src="../../assets/images/bootbb/js/jquery.fitvids.js"></script>
+<script>
+	$(document).ready(function(){
+		// Target the iframe parent div
+		var bvc = $(".bootbb-video-container");
+		//bvc.css("max-width", "800px");
+		bvc.fitVids();
+	});
+</script>
+<!-- end: headerinclude -->
+<script>
+<!--
+	var quickdelete_confirm = "Are you sure you want to delete this post?";
+	var quickrestore_confirm = "Are you sure you want to restore this post?";
+	var allowEditReason = "1";
+	lang.save_changes = "Save Changes";
+	lang.cancel_edit = "Cancel Edit";
+	lang.quick_edit_update_error = "There was an error editing your reply:";
+	lang.quick_reply_post_error = "There was an error posting your reply:";
+	lang.quick_delete_error = "There was an error deleting your reply:";
+	lang.quick_delete_success = "The post was deleted successfully.";
+	lang.quick_delete_thread_success = "The thread was deleted successfully.";
+	lang.quick_restore_error = "There was an error restoring your reply:";
+	lang.quick_restore_success = "The post was restored successfully.";
+	lang.editreason = "Edit Reason";
+// -->
+</script>
+<!-- jeditable (jquery) -->
+<script src="../../assets/jscripts/report.js"></script>
+<script src="../../assets/jscripts/jeditable/jeditable.min.js"></script>
+<script src="../../assets/jscripts/thread.js"></script>
+<meta name="description" content="Introduction: Recently I was struggling with different file systems, some were slow or some weren't convinient at all. I decided to write my own system, and I've been working on it for a while. This i" />
+<link rel="canonical" href="../../threads/0363/tid-363198.html" />
+</head>
+<body>
+	<!-- start: header -->
+<header>
+<div class="navbar navbar-default">
+     <div class="container">
+          <div class="navbar-header">
+               <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" aria-label="Toggle navigation">
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span>
+               <span class="icon-bar"></span> 
+               </button>
+			  
+			  <div class="navbar-header scaleimages">
+				  <!--<a class="navbar-brand" href="../../index.html">BootBB</a>-->
+				  <a class="" href="../../index.html"><img src="../../assets/images/bootbb/logo_forum.gif" /></a>
+			  
+			  </div>
+          </div>
+          <div class="collapse navbar-collapse navbar-ex1-collapse">
+			  <ul class="nav navbar-nav navbar-right">
+				  <!--<li id="nav-portal"><a href="../../index.html"><i class="fa fa-bell"></i> Portal</a></li>-->
+               <li id="nav-forums"><a href="../../index.html"><i class="fa fa-group"></i> Forum</a></li>
+				<!--<li><a href="../../unavailable.html"><i class="fa fa-comment"></i> New Posts</a></li>
+            	<li><a href="../../unavailable.html"><i class="fa fa-comments"></i> Today's Posts</a></li>-->
+               <li id="nav-search"><a href="../../unavailable.html"><i class="fa fa-search"></i> Search</a></li>
+               <li id="nav-member"><a href="../../members/list.html"><i class="fa fa-users"></i> Members</a></li>
+               <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+				  
+<!--<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cubes"></i> Misc <span class="caret"></span></a>
+          <ul class="dropdown-menu" role="menu">
+			  <li id="nav-help"><a href="../../help.html"><i class="fa fa-life-bouy"></i> Help</a></li>
+			  <li class="divider"></li>
+			  <li id="nav-calendar"><a href="../../calendar.html"><i class="fa fa-calendar"></i> Calendar</a></li>
+          </ul>
+</li> -->
+</ul>
+  
+          </div>
+     </div>
+</div>
+</header>
+
+
+<div id="container">
+	<a name="top" id="top"></a>
+		<div id="header">
+			<div id="panel">
+				<div class="upper">
+					<div class="container">
+
+						<!-- start: header_welcomeblock_guest -->
+<!--<span><a href="../../login.html" onclick="$('#quick_login').modal({ fadeDuration: 250, keepelement: true }); return false;" class="login btn btn-danger" style="color: #fff;"><i class="fa fa-sign-in"></i> Login</a> <a href="../../register.html" class="register btn btn-success" style="color: #fff;"><i class="fa fa-user-plus"></i> Register</a></span>-->
+
+<span class="float_right hidden-xs">Hello There, Guest!</span>
+
+<br class="clearfix" />
+	
+
+				<div class="modal" id="quick_login" style="display: none;">
+					<form method="post" action="../../unavailable.html">
+						<input name="my_post_key" type="hidden" value="a6fcea724c8b0f45f93d401d7984a373" />
+						<input name="action" type="hidden" value="do_login" />
+						<input name="url" type="hidden" value="" />
+						<input name="quick_login" type="hidden" value="1" />
+						<table width="100%" cellspacing="0" cellpadding="0" border="0" class="tborder">
+							<tr>
+								<td class="thead" colspan="2"><strong>Login</strong></td>
+							</tr>
+							<tr>
+								<td class="trow1" width="25%"><strong>Username:</strong></td>
+								<td class="trow1"><input name="quick_username" id="quick_login_username" type="text" value="" class="textbox initial_focus" /></td>
+							</tr>
+							<tr>
+								<td class="trow2"><strong>Password:</strong></td>
+								<td class="trow2">
+									<input name="quick_password" id="quick_login_password" type="password" value="" class="textbox" /> <a href="../../unavailable.html" class="lost_password">Lost Password?</a>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow1">&nbsp;</td>
+								<td class="trow1 remember_me">
+									<input name="quick_remember" id="quick_login_remember" type="checkbox" value="yes" class="checkbox" checked="checked" />
+									<label for="quick_login_remember">Remember me</label>
+								</td>
+							</tr>
+							<tr>
+								<td class="trow2" colspan="2">
+									<div align="center"><input name="submit" type="submit" class="button" value="Login" /></div>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<script type="text/javascript">
+					$("#quick_login input[name='url']").val($(location).attr('href'));
+				</script>
+<!-- end: header_welcomeblock_guest -->
+					
+					</div>
+			</div>
+			</div>
+	</div>
+			</div>
+               
+				   
+                <main class="container">
+				<br />
+                 <!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/83.html">Includes</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav -->
+				
+				
+				
+				
+				
+				
+<!-- end: header -->
+	
+	
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (2):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0363/tid-363198-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0363/tid-363198-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	<div class="tborder tfixed clear">
+		<div class="thead">
+				<div class="float_right">
+					<span class="smalltext"><a href="../../threads/0363/tid-363198.html#pid2013490">Threaded Mode</a></span>
+				</div>
+				
+					[Include] mFiles - File Writer/Reader System
+			</div>
+	</div>
+<div id="posts_container">
+	<div id="posts">
+		<!-- start: postbit_classic -->
+
+<a id="pid2013490"></a>
+<div class="post classic " style="" id="post_2013490">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0039/uid-39206.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0039/uid-39206.html">Maxips2</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 410<br />
+	Threads: 88<br />
+	Joined: Oct 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2013490" title="mFiles - File Writer/Reader System">#1</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 1 by Maxips2" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.07.2012, 21:31 <span class="post_edit" id="edited_by_2013490"><!-- start: postbit_editedby -->
+<div class="edited_post postbit_edited postbit_editedby postbit_editedpost">(<!-- start: postbit_editedby_editreason -->
+ <em>Last edited by Maxips2; 26.07.2012 at 22:36.</em>
+<!-- end: postbit_editedby_editreason -->)</div>
+<!-- end: postbit_editedby --></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2013490">
+		<u><b><font color="0x8D8DFFFF"><font size="4">Introduction:</font></font></b></u><br />
+<br />
+Recently I was struggling with different file systems, some were slow or some weren't convinient at all.<br />
+I decided to write my own system, and I've been working on it for a while.<br />
+This is the first system I am releasing, so please be gentle with your comments!<br />
+<br />
+<u><b><font color="0x8D8DFFFF"><font size="4">How To Use:</font></font></b></u><br />
+<br />
+Simply download the file, and put it in your includes folder.<br />
+At the top of your filterscript/gamemode write this line:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include &lt;mfiles&gt;</span></div></div></pre>
+</div>after this line:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include &lt;a_samp&gt;</span></div></div></pre>
+</div>should look like this:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:71px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include &lt;a_samp&gt;</span><br/><span style="color: #2222AA;">#include &lt;mfiles&gt;</span><br/><span style="color: #228822;">// Other includes ...</span></div></div></pre>
+</div>
+<u><b><font color="0x8D8DFFFF"><font size="4">Settings:</font></font></b></u><br />
+<br />
+I have declared a few defines in the include itself, I advice to keep it as it is, but if you insist you may change it.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:199px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#define MAX_FILE_READ_STRING            255 </span><br/><span style="color: #228822;">// The number of cells which will be used in the reading/writing array.</span><br/><span style="color: #2222AA;">#define MAX_KEY_LEN                     32 </span><br/><span style="color: #228822;">// Maximum length of a key</span><br/><span style="color: #2222AA;">#define MAX_VAL_LEN                     128 </span><br/><span style="color: #228822;">// Maximum length of a value.</span><br/><span style="color: #2222AA;">#define KEY_IGNORECASE                  false </span><br/><span style="color: #228822;">// Ignorecase:</span><br/><span style="color: #228822;">// When set to false: when reading/writing to a file it will be case-sensetive.</span><br/><span style="color: #228822;">// That means that VALUE and value won't be the same key.</span><br/><span style="color: #228822;">// If set to true it does the opposite action.</span></div></div></pre>
+</div>
+<u><b><font color="0x8D8DFFFF"><font size="4">Version:</font></font></b></u><br />
+<br />
+• mFiles v1.0 - Initial Release<br />
+<br />
+<u><b><font color="0x8D8DFFFF"><font size="4">Bugs:</font></font></b></u><br />
+<br />
+• None found yet, however if you find a bug please post here or PM me on forums with the details.<br />
+<br />
+<u><b><font color="0x8D8DFFFF"><font size="4">Download:</font></font></b></u><br />
+<br />
+Mediafire: <a href="http://www.mediafire.com/?u4xcoh45wkrbqh5" target="_blank">http://www.mediafire.com/?u4xcoh45wkrbqh5</a><br />
+<br />
+Please do not make any mirrors without my permission.<br />
+<br />
+<u><b><font color="0x8D8DFFFF"><font size="4">Examples:</font></font></b></u><br />
+<br />
+<u><b><font color="0xFF8282AA"><font size="3">Writing:</font></font></b></u><br />
+<br />
+Writing is done in a very simple way:<br />
+Open a file, write the data and close the file.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:311px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> file<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">"settings.ini"</span>;<br/><br/><span style="color: #228822;">// Check if a file exists, if not: create it.</span><br/><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>File_Exists<span style="color: #000000;">(</span>file<span style="color: #000000;">)</span><span style="color: #000000;">)</span> File_Create<span style="color: #000000;">(</span>file<span style="color: #000000;">)</span>;<br/><br/><span style="color: #228822;">// Begin writing into a file.</span><br/>File_Write<span style="color: #000000;">(</span>file<span style="color: #000000;">)</span>;<br/><br/><span style="color: #228822;">// Writing the data...</span><br/>File_WriteString<span style="color: #000000;">(</span><span style="color: #000066;">"hostname"</span>, <span style="color: #000066;">"gamemode_0"</span><span style="color: #000000;">)</span>;<br/>File_WriteInt<span style="color: #000000;">(</span><span style="color: #000066;">"maxplayers"</span>, <span style="color: #000000;">50</span><span style="color: #000000;">)</span>;<br/>File_WriteFloat<span style="color: #000000;">(</span><span style="color: #000066;">"gravity"</span>, <span style="color: #000000;">0.08</span><span style="color: #000000;">)</span>;<br/>File_WriteBool<span style="color: #000000;">(</span><span style="color: #000066;">"allow_connect"</span>, true<span style="color: #000000;">)</span>;<br/>File_WriteHex<span style="color: #000000;">(</span><span style="color: #000066;">"spawn_color"</span>, 0xFFFFFF<span style="color: #000000;">)</span>;<br/>File_WriteBin<span style="color: #000000;">(</span><span style="color: #000066;">"binary_info"</span>, 0b1110110<span style="color: #000000;">)</span>;<br/><br/><span style="color: #228822;">// Finish writing, save and close.</span><br/>File_WriteFinish<span style="color: #000000;">(</span>file<span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+<u><b><font color="0xFF8282AA"><font size="3">Reading:</font></font></b></u><br />
+<br />
+Reading is done pretty much the same way, open a file, read the data and close it.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:295px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> hostname<span style="color: #000000;">[</span><span style="color: #000000;">11</span><span style="color: #000000;">]</span>, maxplayers, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>gravity, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>allow_connect, file<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">"settings.ini"</span>;<br/><br/><span style="color: #228822;">// Check if file exists</span><br/><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>File_Exists<span style="color: #000000;">(</span>file<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/><br/>    <span style="color: #228822;">// Open the file</span><br/>    File_Open<span style="color: #000000;">(</span>file<span style="color: #000000;">)</span>;<br/>    <br/>    <span style="color: #228822;">// Read the data from it...</span><br/>    File_GetStringEx<span style="color: #000000;">(</span><span style="color: #000066;">"hostname"</span>, hostname<span style="color: #000000;">)</span>;<br/>    maxplayers <span style="color: #000000;">=</span> File_GetInt<span style="color: #000000;">(</span><span style="color: #000066;">"maxplayers"</span><span style="color: #000000;">)</span>;<br/>    gravity <span style="color: #000000;">=</span> File_GetFloat<span style="color: #000000;">(</span><span style="color: #000066;">"gravity"</span><span style="color: #000000;">)</span>;<br/>    allow_connect <span style="color: #000000;">=</span> File_GetBool<span style="color: #000000;">(</span><span style="color: #000066;">"allow_connect"</span><span style="color: #000000;">)</span>;<br/>    <br/>    <span style="color: #228822;">// Close the file</span><br/>    File_Close<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<u><b><font color="0x8D8DFFFF"><font size="4">Functions:</font></font></b></u><br />
+<br />
+Natives:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:359px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">native</span> File_Create<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_Rename<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, newfile<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_Copy<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, copyname<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>remove_original <span style="color: #000000;">=</span> false, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>content_only <span style="color: #000000;">=</span> false<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_Exists<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_Write<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_WriteInt<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, value<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_WriteFloat<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>value, accuracy <span style="color: #000000;">=</span> <span style="color: #000000;">6</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_WriteString<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, value<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_WriteHex<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, value<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_WriteBool<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>value<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_WriteBin<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, value<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_WriteFinish<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_Open<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_GetInt<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_GetFloat<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_GetString<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_GetStringEx<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, dest<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, size <span style="color: #000000;">=</span> <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>dest<span style="color: #000000;">)</span>, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>pack <span style="color: #000000;">=</span> false<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_GetHex<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_GetBool<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_GetBin<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_Close<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+• File_Create(filename[])<blockquote>
+<u>Description:</u> Create a new file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed (or file already exists).<br />
+<br />
+<u>Parameters:</u><blockquote>- filename[] - The name of the file you want to create.</blockquote></blockquote>• File_Rename(filename[], newfile[])<blockquote>
+<u>Description</u>: Rename a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed (or original doesn't exist/new name already exist).<br />
+<br />
+<u>Parameters:</u><blockquote>- filename[] - The name of the file you want to rename.<br />
+- newfile[] - The new name of the file.</blockquote></blockquote>• File_Copy(filename[], copyname[], bool:remove_original = false, bool:content_only = false)<blockquote>
+<u>Description:</u> Copy a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed<br />
+<br />
+<u>Parameters:</u><blockquote>- filename[] - The name of the file you want to copy.<br />
+- copyname[] - The name of the copy file.<br />
+- bool:remove_original - Remove original file (set to false by default).<br />
+- bool:content_only - Copy content only (set to false by default).</blockquote></blockquote>• File_Exists(filename[])<blockquote>
+<u>Description:</u> Check if a file exists.<br />
+<br />
+<u>Returns:</u> 1 if exists, 0 if not.<br />
+<br />
+<u>Parameters:</u><blockquote>- filename[] - Name of the file you want to check if exists.</blockquote></blockquote>• File_Write(filename[])<blockquote>
+<u>Description:</u> Begin writing into a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed.<br />
+<br />
+<u>Parameters:</u><blockquote>- filename[] - The name of the file you want to write into.</blockquote></blockquote>• File_WriteString(key[], value[])<blockquote>
+<u>Description:</u> Write a string into a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed.<br />
+<br />
+<u>Parameters:</u><blockquote>- key[] - The name of the file you want to write into.<br />
+- value[] - The string value you want to write.</blockquote></blockquote>• File_WriteInt(key[], value)<blockquote>
+<u>Description:</u> Write an integer into a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed.<br />
+<br />
+<u>Parameters:</u><blockquote>- key[] - The name of the file you want to write into.<br />
+- value - The integer value you want to write.</blockquote></blockquote>• File_WriteFloat(key[], Float:value, accuracy = 6)<br />
+<br />
+(accuracy idea was originally by ****** as you can see in y_ini)<blockquote>
+<u>Description:</u> Write a float into a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed.<br />
+<br />
+<u>Parameters:</u><blockquote>- key[] - The name of the file you want to write into.<br />
+- Float:value - The float value you want to write.<br />
+- accuracy - The number of digits after the dot.</blockquote></blockquote>• File_WriteBool(key[], bool:value)<blockquote>
+<u>Description:</u> Write a boolean into a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed.<br />
+<br />
+<u>Parameters:</u><blockquote>- key[] - The name of the file you want to write into.<br />
+- bool:value - The boolean value you want to write.</blockquote></blockquote>• File_WriteHex(key[], value)<blockquote>
+<u>Description:</u> Write an hexadecimal into a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed.<br />
+<br />
+<u>Parameters:</u><blockquote>- key[] - The name of the file you want to write into.<br />
+- value - The hexadecimal value you want to write.</blockquote></blockquote>• File_WriteBin(key[], value)<blockquote>
+<u>Description:</u> Write a binary into a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed.<br />
+<br />
+<u>Parameters:</u><blockquote>- key[] - The name of the file you want to write into.<br />
+- value - The binary value you want to write.</blockquote></blockquote>• File_WriteFinish(filename[])<blockquote>
+<u>Description:</u> Write the data into the originally file and close it (must be used when finishing writing).<br />
+<br />
+<u>Returns:</u> None.<br />
+<br />
+<u>Parameters:</u><blockquote> - filename[] - The name of the file you finish writing to.</blockquote></blockquote>• File_Open(filename[])<blockquote>
+<u>Description:</u> Open a file to begin reading from it.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed (or file doesn't exist).<br />
+<br />
+<u>Parameters:</u><blockquote> - filename[] - The name of the file you want to read from.</blockquote></blockquote>• File_GetString(key[])<blockquote>
+<u>Description:</u> Read a string value from a file.<br />
+<br />
+<u>Returns:</u> The string it read from a file.<br />
+<br />
+<u>Parameters:</u><blockquote> - key[] - The key you want to read from.</blockquote></blockquote>• File_GetStringEx(key[], dest[], size = sizeof(dest), bool: pack = false)<blockquote>
+<u>Description:</u> Read a string value from a file (with extra parameters).<br />
+<br />
+<u>Returns:</u> Nothing if failed.<br />
+<br />
+<u>Parameters:</u><blockquote> - key[] - The key you want to read from.<br />
+- dest[] - The array you want to save the string to.<br />
+- size - Size of the array.<br />
+- bool: pack - Pack the string or not (set to false by default).</blockquote></blockquote>• File_GetInt(key[])<blockquote>
+<u>Description:</u> Read an integer value from a file.<br />
+<br />
+<u>Returns:</u> The integer it read from a file.<br />
+<br />
+<u>Parameters:</u><blockquote> - key[] - The key you want to read from.</blockquote></blockquote>• Float: File_GetFloat(key[])<blockquote>
+<u>Description:</u> Read a float value from a file.<br />
+<br />
+<u>Returns:</u> The float it read from a file.<br />
+<br />
+<u>Parameters:</u><blockquote> - key[] - The key you want to read from.</blockquote></blockquote>• bool: File_GetBool(key[])<blockquote>
+<u>Description:</u> Read a boolean value from a file.<br />
+<br />
+<u>Returns:</u> The boolean value it read from a file.<br />
+<br />
+<u>Parameters:</u><blockquote> - key[] - The key you want to read from.</blockquote></blockquote>• File_GetHex(key[])<blockquote>
+<u>Description:</u> Read an hexadecimal value from a file.<br />
+<br />
+<u>Returns:</u> The hexadecimal value it read from a file.<br />
+<br />
+<u>Parameters:</u><blockquote> - key[] - The key you want to read from.</blockquote></blockquote>• File_GetBin(key[])<blockquote>
+<u>Description:</u> Read a binary value from a file.<br />
+<br />
+<u>Returns:</u> The binary value it read from a file.<br />
+<br />
+<u>Parameters:</u><blockquote> - key[] - The key you want to read from.</blockquote></blockquote>• File_Close()<blockquote>
+<u>Description:</u> Finish reading from a file and close it.<br />
+<br />
+<u>Returns:</u> None.</blockquote><u><b><font color="0x8D8DFFFF"><font size="4">Timings:</font></font></b></u><br />
+<br />
+Running this code: <a href="http://pastebin.com/J5X7n9Xz" target="_blank">http://pastebin.com/J5X7n9Xz</a><br />
+<br />
+<u><b><font color="0xFF8282AA"><font size="3">Writing:</font></font></b></u><br />
+<br />
+Writing 100 strings into a blank file:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">4 (ms)</pre>
+</div>Writing (replacing) 100 strings in a file:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">50-60 (ms)</pre>
+</div><u><b><font color="0xFF8282AA"><font size="3">Reading:</font></font></b></u><br />
+<br />
+Reading 100 strings from a file:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">20-40 (ms)</pre>
+</div>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2013490">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-39206.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2013535"></a>
+<div class="post classic " style="" id="post_2013535">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0127/uid-127518.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0127/uid-127518.html">yan0804</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2<br />
+	Threads: 0<br />
+	Joined: May 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2013535" title="Re: mFiles - File Writer/Reader System">#2</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 2 by yan0804" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.07.2012, 21:56 <span class="post_edit" id="edited_by_2013535"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2013535">
+		Awesome releasses! <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/> i'll use it for sure!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2013535">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-127518.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2013587"></a>
+<div class="post classic " style="" id="post_2013587">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0039/uid-39206.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0039/uid-39206.html">Maxips2</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 410<br />
+	Threads: 88<br />
+	Joined: Oct 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2013587" title="Re: mFiles - File Writer/Reader System">#3</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 3 by Maxips2" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.07.2012, 22:26 <span class="post_edit" id="edited_by_2013587"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2013587">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>yan0804</strong><br />
+<a href="../../threads/0363/tid-363198.html#pid2013535" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Awesome releasses! <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/> i'll use it for sure!</div>
+</td>
+</tr>
+</table>
+</div>Thanks!<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>[HLF]Southclaw</strong><br />
+<a href="../../unavailable.html" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Nice to see you released it! <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/razz.gif" title="Tongue"/><br />
+<br />
+I got your PM about the replacement, I've been busy recently but if you still want me to look into it, I will!<br />
+I'll check out the code tomorrow <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/></div>
+</td>
+</tr>
+</table>
+</div>Sure!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2013587">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-39206.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2013592"></a>
+<div class="post classic " style="" id="post_2013592">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0097/uid-97403.html"><img src="../../assets/uploads/avatars/97403.png" alt="" width="53" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0097/uid-97403.html">FireCat</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,322<br />
+	Threads: 260<br />
+	Joined: Jul 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2013592" title="Re: mFiles - File Writer/Reader System">#4</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 4 by FireCat" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.07.2012, 22:29 <span class="post_edit" id="edited_by_2013592"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2013592">
+		<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:119px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">stock</span> File_Rename<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, newfile<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #222222;">fexist</span><span style="color: #000000;">(</span>filename<span style="color: #000000;">)</span> || <span style="color: #222222;">fexist</span><span style="color: #000000;">(</span>newfile<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>File_Copy<span style="color: #000000;">(</span>filename, newfile<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/>    <span style="color: #222222;">fremove</span><span style="color: #000000;">(</span>filename<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>Seems legit
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2013592">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-97403.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2013605"></a>
+<div class="post classic " style="" id="post_2013605">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0039/uid-39206.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0039/uid-39206.html">Maxips2</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 410<br />
+	Threads: 88<br />
+	Joined: Oct 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2013605" title="Re: mFiles - File Writer/Reader System">#5</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 5 by Maxips2" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.07.2012, 22:37 <span class="post_edit" id="edited_by_2013605"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2013605">
+		I have just noticed that I forgot to change something in the include, I have updated the link.<br />
+<br />
+<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>FireCat</strong><br />
+<a href="../../threads/0363/tid-363198.html#pid2013592" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic"><div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:119px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">stock</span> File_Rename<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, newfile<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span><span style="color: #222222;">fexist</span><span style="color: #000000;">(</span>filename<span style="color: #000000;">)</span> || <span style="color: #222222;">fexist</span><span style="color: #000000;">(</span>newfile<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/>    <span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>File_Copy<span style="color: #000000;">(</span>filename, newfile<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #2222BB;">return</span> <span style="color: #000000;">0</span>;<br/>    <span style="color: #222222;">fremove</span><span style="color: #000000;">(</span>filename<span style="color: #000000;">)</span>;<br/>    <span style="color: #2222BB;">return</span> <span style="color: #000000;">1</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>Seems legit</div>
+</td>
+</tr>
+</table>
+</div>That works just fine.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2013605">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-39206.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2013689"></a>
+<div class="post classic " style="" id="post_2013689">
+<div class="post_author scaleimages">
+	
+	<div class="author_information">
+			<strong><span class="largetext">Glint</span></strong> <br />
+			<span class="smalltext">
+				Unregistered<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_guest -->
+&nbsp;
+<!-- end: postbit_author_guest -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2013689" title="Re: mFiles - File Writer/Reader System">#6</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 6 by Glint" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.07.2012, 23:27 <span class="post_edit" id="edited_by_2013689"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2013689">
+		good job mate this seems nice any speed tests ?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2013689">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2013695"></a>
+<div class="post classic " style="" id="post_2013695">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0039/uid-39206.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0039/uid-39206.html">Maxips2</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 410<br />
+	Threads: 88<br />
+	Joined: Oct 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2013695" title="Re: mFiles - File Writer/Reader System">#7</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 7 by Maxips2" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.07.2012, 23:36 <span class="post_edit" id="edited_by_2013695"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2013695">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Lexi'</strong><br />
+<a href="../../threads/0363/tid-363198.html#pid2013689" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">good job mate this seems nice any speed tests ?</div>
+</td>
+</tr>
+</table>
+</div>Thanks.<br />
+Yes there are, go to the end of the topic, or just hit CTRL + F and type "Timings" and your browser will do the rest of the job for ya.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2013695">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-39206.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2013703"></a>
+<div class="post classic " style="" id="post_2013703">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0122/uid-122057.html"><img src="../../assets/uploads/avatars/122057.png" alt="" width="50" height="25" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0122/uid-122057.html">Basssiiie</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 758<br />
+	Threads: 7<br />
+	Joined: Mar 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2013703" title="Re: mFiles - File Writer/Reader System">#8</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 8 by Basssiiie" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.07.2012, 23:45 <span class="post_edit" id="edited_by_2013703"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2013703">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Maxips2</strong><br />
+<a href="../../threads/0363/tid-363198.html#pid2013695" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Thanks.<br />
+Yes there are, go to the end of the topic, or just hit CTRL + F and type "Timings" and your browser will do the rest of the job for ya.</div>
+</td>
+</tr>
+</table>
+</div>Aren't the timings for comparing with other file handlers? It's nice that your include can write 100 strings into a file in 4 ms on your PC/server, but the speed of my PC/server is most likely different. It would be nice if you could run a speed test with for example Dini, Y_ini (and maybe some other file handlers) with the same technique and show us the differences. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/wink.png" title="Wink"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2013703">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-122057.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2013707"></a>
+<div class="post classic " style="" id="post_2013707">
+<div class="post_author scaleimages">
+	
+	<div class="author_information">
+			<strong><span class="largetext">Glint</span></strong> <br />
+			<span class="smalltext">
+				Unregistered<br />
+				<span class="postbit_userstars"></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_guest -->
+&nbsp;
+<!-- end: postbit_author_guest -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2013707" title="Re: mFiles - File Writer/Reader System">#9</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 9 by Glint" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.07.2012, 23:48 <span class="post_edit" id="edited_by_2013707"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2013707">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Maxips2</strong><br />
+<a href="../../threads/0363/tid-363198.html#pid2013695" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Thanks.<br />
+Yes there are, go to the end of the topic, or just hit CTRL + F and type "Timings" and your browser will do the rest of the job for ya.</div>
+</td>
+</tr>
+</table>
+</div>Fail! Sorry sorry about that however nice job again.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2013707">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2013709"></a>
+<div class="post classic " style="" id="post_2013709">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0039/uid-39206.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0039/uid-39206.html">Maxips2</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 410<br />
+	Threads: 88<br />
+	Joined: Oct 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2013709" title="Re: mFiles - File Writer/Reader System">#10</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 10 by Maxips2" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">26.07.2012, 23:49 <span class="post_edit" id="edited_by_2013709"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2013709">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Basssiiie</strong><br />
+<a href="../../threads/0363/tid-363198.html#pid2013703" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Aren't the timings for comparing with other file handlers? It's nice that your include can write 100 strings into a file in 4 ms on your PC/server, but the speed of my PC/server is most likely different. It would be nice if you could run a speed test with for example Dini, Y_ini (and maybe some other file handlers) with the same technique and show us the differences. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/wink.png" title="Wink"/></div>
+</td>
+</tr>
+</table>
+</div>Well you can see different timings in different file writers/readers threads.<br />
+<br />
+But for your quesiton, its much faster than dini for sure.<br />
+I haven't comapred timings with y_ini but I believe its faster, but way more complicated.<br />
+<br />
+This system is very easy to use, and its relativley fast.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2013709">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-39206.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2013733"></a>
+<div class="post classic " style="" id="post_2013733">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0122/uid-122057.html"><img src="../../assets/uploads/avatars/122057.png" alt="" width="50" height="25" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0122/uid-122057.html">Basssiiie</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Gangsta<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 758<br />
+	Threads: 7<br />
+	Joined: Mar 2011
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2013733" title="Re: mFiles - File Writer/Reader System">#11</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 11 by Basssiiie" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">27.07.2012, 00:11 <span class="post_edit" id="edited_by_2013733"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2013733">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Maxips2</strong><br />
+<a href="../../threads/0363/tid-363198.html#pid2013709" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Well you can see different timings in different file writers/readers threads.<br />
+<br />
+But for your quesiton, its much faster than dini for sure.<br />
+I haven't comapred timings with y_ini but I believe its faster, but way more complicated.<br />
+<br />
+This system is very easy to use, and its relativley fast.</div>
+</td>
+</tr>
+</table>
+</div>I understand that I can see timings in, but the speed of the script isn't the same on every PC/server. mFiles might just do 100 strings in under 4 ms on your computer, but if I try it on my old laptop, it might take 100 ms. Same goes for other handlers like Y_ini. On ******' PC it might take 100 ms to write 10.000 integers (= example), while on other PC's it might take 250 ms to do the same amount of integers. No offense to your work, I'm just curious how quick your system is in comparison with the other systems while tested on the same PC. <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2013733">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-122057.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2013757"></a>
+<div class="post classic " style="" id="post_2013757">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0039/uid-39206.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0039/uid-39206.html">Maxips2</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 410<br />
+	Threads: 88<br />
+	Joined: Oct 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2013757" title="Re: mFiles - File Writer/Reader System">#12</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 12 by Maxips2" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">27.07.2012, 00:31 <span class="post_edit" id="edited_by_2013757"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2013757">
+		Alright, well I made a timing comparsion with sii and here are the results:<br />
+<br />
+Writing 100 strings into a blank file:<br />
+<br />
+mFiles: 4 (ms)<br />
+sii: 5 (ms)<br />
+<br />
+Reading 100 strings:<br />
+<br />
+mFiles: 32 (ms)<br />
+sii: 7 (ms)<br />
+<br />
+Writing (replacing) 100 strings into a file:<br />
+<br />
+mFiles: 53 (ms)<br />
+sii: 6 (ms)<br />
+<br />
+As you can see sii is slightly faster in some ways, but both systems work in a different way!<br />
+sii is based on cache while mFiles is directly writing into a file (well, not exactly directly)<br />
+<br />
+Only one downside which I see with sii is that you are limited to an amount of keys (255 by default).<br />
+Cache system takes more memory (correct me if im wrong) which means; increasing the amount of keys takes more memory and also takes longer to write!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2013757">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-39206.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2014203"></a>
+<div class="post classic " style="" id="post_2014203">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0016/uid-16107.html"><img src="../../assets/uploads/avatars/16107.png" alt="" width="55" height="52" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0016/uid-16107.html">Amit_B</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 349<br />
+	Threads: 35<br />
+	Joined: Nov 2007
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2014203" title="Re: mFiles - File Writer/Reader System">#13</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 13 by Amit_B" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">27.07.2012, 07:32 <span class="post_edit" id="edited_by_2014203"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2014203">
+		Great release! I'm sure that people will find it useful <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2014203">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-16107.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2014206"></a>
+<div class="post classic " style="" id="post_2014206">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0039/uid-39206.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0039/uid-39206.html">Maxips2</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 410<br />
+	Threads: 88<br />
+	Joined: Oct 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2014206" title="Re: mFiles - File Writer/Reader System">#14</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 14 by Maxips2" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">27.07.2012, 07:35 <span class="post_edit" id="edited_by_2014206"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2014206">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Amit_B</strong><br />
+<a href="../../threads/0363/tid-363198.html#pid2014203" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Great release! I'm sure that people will find it useful <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/smile.png" title="Smiley"/></div>
+</td>
+</tr>
+</table>
+</div>Thanks!
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2014206">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-39206.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2019941"></a>
+<div class="post classic " style="" id="post_2019941">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0039/uid-39206.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0039/uid-39206.html">Maxips2</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 410<br />
+	Threads: 88<br />
+	Joined: Oct 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2019941" title="Re: mFiles - File Writer/Reader System">#15</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 15 by Maxips2" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.07.2012, 16:28 <span class="post_edit" id="edited_by_2019941"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2019941">
+		Update: a new version is about to be released.<br />
+However, I need some people to help me test it so I can release a stable version, anyone interested?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2019941">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-39206.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2019965"></a>
+<div class="post classic " style="" id="post_2019965">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0174/uid-174156.html"><img src="../../assets/uploads/avatars/174156.png" alt="" width="49" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0174/uid-174156.html">[MK]Man_Deep</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 293<br />
+	Threads: 21<br />
+	Joined: Jul 2012
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2019965" title="Re: mFiles - File Writer/Reader System">#16</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 16 by [MK]Man_Deep" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.07.2012, 16:41 <span class="post_edit" id="edited_by_2019965"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2019965">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Maxips2</strong><br />
+<a href="../../threads/0363/tid-363198.html#pid2013490" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic"><u><b><font color="0x8D8DFFFF"><font size="4">Introduction:</font></font></b></u><br />
+<br />
+Recently I was struggling with different file systems, some were slow or some weren't convinient at all.<br />
+I decided to write my own system, and I've been working on it for a while.<br />
+This is the first system I am releasing, so please be gentle with your comments!<br />
+<br />
+<u><b><font color="0x8D8DFFFF"><font size="4">How To Use:</font></font></b></u><br />
+<br />
+Simply download the file, and put it in your includes folder.<br />
+At the top of your filterscript/gamemode write this line:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include &lt;mfiles&gt;</span></div></div></pre>
+</div>after this line:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:39px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include &lt;a_samp&gt;</span></div></div></pre>
+</div>should look like this:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:71px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#include &lt;a_samp&gt;</span><br/><span style="color: #2222AA;">#include &lt;mfiles&gt;</span><br/><span style="color: #228822;">// Other includes ...</span></div></div></pre>
+</div>
+<u><b><font color="0x8D8DFFFF"><font size="4">Settings:</font></font></b></u><br />
+<br />
+I have declared a few defines in the include itself, I advice to keep it as it is, but if you insist you may change it.<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:199px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222AA;">#define MAX_FILE_READ_STRING            255 </span><br/><span style="color: #228822;">// The number of cells which will be used in the reading/writing array.</span><br/><span style="color: #2222AA;">#define MAX_KEY_LEN                     32 </span><br/><span style="color: #228822;">// Maximum length of a key</span><br/><span style="color: #2222AA;">#define MAX_VAL_LEN                     128 </span><br/><span style="color: #228822;">// Maximum length of a value.</span><br/><span style="color: #2222AA;">#define KEY_IGNORECASE                  false </span><br/><span style="color: #228822;">// Ignorecase:</span><br/><span style="color: #228822;">// When set to false: when reading/writing to a file it will be case-sensetive.</span><br/><span style="color: #228822;">// That means that VALUE and value won't be the same key.</span><br/><span style="color: #228822;">// If set to true it does the opposite action.</span></div></div></pre>
+</div>
+<u><b><font color="0x8D8DFFFF"><font size="4">Version:</font></font></b></u><br />
+<br />
+• mFiles v1.0 - Initial Release<br />
+<br />
+<u><b><font color="0x8D8DFFFF"><font size="4">Bugs:</font></font></b></u><br />
+<br />
+• None found yet, however if you find a bug please post here or PM me on forums with the details.<br />
+<br />
+<u><b><font color="0x8D8DFFFF"><font size="4">Download:</font></font></b></u><br />
+<br />
+Mediafire: <a href="http://www.mediafire.com/?u4xcoh45wkrbqh5" target="_blank">http://www.mediafire.com/?u4xcoh45wkrbqh5</a><br />
+<br />
+Please do not make any mirrors without my permission.<br />
+<br />
+<u><b><font color="0x8D8DFFFF"><font size="4">Examples:</font></font></b></u><br />
+<br />
+<u><b><font color="0xFF8282AA"><font size="3">Writing:</font></font></b></u><br />
+<br />
+Writing is done in a very simple way:<br />
+Open a file, write the data and close the file.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:311px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> file<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">"settings.ini"</span>;<br/><br/><span style="color: #228822;">// Check if a file exists, if not: create it.</span><br/><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span><span style="color: #000000;">!</span>File_Exists<span style="color: #000000;">(</span>file<span style="color: #000000;">)</span><span style="color: #000000;">)</span> File_Create<span style="color: #000000;">(</span>file<span style="color: #000000;">)</span>;<br/><br/><span style="color: #228822;">// Begin writing into a file.</span><br/>File_Write<span style="color: #000000;">(</span>file<span style="color: #000000;">)</span>;<br/><br/><span style="color: #228822;">// Writing the data...</span><br/>File_WriteString<span style="color: #000000;">(</span><span style="color: #000066;">"hostname"</span>, <span style="color: #000066;">"gamemode_0"</span><span style="color: #000000;">)</span>;<br/>File_WriteInt<span style="color: #000000;">(</span><span style="color: #000066;">"maxplayers"</span>, <span style="color: #000000;">50</span><span style="color: #000000;">)</span>;<br/>File_WriteFloat<span style="color: #000000;">(</span><span style="color: #000066;">"gravity"</span>, <span style="color: #000000;">0.08</span><span style="color: #000000;">)</span>;<br/>File_WriteBool<span style="color: #000000;">(</span><span style="color: #000066;">"allow_connect"</span>, true<span style="color: #000000;">)</span>;<br/>File_WriteHex<span style="color: #000000;">(</span><span style="color: #000066;">"spawn_color"</span>, 0xFFFFFF<span style="color: #000000;">)</span>;<br/>File_WriteBin<span style="color: #000000;">(</span><span style="color: #000066;">"binary_info"</span>, 0b1110110<span style="color: #000000;">)</span>;<br/><br/><span style="color: #228822;">// Finish writing, save and close.</span><br/>File_WriteFinish<span style="color: #000000;">(</span>file<span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+<u><b><font color="0xFF8282AA"><font size="3">Reading:</font></font></b></u><br />
+<br />
+Reading is done pretty much the same way, open a file, read the data and close it.<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:295px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">new</span> hostname<span style="color: #000000;">[</span><span style="color: #000000;">11</span><span style="color: #000000;">]</span>, maxplayers, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>gravity, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>allow_connect, file<span style="color: #000000;">[</span><span style="color: #000000;">]</span> <span style="color: #000000;">=</span> <span style="color: #000066;">"settings.ini"</span>;<br/><br/><span style="color: #228822;">// Check if file exists</span><br/><span style="color: #2222BB;">if</span><span style="color: #000000;">(</span>File_Exists<span style="color: #000000;">(</span>file<span style="color: #000000;">)</span><span style="color: #000000;">)</span> <span style="color: #000000;">{</span><br/><br/>    <span style="color: #228822;">// Open the file</span><br/>    File_Open<span style="color: #000000;">(</span>file<span style="color: #000000;">)</span>;<br/>    <br/>    <span style="color: #228822;">// Read the data from it...</span><br/>    File_GetStringEx<span style="color: #000000;">(</span><span style="color: #000066;">"hostname"</span>, hostname<span style="color: #000000;">)</span>;<br/>    maxplayers <span style="color: #000000;">=</span> File_GetInt<span style="color: #000000;">(</span><span style="color: #000066;">"maxplayers"</span><span style="color: #000000;">)</span>;<br/>    gravity <span style="color: #000000;">=</span> File_GetFloat<span style="color: #000000;">(</span><span style="color: #000066;">"gravity"</span><span style="color: #000000;">)</span>;<br/>    allow_connect <span style="color: #000000;">=</span> File_GetBool<span style="color: #000000;">(</span><span style="color: #000066;">"allow_connect"</span><span style="color: #000000;">)</span>;<br/>    <br/>    <span style="color: #228822;">// Close the file</span><br/>    File_Close<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;<br/><span style="color: #000000;">}</span></div></div></pre>
+</div>
+<u><b><font color="0x8D8DFFFF"><font size="4">Functions:</font></font></b></u><br />
+<br />
+Natives:<br />
+<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">pawn Code:</div>
+<pre class="alt2" style="margin:0px; padding:6px; border: 1px solid #C2C2C2; width:800px; height:359px; overflow:auto"><div dir="ltr" style="text-align:left;"><div class="pawn" style="font-family:monospace;"><span style="color: #2222BB;">native</span> File_Create<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_Rename<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, newfile<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_Copy<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, copyname<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>remove_original <span style="color: #000000;">=</span> false, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>content_only <span style="color: #000000;">=</span> false<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_Exists<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_Write<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_WriteInt<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, value<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_WriteFloat<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, <span style="color: #000000;">Float</span><span style="color: #000000;">:</span>value, accuracy <span style="color: #000000;">=</span> <span style="color: #000000;">6</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_WriteString<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, value<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_WriteHex<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, value<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_WriteBool<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>value<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_WriteBin<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, value<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_WriteFinish<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_Open<span style="color: #000000;">(</span>filename<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_GetInt<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_GetFloat<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_GetString<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_GetStringEx<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, dest<span style="color: #000000;">[</span><span style="color: #000000;">]</span>, size <span style="color: #000000;">=</span> <span style="color: #2222BB;">sizeof</span><span style="color: #000000;">(</span>dest<span style="color: #000000;">)</span>, <span style="color: #000000;">bool</span><span style="color: #000000;">:</span>pack <span style="color: #000000;">=</span> false<span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_GetHex<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_GetBool<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_GetBin<span style="color: #000000;">(</span>key<span style="color: #000000;">[</span><span style="color: #000000;">]</span><span style="color: #000000;">)</span>;<br/><span style="color: #2222BB;">native</span> File_Close<span style="color: #000000;">(</span><span style="color: #000000;">)</span>;</div></div></pre>
+</div>
+• File_Create(filename[])<blockquote>
+<u>Description:</u> Create a new file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed (or file already exists).<br />
+<br />
+<u>Parameters:</u><blockquote>- filename[] - The name of the file you want to create.</blockquote></blockquote>• File_Rename(filename[], newfile[])<blockquote>
+<u>Description</u>: Rename a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed (or original doesn't exist/new name already exist).<br />
+<br />
+<u>Parameters:</u><blockquote>- filename[] - The name of the file you want to rename.<br />
+- newfile[] - The new name of the file.</blockquote></blockquote>• File_Copy(filename[], copyname[], bool:remove_original = false, bool:content_only = false)<blockquote>
+<u>Description:</u> Copy a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed<br />
+<br />
+<u>Parameters:</u><blockquote>- filename[] - The name of the file you want to copy.<br />
+- copyname[] - The name of the copy file.<br />
+- bool:remove_original - Remove original file (set to false by default).<br />
+- bool:content_only - Copy content only (set to false by default).</blockquote></blockquote>• File_Exists(filename[])<blockquote>
+<u>Description:</u> Check if a file exists.<br />
+<br />
+<u>Returns:</u> 1 if exists, 0 if not.<br />
+<br />
+<u>Parameters:</u><blockquote>- filename[] - Name of the file you want to check if exists.</blockquote></blockquote>• File_Write(filename[])<blockquote>
+<u>Description:</u> Begin writing into a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed.<br />
+<br />
+<u>Parameters:</u><blockquote>- filename[] - The name of the file you want to write into.</blockquote></blockquote>• File_WriteString(key[], value[])<blockquote>
+<u>Description:</u> Write a string into a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed.<br />
+<br />
+<u>Parameters:</u><blockquote>- key[] - The name of the file you want to write into.<br />
+- value[] - The string value you want to write.</blockquote></blockquote>• File_WriteInt(key[], value)<blockquote>
+<u>Description:</u> Write an integer into a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed.<br />
+<br />
+<u>Parameters:</u><blockquote>- key[] - The name of the file you want to write into.<br />
+- value - The integer value you want to write.</blockquote></blockquote>• File_WriteFloat(key[], Float:value, accuracy = 6)<br />
+<br />
+(accuracy idea was originally by ****** as you can see in y_ini)<blockquote>
+<u>Description:</u> Write a float into a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed.<br />
+<br />
+<u>Parameters:</u><blockquote>- key[] - The name of the file you want to write into.<br />
+- Float:value - The float value you want to write.<br />
+- accuracy - The number of digits after the dot.</blockquote></blockquote>• File_WriteBool(key[], bool:value)<blockquote>
+<u>Description:</u> Write a boolean into a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed.<br />
+<br />
+<u>Parameters:</u><blockquote>- key[] - The name of the file you want to write into.<br />
+- bool:value - The boolean value you want to write.</blockquote></blockquote>• File_WriteHex(key[], value)<blockquote>
+<u>Description:</u> Write an hexadecimal into a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed.<br />
+<br />
+<u>Parameters:</u><blockquote>- key[] - The name of the file you want to write into.<br />
+- value - The hexadecimal value you want to write.</blockquote></blockquote>• File_WriteBin(key[], value)<blockquote>
+<u>Description:</u> Write a binary into a file.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed.<br />
+<br />
+<u>Parameters:</u><blockquote>- key[] - The name of the file you want to write into.<br />
+- value - The binary value you want to write.</blockquote></blockquote>• File_WriteFinish(filename[])<blockquote>
+<u>Description:</u> Write the data into the originally file and close it (must be used when finishing writing).<br />
+<br />
+<u>Returns:</u> None.<br />
+<br />
+<u>Parameters:</u><blockquote> - filename[] - The name of the file you finish writing to.</blockquote></blockquote>• File_Open(filename[])<blockquote>
+<u>Description:</u> Open a file to begin reading from it.<br />
+<br />
+<u>Returns:</u> 1 if succeded, 0 if failed (or file doesn't exist).<br />
+<br />
+<u>Parameters:</u><blockquote> - filename[] - The name of the file you want to read from.</blockquote></blockquote>• File_GetString(key[])<blockquote>
+<u>Description:</u> Read a string value from a file.<br />
+<br />
+<u>Returns:</u> The string it read from a file.<br />
+<br />
+<u>Parameters:</u><blockquote> - key[] - The key you want to read from.</blockquote></blockquote>• File_GetStringEx(key[], dest[], size = sizeof(dest), bool: pack = false)<blockquote>
+<u>Description:</u> Read a string value from a file (with extra parameters).<br />
+<br />
+<u>Returns:</u> Nothing if failed.<br />
+<br />
+<u>Parameters:</u><blockquote> - key[] - The key you want to read from.<br />
+- dest[] - The array you want to save the string to.<br />
+- size - Size of the array.<br />
+- bool: pack - Pack the string or not (set to false by default).</blockquote></blockquote>• File_GetInt(key[])<blockquote>
+<u>Description:</u> Read an integer value from a file.<br />
+<br />
+<u>Returns:</u> The integer it read from a file.<br />
+<br />
+<u>Parameters:</u><blockquote> - key[] - The key you want to read from.</blockquote></blockquote>• Float: File_GetFloat(key[])<blockquote>
+<u>Description:</u> Read a float value from a file.<br />
+<br />
+<u>Returns:</u> The float it read from a file.<br />
+<br />
+<u>Parameters:</u><blockquote> - key[] - The key you want to read from.</blockquote></blockquote>• bool: File_GetBool(key[])<blockquote>
+<u>Description:</u> Read a boolean value from a file.<br />
+<br />
+<u>Returns:</u> The boolean value it read from a file.<br />
+<br />
+<u>Parameters:</u><blockquote> - key[] - The key you want to read from.</blockquote></blockquote>• File_GetHex(key[])<blockquote>
+<u>Description:</u> Read an hexadecimal value from a file.<br />
+<br />
+<u>Returns:</u> The hexadecimal value it read from a file.<br />
+<br />
+<u>Parameters:</u><blockquote> - key[] - The key you want to read from.</blockquote></blockquote>• File_GetBin(key[])<blockquote>
+<u>Description:</u> Read a binary value from a file.<br />
+<br />
+<u>Returns:</u> The binary value it read from a file.<br />
+<br />
+<u>Parameters:</u><blockquote> - key[] - The key you want to read from.</blockquote></blockquote>• File_Close()<blockquote>
+<u>Description:</u> Finish reading from a file and close it.<br />
+<br />
+<u>Returns:</u> None.</blockquote><u><b><font color="0x8D8DFFFF"><font size="4">Timings:</font></font></b></u><br />
+<br />
+Running this code: <a href="http://pastebin.com/J5X7n9Xz" target="_blank">http://pastebin.com/J5X7n9Xz</a><br />
+<br />
+<u><b><font color="0xFF8282AA"><font size="3">Writing:</font></font></b></u><br />
+<br />
+Writing 100 strings into a blank file:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">4 (ms)</pre>
+</div>Writing (replacing) 100 strings in a file:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">50-60 (ms)</pre>
+</div><u><b><font color="0xFF8282AA"><font size="3">Reading:</font></font></b></u><br />
+<br />
+Reading 100 strings from a file:<br />
+<div style="margin:20px; margin-top:5px">
+<div class="smallfont" style="margin-bottom:2px">Code:</div>
+<pre class="alt2" dir="ltr" style="
+		margin: 0px;
+		padding: 6px;
+		border: 1px solid #C2C2C2;
+		width: 800px;
+		height: 34px;
+		text-align: left;
+		overflow: auto">20-40 (ms)</pre>
+</div></div>
+</td>
+</tr>
+</table>
+</div>Ok Thats Akward <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/confused.gif" title="Huh?"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2019965">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-174156.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2019969"></a>
+<div class="post classic " style="" id="post_2019969">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0039/uid-39206.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0039/uid-39206.html">Maxips2</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 410<br />
+	Threads: 88<br />
+	Joined: Oct 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2019969" title="Re: mFiles - File Writer/Reader System">#17</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 17 by Maxips2" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.07.2012, 16:44 <span class="post_edit" id="edited_by_2019969"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2019969">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>[MK]Man_Deep</strong><br />
+<a href="../../threads/0363/tid-363198.html#pid2019965" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Ok Thats Akward <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/confused.gif" title="Huh?"/></div>
+</td>
+</tr>
+</table>
+</div>What's akward?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2019969">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-39206.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2020831"></a>
+<div class="post classic " style="" id="post_2020831">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0058/uid-58032.html"><img src="../../assets/uploads/avatars/58032.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0058/uid-58032.html">Jochemd</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				High-roller<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 2,220<br />
+	Threads: 154<br />
+	Joined: Jul 2009
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2020831" title="Re: mFiles - File Writer/Reader System">#18</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 18 by Jochemd" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">29.07.2012, 23:17 <span class="post_edit" id="edited_by_2020831"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2020831">
+		Just a quick hint; these aren't natives but stocks.<br />
+<br />
+Nice, can yoh do benchmarks with y_ini too?
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2020831">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-58032.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2021266"></a>
+<div class="post classic " style="" id="post_2021266">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0039/uid-39206.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0039/uid-39206.html">Maxips2</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Huge Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 410<br />
+	Threads: 88<br />
+	Joined: Oct 2008
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2021266" title="Re: mFiles - File Writer/Reader System">#19</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 19 by Maxips2" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">30.07.2012, 05:15 <span class="post_edit" id="edited_by_2021266"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2021266">
+		<div style="margin:20px; margin-top:5px; ">
+<div class="smallfont" style="margin-bottom:2px">Quote:</div>
+<table border="0" cellpadding="6" cellspacing="0" width="100%">
+<tr>
+<td class="alt2" style="border: 1px solid #C2C2C2; font-size: 8pt;">
+<div>
+					Originally Posted by <strong>Jochemd</strong><br />
+<a href="../../threads/0363/tid-363198.html#pid2020831" rel="nofollow"><img alt="View Post" border="0" class="inlineimg" src="../../assets/images/buttons/viewpost.gif"/></a><br />
+</div>
+<div style="font-style:italic">Just a quick hint; these aren't natives but stocks.<br />
+<br />
+Nice, can yoh do benchmarks with y_ini too?</div>
+</td>
+</tr>
+</table>
+</div>In version 1.0 I believe mFiles could be faster in some cases but I can't tell you for sure as I have not compared it with y_ini.<br />
+However with the new verison (1.1) mFiles is the fastest writer/reader you can find on the net (if you use it right of course).<br />
+With 1.1 I have compared it to sii, DOF2 and y_ini with writing 1000 files and also replacing 1000 fields (255 fields on the cache based systems) and mFiles was the fastest of all (including reading!).<br />
+<br />
+Version 1.1 is not released just yet, but I think I might release it as a beta version.<br />
+The reason it was not released to public yet is because I am a little bit worried about the repalcment part as its a new method which I came up with.
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2021266">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-39206.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic --><!-- start: postbit_classic -->
+
+<a id="pid2031482"></a>
+<div class="post classic " style="" id="post_2031482">
+<div class="post_author scaleimages">
+	<!-- start: postbit_avatar -->
+<div class="postbit_avatar author_avatar"><a href="../../members/0097/uid-97972.html"><img src="../../assets/images/default_avatar.png" alt="" width="55" height="55" /></a></div>
+<!-- end: postbit_avatar -->
+	<div class="author_information">
+			<strong><span class="largetext"><a href="../../members/0097/uid-97972.html">Snir_sofer</a></span></strong> <!-- start: postbit_offline -->
+<span class="online_status status_offline" title="Offline"></span>
+<!-- end: postbit_offline --><br />
+			<span class="smalltext">
+				Little Clucker<br />
+				<span class="postbit_userstars"><img src="../../assets/images/star.png" alt="*" /><img src="../../assets/images/star.png" alt="*" /><br /></span>
+				
+			</span>
+	</div>
+	<div class="author_statistics">
+		<!-- start: postbit_author_user -->
+	Posts: 45<br />
+	Threads: 15<br />
+	Joined: Jul 2010
+	<!-- start: postbit_reputation -->
+<br />Reputation: <!-- start: postbit_reputation_formatted_link -->
+<a href="../../unavailable.html"><strong class="reputation_neutral">0</strong></a>
+<!-- end: postbit_reputation_formatted_link -->
+<!-- end: postbit_reputation --><br />
+<!-- end: postbit_author_user -->
+	</div>
+</div>
+<div class="post_content">
+	<div class="post_head">
+		<!-- start: postbit_posturl -->
+<div class="float_right" style="vertical-align: top">
+<strong><a href="../../threads/0363/tid-363198.html#pid2031482" title="Re: mFiles - File Writer/Reader System">#20</a></strong>
+
+</div>
+<!-- end: postbit_posturl -->
+		
+		<h1 aria-label="Post: 20 by Snir_sofer" style="display:inline;font-size:9px;"><!-- helps navigation for screen readers --></h1>
+		<span class="post_date">03.08.2012, 16:26 <span class="post_edit" id="edited_by_2031482"></span></span>
+	
+	</div>
+	<div class="post_body scaleimages" id="pid_2031482">
+		thanks <img alt="" border="0" class="inlineimg" src="../../assets/images/smilies/biggrin.png" title="Cheesy"/>
+	</div>
+	
+	
+	<div class="post_meta" id="post_meta_2031482">
+		
+	</div>
+</div>
+<div class="post_controls">
+	<div class="postbit_buttons author_buttons float_left">
+		<!-- start: postbit_find -->
+<a href="../../search/posts-97972.html" title="Find all posts by this user" class="postbit_find"><span>Find</span></a>
+<!-- end: postbit_find -->
+	</div>
+	<div class="postbit_buttons post_management_buttons float_right">
+		<!-- start: postbit_quote -->
+<a href="../../unavailable.html" title="Quote this message in a reply" class="postbit_quote postbit_mirage"><span>Reply</span></a>
+<!-- end: postbit_quote -->
+	</div>
+</div>
+</div>
+<!-- end: postbit_classic -->
+	</div>
+</div>
+	
+			<div class="tfoot row">
+				<div class="col-sm-6">
+					<strong>&laquo; <a href="../../threads/0363/tid-363198.html">Next Oldest</a> | <a href="../../threads/0363/tid-363198.html">Next Newest</a> &raquo;</strong>
+				</div>
+				<div class="col-sm-6"><!-- start: showthread_search -->
+	<div class="float_right">
+		<form action="../../unavailable.html" method="post">
+			<input type="hidden" name="action" value="thread" />
+			<input type="hidden" name="tid" value="363198" />
+			<input type="text" name="keywords" value="Enter Keywords" onfocus="if(this.value == 'Enter Keywords') { this.value = ''; }" onblur="if(this.value=='') { this.value='Enter Keywords'; }" class="textbox" size="25" />
+			<input type="submit" class="button" value="Search Thread" />
+		</form>
+	</div>
+<!-- end: showthread_search --></div>
+			</div>
+	<div class="float_left">
+		<!-- start: multipage -->
+<div class="pagination">
+<span class="pages">Pages (2):</span>
+<!-- start: multipage_page_current -->
+ <span class="pagination_current">1</span>
+<!-- end: multipage_page_current --><!-- start: multipage_page -->
+<a href="../../threads/0363/tid-363198-page-2.html" class="pagination_page">2</a>
+<!-- end: multipage_page --><!-- start: multipage_nextpage -->
+<a href="../../threads/0363/tid-363198-page-2.html" class="pagination_next">Next &raquo;</a>
+<!-- end: multipage_nextpage -->
+</div>
+<!-- end: multipage -->
+	</div>
+	<div class="float_right">
+		
+	</div>
+	<br class="clear" />
+	
+	
+	
+	<br />
+	<div class="float_left">
+		<ul class="thread_tools">
+			<!-- start: showthread_printthread -->
+<li class="printable"><a href="../../unavailable.html">View a Printable Version</a></li>
+<!-- end: showthread_printthread -->
+			
+			
+			
+		</ul>
+	</div>
+
+	<div class="float_right" style="text-align: right;">
+		
+		<!-- start: forumjump_advanced -->
+<form action="../../unavailable.html" method="get">
+<span class="smalltext">Forum Jump:</span>
+<select name="fid" class="forumjump">
+<option value="-4">Private Messages</option>
+<option value="-3">User Control Panel</option>
+<option value="-5">Who's Online</option>
+<option value="-2">Search</option>
+<option value="-1">Forum Home</option>
+<!-- start: forumjump_bit -->
+<option value="3" > SA-MP</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="74" >-- News and Updates</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="13" >-- General</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="16" >-- Client Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="20" >-- Bug Reports</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="21" >-- Screenshots and Videos</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="6" > SA-MP Server</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="19" >-- Server Support</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="22" >-- Server Advertisements</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="8" > SA-MP Scripting and Plugins</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="12" >-- Scripting Help</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="70" >---- Tutorials</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="84" >---- Discussion</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="89" >---- Help Archive</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="71" >-- Gamemode Scripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="17" >-- Filterscripts</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="83" selected="selected">---- Includes</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="82" >---- Tools and Files </option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="64" >---- Maps</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="18" >-- Plugin Development</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="92" > SA-MP DL Edition</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="90" >-- SA-MP 0.3.DL</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="94" >---- Model Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="7" > Other</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="23" >-- Everything and Nothing</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="9" > Non-English</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="33" >-- Languages</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="31" >---- Nederlands/Dutch</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="76" >------ Scripting Showroom en Discussie</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="87" >------ Off topic</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="29" >---- Español/Spanish</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="59" >------ Lanzamientos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="30" >---- Français/French</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="81" >------ Showroom</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="32" >---- Русский/Russian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="66" >------ Релизы/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="34" >---- Português/Portuguese</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="56" >------ Lançamentos/Releases</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="40" >---- Română/Romanian</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="77" >------ Salonul Scripturilor</option>
+<!-- end: forumjump_bit --><!-- start: forumjump_bit -->
+<option value="88" >---- Archive</option>
+<!-- end: forumjump_bit -->
+</select>
+<!-- start: gobutton -->
+<input type="submit" class="button" value="Go" />
+<!-- end: gobutton -->
+</form>
+<script type="text/javascript">
+$(".forumjump").on('change', function() {
+	var option = $(this).val();
+
+	if(option < 0)
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+	else
+	{
+		window.location = 'forumdisplay.php?fid='+option;
+	}
+});
+</script>
+<!-- end: forumjump_advanced -->
+	</div>
+	<br class="clear" />
+	<!-- start: showthread_usersbrowsing -->
+<br />
+<span class="smalltext">Users browsing this thread: 1 Guest(s)</span>
+<br />
+<!-- end: showthread_usersbrowsing -->
+	<!-- start: footer -->
+<div style="clear:both"><div style="padding-top: 10px"><!-- start: nav -->
+<ol class="breadcrumb container"><!-- start: nav_bit -->
+<li><a href="../../index.html">SA-MP Forums Archive</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/8.html">SA-MP Scripting and Plugins</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/17.html">Filterscripts</a></li>
+<!-- end: nav_bit --><!-- start: nav_bit -->
+<li><a href="../../forums/83.html">Includes</a></li>
+<!-- end: nav_bit --><!-- start: nav_sep_active -->
+
+<!-- end: nav_sep_active --></ol>
+<!-- end: nav --></div></div>
+</main>
+
+<!-- Fix for MentionMe popup window position -->
+<script type="text/javascript">
+	var MentionMe = (function(m) {
+	m.customSCEditorContainerOffset = {
+		left: 0,
+		top: 2,
+	};
+
+	return m;
+})(MentionMe || {});
+</script>
+<!-- End Fix for MentionMe popup window position -->
+<!-- end: footer -->
+	<script type="text/javascript">
+		var thread_deleted = "0";
+		if(thread_deleted == "1")
+		{
+			$("#quick_reply_form, .new_reply_button, .thread_tools, .inline_rating").hide();
+			$("#moderator_options_selector option.option_mirage").attr("disabled","disabled");
+		}
+	</script>
+</body>
+</html>
+<!-- end: showthread -->
